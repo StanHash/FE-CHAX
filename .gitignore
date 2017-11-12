@@ -1,3 +1,5 @@
+*.gba
+
 # Object files
 *.o
 *.ko
