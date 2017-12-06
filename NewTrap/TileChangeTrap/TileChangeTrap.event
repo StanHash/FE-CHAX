@@ -1,0 +1,37 @@
+#ifndef HAX_TILE_CHANGE_TRAP
+#define HAX_TILE_CHANGE_TRAP
+
+SINGLE_TILE_CHANGE_TRAP_TYPE:
+	WORD 0x30 // whatever
+
+#include "TileChangeTrap.c.lyn.event"
+
+/*
+
+This implements these:
+	void ChangeSingleTile(int x, int y, int tileID, Proc* parent)
+	void ChangeSingleTileExt(int x, int y, int tileID, int display, Proc* parent)
+
+in other words, the "ChangeSingleTile" points to a routine that takes the following arguments:
+	r0 = tile x position
+	r1 = tile y position
+	r2 = tile ID short
+	r3 = parent 6C for fade display (0 for instant gfx change)
+
+and the "ChangeSingleTileExt" label points to a routine that takes those:
+	r0 = tile x position
+	r1 = tile y position
+	r2 = tile ID short
+	r3 = 0 for instant, 1 for display fade change
+	[sp] = parent 6C for fade display (0 for none)
+
+ChangeSingleTile calls ChangeSingleTileExt, and exists so that you don't have to mess with the stack for simple & straighforward applications.
+
+HOW DOES THIS WORK:
+	Each tile changed by one of those 2 routines creates a trap of type id 0x30 that holds the data for the tile change.
+	It using traps for holding data means that those changes *will* be saved properly.
+	I am hooking into the same routine that applies standard map changes to apply the changes on load, so this shouldn't be an issue either.
+
+*/
+
+#endif // HAX_TILE_CHANGE_TRAP
