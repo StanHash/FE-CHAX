@@ -1,0 +1,25 @@
+#ifndef MAIN
+#define MAIN
+
+#include "Extensions/Hack Installation.txt"
+#include "EAstdlib.event"
+
+#define FreeSpace         0xB2A610 // Size: 0xD59F0
+#define FreeSpace_BLRange 0x1C1EC0
+
+ORG FreeSpace_BLRange
+	// Nothing !
+
+ORG FreeSpace
+	#include "_FE8EssentialFixes.event"
+	#include "_FE8ProcNameFix.event"
+
+	#include "NewTrap/TileChangeTrap/TileChangeTrap.event"
+	
+	{
+	// include test chapter
+	}
+
+#else // MAIN
+	MESSAGE wat are u doin
+#endif // MAIN

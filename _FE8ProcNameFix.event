@@ -1,0 +1,16 @@
+#ifndef HAX_6C_NAME_FIX
+#define HAX_6C_NAME_FIX
+
+#ifndef _FE8_
+	ERROR _file_ not assembled for FE8
+#endif
+
+PUSH; ORG 0x002C9E // Somewhere in the 6C Construction routine
+	SHORT 0x6129 // str  r1, [r5, #0x10]
+	SHORT 0x2026 // mov  r0, #0x26
+	SHORT 0x5429 // strb r1, [r5, r0]
+	SHORT 0x3002 // add  r0, #2
+	SHORT 0x5429 // strb r1, [r5, r0]
+POP
+
+#endif // HAX_6C_NAME_FIX
