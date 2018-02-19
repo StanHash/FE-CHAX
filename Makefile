@@ -1,94 +1,113 @@
 .SUFFIXES:
-.PHONY: clean
+.PHONY: rom all clean
 
-# -----------
-# MAIN CONFIG
+include tools.mak
 
 # setting up main dir
-# we want to use an absolute path because EA requires changing working directory
+# we want to use an absolute path because EA's wd won't be here
 MAIN_DIR := $(realpath .)
 
-# main files
-MAIN       = $(MAIN_DIR)/Main.event
-BASE_ROM   = $(MAIN_DIR)/FE8_U.gba
-OUTPUT_ROM = $(MAIN_DIR)/OUT.gba
-
-# -----------------------
-# NON-EVENT BUILD OPTIONS
-
-# making sure devkitARM exists and is set up
-ifeq ($(strip $(DEVKITARM)),)
-	$(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM")
-endif
-
-# including devkitARM tool definitions
-# We aren't using devkitARM rules since we want to output things slightly differently (no dependancy things yet)
-include $(DEVKITARM)/base_tools
-
-# setting up additional path
-export PATH := $(abspath .)/bin:$(PATH)
-
-# setting up additional tools
-# right now integrating EA is kind of a mess, so we use a trampoline shell script that changes the working directory
-export EA  := ea.sh
-export LYN := lyn
-
-# CC/AS options
-
+# Setting C/ASM include directories up
 INCLUDE_DIRS := $(MAIN_DIR)/libgbafe
-ARCH         := -mcpu=arm7tdmi -mthumb -mthumb-interwork
+INCFLAGS     := $(foreach dir, $(INCLUDE_DIRS), -I "$(dir)")
 
-CCFLAGS      := -g -Wall -O3 -mtune=arm7tdmi -fomit-frame-pointer -ffast-math
-ASFLAGS      := -g
+# setting up compilation flags
+ARCH    := -mcpu=arm7tdmi -mthumb -mthumb-interwork
+CFLAGS  := $(ARCH) $(INCFLAGS) -Wall -Os -mtune=arm7tdmi -fomit-frame-pointer -ffast-math
+ASFLAGS := $(ARCH) $(INCFLAGS)
+
+# setting up cache dir
+CACHE_DIR := $(MAIN_DIR)/.MkCache
+$(shell mkdir -p $(CACHE_DIR) > /dev/null)
+
+# defining dependency directory
+DEPSDIR := $(CACHE_DIR)
 
 # lyn options
+LYNLIB := $(MAIN_DIR)/libgbafe/fe8u.o
 
-LYN_LIBS := $(MAIN_DIR)/libgbafe/fe8u.s.o
-LYNFLAGS := $(LYN_LIBS)
+# Finding all possible source files
+CFILES   := $(shell find "$(MAIN_DIR)" -name '*.c')
+SFILES   := $(shell find "$(MAIN_DIR)" -name '*.s')
+OFILES   := $(CFILES:.c=.o) $(SFILES:.s=.o)
+ASMFILES := $(CFILES:.c=.asm)
+LYNFILES := $(OFILES:.o=.lyn.event)
+DMPFILES := $(OFILES:.o=.dmp)
+DEPFILES := $(addprefix $(DEPSDIR)/, $(notdir $(CFILES:.c=.d)))
 
-# ----------
-# AUTOMATICS
+# EA Files
+EVENT_MAIN     := $(MAIN_DIR)/Main.event
+EVENT_MAIN_NPP := $(CACHE_DIR)/Main.npp.event
+EVENT_MAIN_DEP := $(CACHE_DIR)/EventMain.d
 
-# Generating AS/CC include directory flags from directory list
-INCFLAGS := $(foreach dir, $(INCLUDE_DIRS), -I $(dir))
+# ROMs
+ROM_SOURCE     := $(MAIN_DIR)/FE8_U.gba
+ROM_TARGET     := $(MAIN_DIR)/FEHACK.gba
 
-CCFLAGS += $(ARCH) $(INCFLAGS)
-ASFLAGS += $(ARCH) $(INCFLAGS)
+# pea options
+PEAFLAGS   := -D _FE8_ -I $(MAIN_DIR)/bin/EventAssembler/ -T $(MAIN_DIR)/bin/EventAssembler/Tools/
+PEADEPFLAGS = -MMD -MT $(EVENT_MAIN_NPP) -MF $(EVENT_MAIN_DEP) -MP -MG
 
-# Finding all C files
-CFILES := $(shell find $(MAIN_DIR) -name '*.c')
+# defining C dependency flags
+CDEPFLAGS = -MMD -MT "$*.o" -MT "$*.asm" -MF "$(DEPSDIR)/$(notdir $*).d" -MP
 
-# Finding all S files
-SFILES := $(shell find $(MAIN_DIR) -name '*.s')
+# All files
+ALL_FILES := $(EVENT_MAIN_NPP) $(EVENT_MAIN_DEP) $(ROM_TARGET) $(OFILES) $(ASMFILES) $(LYNFILES) $(DMPFILES)
 
-# Generating object names from C & S files
-FILES_OBJ := $(CFILES:.c=.c.o) $(SFILES:.s=.s.o)
-FILES_LYN := $(FILES_OBJ:.o=.lyn.event)
+# ------------------
+# PHONY TARGET RULES
 
-# ---------------------------------
-# MAIN TARGETS (OUTPUT ROM & CLEAN)
+rom: $(ROM_TARGET);
 
-$(OUTPUT_ROM): $(MAIN) $(BASE_ROM) $(FILES_LYN)
-	@echo "$(notdir $<) -> $(notdir $@)"
-	@cp -f $(BASE_ROM) $(OUTPUT_ROM)
-	@$(EA) A FE8 "-output:$(OUTPUT_ROM)" "-input:$(MAIN)"
+all: $(ALL_FILES);
 
 clean:
 	@echo "cleaning..."
-	@rm -f $(FILES_OBJ) $(FILES_LYN) $(OUTPUT_ROM)
+	@rm -f $(ALL_FILES)
 	@echo "done."
 
-# -----------------
-# FILE TYPE TARGETS
+# -------------------
+# ACTUAL TARGET RULES
 
-%.lyn.event: %.o $(LYN_LIBS)
-	@echo "$(notdir $<) -> $(notdir $@)"
-	@$(LYN) $< $(LYNFLAGS) > $@
+$(ROM_TARGET): $(EVENT_MAIN_NPP) $(ROM_SOURCE) $(EVENT_MAIN_DEP)
+	$(PREPROCESS_MESSAGE)
+	@cp -f "$(ROM_SOURCE)" "$(ROM_TARGET)"
+	@$(EA) A FE8 "-output:$(ROM_TARGET)" "-input:$(EVENT_MAIN_NPP)"
 
-%.c.o: %.c
-	@echo "$(notdir $<) -> $(notdir $@)"
-	@$(CC) $(CCFLAGS) -c $< -o $@ $(ERROR_FILTER)
+$(EVENT_MAIN_NPP) $(EVENT_MAIN_DEP): $(EVENT_MAIN)
+	$(PREPROCESS_MESSAGE)
+	@$(PEA) $(PEAFLAGS) $(PEADEPFLAGS) "$(EVENT_MAIN)" -o "$(EVENT_MAIN_NPP)"
 
-%.s.o: %.s
-	@echo "$(notdir $<) -> $(notdir $@)"
+# -------------
+# PATTERN RULES
+
+# C to ASM rule
+%.asm: %.c
+	$(PREPROCESS_MESSAGE)
+	@$(CC) $(CFLAGS) $(CDEPFLAGS) -S $< -o $@ -fverbose-asm $(ERROR_FILTER)
+
+# C to OBJ rule
+%.o: %.c
+	$(PREPROCESS_MESSAGE)
+	@$(CC) $(CFLAGS) $(CDEPFLAGS) -c $< -o $@ $(ERROR_FILTER)
+
+# ASM to OBJ rule
+%.o: %.s
+	$(PREPROCESS_MESSAGE)
 	@$(AS) $(ASFLAGS) $< -o $@ $(ERROR_FILTER)
+
+# OBJ to DMP rule
+%.dmp: %.o
+	$(PREPROCESS_MESSAGE)
+	@$(OBJCOPY) -S $< -O binary $@
+
+# OBJ to EVENT rule
+%.lyn.event: %.o $(LYNLIB)
+	$(PREPROCESS_MESSAGE)
+	@lyn $< $(LYNLIB) > $@
+
+# --------------------
+# INCLUDE DEPENDENCIES
+
+-include $(DEPFILES)
+-include $(EVENT_MAIN_DEP)

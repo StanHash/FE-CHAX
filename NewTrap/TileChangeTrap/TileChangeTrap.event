@@ -4,7 +4,7 @@
 SINGLE_TILE_CHANGE_TRAP_TYPE:
 	WORD 0x30 // whatever
 
-#include "TileChangeTrap.c.lyn.event"
+#include "TileChangeTrap.lyn.event"
 
 /*
 
