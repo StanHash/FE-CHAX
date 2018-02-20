@@ -24,6 +24,8 @@ They don't. Not really well at least. There's two main reasons for that:
 
 Sorry for the messiness of the whole process, this is kind of an experimental build structure, I'll be working on improving the whole thing in the future.
 
+NOTE: if you are using `#incbin` or `#incext` anywhere in your buildfile, you need to have [`bin2ea`](https://github.com/StanHash/bin2ea) in the tools folder of EA (or another tool in another folder, see [the `pea` README](https://github.com/StanHash/pea-preprocessor/blob/master/README.md) for details)
+
 ## `ea` shell script that I use (Linux)
 
 ```sh
@@ -37,4 +39,4 @@ put that in a new `bin` subfolder, along with [`lyn`](https://github.com/StanHas
 
 (Also don't forget .NET/Mono to be able to run EA)
 
-Under Windows, you probably can just omit `mono`, as .NET executables are considered as native Windows executables (I think), and can be called as they are. Requires testing as I don't have access to a Windows system right now.
+Under Windows, you probably can just omit `mono`, as .NET executables are considered as native Windows executables.
