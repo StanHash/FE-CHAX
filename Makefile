@@ -3,12 +3,8 @@
 
 include tools.mak
 
-# setting up main dir
-# we want to use an absolute path because EA's wd won't be here
-MAIN_DIR := $(realpath .)
-
 # Setting C/ASM include directories up
-INCLUDE_DIRS := $(MAIN_DIR)/libgbafe
+INCLUDE_DIRS := libgbafe
 INCFLAGS     := $(foreach dir, $(INCLUDE_DIRS), -I "$(dir)")
 
 # setting up compilation flags
@@ -17,18 +13,18 @@ CFLAGS  := $(ARCH) $(INCFLAGS) -Wall -Os -mtune=arm7tdmi -fomit-frame-pointer -f
 ASFLAGS := $(ARCH) $(INCFLAGS)
 
 # setting up cache dir
-CACHE_DIR := $(MAIN_DIR)/.MkCache
+CACHE_DIR := .MkCache
 $(shell mkdir -p $(CACHE_DIR) > /dev/null)
 
 # defining dependency directory
 DEPSDIR := $(CACHE_DIR)
 
 # lyn options
-LYNLIB := $(MAIN_DIR)/libgbafe/fe8u.o
+LYNLIB := libgbafe/fe8u.o
 
 # Finding all possible source files
-CFILES   := $(shell find "$(MAIN_DIR)" -name '*.c')
-SFILES   := $(shell find "$(MAIN_DIR)" -name '*.s')
+CFILES   := $(shell find -name '*.c')
+SFILES   := $(shell find -name '*.s')
 OFILES   := $(CFILES:.c=.o) $(SFILES:.s=.o)
 ASMFILES := $(CFILES:.c=.asm)
 LYNFILES := $(OFILES:.o=.lyn.event)
@@ -36,16 +32,16 @@ DMPFILES := $(OFILES:.o=.dmp)
 DEPFILES := $(addprefix $(DEPSDIR)/, $(notdir $(CFILES:.c=.d)))
 
 # EA Files
-EVENT_MAIN     := $(MAIN_DIR)/Main.event
+EVENT_MAIN     := Main.event
 EVENT_MAIN_NPP := $(CACHE_DIR)/Main.npp.event
 EVENT_MAIN_DEP := $(CACHE_DIR)/EventMain.d
 
 # ROMs
-ROM_SOURCE     := $(MAIN_DIR)/FE8_U.gba
-ROM_TARGET     := $(MAIN_DIR)/FEHACK.gba
+ROM_SOURCE     := FE8_U.gba
+ROM_TARGET     := FEHACK.gba
 
 # pea options
-PEAFLAGS   := -D _FE8_ -I $(MAIN_DIR)/bin/EventAssembler/ -T $(MAIN_DIR)/bin/EventAssembler/Tools/
+PEAFLAGS   := -D _FE8_ -I bin/EventAssembler/ -T bin/EventAssembler/Tools/
 PEADEPFLAGS = -MMD -MT $(EVENT_MAIN_NPP) -MF $(EVENT_MAIN_DEP) -MP -MG
 
 # defining C dependency flags
@@ -72,7 +68,7 @@ clean:
 $(ROM_TARGET): $(EVENT_MAIN_NPP) $(ROM_SOURCE) $(EVENT_MAIN_DEP)
 	$(PREPROCESS_MESSAGE)
 	@cp -f "$(ROM_SOURCE)" "$(ROM_TARGET)"
-	@$(EA) A FE8 "-output:$(ROM_TARGET)" "-input:$(EVENT_MAIN_NPP)"
+	@$(EA) A FE8 "-output:$(abspath $(ROM_TARGET))" "-input:$(abspath $(EVENT_MAIN_NPP))"
 
 $(EVENT_MAIN_NPP) $(EVENT_MAIN_DEP): $(EVENT_MAIN)
 	$(PREPROCESS_MESSAGE)
