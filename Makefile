@@ -33,7 +33,6 @@ DEPFILES := $(addprefix $(DEPSDIR)/, $(notdir $(CFILES:.c=.d)))
 
 # EA Files
 EVENT_MAIN     := Main.event
-EVENT_MAIN_NPP := $(CACHE_DIR)/Main.npp.event
 EVENT_MAIN_DEP := $(CACHE_DIR)/EventMain.d
 
 # ROMs
@@ -42,20 +41,19 @@ ROM_TARGET     := FEHACK.gba
 
 # pea options
 PEAFLAGS   := -D _FE8_ -I bin/EventAssembler/ -T bin/EventAssembler/Tools/
-PEADEPFLAGS = -MMD -MT $(EVENT_MAIN_NPP) -MF $(EVENT_MAIN_DEP) -MP -MG
+PEADEPFLAGS = -MM -MT $(ROM_TARGET) -MF $(EVENT_MAIN_DEP) -MP -MG -.pp.makedep.outputIsTarget=false
 
 # defining C dependency flags
 CDEPFLAGS = -MMD -MT "$*.o" -MT "$*.asm" -MF "$(DEPSDIR)/$(notdir $*).d" -MP
 
 # All files
-ALL_FILES := $(EVENT_MAIN_NPP) $(EVENT_MAIN_DEP) $(ROM_TARGET) $(OFILES) $(ASMFILES) $(LYNFILES) $(DMPFILES)
+ALL_FILES := $(EVENT_MAIN_DEP) $(ROM_TARGET) $(OFILES) $(ASMFILES) $(LYNFILES) $(DMPFILES)
 
 # ------------------
 # PHONY TARGET RULES
 
 hack: $(ROM_TARGET);
-
-all: $(ALL_FILES);
+all:  $(ALL_FILES);
 
 clean:
 	@echo "cleaning..."
@@ -65,14 +63,14 @@ clean:
 # -------------------
 # ACTUAL TARGET RULES
 
-$(ROM_TARGET): $(EVENT_MAIN_NPP) $(ROM_SOURCE) $(EVENT_MAIN_DEP)
+$(ROM_TARGET): $(EVENT_MAIN) $(EVENT_MAIN_DEP) $(ROM_SOURCE)
 	$(PREPROCESS_MESSAGE)
 	@cp -f "$(ROM_SOURCE)" "$(ROM_TARGET)"
-	@$(EA) A FE8 "-output:$(abspath $(ROM_TARGET))" "-input:$(abspath $(EVENT_MAIN_NPP))"
+	@$(EA) A FE8 "-output:$(abspath $(ROM_TARGET))" "-input:$(abspath $(EVENT_MAIN))"
 
-$(EVENT_MAIN_NPP) $(EVENT_MAIN_DEP): $(EVENT_MAIN)
+$(EVENT_MAIN_DEP): $(EVENT_MAIN)
 	$(PREPROCESS_MESSAGE)
-	@$(PEA) $(PEAFLAGS) $(PEADEPFLAGS) "$(EVENT_MAIN)" -o "$(EVENT_MAIN_NPP)"
+	@$(PEA) $(PEAFLAGS) $(PEADEPFLAGS) "$(EVENT_MAIN)"
 
 # -------------
 # PATTERN RULES
@@ -89,8 +87,8 @@ $(EVENT_MAIN_NPP) $(EVENT_MAIN_DEP): $(EVENT_MAIN)
 
 # ASM to OBJ rule
 %.o: %.s
-	$(PREPROCESS_MESSAGE)
-	@$(AS) $(ASFLAGS) $< -o $@ $(ERROR_FILTER)
+	@echo "$(notdir $<) => $(notdir $@)"
+	@$(AS) $(ARCH) -I $(dir $<) $< -o $@ $(ERROR_FILTER)
 
 # OBJ to DMP rule
 %.dmp: %.o
