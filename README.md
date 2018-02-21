@@ -16,7 +16,7 @@ They don't. Not really well at least. There's two main reasons for that:
 - have `make` (and some kind of posix-compatible shell (if you're under Windows, look into `<devkitPro>/msys/bin/`))
 - have [`lyn`](https://github.com/StanHash/lyn/releases), [`pea`](https://github.com/StanHash/pea-preprocessor/releases) & `ea` (see below) in a new `bin` folder.
 - run your shell and go to this folder
-  - you can `make` or `make rom` to build the demo ROM (requires `FE8_U.gba` in the directory)
+  - you can `make` or `make hack` to build the demo ROM (requires `FE8_U.gba` in the directory)
   - you can `make all` to make everything unconditionally.
   - you can `make SomeFile.[o|asm|dmp|lyn.event]` to make a specific file (`asm` files are generated from C).
   - run `make clean` when you're done.
