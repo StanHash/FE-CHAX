@@ -1,5 +1,5 @@
 .SUFFIXES:
-.PHONY: rom all clean
+.PHONY: hack all clean
 
 include tools.mak
 
@@ -53,7 +53,7 @@ ALL_FILES := $(EVENT_MAIN_NPP) $(EVENT_MAIN_DEP) $(ROM_TARGET) $(OFILES) $(ASMFI
 # ------------------
 # PHONY TARGET RULES
 
-rom: $(ROM_TARGET);
+hack: $(ROM_TARGET);
 
 all: $(ALL_FILES);
 
