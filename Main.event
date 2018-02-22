@@ -15,6 +15,7 @@ ORG FreeSpace
 	#include "_FE8ProcNameFix.event"
 
 	#include "NewTrap/TileChangeTrap/TileChangeTrap.event"
+	#include "NewTrap/MovingTrap/ThingSmall.event"
 	
 	{
 	// include test chapter

@@ -1,6 +1,7 @@
 .MkCache*
 *.gba
 *.sav
+*.png
 bin*
 
 # Object files

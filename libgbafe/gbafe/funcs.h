@@ -19,6 +19,11 @@ extern uint16_t** const tile_index_map; //! FE8U = (0x0859A9D4)
 
 extern Trap trap_array[]; //! FE8U = (0x0203A614)
 
+extern Unit* active_unit; //! FE8U = (0x03004E50)
+
+extern const int16_t sin_table[]; //! FE8U = (0x080D751C)
+extern const int16_t cos_table[]; //! FE8U = (0x080D759C)
+
 #pragma long_calls
 
 // <RNG Systems>
@@ -68,10 +73,10 @@ int CanUnitCrossTerrain(Unit* unit, uint8_t terrain); //! FE8U = (0x0801949C+1)
 
 // <Maps>
 
-void FlushTileUpdates();    //! FE8U = (0x08019A64+1)
+void FlushTileUpdates();        //! FE8U = (0x08019A64+1)
 void UpdateGameTilesGraphics(); //! FE8U = (0x08019C3C+1)
-void PrepareMapChangeGfx(); //! FE8U = (0x08019CBC+1)
-void RefreshEntityMaps(); //! FE8U = (0x0801A1F4+1)
+void PrepareMapChangeGfx();     //! FE8U = (0x08019CBC+1)
+void RefreshEntityMaps();       //! FE8U = (0x0801A1F4+1)
 
 // </Maps>
 
@@ -127,10 +132,24 @@ void UpdateUnitsUnderRoof(); //! FE8U = (0x0802E690+1)
 
 // <MoveUnit>
 
-MoveUnitProc* NewMoveUnitForMapUnit(Unit*);    //! FE8U = (0x08078464+1)
-void SetMoveUnitDirection(MoveUnitProc*, int); //! FE8U = (0x08078694+1)
-void EndAllMoveUnits();                        //! FE8U = (0x080790A4+1)
-void EndMoveUnit(MoveUnitProc*);               //! FE8U = (0x080790B4+1)
+void ResetAllMoveUnitExtraData();                                             //! FE8U = (0x0807840C+1)
+MoveUnitProc* NewMoveUnitForUnit_Specialized(Unit* unit, int mms, int palId); //! FE8U = (0x08078428+1)
+MoveUnitProc* NewMoveUnitForUnit(Unit* unit);                                 //! FE8U = (0x08078464+1)
+void EnableMoveUnitCameraFollow();                                            //! FE8U = (0x080784E4+1)
+void DisableMoveUnitCameraFollow();                                           //! FE8U = (0x080784EC+1)
+MoveUnitProc* NewMoveUnitForUI(Unit* unit);                                   //! FE8U = (0x080784F4+1)
+MoveUnitProc* NewMoveUnit(int x, int y, int mms, int objBase, int palId);     //! FE8U = (0x08078540+1)
+void SetMoveUnitDirection(MoveUnitProc* moveunit, int direction);             //! FE8U = (0x08078694+1)
+void ResetMoveUnitDirection(MoveUnitProc* moveunit);                          //! FE8U = (0x080786BC+1)
+void ResetMoveUnitDirection_Unique();                                         //! FE8U = (0x080786E8+1)
+void SetMoveUnitMoveManual_Unique(uint8_t* moveManual);                       //! FE8U = (0x08078700+1)
+int DoesMoveUnitExist();                                                      //! FE8U = (0x08078720+1)
+int DoesMovingMoveUnitExist();                                                //! FE8U = (0x08078738+1)
+void SetMoveUnitMoveManual(MoveUnitProc* moveunit, uint8_t* moveManual);      //! FE8U = (0x08078790+1)
+void EndAllMoveUnits();                                                       //! FE8U = (0x080790A4+1)
+void EndMoveUnit(MoveUnitProc* moveunit);                                     //! FE8U = (0x080790B4+1)
+
+void SetMoveUnitDisplayPosition(MoveUnitProc* moveunit, int x, int y);        //! FE8U = (0x080797E4+1)
 
 // </MoveUnit>
 

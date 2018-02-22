@@ -26,6 +26,11 @@ SET_ABS_DATA tile_index_map, (0x0859A9D4)
 
 SET_ABS_DATA trap_array,   (0x0203A614)
 
+SET_ABS_DATA active_unit,  (0x03004E50)
+
+SET_ABS_DATA sin_table,    (0x080D751C)
+SET_ABS_DATA cos_table,    (0x080D759C)
+
 @ <RNG Systems>
 
 SET_ABS_FUNC NextRN,          (0x08000B88+1)
@@ -132,10 +137,24 @@ SET_ABS_FUNC UpdateUnitsUnderRoof, (0x0802E690+1)
 
 @ <MoveUnit>
 
-SET_ABS_FUNC NewMoveUnitForMapUnit, (0x08078464+1)
-SET_ABS_FUNC SetMoveUnitDirection,  (0x08078694+1)
-SET_ABS_FUNC EndAllMoveUnits,       (0x080790A4+1)
-SET_ABS_FUNC EndMoveUnit,           (0x080790B4+1)
+SET_ABS_FUNC ResetAllMoveUnitExtraData,      (0x0807840C+1)
+SET_ABS_FUNC NewMoveUnitForUnit_Specialized, (0x08078428+1)
+SET_ABS_FUNC NewMoveUnitForUnit,             (0x08078464+1)
+SET_ABS_FUNC EnableMoveUnitCameraFollow,     (0x080784E4+1)
+SET_ABS_FUNC DisableMoveUnitCameraFollow,    (0x080784EC+1)
+SET_ABS_FUNC NewMoveUnitForUI,               (0x080784F4+1)
+SET_ABS_FUNC NewMoveUnit,                    (0x08078540+1)
+SET_ABS_FUNC SetMoveUnitDirection,           (0x08078694+1)
+SET_ABS_FUNC ResetMoveUnitDirection,         (0x080786BC+1)
+SET_ABS_FUNC ResetMoveUnitDirection_Unique,  (0x080786E8+1)
+SET_ABS_FUNC SetMoveUnitMoveManual_Unique,   (0x08078700+1)
+SET_ABS_FUNC DoesMoveUnitExist,              (0x08078720+1)
+SET_ABS_FUNC DoesMovingMoveUnitExist,        (0x08078738+1)
+SET_ABS_FUNC SetMoveUnitMoveManual,          (0x08078790+1)
+SET_ABS_FUNC EndAllMoveUnits,                (0x080790A4+1)
+SET_ABS_FUNC EndMoveUnit,                    (0x080790B4+1)
+
+SET_ABS_FUNC SetMoveUnitDisplayPosition,     (0x080797E4+1)
 
 @ </MoveUnit>
 
