@@ -12,7 +12,7 @@ void ChangeSingleTile(int x, int y, int tileID, Proc* parent);
 void ChangeSingleTileExt(int x, int y, int tileID, int display, Proc* parent);
 
 static void ApplySingleTileChange(int x, int y, int tileID) {
-	tile_index_map[y][x] = tileID;
+	map_raw_tile_index[y][x] = tileID;
 }
 
 static Trap* FindTileChangeTrap(int x, int y) {
@@ -63,20 +63,20 @@ void ChangeSingleTileExt(int x, int y, int tileID, int display, Proc* parent) {
 	
 	if (tileID != oldTile) {
 		if (display)
-			PrepareMapChangeGfx();
+			InitMapChangeGraphics();
 		
 		SET_TRAP_CHANGE_TILE(trap, tileID);
 		ApplySingleTileChange(TRAP_CHANGE_X(trap), TRAP_CHANGE_Y(trap), GET_TRAP_CHANGE_TILE(trap));
 		
-		FlushTileUpdates();
+		RefreshTileMaps();
 		UpdateUnitsUnderRoof();
-		UpdateGameTilesGraphics();
+		DrawTileGraphics();
 		
 		if (display) {
 			if (parent)
-				NewBlockingBMXFADE(1, parent);
+				StartBlockingBMXFADE(1, parent);
 			else
-				NewBMXFADE(1);
+				StartBMXFADE(1);
 		}
 	}
 }

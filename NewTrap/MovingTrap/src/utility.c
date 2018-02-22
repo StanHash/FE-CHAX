@@ -2,7 +2,7 @@
 
 static int sign(int value) { return (value>>31) - (-value>>31); }
 
-int MoveMoveUnitTowards(MoveUnitProc* moveunit, int x, int y, int speed) {
+int MoveMoveUnitTowards(MoveUnitState* moveunit, int x, int y, int speed) {
 	x = x << 8;
 	y = y << 8;
 	

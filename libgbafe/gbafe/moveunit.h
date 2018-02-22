@@ -1,14 +1,15 @@
 #ifndef GBAFE_MOVEUNIT_H
 #define GBAFE_MOVEUNIT_H
 
+// mu.c
+
 #include <stdint.h>
 
-#include "6C.h"
+#include "proc.h"
 #include "unit.h"
-#include "TCS.h"
+#include "animhandle.h"
 
-typedef struct _MoveUnitProc MoveUnitProc;
-typedef struct _MoveUnitProc MoveUnit6C;
+typedef struct _MoveUnitState MoveUnitState;
 
 typedef struct _MoveUnitExtraData MoveUnitExtraData;
 
@@ -21,17 +22,17 @@ struct _MoveUnitExtraData {
 	uint8_t commandCount;
 	uint8_t commands[63];
 	
-	void* _;
-	MoveUnitProc* moveunit;
+	void* _u;
+	MoveUnitState* pMoveunit;
 };
 
-struct _MoveUnitProc {
-	Proc header;
+struct _MoveUnitState {
+	ProcState header;
 	
 	// should be padded to 0x2C
 	
 	Unit* pUnit;
-	AnimHandle* pTCS;
+	AnimHandle* pAnimHandle;
 	MoveUnitExtraData* pExtraData;
 	void* pVRAM;
 	
@@ -54,7 +55,29 @@ struct _MoveUnitProc {
 	int16_t xOffset;             // 50 | short | added to x? (0 initially)
 	int16_t yOffset;             // 52 | short | added to y? (0 initially)
 	
-	Proc* pBlendTimerProc;       // 54 | word  | blend timer thing 6C pointer
+	ProcState* pBlendTimerProc;  // 54 | word  | blend timer thing 6C pointer
 };
+
+#pragma long_calls
+
+void ResetAllMoveUnitExtraData();                                              //! FE8U = (0x0807840C+1)
+MoveUnitState* StartMoveUnitForUnitExt(Unit* unit, int mms, int palId);        //! FE8U = (0x08078428+1)
+MoveUnitState* StartMoveUnitForUnit(Unit* unit);                               //! FE8U = (0x08078464+1)
+void EnableMoveUnitCameraFollow(MoveUnitState*);                               //! FE8U = (0x080784E4+1)
+void DisableMoveUnitCameraFollow(MoveUnitState*);                              //! FE8U = (0x080784EC+1)
+MoveUnitState* StartMoveUnitForUI(Unit* unit);                                 //! FE8U = (0x080784F4+1)
+MoveUnitState* StartMoveUnit(int x, int y, int mms, int objBase, int palId);   //! FE8U = (0x08078540+1)
+void SetMoveUnitDirection(MoveUnitState* moveunit, int direction);             //! FE8U = (0x08078694+1)
+void ResetMoveUnitDirection(MoveUnitState* moveunit);                          //! FE8U = (0x080786BC+1)
+void ResetMoveUnitDirection_Unique();                                          //! FE8U = (0x080786E8+1)
+void SetMoveUnitMoveManual_Unique(uint8_t* moveManual);                        //! FE8U = (0x08078700+1)
+int DoesMoveUnitExist();                                                       //! FE8U = (0x08078720+1)
+int DoesMovingMoveUnitExist();                                                 //! FE8U = (0x08078738+1)
+void SetMoveUnitMoveManual(MoveUnitState* moveunit, uint8_t* moveManual);      //! FE8U = (0x08078790+1)
+void EndAllMoveUnits();                                                        //! FE8U = (0x080790A4+1)
+void EndMoveUnit(MoveUnitState* moveunit);                                     //! FE8U = (0x080790B4+1)
+void SetMoveUnitDisplayPosition(MoveUnitState* moveunit, int x, int y);        //! FE8U = (0x080797E4+1)
+
+#pragma long_calls_off
 
 #endif // GBAFE_MOVEUNIT_H

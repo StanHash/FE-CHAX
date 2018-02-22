@@ -2,7 +2,7 @@
 
 typedef struct _TrapHandlerProc TrapHandlerProc;
 struct _TrapHandlerProc {
-	Proc header;
+	ProcState header;
 	
 	Unit* pUnit;
 	int   idk;
@@ -26,18 +26,18 @@ static const uint8_t OppositeDirectionTable[] = {
 };
 
 static const ProcCode ProcCode_TrapHandler[] = {
-	_6C_SET_NAME("Stan:MovingTrapHandler"),
-	_6C_YIELD,
+	PROC_SET_NAME("Stan:MovingTrapHandler"),
+	PROC_YIELD,
 	
-	_6C_WHILE_ROUTINE(DoesMovingMoveUnitExist),
+	PROC_WHILE_ROUTINE(DoesMovingMoveUnitExist),
 	
-_6C_LABEL(0),
-	_6C_CALL_ROUTINE(TrapHandlerCheck),
-	_6C_WHILE_ROUTINE(0x08078721), // Blocking MoveUnit 6C Exists
-	_6C_GOTO(0),
+PROC_LABEL(0),
+	PROC_CALL_ROUTINE(TrapHandlerCheck),
+	PROC_WHILE_ROUTINE(0x08078721), // Blocking MoveUnit 6C Exists
+	PROC_GOTO(0),
 	
-_6C_LABEL(1),
-	_6C_END
+PROC_LABEL(1),
+	PROC_END
 };
 
 int CanUnitBeOnPosition(Unit* unit, int x, int y) {
@@ -47,13 +47,13 @@ int CanUnitBeOnPosition(Unit* unit, int x, int y) {
 	if (x >= map_size.x || y >= map_size.y)
 		return 0; // position out of bounds
 	
-	if (unit_map[y][x])
+	if (map_unit[y][x])
 		return 0; // a unit is occupying this position
 	
-	if (hidden_map[y][x] & 1)
+	if (map_hidden[y][x] & 1)
 		return 0; // a hidden unit is occupying this position
 	
-	return CanUnitCrossTerrain(unit, terrain_map[y][x]);
+	return CanUnitCrossTerrain(unit, map_terrain[y][x]);
 }
 
 Vector2 GetPushPosition(Unit* unit, int direction, int moveAmount) {
@@ -71,18 +71,18 @@ Vector2 GetPushPosition(Unit* unit, int direction, int moveAmount) {
 		if (!(--moveAmount))
 			break;
 		
-		if (hidden_map[result.y][result.x] & 2) // check for a hidden trap such as a mine
+		if (map_hidden[result.y][result.x] & 2) // check for a hidden trap such as a mine
 			break;
 	}
 	
 	return result;
 }
 
-void HandleTrap(Proc* proc, Unit* unit, int idk) {
+void HandleTrap(ProcState* proc, Unit* unit, int idk) {
 	RefreshEntityMaps();
 	EndAllMoveUnits();
 	
-	TrapHandlerProc* newProc = (TrapHandlerProc*) New6CBlocking(ProcCode_TrapHandler, proc);
+	TrapHandlerProc* newProc = (TrapHandlerProc*) StartBlockingProc(ProcCode_TrapHandler, proc);
 	
 	newProc->pUnit = unit;
 	newProc->idk   = idk;
@@ -97,7 +97,7 @@ void TrapHandlerCheck(TrapHandlerProc* proc) {
 		Vector2 pos = GetPushPosition(proc->pUnit, trap->data[0], 0);
 		
 		if (pos.x == proc->pUnit->xPos && pos.y == proc->pUnit->yPos) {
-			Goto6CLabel((Proc*) proc, 1);
+			GotoProcLabel((Proc*) proc, 1);
 		} else {
 			// FIXME: write definitions for the whole AI pre-action struct thingy
 			
@@ -108,5 +108,5 @@ void TrapHandlerCheck(TrapHandlerProc* proc) {
 			(*pAIY) = proc->pUnit->yPos = action_data.yMove = pos.y;
 		}
 	} else
-		Goto6CLabel((Proc*) proc, 1);
+		GotoProcLabel((Proc*) proc, 1);
 }

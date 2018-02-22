@@ -1,15 +1,19 @@
-#ifndef GBAFE_TCS_H
-#define GBAFE_TCS_H
+#ifndef GBAFE_ANIMHANDLE_H
+#define GBAFE_ANIMHANDLE_H
+
+// this may or may not correspond to the ap.c file in the proto
+// (the order matches, but may be dialog interpreter too, which is just before)
 
 #include <stdint.h>
 
 #include "common.h"
 
-typedef struct _TCStruct TCStruct;
-typedef struct _TCStruct TCS;
-typedef struct _TCStruct AnimHandle;
+// I call those "TCS" in my doc -Stan
 
-struct _TCStruct {
+typedef struct _AnimHandle AnimHandle;
+typedef struct _AnimHandle TCStruct;
+
+struct _AnimHandle {
 	void* pDefinition;      // 00 | word  | Pointer to ROMTCS
 	void* pFrameData;       // 04 | word  | Pointer to Frame Data Ref (from ROMTCS)
 	void* pAnimDataStart;   // 08 | word  | Pointer to Current Anim Data (Start, where you go back on loop)
@@ -26,4 +30,7 @@ struct _TCStruct {
 	void* pGraphics;        // 24 | word  | Gfx Pointer
 };
 
-#endif // GBAFE_TCS_H
+#pragma long_calls
+#pragma long_calls_off
+
+#endif // GBAFE_ANIMHANDLE_H

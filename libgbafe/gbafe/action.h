@@ -8,7 +8,8 @@
 typedef struct _ActionData ActionData;
 
 struct _ActionData {
-	uint16_t stuff[6]; // sometimes those are pushed RN states
+	// unknown stuff (sometimes RNs are pushed here) (maybe an union?)
+	uint16_t _u00[6];
 	
 	uint8_t subjectIndex;
 	uint8_t targetIndex;
@@ -20,6 +21,8 @@ struct _ActionData {
 	
 	uint8_t actionIndex;
 	
+	// maybe from this onwards it's an union?
+	
 	uint8_t itemSlotIndex;
 	
 	uint8_t xOther;
@@ -27,5 +30,7 @@ struct _ActionData {
 	
 	uint8_t trapType;
 };
+
+extern ActionData action_data; //! FE8U = (0x0203A958)
 
 #endif // GBAFE_ACTION_H

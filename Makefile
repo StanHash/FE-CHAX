@@ -23,8 +23,8 @@ DEPSDIR := $(CACHE_DIR)
 LYNLIB := libgbafe/fe8u.o
 
 # Finding all possible source files
-CFILES   := $(shell find -name '*.c')
-SFILES   := $(shell find -name '*.s')
+CFILES   := $(shell find -type f -name '*.c')
+SFILES   := $(shell find -type f -name '*.s')
 OFILES   := $(CFILES:.c=.o) $(SFILES:.s=.o)
 ASMFILES := $(CFILES:.c=.asm)
 LYNFILES := $(OFILES:.o=.lyn.event)

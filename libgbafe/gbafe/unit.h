@@ -1,6 +1,9 @@
 #ifndef GBAFE_UNIT_H
 #define GBAFE_UNIT_H
 
+// Rename to bmunit.h? Since it corresponds to bmunit.c from the proto
+// Maybe corresponds to multiple files
+
 #include <stdint.h>
 
 #include "common.h"
@@ -116,5 +119,10 @@ struct _BattleUnit {
 };
 
 #define UNIT_ATTRIBUTES(apUnit) ((apUnit)->pCharacterData->attributes | (apUnit)->pClassData->attributes)
+
+extern Unit* active_unit; //! FE8U = (0x03004E50)
+
+#pragma long_calls
+#pragma long_calls_off
 
 #endif // GBAFE_UNIT_H

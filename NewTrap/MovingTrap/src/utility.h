@@ -3,6 +3,6 @@
 
 #include "gbafe.h"
 
-int MoveMoveUnitTowards(MoveUnitProc* moveunit, int x, int y, int speed);
+int MoveMoveUnitTowards(MoveUnitState* moveunit, int x, int y, int speed);
 
 #endif // UTILITY_H

@@ -3,9 +3,6 @@
 
 #include <stdint.h>
 
-#define COS_OF(value) (sin_table[(value)])
-#define SIN_OF(value) (cos_table[(value)])
-
 typedef struct _Vector2  Vector2;
 typedef struct _Vector2U Vector2U;
 
@@ -34,6 +31,16 @@ enum _UnitState {
 	//              = 0x00080000,
 	//              = 0x00100000,
 	//              = 0x00200000,
+	//              = 0x00400000,
+	//              = 0x00800000,
+	//              = 0x01000000,
+	//              = 0x02000000,
+	//              = 0x04000000,
+	//              = 0x08000000,
+	//              = 0x10000000,
+	//              = 0x20000000,
+	//              = 0x40000000,
+	//              = 0x80000000,
 	
 	US_DUMMY
 };
@@ -101,6 +108,16 @@ enum _IAttributes {
 	IA_LOCK_5         = 0x00080000,
 	IA_LOCK_6         = 0x00100000,
 	IA_LOCK_7         = 0x00200000,
+	//                = 0x00400000,
+	//                = 0x00800000,
+	//                = 0x01000000,
+	//                = 0x02000000,
+	//                = 0x04000000,
+	//                = 0x08000000,
+	//                = 0x10000000,
+	//                = 0x20000000,
+	//                = 0x40000000,
+	//                = 0x80000000,
 
 	IA_DUMMY
 };
