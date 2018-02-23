@@ -16,6 +16,7 @@ ORG FreeSpace
 
 	#include "NewTrap/TileChangeTrap/TileChangeTrap.event"
 	#include "NewTrap/MovingTrap/ThingSmall.event"
+	#include "EvilRN/EvilRN.event"
 	
 	{
 	// include test chapter

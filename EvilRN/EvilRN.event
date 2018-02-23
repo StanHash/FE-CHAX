@@ -1,0 +1,22 @@
+#ifndef HAX_EVILRN_EVENT
+#define HAX_EVILRN_EVENT
+
+#ifndef _FE8_
+	ERROR EVILRN is for FE8
+#endif
+
+#include "Extensions/Hack Installation.txt"
+
+{
+
+PUSH; ORG 0x000CB8
+	jumpToHack(RollRNForHit)
+POP
+
+ALIGN 4
+
+#include "src/evilrn.lyn.event"
+
+}
+
+#endif // HAX_EVILRN_EVENT
