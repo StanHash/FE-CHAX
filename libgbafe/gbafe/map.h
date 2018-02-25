@@ -89,4 +89,14 @@ uint8_t GetCurrentMovCostTable(void);                                         //
 #define FillRangeMapForDangerZone ApplyStuffToRangeMaps
 #define MapIncInBoundedRange Map_IncRange
 
+// compat with early versions
+#define map_size gMapSize
+#define map_unit gMapUnit
+#define map_terrain gMapTerrain
+#define map_movement gMapMovement
+#define map_range gMapRange
+#define map_fog gMapFog
+#define map_hidden gMapHidden
+#define map_raw_tile_index gMapRawTiles
+
 #endif // GBAFE_MAP_H

@@ -247,7 +247,7 @@ CharacterData GetROMCharStruct(uint8_t);                 //! FE8U = 0x8019465
 
 void RemoveUnitItem(Unit*, int slot);                    //! FE8U = 0x8019485
 
-int CanUnitCrossTerrain(const Unit*, uint8_t terrain);   //! FE8U = (0x0801949C+1)
+int CanUnitCrossTerrain(const Unit*, uint8_t terrain);   //! FE8U = 0x801949D
 
 #pragma long_calls_off
 
@@ -259,5 +259,8 @@ int CanUnitCrossTerrain(const Unit*, uint8_t terrain);   //! FE8U = (0x0801949C+
 #define IsPositionMagicSealed IsPosMagicSealed
 #define GetClassData GetROMClassStruct
 #define GetCharacterData GetROMCharStruct
+
+// compat with early versions
+#define active_unit gActiveUnit
 
 #endif // GBAFE_UNIT_H

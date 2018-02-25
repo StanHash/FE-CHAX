@@ -104,7 +104,7 @@ void       SetProcCycleHandler(ProcState*, void(*)(ProcState*));     //! FE8U = 
 #define Proc_BlockEachWithMark HaltEachProcMarked
 #define Proc_UnblockEachWithMark ResumeEachProcMarked
 
-void Proc_Initialize(void);
+// void Proc_Initialize(void);
 // ??? Proc_Create(???);
 // ??? Proc_CreateBlockingChild(???);
 // ??? Proc_Delete(???);;

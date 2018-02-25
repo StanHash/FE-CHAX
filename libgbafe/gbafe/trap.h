@@ -58,4 +58,7 @@ Trap* AddBallista(int x, int y, int itemIndex);                                 
 
 #pragma long_calls_off
 
+// compat with early versions
+#define trap_array gTrapArray
+
 #endif // GBAFE_TRAPS_H
