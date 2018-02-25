@@ -26,7 +26,7 @@ struct _Trap {
 	uint8_t data[5];
 };
 
-extern Trap trap_array[]; //! FE8U = (0x0203A614)
+extern Trap gTrapArray[]; //! FE8U = (0x0203A614)
 
 #pragma long_calls
 

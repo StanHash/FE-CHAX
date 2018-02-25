@@ -49,4 +49,6 @@ struct _CharacterData {
 	void*    pU30;
 };
 
+extern const CharacterData gCharacterData[];
+
 #endif // GBAFE_CHARACTER_H

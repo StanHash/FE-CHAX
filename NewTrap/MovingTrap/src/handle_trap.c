@@ -44,16 +44,16 @@ int CanUnitBeOnPosition(Unit* unit, int x, int y) {
 	if (x < 0 || y < 0)
 		return 0; // position out of bounds
 	
-	if (x >= map_size.x || y >= map_size.y)
+	if (x >= gMapSize.x || y >= gMapSize.y)
 		return 0; // position out of bounds
 	
-	if (map_unit[y][x])
+	if (gMapUnit[y][x])
 		return 0; // a unit is occupying this position
 	
-	if (map_hidden[y][x] & 1)
+	if (gMapHidden[y][x] & 1)
 		return 0; // a hidden unit is occupying this position
 	
-	return CanUnitCrossTerrain(unit, map_terrain[y][x]);
+	return CanUnitCrossTerrain(unit, gMapTerrain[y][x]);
 }
 
 Vector2 GetPushPosition(Unit* unit, int direction, int moveAmount) {
@@ -71,7 +71,7 @@ Vector2 GetPushPosition(Unit* unit, int direction, int moveAmount) {
 		if (!(--moveAmount))
 			break;
 		
-		if (map_hidden[result.y][result.x] & 2) // check for a hidden trap such as a mine
+		if (gMapHidden[result.y][result.x] & 2) // check for a hidden trap such as a mine
 			break;
 	}
 	
@@ -92,7 +92,7 @@ void TrapHandlerCheck(TrapHandlerProc* proc) {
 	Trap* trap = GetTrapAt(proc->pUnit->xPos, proc->pUnit->yPos);
 	
 	if (trap) {
-		//~ NewUnitMoveAnim(proc->pUnit, OppositeDirectionTable[trap->data[0]], (Proc*) proc);
+		// NewUnitMoveAnim(proc->pUnit, OppositeDirectionTable[trap->data[0]], (Proc*) proc);
 		
 		Vector2 pos = GetPushPosition(proc->pUnit, trap->data[0], 0);
 		
@@ -104,8 +104,8 @@ void TrapHandlerCheck(TrapHandlerProc* proc) {
 			uint8_t* const pAIX = (uint8_t*) 0x0203AA96;
 			uint8_t* const pAIY = (uint8_t*) 0x0203AA97;
 			
-			(*pAIX) = proc->pUnit->xPos = action_data.xMove = pos.x;
-			(*pAIY) = proc->pUnit->yPos = action_data.yMove = pos.y;
+			(*pAIX) = proc->pUnit->xPos = gActionData.xMove = pos.x;
+			(*pAIY) = proc->pUnit->yPos = gActionData.yMove = pos.y;
 		}
 	} else
 		GotoProcLabel((Proc*) proc, 1);

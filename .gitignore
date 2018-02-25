@@ -4,6 +4,12 @@
 FE*-*.png
 bin/*
 
+*.lyn.event
+*.asm
+*.o
+
+.vscode*
+
 # Object files
 *.o
 *.ko

@@ -3,6 +3,9 @@
 
 #include "common.h"
 
+extern uint16_t gRNState[];
+extern uint32_t gOtherRN;
+
 #pragma long_calls
 
 int  NextRN();                     //! FE8U = (0x08000B88+1)

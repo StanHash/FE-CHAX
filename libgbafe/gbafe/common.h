@@ -6,6 +6,8 @@
 typedef struct _Vector2  Vector2;
 typedef struct _Vector2U Vector2U;
 
+typedef enum _UAllegiance UnitAllegiance;
+
 enum _UnitState {
 	US_NONE         = 0x00000000,
 	
@@ -120,6 +122,21 @@ enum _IAttributes {
 	//                = 0x80000000,
 
 	IA_DUMMY
+};
+
+enum _UAllegiance {
+	UA_BLUE  = 0x00,
+	UA_GREEN = 0x40,
+	UA_RED   = 0x80
+};
+
+enum _StatusEffect {
+	STATUS_NONE   = 0,
+
+	// idk
+	// status 2 is sleep?
+
+	STATUS_DUMMY
 };
 
 struct _Vector2 {

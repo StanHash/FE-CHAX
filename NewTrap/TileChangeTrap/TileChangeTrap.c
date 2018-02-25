@@ -12,11 +12,11 @@ void ChangeSingleTile(int x, int y, int tileID, Proc* parent);
 void ChangeSingleTileExt(int x, int y, int tileID, int display, Proc* parent);
 
 static void ApplySingleTileChange(int x, int y, int tileID) {
-	map_raw_tile_index[y][x] = tileID;
+	gMapRawTiles[y][x] = tileID;
 }
 
 static Trap* FindTileChangeTrap(int x, int y) {
-	Trap* trap = trap_array;
+	Trap* trap = gTrapArray;
 	
 	while (trap->type) {
 		if (trap->type == SINGLE_TILE_CHANGE_TRAP_TYPE)
@@ -30,7 +30,7 @@ static Trap* FindTileChangeTrap(int x, int y) {
 }
 
 void ApplyTrapMapChanges() { // should replace 0802E430
-	Trap* trap = trap_array;
+	Trap* trap = gTrapArray;
 	
 	while (trap->type) {
 		if (trap->type == 3)

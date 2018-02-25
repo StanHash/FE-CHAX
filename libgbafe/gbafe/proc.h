@@ -71,7 +71,7 @@ ProcState* StartBlockingProc(const ProcInstruction*, ProcState*);    //! FE8U = 
 void       EndProc(ProcState*);                                      //! FE8U = (0x08002D6C+1)
 void       ExecProc(ProcState*);                                     //! FE8U = (0x08002E84+1)
 void       BreakProcLoop(ProcState*);                                //! FE8U = (0x08002E94+1)
-ProcState* FincProc(const ProcInstruction*);                         //! FE8U = (0x08002E9C+1)
+ProcState* FindProc(const ProcInstruction*);                         //! FE8U = (0x08002E9C+1)
 void       GotoProcLabel(ProcState*, int);                           //! FE8U = (0x08002F24+1)
 void       GotoProcInstruction(ProcState*, const ProcInstruction*);  //! FE8U = (0x08002F5C+1)
 void       MarkProc(ProcState*, int);                                //! FE8U = (0x08002F64+1)
@@ -86,5 +86,55 @@ void       BreakEachProcLoop(const ProcInstruction*);                //! FE8U = 
 void       SetProcCycleHandler(ProcState*, void(*)(ProcState*));     //! FE8U = (0x08003450+1)
 
 #pragma long_calls_off
+
+// compat with decomp
+
+#define Proc_Create StartProc
+#define Proc_CreateBlockingChild StartBlockingProc
+#define Proc_Delete EndProc
+#define Proc_Run ExecProc
+#define Proc_ClearNativeCallback BreakProcLoop
+#define Proc_Find FindProc
+#define Proc_GotoLabel GotoProcLabel
+#define Proc_JumpToPointer GotoProcInstruction
+#define Proc_SetMark MarkProc
+#define Proc_SetDestructor SetProcEndHandler
+#define Proc_ForEach ForEveryProc
+#define Proc_ForEachWithScript ForEachProc
+#define Proc_BlockEachWithMark HaltEachProcMarked
+#define Proc_UnblockEachWithMark ResumeEachProcMarked
+
+void Proc_Initialize(void);
+// ??? Proc_Create(???);
+// ??? Proc_CreateBlockingChild(???);
+// ??? Proc_Delete(???);;
+// ??? Proc_Run(???);
+// ??? Proc_ClearNativeCallback(???);
+// ??? Proc_Find(???);
+// ??? Proc_FindNonBlocked(???);
+// ??? Proc_FindWithMark(???);
+// ??? Proc_GotoLabel(???);
+// ??? Proc_JumpToPointer(???);
+// ??? Proc_SetMark(???);
+// ??? Proc_SetDestructor(???);
+// ??? Proc_ForEach(???);
+// ??? Proc_ForEachWithScript(???);
+// ??? Proc_ForEachWithMark(???);
+// ??? Proc_BlockEachWithMark(???);
+// ??? Proc_UnblockEachWithMark(???);
+// ??? Proc_DeleteEachWithMark(???);
+// ??? Proc_DeleteAllWithScript(???);
+// ??? Proc_ClearNativeCallbackEachWithScript(???);
+// ??? sub_80030CC(???);
+// ??? sub_800344C(???);
+// ??? Proc_SetNativeFunc(???);
+// ??? Proc_BlockSemaphore(???);
+// ??? Proc_WakeSemaphore(???);
+// ??? Proc_FindAfter(???);
+// ??? Proc_FindAfterWithParent(???);
+// ??? sub_80034D4(???);
+// ??? sub_80034FC(???);
+// ??? sub_8003530(???);
+// ??? sub_8003540(???);
 
 #endif // GBAFE_PROC_H

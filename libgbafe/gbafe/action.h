@@ -31,6 +31,9 @@ struct _ActionData {
 	uint8_t trapType;
 };
 
-extern ActionData action_data; //! FE8U = (0x0203A958)
+extern ActionData gActionData; //! FE8U = (0x0203A958)
+
+#pragma long_calls
+#pragma long_calls_off
 
 #endif // GBAFE_ACTION_H

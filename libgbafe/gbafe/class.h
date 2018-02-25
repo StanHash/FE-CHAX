@@ -57,11 +57,13 @@ struct _ClassData {
 	
 	uint8_t  ranks[8];
 	
-	void*    pBattleAnimDef;
-	void*    pMovCostTable[3]; // standard, rain, snow
-	void*    pTerrainBonusTables[3]; // def, avo, res
+	const void* pBattleAnimDef;
+	const void* pMovCostTable[3]; // standard, rain, snow
+	const void* pTerrainBonusTables[3]; // def, avo, res
 	
-	void*    pU50;
+	const void* _pU50;
 };
+
+extern const ClassData gClassData[];
 
 #endif // GBAFE_CLASS_H
