@@ -58,7 +58,7 @@ extern unsigned int gTargetArraySize; //! FE8U = 0x0203E0EC
 
 #pragma long_calls
 
-void InitTargets(void);                                   //! FE8U = 0x804F8A5
+void InitTargets(int x, int y);                           //! FE8U = 0x804F8A5
 void AddTarget(int x, int y, uint8_t unit, uint8_t trap); //! FE8U = 0x804F8BD
 void LinkTargets(void);                                   //! FE8U = 0x804F911
 
@@ -81,8 +81,6 @@ unsigned int GetTargetListSize(void);       //! FE8U = 0x804FD29
 TargetEntry* GetTarget(unsigned int index); //! FE8U = 0x804FD35
 
 #pragma long_calls_off
-
-#define ClearTargets InitTargets
 
 #define StartTargetSelection NewTargetSelection
 #define StartTargetSelectionExt NewTargetSelection_Specialized
