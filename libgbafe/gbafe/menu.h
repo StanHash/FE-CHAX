@@ -6,8 +6,10 @@
 #include "proc.h"
 
 typedef struct _MenuGeometry          MenuGeometry;
+
 typedef struct _MenuDefinition        MenuDefinition;
 typedef struct _MenuCommandDefinition MenuCommandDefinition;
+
 typedef struct _MenuProc              MenuProc;
 typedef struct _MenuCommandProc       MenuCommandProc;
 
@@ -69,6 +71,16 @@ struct _MenuProc {
 
 struct _MenuCommandProc {
 	ProcState header;
+
+	uint16_t xDrawTile;
+	uint16_t yDrawTile;
+
+	const MenuCommandDefinition* pDefinition;
+
+	uint32_t _temp[2]; // TODO: TextHandle
+
+	uint8_t commandDefinitionIndex;
+	uint8_t availability;
 };
 
 enum _MenuCommandAvailability {
@@ -78,6 +90,8 @@ enum _MenuCommandAvailability {
 };
 
 enum _MenuEffect {
+	ME_NONE      = 0x00,
+
 	ME_DISABLE   = 0x01,
 	ME_END       = 0x02,
 	ME_PLAY_BEEP = 0x04,

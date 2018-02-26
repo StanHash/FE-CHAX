@@ -17,6 +17,7 @@ extern "C" {
 #include "gbafe/unit.h"
 #include "gbafe/map.h"
 #include "gbafe/menu.h"
+#include "gbafe/targetselect.h"
 #include "gbafe/levelup.h"
 #include "gbafe/standunit.h"
 #include "gbafe/moveunit.h"

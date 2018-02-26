@@ -9,7 +9,8 @@
 #include "unit.h"
 #include "animhandle.h"
 
-typedef struct _MoveUnitState MoveUnitState;
+typedef struct _MoveUnitProc MoveUnitProc;
+typedef struct _MoveUnitProc MoveUnitState;
 
 typedef struct _MoveUnitExtraData MoveUnitExtraData;
 
@@ -26,7 +27,7 @@ struct _MoveUnitExtraData {
 	MoveUnitState* pMoveunit;
 };
 
-struct _MoveUnitState {
+struct _MoveUnitProc {
 	ProcState header;
 	
 	// should be padded to 0x2C
@@ -60,7 +61,7 @@ struct _MoveUnitState {
 
 #pragma long_calls
 
-void ResetAllMoveUnitExtraData();                                              //! FE8U = (0x0807840C+1)
+void ResetAllMoveUnitExtraData(void);                                          //! FE8U = (0x0807840C+1)
 MoveUnitState* StartMoveUnitForUnitExt(Unit* unit, int mms, int palId);        //! FE8U = (0x08078428+1)
 MoveUnitState* StartMoveUnitForUnit(Unit* unit);                               //! FE8U = (0x08078464+1)
 void EnableMoveUnitCameraFollow(MoveUnitState*);                               //! FE8U = (0x080784E4+1)
