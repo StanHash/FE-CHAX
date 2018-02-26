@@ -19,7 +19,7 @@ struct _Unit {
 	ClassData* pClassData;
 	uint8_t level;
 	uint8_t exp;
-	uint8_t u0A_saved;
+	uint8_t _u0A_saved;
 	uint8_t index;
 	uint32_t state;
 	uint8_t xPos;
@@ -50,16 +50,16 @@ struct _Unit {
 	uint8_t supports[6];
 	uint8_t unitLeader;
 	uint8_t supportBits;
-	uint8_t u3A;
-	uint8_t u3B;
+	uint8_t _u3A;
+	uint8_t _u3B;
 	void* pMapSpriteHandle;
 	uint16_t ai3And4;
 	uint8_t ai1;
 	uint8_t ai1data;
 	uint8_t ai2;
 	uint8_t ai2data;
-	uint8_t u46_saved;
-	uint8_t u47;
+	uint8_t _u46_saved;
+	uint8_t _u47;
 };
 
 struct _BattleUnit {
@@ -143,8 +143,9 @@ struct _EventUnit {
 
 #define UNIT_ATTRIBUTES(apUnit) ((apUnit)->pCharacterData->attributes | (apUnit)->pClassData->attributes)
 
-extern Unit* gActiveUnit; //! FE8U = (0x03004E50)
-extern Unit* const gUnitLookup[]; //! FE8U = (0x0859A5D0)
+extern Unit        gUnitArray[];  //! FE8U = 0x202BE4C
+extern Unit*       gActiveUnit;   //! FE8U = 0x3004E50
+extern Unit* const gUnitLookup[]; //! FE8U = 0x859A5D0
 
 #pragma long_calls
 
