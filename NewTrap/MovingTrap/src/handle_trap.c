@@ -18,12 +18,14 @@ static const Vector2 DirectionStepTable[] = {
 	{  0, -1 }  // up
 };
 
+/*
 static const uint8_t OppositeDirectionTable[] = {
 	1, // left  -> right
 	0, // right -> left
 	3, // down  -> up
 	2  // up    -> down
 };
+//*/
 
 static const ProcCode ProcCode_TrapHandler[] = {
 	PROC_SET_NAME("Stan:MovingTrapHandler"),

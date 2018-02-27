@@ -15,8 +15,8 @@ typedef struct _BattleUnit BattleUnit;
 typedef struct _EventUnit  EventUnit;
 
 struct _Unit {
-	CharacterData* pCharacterData;
-	ClassData* pClassData;
+	const CharacterData* pCharacterData;
+	const ClassData* pClassData;
 	uint8_t level;
 	uint8_t exp;
 	uint8_t _u0A_saved;

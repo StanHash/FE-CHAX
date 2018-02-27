@@ -1,6 +1,7 @@
 #ifndef GBAFE_COMMON_H
 #define GBAFE_COMMON_H
 
+#include <stddef.h>
 #include <stdint.h>
 
 typedef struct _Vector2  Vector2;

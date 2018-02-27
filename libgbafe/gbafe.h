@@ -7,9 +7,14 @@
 extern "C" {
 #endif
 
+#include "gbafe/armfunc.h"
 #include "gbafe/random.h"
+#include "gbafe/hardware.h"
+#include "gbafe/vramtransfer.h"
 #include "gbafe/proc.h"
 #include "gbafe/animhandle.h"
+#include "gbafe/hiobj.h"
+#include "gbafe/compress.h"
 #include "gbafe/class.h"
 #include "gbafe/character.h"
 #include "gbafe/game.h"
