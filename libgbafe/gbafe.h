@@ -12,6 +12,7 @@ extern "C" {
 #include "gbafe/hardware.h"
 #include "gbafe/vramtransfer.h"
 #include "gbafe/proc.h"
+#include "gbafe/text.h"
 #include "gbafe/animhandle.h"
 #include "gbafe/hiobj.h"
 #include "gbafe/compress.h"
