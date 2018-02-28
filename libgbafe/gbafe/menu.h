@@ -50,7 +50,7 @@ struct _MenuCommandDefinition {
 };
 
 struct _MenuProc {
-	ProcState header;
+	PROC_FIELDS
 
 	MenuGeometry geometry;
 	const MenuDefinition* pDefinition;
@@ -70,7 +70,7 @@ struct _MenuProc {
 };
 
 struct _MenuCommandProc {
-	ProcState header;
+	PROC_FIELDS
 
 	uint16_t xDrawTile;
 	uint16_t yDrawTile;

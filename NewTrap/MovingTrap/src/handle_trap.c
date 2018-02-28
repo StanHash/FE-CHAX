@@ -2,7 +2,7 @@
 
 typedef struct _TrapHandlerProc TrapHandlerProc;
 struct _TrapHandlerProc {
-	ProcState header;
+	PROC_FIELDS
 	
 	Unit* pUnit;
 	int   idk;

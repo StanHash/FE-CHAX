@@ -28,7 +28,7 @@ struct _MoveUnitExtraData {
 };
 
 struct _MoveUnitProc {
-	ProcState header;
+	PROC_FIELDS
 	
 	// should be padded to 0x2C
 	

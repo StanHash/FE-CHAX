@@ -6,7 +6,7 @@
 
 typedef struct _UnitMoveAnimProc UnitMoveAnimProc;
 struct _UnitMoveAnimProc {
-	Proc header;
+	PROC_FIELDS
 	
 	MoveUnitState* pMoveUnit;
 	

@@ -97,7 +97,7 @@ void        Font_LoadForUI(void);                                               
 void        Font_LoadForDialogue(void);                                                            //! FE8U = 0x80043E9
 void        Font_SetSomeSpecialDrawingRoutine(void);                                               //! FE8U = 0x8004429
 
-void        DrawTextInline(TextHandle*, uint16_t* bg, int color, int xStart, const char* cstring); //! FE8U = 0x800443D
+void        DrawTextInline(TextHandle*, uint16_t* bg, int color, int xStart, int tileWidth, const char* cstring); //! FE8U = 0x800443D
 void        Text_InsertString(TextHandle*, int xPos, int color, const char* str);                  //! FE8U = 0x8004481
 void        Text_InsertNumberOr2Dashes(TextHandle*, int xPos, int color, uint8_t);                 //! FE8U = 0x80044A5
 

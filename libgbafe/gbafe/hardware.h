@@ -141,5 +141,7 @@ void      EnableBgSyncByIndex(int bg);                         //! FE8U = 0x8001
 // TODO: add to list
 #define SetColorEffectFirstTarget ((void(*)(int, int, int, int, int))(0x08001F0D))
 #define SetColorEffectSecondTarget ((void(*)(int, int, int, int, int))(0x08001F0D))
+#define SetColorEffectBackdropFirstTarget ((void(*)(int))(0x08001F49))
+#define SetColorEffectBackdropSecondTarget ((void(*)(int))(0x08001F65))
 
 #endif // GBAFE_HARDWARE_H

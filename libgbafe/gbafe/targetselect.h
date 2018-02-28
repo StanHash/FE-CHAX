@@ -31,7 +31,7 @@ struct _TargetSelectionDefinition {
 };
 
 struct _TargetSelectionProc {
-	Proc header;
+	PROC_FIELDS
 
 	const TargetSelectionDefinition* pDefinition;
 	TargetEntry* pCurrentEntry;
