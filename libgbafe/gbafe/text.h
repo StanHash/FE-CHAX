@@ -6,6 +6,7 @@
 typedef struct _FontData       FontData;
 typedef struct _TextHandle     TextHandle;
 typedef struct _TextBatchEntry TextBatchEntry;
+typedef struct _FontGlyphData  FontGlyphData;
 
 typedef enum   _FontGlyphType  FontGlyphType;
 
@@ -41,6 +42,12 @@ struct _TextHandle {
 struct _TextBatchEntry {
 	TextHandle* textHandle;
 	size_t      tileWidth;
+};
+
+struct _FontGlyphData {
+	const FontGlyphData* pNextMaybe;
+	uint8_t pxLength;
+	uint32_t lines2bpp[0x10];
 };
 
 enum _FontGlyphType {
@@ -112,5 +119,12 @@ void        Text_Init3(TextHandle*);                                            
 void        Text_80046B4(TextHandle*);                                                             //! FE8U = 0x80046B5
 
 #pragma long_calls_off
+
+#define Get2bppTo4bppLookup GetSomeTextDrawingRelatedTablePointer
+
+#define DrawGlyph1DTile Font_StandardGlyphDrawer
+#define DrawGlyph1DTileNoClear Font_SpecializedGlyphDrawer
+
+#define Font_SetDraw1DTileNoClear Font_SetSomeSpecialDrawingRoutine
 
 #endif // GBAFE_TEXT_H
