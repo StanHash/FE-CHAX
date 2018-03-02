@@ -1,6 +1,8 @@
 #ifndef GBAFE_HARDWARE_H
 #define GBAFE_HARDWARE_H
 
+#include "gba/gba.h"
+
 #include "common.h"
 #include "proc.h"
 
@@ -8,21 +10,25 @@ typedef struct _LCDIOBuffer LCDIOBuffer;
 typedef struct _KeyStatusBuffer KeyStatusBuffer;
 
 struct _LCDIOBuffer {
-	uint32_t dispControl;
-	uint32_t dispStat;
+	struct DispCnt dispControl;
+	struct DispStat dispStat;
+
 	uint32_t _u08;
 
-	uint32_t bgControl[4];
+	struct BgCnt bgControl[4];
 	Vector2U bgOffset[4];
 	
 	uint16_t win0h;
 	uint16_t win1h;
 	uint16_t win0v;
 	uint16_t win1v;
-	uint32_t winControl;
+
+	struct WinCnt winControl;
+	
 	uint16_t mosaic;
 	
-	uint32_t blendControl;
+	struct BlendCnt blendControl;
+	
 	uint32_t _u40;
 	uint8_t blendCoeffA;
 	uint8_t blendCoeffB;

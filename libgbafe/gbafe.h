@@ -1,11 +1,11 @@
 #ifndef GBAFE_H
 #define GBAFE_H
 
-#include <stdint.h>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include "gba/gba.h"
 
 #include "gbafe/armfunc.h"
 #include "gbafe/random.h"

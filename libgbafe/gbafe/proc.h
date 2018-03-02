@@ -18,23 +18,32 @@ struct _ProcInstruction {
 };
 
 #define PROC_FIELDS \
-	ProcInstruction* codeStart; \
-	ProcInstruction* codeNext; \
-	void (*onEnd)(Proc*); \
-	void (*onCycle)(Proc*); \
-	const char* name; \
-	Proc* parent; \
-	Proc* child; \
-	Proc* previous; \
-	Proc* next; \
-	uint16_t sleepTime; \
-	uint8_t  mark; \
-	uint8_t  statebits; \
-	uint8_t  lockCount;
+	ProcInstruction* codeStart; /* */ \
+	ProcInstruction* codeNext;  /* */ \
+	void (*onEnd)(Proc*);       /* */ \
+	void (*onCycle)(Proc*);     /* */ \
+	const char* name;           /* */ \
+	Proc* parent;               /* */ \
+	Proc* child;                /* */ \
+	Proc* previous;             /* */ \
+	Proc* next;                 /* */ \
+	uint16_t sleepTime;         /* */ \
+	uint8_t  mark;              /* */ \
+	uint8_t  statebits;         /* */ \
+	uint8_t  lockCount;         /* */
 
 struct _ProcState {
 	PROC_FIELDS
 };
+
+#define PROC_ROOT_0 (Proc*)(0)
+#define PROC_ROOT_1 (Proc*)(1)
+#define PROC_ROOT_2 (Proc*)(2)
+#define PROC_ROOT_3 (Proc*)(3)
+#define PROC_ROOT_4 (Proc*)(4)
+#define PROC_ROOT_5 (Proc*)(5)
+#define PROC_ROOT_6 (Proc*)(6)
+#define PROC_ROOT_7 (Proc*)(7)
 
 #define PROC_TREE(aIndex) (Proc*)(aIndex)
 #define PROC(aProc) (Proc*)(aProc)
@@ -92,6 +101,8 @@ void  SetProcCycleHandler(Proc*, void(*)(Proc*));          //! FE8U = (0x0800345
 #pragma long_calls_off
 
 // compat with decomp
+
+#define PROC_HEADER PROC_FIELDS
 
 #define Proc_Create StartProc
 #define Proc_CreateBlockingChild StartBlockingProc
