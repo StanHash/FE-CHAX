@@ -36,14 +36,14 @@ struct _ProcState {
 	PROC_FIELDS
 };
 
-#define PROC_ROOT_0 (Proc*)(0)
-#define PROC_ROOT_1 (Proc*)(1)
-#define PROC_ROOT_2 (Proc*)(2)
-#define PROC_ROOT_3 (Proc*)(3)
-#define PROC_ROOT_4 (Proc*)(4)
-#define PROC_ROOT_5 (Proc*)(5)
-#define PROC_ROOT_6 (Proc*)(6)
-#define PROC_ROOT_7 (Proc*)(7)
+#define ROOT_PROC_0 (Proc*)(0)
+#define ROOT_PROC_1 (Proc*)(1)
+#define ROOT_PROC_2 (Proc*)(2)
+#define ROOT_PROC_3 (Proc*)(3)
+#define ROOT_PROC_4 (Proc*)(4)
+#define ROOT_PROC_5 (Proc*)(5)
+#define ROOT_PROC_6 (Proc*)(6)
+#define ROOT_PROC_7 (Proc*)(7)
 
 #define PROC_TREE(aIndex) (Proc*)(aIndex)
 #define PROC(aProc) (Proc*)(aProc)
