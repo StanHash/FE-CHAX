@@ -41,7 +41,7 @@ ROM_TARGET     := FEHACK.gba
 
 # pea options
 PEAFLAGS   := -D _FE8_ -I bin/EventAssembler/ -T bin/EventAssembler/Tools/
-PEADEPFLAGS = -MM -MT $(ROM_TARGET) -MF $(EVENT_MAIN_DEP) -MP -MG -.pp.makedep.outputIsTarget=false
+PEADEPFLAGS = -MM -MT $(ROM_TARGET) -MF $(EVENT_MAIN_DEP) -MP -MG -.pp.makedep.outputIsTarget=true
 
 # defining C dependency flags
 CDEPFLAGS = -MMD -MT "$*.o" -MT "$*.asm" -MF "$(DEPSDIR)/$(notdir $*).d" -MP

@@ -7,7 +7,7 @@ typedef struct _ObjData ObjData;
 typedef struct _OAMData OAMData;
 
 struct _OAMData {
-	uint16_t oam[3];
+	uint16_t oam1, oam2, oam3;
 };
 
 struct _ObjData {

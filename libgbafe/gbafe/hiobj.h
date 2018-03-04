@@ -8,8 +8,8 @@
 #pragma long_calls
 
 void ClearIntermediateOAMBuffers(void); //! FE8U = 0x80053A5
-void RegisterObjectAttributes_SafeMaybe(int node, uint16_t xBase, uint16_t yBase, const OAMData* pData, uint16_t tileBase); //! FE8U = 0x80053E9
-void RegisterObjectAttributes(int node, uint16_t xBase, uint16_t yBase, const OAMData* pData, uint16_t tileBase); //! FE8U = 0x8005429
+void RegisterObjectAttributes_SafeMaybe(int node, uint16_t xBase, uint16_t yBase, const ObjData* pData, uint16_t tileBase); //! FE8U = 0x80053E9
+void RegisterObjectAttributes(int node, uint16_t xBase, uint16_t yBase, const ObjData* pData, uint16_t tileBase); //! FE8U = 0x8005429
 void HiObjProcess(void); //! FE8U = 0x8005459
 
 // TODO
