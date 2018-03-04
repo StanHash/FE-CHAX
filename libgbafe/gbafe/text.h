@@ -14,7 +14,7 @@ struct _FontData {
 	void* pVRAMTileRoot;
 	const void* pGlyphData;
 
-	void (*drawGlyph)(TextHandle*, const void*);
+	void (*drawGlyph)(TextHandle*, const FontGlyphData*);
 	void*(*getDrawTarget)(TextHandle*);
 
 	uint16_t tileBase;
@@ -46,6 +46,7 @@ struct _TextBatchEntry {
 
 struct _FontGlyphData {
 	const FontGlyphData* pNextMaybe;
+	uint8_t wcbyte2;
 	uint8_t pxLength;
 	uint32_t lines2bpp[0x10];
 };
@@ -97,8 +98,8 @@ void        Text_AppendChar(TextHandle*, char);                                 
 
 void*       GetVRAMPointerForTextMaybe(TextHandle*);                                               //! FE8U = 0x80041E9
 const void* GetSomeTextDrawingRelatedTablePointer(int);                                            //! FE8U = 0x8004209
-void        Font_StandardGlyphDrawer(TextHandle*, const void*);                                    //! FE8U = 0x8004219
-void        Font_SpecializedGlyphDrawer(TextHandle*, const void*);                                 //! FE8U = 0x8004269
+void        Font_StandardGlyphDrawer(TextHandle*, const FontGlyphData*);                           //! FE8U = 0x8004219
+void        Font_SpecializedGlyphDrawer(TextHandle*, const FontGlyphData*);                        //! FE8U = 0x8004269
 
 void        Font_LoadForUI(void);                                                                  //! FE8U = 0x80043A9
 void        Font_LoadForDialogue(void);                                                            //! FE8U = 0x80043E9
