@@ -15,7 +15,7 @@ struct _ClassData {
 	uint8_t  SMSId;
 	uint8_t  slowWalking;
 	uint16_t defaultPortraitId;
-	uint8_t  u0A;
+	uint8_t  _u0A;
 	
 	uint8_t  baseHP;
 	uint8_t  basePow;
@@ -23,7 +23,6 @@ struct _ClassData {
 	uint8_t  baseSpd;
 	uint8_t  baseDef;
 	uint8_t  baseRes;
-	uint8_t  baseLck;
 	uint8_t  baseCon;
 	uint8_t  baseMov;
 	
@@ -33,7 +32,6 @@ struct _ClassData {
 	uint8_t  maxSpd;
 	uint8_t  maxDef;
 	uint8_t  maxRes;
-	uint8_t  maxLck;
 	uint8_t  maxCon;
 	
 	uint8_t  classRelativePower;
@@ -58,8 +56,8 @@ struct _ClassData {
 	uint8_t  ranks[8];
 	
 	const void* pBattleAnimDef;
-	const void* pMovCostTable[3]; // standard, rain, snow
-	const void* pTerrainBonusTables[3]; // def, avo, res
+	const uint8_t* pMovCostTable[3]; // standard, rain, snow
+	const uint8_t* pTerrainBonusTables[3]; // def, avo, res
 	
 	const void* _pU50;
 };

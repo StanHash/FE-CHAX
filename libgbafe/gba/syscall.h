@@ -3,6 +3,10 @@
 
 #include "types.h"
 
+int Div(int, int);
+int Mod(int, int);
+int DivArm(int, int);
+
 #define RESET_EWRAM      0x01
 #define RESET_IWRAM      0x02
 #define RESET_PALETTE    0x04

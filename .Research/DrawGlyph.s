@@ -9,7 +9,9 @@ ARM_DrawTextGlyph:
 	@ r3 is x cursor mod 8
 
 	mov   r9,  #0xf
-	mov   r10, #0xffff
+
+	mov   r10, #0x10000
+	sub   r10, #1
 
 Continue:
 	@ r5 = some offset (depends on local x offset)
