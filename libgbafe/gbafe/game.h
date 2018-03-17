@@ -5,9 +5,9 @@
 
 #pragma long_calls
 
-int LockGameLogic();    //! FE8U = (0x08015360+1)
-int UnlockGameLogic();  //! FE8U = (0x08015370+1)
-int GetGameLogicLock(); //! FE8U = (0x08015380+1)
+int LockGameLogic(void);    //! FE8U = (0x08015360+1)
+int UnlockGameLogic(void);  //! FE8U = (0x08015370+1)
+int GetGameLogicLock(void); //! FE8U = (0x08015380+1)
 
 // TODO: move those elsewhere
 void BlockGameGraphicsLogic(void);   //! FE8U = 0x8030185

@@ -15,108 +15,117 @@ typedef struct _BattleUnit BattleUnit;
 typedef struct _EventUnit  EventUnit;
 
 struct _Unit {
-	const CharacterData* pCharacterData;
-	const ClassData* pClassData;
-	uint8_t level;
-	uint8_t exp;
-	uint8_t _u0A_saved;
-	uint8_t index;
-	uint32_t state;
-	uint8_t xPos;
-	uint8_t yPos;
-	uint8_t maxHP;
-	uint8_t curHP;
-	uint8_t pow;
-	uint8_t skl;
-	uint8_t spd;
-	uint8_t def;
-	uint8_t res;
-	uint8_t lck;
-	uint8_t conBonus;
-	uint8_t rescueOtherUnit;
-	uint8_t ballistaIndex;
-	uint8_t movBonus;
-	uint16_t items[5];
-	uint8_t ranks[8];
+	/* 00 */ const CharacterData* pCharacterData;
+	/* 04 */ const ClassData* pClassData;
+	
+	/* 08 */ uint8_t level;
+	/* 09 */ uint8_t exp;
+	/* 0A */ uint8_t _u0A_saved;
+	
+	/* 0B */ uint8_t index;
+	
+	/* 0C */ uint32_t state;
+	
+	/* 10 */ uint8_t xPos;
+	/* 11 */ uint8_t yPos;
+
+	/* 12 */ uint8_t maxHP;
+	/* 13 */ uint8_t curHP;
+	/* 14 */ uint8_t pow;
+	/* 15 */ uint8_t skl;
+	/* 16 */ uint8_t spd;
+	/* 17 */ uint8_t def;
+	/* 18 */ uint8_t res;
+	/* 19 */ uint8_t lck;
+
+	/* 1A */ uint8_t conBonus;
+	/* 1B */ uint8_t rescueOtherUnit;
+	/* 1C */ uint8_t ballistaIndex;
+	/* 1D */ uint8_t movBonus;
+
+	/* 1E */ uint16_t items[5];
+	/* 28 */ uint8_t ranks[8];
 	
 	struct {
-		uint8_t index    : 4;
-		uint8_t duration : 4;
+		/* 30 */ uint8_t index    : 4;
+		/* 30 */ uint8_t duration : 4;
 	} status;
 	
-	uint8_t torchDuration   : 4;
-	uint8_t barrierDuration : 4;
+	/* 31 */ uint8_t torchDuration   : 4;
+	/* 31 */ uint8_t barrierDuration : 4;
 	
-	uint8_t supports[6];
-	uint8_t unitLeader;
-	uint8_t supportBits;
-	uint8_t _u3A;
-	uint8_t _u3B;
-	void* pMapSpriteHandle;
-	uint16_t ai3And4;
-	uint8_t ai1;
-	uint8_t ai1data;
-	uint8_t ai2;
-	uint8_t ai2data;
-	uint8_t _u46_saved;
-	uint8_t _u47;
+	/* 32 */ uint8_t supports[6];
+	/* 38 */ uint8_t unitLeader;
+	/* 39 */ uint8_t supportBits;
+	/* 3A */ uint8_t _u3A;
+	/* 3B */ uint8_t _u3B;
+
+	/* 3C */ void* pMapSpriteHandle;
+	
+	/* 40 */ uint16_t ai3And4;
+	/* 42 */ uint8_t ai1;
+	/* 43 */ uint8_t ai1data;
+	/* 44 */ uint8_t ai2;
+	/* 45 */ uint8_t ai2data;
+	/* 46 */ uint8_t _u46_saved;
+	/* 47 */ uint8_t _u47;
 };
 
 struct _BattleUnit {
-	Unit unit;
+	/* 00 */ Unit unit;
 	
-	uint16_t weaponAfter;
-	uint16_t weaponBefore;
-	uint32_t weaponAttributes;
-	uint8_t  weaponType;
-	uint8_t  weaponSlotIndex;
+	/* 48 */ uint16_t weaponAfter;
+	/* 4A */ uint16_t weaponBefore;
+	/* 4C */ uint32_t weaponAttributes;
+	/* 50 */ uint8_t  weaponType;
+	/* 51 */ uint8_t  weaponSlotIndex;
 	
-	uint8_t  canCounter;
+	/* 52 */ uint8_t  canCounter;
 	
-	int8_t   WTHitModifier;
-	int8_t   WTAtkModifier;
+	/* 53 */ int8_t   WTHitModifier;
+	/* 54 */ int8_t   WTAtkModifier;
 	
-	uint8_t  terrainIndex;
-	uint8_t  terrainDefense;
-	uint8_t  terrainAvoid;
-	uint8_t  terrainResistance;
-	uint8_t  u59;
+	/* 55 */ uint8_t  terrainIndex;
+	/* 56 */ uint8_t  terrainDefense;
+	/* 57 */ uint8_t  terrainAvoid;
+	/* 58 */ uint8_t  terrainResistance;
+	/* 59 */ uint8_t  _u59;
 	
 	struct {
-		uint16_t attack;
-		uint16_t defense;
-		uint16_t attackSpeed;
-		uint16_t hit;
-		uint16_t avoid;
-		uint16_t battleHit;
-		uint16_t crit;
-		uint16_t dodge;
-		uint16_t battleCrit;
-		uint16_t silencerRate;
+		/* 5A */ uint16_t attack;
+		/* 5C */ uint16_t defense;
+		/* 5E */ uint16_t attackSpeed;
+		/* 60 */ uint16_t hit;
+		/* 62 */ uint16_t avoid;
+		/* 64 */ uint16_t battleHit;
+		/* 66 */ uint16_t crit;
+		/* 68 */ uint16_t dodge;
+		/* 6A */ uint16_t battleCrit;
+		/* 6C */ uint16_t silencerRate;
 	} battleStats;
 	
-	uint8_t  expGain;
-	uint8_t  statusOut;
-	uint8_t  levelPrevious;
-	uint8_t  expPrevious;
+	/* 6E */ uint8_t  expGain;
+	/* 6F */ uint8_t  statusOut;
+	/* 70 */ uint8_t  levelPrevious;
+	/* 71 */ uint8_t  expPrevious;
 	
-	uint8_t  currentHP;
+	/* 72 */ uint8_t  currentHP;
 	
-	int8_t   changeHP;
-	int8_t   changePow;
-	int8_t   changeSkl;
-	int8_t   changeSpd;
-	int8_t   changeDef;
-	int8_t   changeRes;
-	int8_t   changeLck;
-	int8_t   changeCon;
+	/* 73 */ int8_t   changeHP;
+	/* 74 */ int8_t   changePow;
+	/* 75 */ int8_t   changeSkl;
+	/* 76 */ int8_t   changeSpd;
+	/* 77 */ int8_t   changeDef;
+	/* 78 */ int8_t   changeRes;
+	/* 79 */ int8_t   changeLck;
+	/* 7A */ int8_t   changeCon;
 	
-	int8_t   wexpMultiplier;
-	uint8_t  nonZeroDamage;
-	uint8_t  weaponBroke;
+	/* 7B */ int8_t   wexpMultiplier;
+	/* 7C */ uint8_t  nonZeroDamage;
+	/* 7D */ uint8_t  weaponBroke;
 	
-	uint8_t  u7E;
-	uint8_t  u7F;
+	/* 7E */ uint8_t  _u7E;
+	/* 7F */ uint8_t  _u7F;
 };
 
 struct _EventUnit {

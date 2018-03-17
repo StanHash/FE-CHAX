@@ -18,22 +18,22 @@ struct _ProcInstruction {
 };
 
 #define PROC_FIELDS \
-	ProcInstruction* codeStart; /* */ \
-	ProcInstruction* codeNext;  /* */ \
-	void (*onEnd)(Proc*);       /* */ \
-	void (*onCycle)(Proc*);     /* */ \
-	const char* name;           /* */ \
-	Proc* parent;               /* */ \
-	Proc* child;                /* */ \
-	Proc* previous;             /* */ \
-	Proc* next;                 /* */ \
-	uint16_t sleepTime;         /* */ \
-	uint8_t  mark;              /* */ \
-	uint8_t  statebits;         /* */ \
-	uint8_t  lockCount;         /* */
+	ProcInstruction* codeStart; /* start of instructions */ \
+	ProcInstruction* codeNext;  /* next instruction */ \
+	void (*onEnd)(Proc*);       /* called on proc end */ \
+	void (*onCycle)(Proc*);     /* called on proc cycle */ \
+	const char* name;           /* name (debug) */ \
+	Proc* parent;               /* parent proc */ \
+	Proc* child;                /* first child proc */ \
+	Proc* previous;             /* previous proc (younger sibling) */ \
+	Proc* next;                 /* next proc (older sibling) */ \
+	uint16_t sleepTime;         /* time left to sleep */ \
+	uint8_t  mark;              /* mark */ \
+	uint8_t  statebits;         /* state */ \
+	uint8_t  lockCount;         /* lock count*/
 
 struct _ProcState {
-	PROC_FIELDS
+	PROC_FIELDS;
 };
 
 #define ROOT_PROC_0 (Proc*)(0)
@@ -44,9 +44,6 @@ struct _ProcState {
 #define ROOT_PROC_5 (Proc*)(5)
 #define ROOT_PROC_6 (Proc*)(6)
 #define ROOT_PROC_7 (Proc*)(7)
-
-#define PROC_TREE(aIndex) (Proc*)(aIndex)
-#define PROC(aProc) (Proc*)(aProc)
 
 #define PROC_END                           { 0x00, 0x0000, 0 }
 #define PROC_SET_NAME(aName)               { 0x01, 0x0000, aName }

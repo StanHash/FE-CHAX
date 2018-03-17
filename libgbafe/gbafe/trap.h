@@ -13,17 +13,17 @@ typedef struct _Trap Trap;
 typedef struct _Trap ActiveTile; // because speedruns are neat
 
 struct _EventTrapData {
-	uint8_t type;
-	uint8_t data[5];
-};
+	/* 00 */ uint8_t type;
+	/* 01 */ uint8_t data[5];
+} __attribute__((packed));
 
 struct _Trap {
-	uint8_t xPosition;
-	uint8_t yPosition;
+	/* 00 */ uint8_t xPosition;
+	/* 01 */ uint8_t yPosition;
 	
-	uint8_t type;
+	/* 02 */ uint8_t type;
 	
-	uint8_t data[5];
+	/* 03 */ uint8_t data[5];
 };
 
 extern Trap gTrapArray[]; //! FE8U = (0x0203A614)
@@ -43,14 +43,14 @@ void  AddTrap8(int x, int y);                                                   
 void  AddTrap9(int x, int y, int ext);                                                 //! FE8U = (0x0802E398+1)
 
 // map changes -> map.h?
-void  ApplyTrapMapChanges();                                                           //! FE8U = (0x0802E430+1)
+void  ApplyTrapMapChanges(void);                                                       //! FE8U = (0x0802E430+1)
 
 void  ApplyMapChangesById(int id);                                                     //! FE8U = (0x0802E58C+1)
 void  AddMapChange(int id);                                                            //! FE8U = (0x0802E5F8+1)
 void  RemoveMapChange(int id);                                                         //! FE8U = (0x0802E60C+1)
 
 void  HideIfUnderRoof(Unit*);                                                          //! FE8U = (0x0802E660+1)
-void  UpdateUnitsUnderRoof();                                                          //! FE8U = (0x0802E690+1)
+void  UpdateUnitsUnderRoof(void);                                                      //! FE8U = (0x0802E690+1)
 
 // other file?
 void  AddGorgonEggTrap(int a, int b, int c, int d, int e);                             //! FE8U = (0x08037928+1)

@@ -78,6 +78,8 @@ extern uint16_t* gBgMapTarget[4];      //! FE8U = 0x2024CA8
 
 extern KeyStatusBuffer gKeyStatus;     //! FE8U = 0x2024CC0
 
+#define BG_LOCATED_TILE(apBg, aXTile, aYTile) (&(apBg)[(aXTile) + (aYTile) * 0x20])
+
 #pragma long_calls
 
 void      CopyToPaletteBuffer(const uint16_t src[], size_t targetOffset, size_t size); //! FE8U = 0x8000DB9

@@ -17,7 +17,7 @@ UnitMoveAnimProc* NewUnitMoveAnim(MoveUnitState* moveunit, Vector2 from, Vector2
 		moveAnimProc = (UnitMoveAnimProc*) StartBlockingProc(ProcCode_UnitMoveAnim, parent);
 		moveAnimProc->locks = 0;
 	} else {
-		moveAnimProc = (UnitMoveAnimProc*) StartProc(ProcCode_UnitMoveAnim, PROC_TREE(3));
+		moveAnimProc = (UnitMoveAnimProc*) StartProc(ProcCode_UnitMoveAnim, ROOT_PROC_3);
 		
 		moveAnimProc->locks = 1;
 		LockGameLogic();

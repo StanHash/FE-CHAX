@@ -44,7 +44,8 @@ void      AP_SetDefinition(APHandle* ap, const void* definition); //! FE8U = (0x
 ProcState* APProc_Create(const void* definition, uint16_t x, uint16_t y, uint16_t tileBase, int animIndex, int depth); //! FE8U = (0x08009718+1)
 void       APProc_SetParameters(ProcState* apProc, uint16_t x, uint16_t y, uint16_t tileBase); //! FE8U = (0x08009798+1)
 void       APProc_Delete(ProcState*); //! FE8U = (0x080097B4+1)
-void       APProc_DeleteAll();        //! FE8U = (0x080097C0+1)
+void       APProc_DeleteAll(void); //! FE8U = (0x080097C0+1)
+int        APProc_Exists(void);  //! FE8U = (0x080097D1)
 
 #pragma long_calls_off
 

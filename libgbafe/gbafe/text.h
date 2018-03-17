@@ -11,50 +11,53 @@ typedef struct _FontGlyphData  FontGlyphData;
 typedef enum   _FontGlyphType  FontGlyphType;
 
 struct _FontData {
-	void* pVRAMTileRoot;
-	const void* pGlyphData;
+	/* 00 */ void* pVRAMTileRoot;
+	/* 04 */ const void* pGlyphData;
 
-	void (*drawGlyph)(TextHandle*, const FontGlyphData*);
-	void*(*getDrawTarget)(TextHandle*);
+	/* 08 */ void (*drawGlyph)(TextHandle*, const FontGlyphData*);
+	/* 0C */ void*(*getDrawTarget)(TextHandle*);
 
-	uint16_t tileBase;
-	uint16_t tileNext;
-	uint16_t palIndex;
+	/* 10 */ uint16_t tileBase;
+	/* 12 */ uint16_t tileNext;
+	/* 14 */ uint16_t palIndex;
 
-	uint8_t _u16;
-	uint8_t _u17;
+	/* 16 */ uint8_t _u16;
+	/* 17 */ uint8_t _u17;
 };
 
 struct _TextHandle {
-	uint16_t tileIndexOffset;
+	/* 00 */ uint16_t tileIndexOffset;
 
-	uint8_t xCursor;
-	uint8_t colotId;
+	/* 02 */ uint8_t xCursor;
+	/* 03 */ uint8_t colotId;
 	
-	uint8_t tileWidth;
+	/* 04 */ uint8_t tileWidth;
 
-	uint8_t useDoubleBuffer;
-	uint8_t currentBufferId;
+	/* 05 */ uint8_t useDoubleBuffer;
+	/* 06 */ uint8_t currentBufferId;
 
-	uint8_t _u07;
+	/* 07 */ uint8_t _u07;
 };
 
 struct _TextBatchEntry {
-	TextHandle* textHandle;
-	size_t      tileWidth;
+	/* 00 */ TextHandle* textHandle;
+	/* 04 */ size_t      tileWidth;
 };
 
 struct _FontGlyphData {
-	const FontGlyphData* pNextMaybe;
-	uint8_t wcbyte2;
-	uint8_t pxLength;
-	uint32_t lines2bpp[0x10];
+	/* 00 */ const FontGlyphData* pNextMaybe;
+	/* 04 */ uint8_t wcbyte2;
+	/* 05 */ uint8_t pxLength;
+	/* 08 */ uint32_t lines2bpp[0x10];
 };
 
 enum _FontGlyphType {
 	FONT_GLYPH_UI       = 0,
 	FONT_GLYPH_DIALOGUE = 1
 };
+
+extern FontData gDefaultFontData;
+extern FontData* gpCurrentFont;
 
 #pragma long_calls
 
@@ -83,7 +86,7 @@ void        Text_Draw(TextHandle*, uint16_t* bgMap);                            
 void        Text_DrawBlank(TextHandle*, uint16_t* bgMap);                                          //! FE8U = 0x8003EBD
 
 size_t      GetStringTextWidth(const char*);                                                       //! FE8U = 0x8003EDD
-size_t      GetCharTextWidth(char);                                                                //! FE8U = 0x8003F3D
+const char* GetCharTextWidth(const char* in, size_t* out);                                         //! FE8U = 0x8003F3D
 size_t      GetStringTextCenteredPos(const char*);                                                 //! FE8U = 0x8003F91
 
 const char* String_GetEnd(const char*);                                                            //! FE8U = 0x8003FF5
@@ -112,7 +115,7 @@ void        Text_InsertNumberOr2Dashes(TextHandle*, int xPos, int color, uint8_t
 void        Text_AppendStringSimple(TextHandle*, const char*);                                     //! FE8U = 0x80044C9
 void        Text_AppendCharSimple(TextHandle*, char);                                              //! FE8U = 0x8004505
 
-size_t      GetCharTextWidthSimple(char);                                                          //! FE8U = 0x8004539
+const char* GetCharTextWidthSimple(const char* in, size_t* out);                                   //! FE8U = 0x8004539
 size_t      GetStringTextWidthSimple(const char*);                                                 //! FE8U = 0x8004569
 
 void        InitSomeOtherGraphicsRelatedStruct(FontData*, void* vram, int pal);                    //! FE8U = 0x800459D

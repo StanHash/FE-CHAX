@@ -8,37 +8,37 @@ typedef struct _TargetSelectionDefinition TargetSelectionDefinition;
 typedef struct _TargetSelectionProc       TargetSelectionProc;
 
 struct _TargetEntry {
-	uint8_t x, y;
-	uint8_t unitIndex;
-	uint8_t trapIndex;
+	/* 00 */ uint8_t x, y;
+	/* 02 */ uint8_t unitIndex;
+	/* 03 */ uint8_t trapIndex;
 
-	TargetEntry* next;
-	TargetEntry* prev;
+	/* 04 */ TargetEntry* next;
+	/* 08 */ TargetEntry* prev;
 };
 
 struct _TargetSelectionDefinition {
-	void(*onInit)(TargetSelectionProc*);
-	void(*onEnd)(TargetSelectionProc*);
+	/* 00 */ void(*onInit)(TargetSelectionProc*);
+	/* 04 */ void(*onEnd)(TargetSelectionProc*);
 	
-	void(*onInitTarget)(TargetSelectionProc*, TargetEntry*);
+	/* 08 */ void(*onInitTarget)(TargetSelectionProc*, TargetEntry*);
 
-	void(*onSwitchIn)(TargetSelectionProc*, TargetEntry*);
-	void(*onSwitchOut)(TargetSelectionProc*, TargetEntry*);
+	/* 0C */ void(*onSwitchIn)(TargetSelectionProc*, TargetEntry*);
+	/* 10 */ void(*onSwitchOut)(TargetSelectionProc*, TargetEntry*);
 
-	int(*onAPress)(TargetSelectionProc*, TargetEntry*);
-	int(*onBPress)(TargetSelectionProc*, TargetEntry*);
-	int(*onRPress)(TargetSelectionProc*, TargetEntry*);
+	/* 14 */ int(*onAPress)(TargetSelectionProc*, TargetEntry*);
+	/* 18 */ int(*onBPress)(TargetSelectionProc*, TargetEntry*);
+	/* 1C */ int(*onRPress)(TargetSelectionProc*, TargetEntry*);
 };
 
 struct _TargetSelectionProc {
-	PROC_FIELDS
+	PROC_HEADER;
 
-	const TargetSelectionDefinition* pDefinition;
-	TargetEntry* pCurrentEntry;
+	/* 2C */ const TargetSelectionDefinition* pDefinition;
+	/* 30 */ TargetEntry* pCurrentEntry;
 	
-	uint8_t stateBits;
+	/* 34 */ uint8_t stateBits;
 
-	int(*onAPressOverride)(TargetSelectionProc*, TargetEntry*);
+	/* 38 */ int(*onAPressOverride)(TargetSelectionProc*, TargetEntry*);
 };
 
 enum _TargetSelectionEffect {
