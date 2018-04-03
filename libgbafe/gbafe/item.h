@@ -29,10 +29,8 @@ struct _ItemData {
 	uint8_t  weight;
 	uint8_t  crit;
 	
-	struct {
-		uint8_t max : 4;
-		uint8_t min : 4;
-	} range;
+	uint8_t maxRange : 4;
+	uint8_t minRange : 4;
 	
 	uint16_t costPerUse;
 	uint8_t  weaponRank;

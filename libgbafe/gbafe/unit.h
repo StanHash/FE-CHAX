@@ -46,10 +46,8 @@ struct _Unit {
 	/* 1E */ uint16_t items[5];
 	/* 28 */ uint8_t ranks[8];
 	
-	struct {
-		/* 30 */ uint8_t index    : 4;
-		/* 30 */ uint8_t duration : 4;
-	} status;
+	/* 30 */ uint8_t statusIndex    : 4;
+	/* 30 */ uint8_t statusDuration : 4;
 	
 	/* 31 */ uint8_t torchDuration   : 4;
 	/* 31 */ uint8_t barrierDuration : 4;
@@ -90,20 +88,18 @@ struct _BattleUnit {
 	/* 57 */ uint8_t  terrainAvoid;
 	/* 58 */ uint8_t  terrainResistance;
 	/* 59 */ uint8_t  _u59;
-	
-	struct {
-		/* 5A */ uint16_t attack;
-		/* 5C */ uint16_t defense;
-		/* 5E */ uint16_t attackSpeed;
-		/* 60 */ uint16_t hit;
-		/* 62 */ uint16_t avoid;
-		/* 64 */ uint16_t battleHit;
-		/* 66 */ uint16_t crit;
-		/* 68 */ uint16_t dodge;
-		/* 6A */ uint16_t battleCrit;
-		/* 6C */ uint16_t silencerRate;
-	} battleStats;
-	
+
+	/* 5A */ uint16_t battleAttack;
+	/* 5C */ uint16_t battleDefense;
+	/* 5E */ uint16_t battleAttackSpeed;
+	/* 60 */ uint16_t battleHit;
+	/* 62 */ uint16_t battleAvoid;
+	/* 64 */ uint16_t battleEffectiveHit;
+	/* 66 */ uint16_t battleCrit;
+	/* 68 */ uint16_t battleDodge;
+	/* 6A */ uint16_t battleEffectiveCrit;
+	/* 6C */ uint16_t battleSilencerRate;
+
 	/* 6E */ uint8_t  expGain;
 	/* 6F */ uint8_t  statusOut;
 	/* 70 */ uint8_t  levelPrevious;
