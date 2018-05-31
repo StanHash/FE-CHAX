@@ -1,42 +1,39 @@
-# FE-CHAX
+# Stan's C Hax for FE8U
 
-Headers, library and "hacks" for GBAFE; mostly written in C. See [FE8UASMHax](https://github.com/StanHash/FE8UASMHax) for more (older) stuff.
+Headers, library and "hacks" for GBAFE; mostly written in C. See [FE8UASMHax](https://github.com/StanHash/FE8UASMHax) for older stuff (there's a lot more there than here).
 
-## about how `make` & Event Assembler synergize
+## Do `make` & Event Assembler synergize
 
-They don't. Not really well at least. There's two main reasons for that:
-
-- `Core.exe` requires the current directory to be the Event Assembler directory, which requires us to resort to some trickery when it comes to calling EA from [the Makefile](./Makefile): we need to define files passed to EA through their *absolute* path, and then we're using a trampoline shell script that changes the working directory to EA's before calling Core (see below for an example of said script).
-- EA doesn't provide us any easy way of generating `#include` (and `#incbin`) dependency rules, which is a problem since this means that `make` won't be able to detect needing to rebuild the target if any file that isn't the main file ([Main.event](./Main.event) in our case) was updated. We can bypass this limitation by simply calling `make clean && make` or by making the ROM a forced target, but then what purpose do we even have using makefiles?
-  - `pea` fixes this issue now, as it does makefile dependency generation ala `gcc -M`.
+**Yes, [using this EA build](https://www.dropbox.com/s/moxk5tnerzhdkgl/EventAssembler-Stan.18.05.31.7z?dl=0)** ([Source is available at `FireEmblemUniverse/Event-Assembler` branch `stan-edits`](https://github.com/FireEmblemUniverse/Event-Assembler/tree/stan-edits)).
 
 ## how2
 
 - have [devkitARM](https://devkitpro.org/wiki/Getting_Started/devkitARM) installed, and the `DEVKITARM` env variable set.
-- have `make` (and some kind of posix-compatible shell (if you're under Windows, look into `<devkitPro>/msys/bin/`))
-- have [`lyn`](https://github.com/StanHash/lyn/releases), [`pea`](https://github.com/StanHash/pea-preprocessor/releases) & `ea` (see below) in a new `bin` folder.
+- have `make` (and some kind of posix-compatible shell (if you're under Windows, devkitPro comes with msys bundled, which is more than enough) in you path.
+- have [python 3](https://www.python.org/) installed and in your path.
+- have the following tools in the `Tools` folder, with the correct name (or you can edit [`Tools.mak`](./Tools.mak) in case names don't match):
+  - [`lyn`](https://github.com/StanHash/lyn/releases)
+  - [`EventAssembler/Core` (and the rest of the EA installation of course)](https://www.dropbox.com/s/moxk5tnerzhdkgl/EventAssembler-Stan.18.05.31.7z?dl=0)
+    - **Using this custom build is _required_** (versions > 11.1 would probably work, but those have yet to exist as I am writing this)
+  - [Colorz's `PortraitFormatter`](http://feuniverse.us/t/ea-ea-formatting-suite/1714?u=stanh)
+  - [Colorz's `ParseFile`](http://feuniverse.us/t/ea-ea-formatting-suite/1714?u=stanh)
+  - [YamaArashi's (?) `gbagfx`](https://github.com/pret/pokeruby-tools)
 - run your shell and go to this folder
-  - you can `make` or `make hack` to build the demo ROM (requires `FE8_U.gba` in the directory)
+  - you can `make` or `make hack` to build the demo ROM (requires `FE8U.gba` in the directory)
   - you can `make all` to make everything unconditionally.
   - you can `make SomeFile.[o|asm|dmp|lyn.event]` to make a specific file (`asm` files are generated from C).
   - run `make clean` when you're done.
-- Use the files in your project and hf :)
+- hf :)
 
-Sorry for the messiness of the whole process, this is kind of an experimental build structure, I'll be working on improving the whole thing in the future.
+## Big thankies
 
-NOTE: if you are using `#incbin` or `#incext` anywhere in your buildfile, you need to have [`bin2ea`](https://github.com/StanHash/bin2ea) in the tools folder of EA (or another tool in another folder, see [the `pea` README](https://github.com/StanHash/pea-preprocessor/blob/master/README.md) for details)
+Kinda random but I feel like giving credit.
 
-## `ea` shell script that I use (Linux)
-
-```sh
-#!/bin/sh
-
-cd "$(dirname -- "$0")/EventAssembler" || exit 1
-mono ./Core.exe "$@"
-```
-
-put that in a new `bin` subfolder, along with [`lyn`](https://github.com/StanHash/lyn/releases), [`pea`](https://github.com/StanHash/pea-preprocessor/releases) and an `EventAssembler` folder containing latest [Event Assembler](http://feuniverse.us/t/event-assembler/1749?u=stanh).
-
-(Also don't forget .NET/Mono to be able to run EA)
-
-Under Windows, you probably can just omit `mono`, as .NET executables are considered as native Windows executables.
+- circleseverywhere: Most tools in the `Tools/py` folder are based off his work. `_FE8EssentialFixes.event` is his composition (I think). Also lots of cool hax to base off mine. Also the original `MAKE HACK.cmd`. Also cool guy.
+- Colorz: Maintains EA and implemented a lot of useful stuff. Also made `ParseFile` and `PortraitFormatter`, both of which are used here. Also useful hax. Also *Everything Assembler*. Also cool guy.
+- Tequila: the Teq Doq is the best thing ever (I probably never would have gotten that far if not for that). Also lots of hax. Also cool guy. :duck:
+- Teraspark, Leonarth, Kirb, Tiki/laqieer, ...: Cool and useful hax. Cool guys.
+- Nintenlord: He made the original EA. I never knew him but I assume he also was a cool guy.
+- Zane: Doesn't have much to do with this but I love his work. Cool guy.
+- Arch, Camdar: They prevent FEU from dying horribly (or at least from doing so for extented amounts of time). Cool guys.
+- all of FEU: Cool guys.
