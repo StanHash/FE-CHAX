@@ -11,8 +11,9 @@ export PATH := $(abspath .)/bin:$(PATH)
 
 # setting up additional tools
 # right now integrating EA is kind of a mess, so we use a trampoline shell script that changes the working directory
-export EA  := ea
-export PEA := pea
-export LYN := lyn
+export EA     := ea
+export PEA    := pea
+export LYN    := lyn
+export GBAGFX := gbagfx
 
 PREPROCESS_MESSAGE = @echo "$(notdir $<) => $(notdir $@)"

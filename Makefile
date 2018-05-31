@@ -9,7 +9,7 @@ INCFLAGS     := $(foreach dir, $(INCLUDE_DIRS), -I "$(dir)")
 
 # setting up compilation flags
 ARCH    := -mcpu=arm7tdmi -mthumb -mthumb-interwork
-CFLAGS  := $(ARCH) $(INCFLAGS) -Wall -Os -mtune=arm7tdmi -fomit-frame-pointer -ffast-math
+CFLAGS  := $(ARCH) $(INCFLAGS) -Wall -Os -mtune=arm7tdmi -fomit-frame-pointer -ffast-math -ffreestanding
 ASFLAGS := $(ARCH) $(INCFLAGS)
 
 # setting up cache dir
@@ -40,7 +40,7 @@ ROM_SOURCE     := FE8_U.gba
 ROM_TARGET     := FEHACK.gba
 
 # pea options
-PEAFLAGS   := -D _FE8_ -I bin/EventAssembler/ -T bin/EventAssembler/Tools/
+PEAFLAGS   := -D _FE8_ -I bin/EventAssembler/ -T bin/EventAssembler/Tools/ -T bin/
 PEADEPFLAGS = -MM -MT $(ROM_TARGET) -MF $(EVENT_MAIN_DEP) -MP -MG -.pp.makedep.outputIsTarget=true
 
 # defining C dependency flags
@@ -80,6 +80,10 @@ $(EVENT_MAIN_DEP): $(EVENT_MAIN)
 	$(PREPROCESS_MESSAGE)
 	@$(CC) $(CFLAGS) $(CDEPFLAGS) -S $< -o $@ -fverbose-asm $(ERROR_FILTER)
 
+%.asm: %.cpp
+	$(PREPROCESS_MESSAGE)
+	@$(CC) $(CFLAGS) $(CDEPFLAGS) -S $< -o $@ -fverbose-asm -fno-rtti $(ERROR_FILTER)
+
 # C to OBJ rule
 %.o: %.c
 	$(PREPROCESS_MESSAGE)
@@ -98,7 +102,22 @@ $(EVENT_MAIN_DEP): $(EVENT_MAIN)
 # OBJ to EVENT rule
 %.lyn.event: %.o $(LYNLIB)
 	$(PREPROCESS_MESSAGE)
-	@lyn $< $(LYNLIB) > $@
+	@$(LYN) $< $(LYNLIB) > $@
+
+# PNG to 4bpp rule
+%.4bpp: %.png
+	$(PREPROCESS_MESSAGE)
+	@$(GBAGFX) $< $@
+
+# PNG to gbapal rule
+%.gbapal: %.png
+	$(PREPROCESS_MESSAGE)
+	@$(GBAGFX) $< $@
+
+# Anything to lz rule
+%.lz: %
+	$(PREPROCESS_MESSAGE)
+	@$(GBAGFX) $< $@
 
 # --------------------
 # INCLUDE DEPENDENCIES

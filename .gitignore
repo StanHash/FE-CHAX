@@ -94,3 +94,14 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
+
+# Ignore ignored files
+Ignore-*
+
+# Ignore WIP stuff
+CMovement*
+CSS*
+CSkills*
+HeroesMovement*
+libevent*
+Misc*

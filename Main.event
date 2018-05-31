@@ -14,10 +14,12 @@ ORG FreeSpace
 	#include "_FE8EssentialFixes.event"
 	#include "_FE8ProcNameFix.event"
 
-	#include "NewTrap/TileChangeTrap/TileChangeTrap.event"
-	#include "NewTrap/MovingTrap/ThingSmall.event"
-	#include "EvilRN/EvilRN.event"
-	
+	ALIGN 4
+
+	// Only allow one action per player phase :)
+	// PUSH; ORG $59AC02; SHORT 3; POP
+	// PUSH; ORG $59AC7A; SHORT 3; POP
+
 	{
 	// include test chapter
 	}
