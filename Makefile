@@ -1,10 +1,10 @@
 .SUFFIXES:
 .PHONY: hack all clean
 
-include tools.mak
+include Tools.mak
 
 # Setting C/ASM include directories up
-INCLUDE_DIRS := libgbafe
+INCLUDE_DIRS := Tools/libgbafe
 INCFLAGS     := $(foreach dir, $(INCLUDE_DIRS), -I "$(dir)")
 
 # setting up compilation flags
@@ -20,7 +20,7 @@ $(shell mkdir -p $(CACHE_DIR) > /dev/null)
 DEPSDIR := $(CACHE_DIR)
 
 # lyn options
-LYNLIB := libgbafe/fe8u.o
+LYNLIB := Tools/libgbafe/fe8u.o
 
 # Finding all possible source files
 CFILES   := $(shell find -type f -name '*.c')
@@ -33,11 +33,11 @@ DEPFILES := $(addprefix $(DEPSDIR)/, $(notdir $(CFILES:.c=.d)))
 
 # EA Files
 EVENT_MAIN     := Main.event
-EVENT_MAIN_DEP := $(CACHE_DIR)/EventMain.d
+EVENT_MAIN_DEP := $(CACHE_DIR)/Main.d
 
 # ROMs
-ROM_SOURCE     := FE8_U.gba
-ROM_TARGET     := FEHACK.gba
+ROM_SOURCE     := FE8U.gba
+ROM_TARGET     := HACK.gba
 
 # pea options
 PEAFLAGS   := -D _FE8_ -I bin/EventAssembler/ -T bin/EventAssembler/Tools/ -T bin/
@@ -66,11 +66,11 @@ clean:
 $(ROM_TARGET): $(EVENT_MAIN) $(EVENT_MAIN_DEP) $(ROM_SOURCE)
 	$(PREPROCESS_MESSAGE)
 	@cp -f "$(ROM_SOURCE)" "$(ROM_TARGET)"
-	@$(EA) A FE8 "-output:$(abspath $(ROM_TARGET))" "-input:$(abspath $(EVENT_MAIN))"
+	@$(EA) A FE8 -output $(ROM_TARGET) -input $(EVENT_MAIN)
 
 $(EVENT_MAIN_DEP): $(EVENT_MAIN)
 	$(PREPROCESS_MESSAGE)
-	@$(PEA) $(PEAFLAGS) $(PEADEPFLAGS) "$(EVENT_MAIN)"
+	@$(EA) A FE8 -output $(ROM_TARGET) -input $(EVENT_MAIN) -quiet -MM -MG -MT $(EVENT_MAIN_DEP) -MF $(EVENT_MAIN_DEP)
 
 # -------------
 # PATTERN RULES
@@ -118,6 +118,24 @@ $(EVENT_MAIN_DEP): $(EVENT_MAIN)
 %.lz: %
 	$(PREPROCESS_MESSAGE)
 	@$(GBAGFX) $< $@
+
+# Formatted text to insertable binary
+# Nulling output because it's annoying
+%.fetxt.bin: %.fetxt
+	$(PARSEFILE) $< -o $@ > /dev/null
+
+# PNG to insertable portrait rule
+%_mug.dmp %_palette.dmp %_frames.dmp %_minimug.dmp: %.png
+	$(PORTRAITFORMATTER) $<
+
+# CSV+NMM to event
+# Untested
+%.event: %.csv %.nmm
+	$(C2EA) $*.csv $*.event $(ROM_SOURCE)
+
+# TMX to event + dmp
+%.event %_data.dmp: %.tmx
+	$(TMX2EA) $*.tmx $*.event
 
 # --------------------
 # INCLUDE DEPENDENCIES

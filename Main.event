@@ -11,8 +11,8 @@ ORG FreeSpace_BLRange
 	// Nothing !
 
 ORG FreeSpace
-	#include "_FE8EssentialFixes.event"
-	#include "_FE8ProcNameFix.event"
+	#include "Wizardry/_FE8EssentialFixes.event"
+	#include "Wizardry/_FE8ProcNameFix.event"
 
 	ALIGN 4
 

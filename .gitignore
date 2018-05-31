@@ -1,8 +1,7 @@
-.MkCache*
+.MkCache/*
 *.gba
 *.sav
 FE*-*.png
-bin/*
 
 *.lyn.event
 *.asm
@@ -94,14 +93,3 @@ $RECYCLE.BIN/
 
 # Windows shortcuts
 *.lnk
-
-# Ignore ignored files
-Ignore-*
-
-# Ignore WIP stuff
-CMovement*
-CSS*
-CSkills*
-HeroesMovement*
-libevent*
-Misc*

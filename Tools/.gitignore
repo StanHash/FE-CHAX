@@ -1,0 +1,8 @@
+ParseFile*
+PortraitFormatter*
+lyn*
+gbagfx*
+bin2ea*
+EventAssembler/*
+libevent/*
+*__pycache__*
