@@ -87,6 +87,22 @@ struct WinCnt
     u8  win1_obj_on:1;
     u8  win1_blend_on:1;
     u8  dummy2:2;
+
+    u8  wout_bg0_on:1;
+    u8  wout_bg1_on:1;
+    u8  wout_bg2_on:1;
+    u8  wout_bg3_on:1;
+    u8  wout_obj_on:1;
+    u8  wout_blend_on:1;
+    u8  dummy3:2;
+
+    u8  objw_bg0_on:1;
+    u8  objw_bg1_on:1;
+    u8  objw_bg2_on:1;
+    u8  objw_bg3_on:1;
+    u8  objw_obj_on:1;
+    u8  objw_blend_on:1;
+    u8  dummy4:2;
 };
 
 struct BlendCnt

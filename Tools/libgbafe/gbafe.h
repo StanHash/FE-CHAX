@@ -34,6 +34,7 @@ extern "C" {
 #include "gbafe/moveunit.h"
 #include "gbafe/trap.h"
 #include "gbafe/action.h"
+#include "gbafe/chapterdata.h"
 #include "gbafe/other.h"
 
 #ifdef __cplusplus
