@@ -1,0 +1,206 @@
+
+rX   -> sX
+
+# code 0
+[0020] (nothing) -> NOP
+
+# code 1
+[0120] ENDA -> END
+[0121] ENDB -> TERMINATE
+
+# code 2
+[0220] EVBIT_F    -> EVBIT_F Bit
+[0228] EVBIT_T    -> EVBIT_T Bit
+[0221] ENUF       -> TRIGGER_F Id
+[0229] ENUT       -> TRIGGER_T Id
+
+[0221] ENUF_SLOT2 -> (remove)
+[0229] ENUT_SLOT2 -> (remove)
+
+# code 3
+[0320] CHECK_EVBIT   -> GET_EVBIT Bit
+[0321] CHECK_EVENTID -> GET_TRIGGER Id
+
+# code 4
+[0420] CHECK_RANDOM -> GET_RANDOM Max
+
+# code 5
+[0540] SVAL -> SVAL sX Value
+            -> SVAL sX [x, y]
+            -> SPTR sX Label
+            -> (?) SET sX Value
+
+# code 6
+[0620] SADD -> ADD sDst sOp1 sOp2
+[0621] SSUB -> SUB sDst sOp1 sOp2
+[0622] SMUL -> MUL sDst sOp1 sOp2
+[0623] SDIV -> DIV sDst sOp1 sOp2
+[0624] SMOD -> MOD sDst sOp1 sOp2
+[0625] SAND -> AND sDst sOp1 sOp2
+[0626] SORR -> ORR sDst sOp1 sOp2
+[0627] SXOR -> XOR sDst sOp1 sOp2
+[0628] SLSL -> LSL sDst sOp1 sOp2
+[0629] SLSR -> LSR sDst sOp1 sOp2
+
+# code 7
+[0720] STQFROMSLOT        -> ENQUEUE sIn
+[0721] SAVETOQUEUE        -> ENQUEUE
+[0722] SLOTS_SETFROMQUEUE -> DEQUEUE sOut
+
+# code 8
+[0820] LABEL -> LABEL Id
+
+# code 9
+[0920] GOTO -> GOTO Id
+
+# code A
+[0A40] CALL         -> CALL Label
+
+[0A40] TUTORIALCALL -> (remove)
+
+# code B
+????
+
+# code C
+[0C40] BEQ -> BEQ Id sOp1 sOp2
+[0C41] BNE -> BNE Id sOp1 sOp2
+(etc)
+
+# code D
+[0D40] ASMC -> ASMC
+
+# code E
+[0E20] STAL -> SLEEP Amt
+            -> STALL Amt
+
+# code F
+[0F20] COUNTER_CHECK    -> COUNTER_GET Id
+[0F21] COUNTER_SET      -> COUNTER_SET Id Value
+[0F22] COUNTER_ADD      -> COUNTER_INC Id
+[0F23] COUNTER_SUBTRACT -> COUNTER_DEC Id
+
+# code 10
+[1020] EVBIT_MODIFY -> ?
+
+# code 11
+[1120] STORETOSOMETHING -> IGNORE_KEYS Mask
+
+# code 12
+[1220] MUSC -> MUSIC_SET Id
+
+# code 13
+[1320] MUS3     -> MUSIC_SWITCH Id
+[1322] MUSCFAST -> MUSIC_FADE_FAST Id
+[1324] MUSCMID  -> MUSIC_FADE Id
+[1326] MUSCSLOW -> MUSIC_FADE_SLOW Id
+
+# code 14
+[1420] MUSS -> MUSIC_REPLACE Id
+[1421] MURE -> MUSIC_RESTORE
+
+# code 15
+[1520] MUSI -> MUSIC_QUIET_T
+[1521] MUNO -> MUSIC_QUIET_F
+
+# code 16
+[1620] SOUN -> SOUND Id
+
+# code 17
+[1720] FADU -> FADE_FROM_BLACK Speed
+[1721] FADI -> FADE_TO_BLACK Speed
+[1722] FAWU -> FADE_FROM_WHITE Speed
+[1723] FAWI -> FADE_TO_WHITE Speed
+
+# code 18
+[1860] STARTFADE  -> COLOR_EFFECT_PREPARE
+[1861] ENDFADE    -> COLOR_EFFECT_END
+[1862] FADECOLORS -> COLOR_EFFECT_APPLY [Start, Count] Speed [Red, Green, Blue]
+
+# Note: Color targets are defined as ("0x11D" and "0xA06" are valid) in the EA doc.
+# It's just a pair of start/size bytes for palette bank indices.
+# For example, 0x11D ([0x1D, 1]) means from palette #0x1D to #0x1D+1
+# And 0xA06 means from palette #6 to palette #6+10 = #16
+
+# code 19
+[1920] CHECK_MODE           -> GET_GAME_MODE
+[1921] CHECK_CHAPTER_NUMBER -> GET_CHAPTER_ID
+[1922] CHECK_HARD           -> GET_DIFFICULT
+[1923] CHECK_TURNS          -> GET_TURN_COUNT
+[1924] CHECK_ENEMIES        -> GET_RED_COUNT
+[1925] CHECK_OTHERS         -> GET_GREEN_COUNT
+[1926] CHECK_SKIRMISH       -> GET_SKIRMISH
+[1927] CHECK_TUTORIAL       -> GET_EASY
+[1928] CHECK_MONEY          -> GET_MONEY
+[1929] CHECK_EVENTID        -> GET_ACTIVE_TRIGGER
+[192A] CHECK_POSTGAME       -> GET_POSTGAME
+
+[1921] CHECK_SOMETHING      -> (remove)
+
+# code 1A
+[1A20] TEXTSTART            -> TEXT_START
+[1A21] REMOVEPORTRAITS      -> TEXT_START_BACKGROUND
+[1A22]                      -> TEXT_START_UNK2
+[1A23] TUTORIALTEXTBOXSTART -> TEXT_START_TUTOBOX
+[1A24] SOLOTEXTBOXSTART     -> TEXT_START_SOLO (?)
+[1A25]                      -> TEXT_START_UNK5
+
+# code 1B
+[1B20] TEXTSHOW  -> TEXT_SHOW Id      # This will reset the text-skipping flag
+[1B21] TEXTSHOW2 -> TEXT_SHOW_NEXT Id # This will only display if not text-skipping
+[1B22] REMA      -> TEXT_CLEAR
+
+# code 1C
+[1C20] TEXTCONT  -> TEXT_CONTINUE
+
+# code 1D
+[1D20] TEXTEND   -> TEXT_END
+
+# code 1E
+????
+
+# code 1F
+????
+
+# code 20
+????
+
+# code 21
+[2140] BACG    -> TEXT_BACKGROUND_SET Id
+[2141] _0x2141 -> TEXT_BACKGROUND_UNK1 Id // SWITCH?
+[2142]         -> TEXT_BACKGROUND_UNK2 Id
+[2143]         -> TEXT_BACKGROUND_UNK3 Id
+
+# code 22
+[2220] CLEAN -> GFX_REFRESH
+
+# code 23
+[2320]       -> GFX_DISABLE
+
+# code 24
+[2420]       -> GFX_ENABLE
+
+# code 25
+[2520] LOMA -> MAP_SWITCH Id
+
+# code 26
+[2620] _0x2620 -> CAMERA_SET [x, y]
+[2621] CAM1    -> CAMERA_SET CharId
+[2628] CAM1    -> CAMERA_SET_UNK [x, y]
+[2629] _0x2629 -> CAMERA_SET_UNK CharId
+
+# code 27
+[2720] TILECHANGE  -> TILE_CHANGE Id
+[2721] TILEREVERSE -> TILE_REVERT Id
+
+# code 28
+[2821] WEA1 -> WEATHER_SET Type
+
+# code 29
+[2921] VCWF -> FOG_SET Range
+
+# code 2A
+[2A20] MNTS -> GAME_GOTO_TITLE
+[2A21] MNCH -> GAME_GOTO_CHAPTER Id
+[2A22] MNC2 -> GAME_GOTO_CHAPTER_NOWM Id
+[2A23] MNC3 -> GAME_GOTO_CHAPTER_NOSAVE Id
+[2A24] MNC4 -> GAME_GOTO_END (?)

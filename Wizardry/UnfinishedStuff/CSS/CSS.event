@@ -1,0 +1,42 @@
+#ifndef HAX_CSS
+#define HAX_CSS
+
+PUSH
+	ORG 0x087E24
+		POIN proc_css
+
+	ORG 0x08899C
+		POIN proc_css
+POP
+
+ALIGN 4
+
+// Code
+
+#include "src/css_common.lyn.event"
+#include "src/css_core.lyn.event"
+#include "src/css_lpanel.lyn.event"
+#include "src/css_objtext.lyn.event"
+#include "src/css_mugframe_small.lyn.event"
+
+ALIGN 4
+
+// Resources
+
+css_stattext_pal:
+	#incbin "res/stattext_dummy.gbapal"
+	ALIGN 4
+
+	// Debug palette
+	// #incbin "res/debug_pal.dmp"
+
+css_mugframe_small_gfx:
+	#incbin "res/mugframe_small.4bpp.lz"
+	ALIGN 4
+
+ALIGN 4
+css_mugframe_small_pal:
+	#incbin "res/mugframe_small.gbapal"
+	ALIGN 4
+
+#endif // HAX_CSS

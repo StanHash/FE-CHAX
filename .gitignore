@@ -8,6 +8,10 @@ FE*-*.png
 *.o
 *.dmp
 
+*.lz
+*.4bpp
+*.gbapal
+
 Spritans/Portraits.event
 Writans/Text.event
 Writans/TextDefinitions.event

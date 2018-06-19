@@ -1,0 +1,7 @@
+#ifndef HAX_STAN_GROUP_EXP
+#define HAX_STAN_GROUP_EXP
+
+#include "src/VESMain.lyn.event"
+#include "src/VESUnitDisplay.lyn.event"
+
+#endif // HAX_STAN_GROUP_EXP
