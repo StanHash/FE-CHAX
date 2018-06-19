@@ -1,7 +1,11 @@
-# Ignore WIP stuff
+# All the WIP stuff
+
 CMovement*
 CSS*
 CSkills*
 HeroesMovement*
+UnitSelectMenu*
 libevent*
 Misc*
+Laz*
+Val*

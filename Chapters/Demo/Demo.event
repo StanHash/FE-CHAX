@@ -1,0 +1,97 @@
+#ifndef CHAPTER_DEMO
+#define CHAPTER_DEMO
+
+#include "EAstdlib.event"
+
+// This `DemoMap.event` file will be automatically generated/updated:
+// The file `DemoMap.tmx` exists in this folder, and make knows how to
+// build `.event` files out of `.tmx` files (there's a rule for that)
+
+#include "DemoMap.event"
+
+EventPointerTable(0x7, ThisChapter)
+
+ALIGN 4
+ThisChapter:
+	POIN TurnEventList
+	POIN CharacterEventList
+	POIN LocationEventList
+	POIN ActionEventList
+	POIN DunnoList DunnoList DunnoList
+	POIN TutorialList
+	POIN TrapList TrapList2
+	POIN unPlayerList unPlayerList
+	WORD 0 0 0 0 0 0
+	POIN scBeginning scEnding
+
+ALIGN 4
+TurnEventList:
+	END_MAIN
+
+ALIGN 4
+CharacterEventList:
+	END_MAIN
+
+ALIGN 4
+LocationEventList:
+	END_MAIN
+
+ALIGN 4
+ActionEventList:
+	CauseGameOverIfLordDies
+	END_MAIN
+
+ALIGN 4
+DunnoList:
+	END_MAIN
+
+ALIGN 4
+TutorialList:
+	WORD 0
+
+ALIGN 4
+TrapList:
+	BLST [8, 10] 0x35
+TrapList2:
+	ENDTRAP
+
+ALIGN 4
+unPlayerList:
+	UNIT Eirika PegasusKnight 0 Level(10, Ally, True) [7, 6] 0 0 1 SumREDA [IronLance, ElysianWhip, Vulnerary] NoAI
+	UNIT Moulder Priest Eirika Level(10, Ally, True) [8, 8] 0 0 0 0 [Heal] NoAI
+	UNIT Innes Sniper Eirika Level(1, Ally, True) [7, 9] 0 0 0 0 [IronBow, SteelBow, IronSword] NoAI
+	UNIT
+
+ALIGN 4
+unEnemyList:
+	UNIT 0x80 Soldier 0 Level(1, Enemy, False) [12, 7] 0 0 0 0 [IronLance] NoAI
+	UNIT 0x80 Soldier 0 Level(1, Enemy, False) [11, 8] 0 0 0 0 [IronLance] NoAI
+	UNIT 0x80 Dancer  0 Level(1, Enemy, False) [14, 9] 0 0 0 0 [Elixir]    HealUnits
+	UNIT
+
+SumREDA:
+	REDA [9, 7] 0 0 0 0
+
+ALIGN 4
+scBeginning:
+	CALL $591F40
+
+	// ASMC $048281
+
+	EVBIT_T 9
+
+	LOAD1 0 unEnemyList
+	ENUN
+
+	LOAD1 0 unPlayerList
+	ENUN
+
+	EVBIT_F 9
+
+	ENDA
+
+ALIGN 4
+scEnding:
+	ENDA
+
+#endif // CHAPTER_DEMO

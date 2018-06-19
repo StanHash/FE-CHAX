@@ -4,7 +4,9 @@
 #include "Extensions/Hack Installation.txt"
 #include "EAstdlib.event"
 
-#define FreeSpace         0xB2A610 // Size: 0xD59F0
+#define FreeSpace    0xB2A610
+#define FreeSpaceEnd 0xC00000
+
 #define FreeSpace_BLRange 0x1C1EC0
 
 ORG FreeSpace_BLRange
@@ -15,14 +17,20 @@ ORG FreeSpace
 	#include "Wizardry/_FE8ProcNameFix.event"
 
 	ALIGN 4
+	#include "Writans/Text.event"
 
-	// Only allow one action per player phase :)
-	// PUSH; ORG $59AC02; SHORT 3; POP
-	// PUSH; ORG $59AC7A; SHORT 3; POP
+	ALIGN 4
+	#include "Spritans/Portraits.event"
 
 	{
-	// include test chapter
+	#include "Chapters/Chapters.event"
 	}
+
+	// If the following assertion fails, it means we ran out of free space.
+	// If that happens, we want to either split out our data between different
+	// sections, or start writing after the end of the ROM (offset 0x1000000+)
+
+	ASSERT (FreeSpaceEnd - CURRENTOFFSET)
 
 #else // MAIN
 	MESSAGE wat are u doin

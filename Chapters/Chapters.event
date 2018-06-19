@@ -1,0 +1,12 @@
+#ifndef CHAPTERS
+#define CHAPTERS
+
+// Putting each chapter in their own symbol scope
+// That way, label names can be reused between chapters
+// (Which would be useful if I had more than one)
+
+{
+#include "Demo/Demo.event"
+}
+
+#endif // CHAPTERS

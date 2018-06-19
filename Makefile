@@ -39,15 +39,16 @@ EVENT_MAIN_DEP := $(CACHE_DIR)/Main.d
 ROM_SOURCE     := FE8U.gba
 ROM_TARGET     := HACK.gba
 
-# pea options
-PEAFLAGS   := -D _FE8_ -I bin/EventAssembler/ -T bin/EventAssembler/Tools/ -T bin/
-PEADEPFLAGS = -MM -MT $(ROM_TARGET) -MF $(EVENT_MAIN_DEP) -MP -MG -.pp.makedep.outputIsTarget=true
-
 # defining C dependency flags
 CDEPFLAGS = -MMD -MT "$*.o" -MT "$*.asm" -MF "$(DEPSDIR)/$(notdir $*).d" -MP
 
 # All files
 ALL_FILES := $(EVENT_MAIN_DEP) $(ROM_TARGET) $(OFILES) $(ASMFILES) $(LYNFILES) $(DMPFILES)
+
+# Variable listing all text files in the writans directory
+# The text installer depends on them (in case there was any change)
+# (Too lazy to code a dependency thingy for that too)
+WRITANS_ALL_TEXT := $(wildcard Writans/*.txt)
 
 # ------------------
 # PHONY TARGET RULES
@@ -71,6 +72,15 @@ $(ROM_TARGET): $(EVENT_MAIN) $(EVENT_MAIN_DEP) $(ROM_SOURCE)
 $(EVENT_MAIN_DEP): $(EVENT_MAIN)
 	$(PREPROCESS_MESSAGE)
 	@$(EA) A FE8 -output $(ROM_TARGET) -input $(EVENT_MAIN) -quiet -MM -MG -MT $(EVENT_MAIN_DEP) -MF $(EVENT_MAIN_DEP)
+
+# -------------------
+# SPECIAL FILES RULES
+
+Spritans/Portraits.event: Spritans/PortraitList
+	$(GENMUGS) $< $@
+
+Writans/Text.event Writans/TextDefinitions.event: $(WRITANS_ALL_TEXT)
+	$(TEXTPROCESS) Writans/TextMain.txt Writans/Text.event Writans/TextDefinitions.event
 
 # -------------
 # PATTERN RULES

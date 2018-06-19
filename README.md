@@ -33,6 +33,7 @@ Kinda random but I feel like giving credit.
 - Colorz: Maintains EA and implemented a lot of useful stuff. Also made `ParseFile` and `PortraitFormatter`, both of which are used here. Also useful hax. Also *Everything Assembler*. Also cool guy.
 - Tequila: the Teq Doq is the best thing ever (I probably never would have gotten that far if not for that). Also lots of hax. Also cool guy. :duck:
 - Teraspark, Leonarth, Kirb, Tiki/laqieer, ...: Cool and useful hax. Cool guys.
+- Alusq: Demo/Test map. Cool guy.
 - Nintenlord: He made the original EA. I never knew him but I assume he also was a cool guy.
 - Zane: Doesn't have much to do with this but I love his work. Cool guy.
 - Arch, Camdar: They prevent FEU from dying horribly (or at least from doing so for extented amounts of time). Cool guys.

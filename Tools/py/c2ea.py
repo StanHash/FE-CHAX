@@ -54,19 +54,28 @@ def processed_lines(csvName, romName):
 		table = csv.reader(myfile)
 
 		offsetCell = next(table)[0]
+
 		inline = False
+		repoint = True
 
 		tableName = ''
 
 		if offsetCell.strip()[0:6]=="INLINE":
 			tableName = offsetCell[6:].strip()
+
 			inline = True
-			
-			yield '{0}:'.format(tableName)
+
+			if tableName[0:5] == "ALONE":
+				tableName = tableName[3:].strip()
+
+			else:
+				repoint = False
+
+			yield '{0}:\n'.format(tableName)
 
 		else:
-			yield "PUSH"
-			yield "ORG {0}".format(offsetCell)
+			yield "PUSH\n"
+			yield "ORG {0}\n".format(offsetCell)
 		
 		for row in table:
 			line = "{0}(".format(macroName)
@@ -95,15 +104,16 @@ def processed_lines(csvName, romName):
 				except ValueError: # if it's not a number, just add it directly
 					line += (data + ',')
 			
-			yield line[:-1] + ')'
+			yield line[:-1] + ')\n'
 		
-		if inline:
-			yield "PUSH"
+		if inline and repoint:
+			yield "PUSH\n"
 
 			for offset in pfind.pointer_iter(romName, 0x8000000 | nmm.offset):
-				yield "ORG {0}\nPOIN {1}".format(hex(offset), tableName)
-		
-		yield "POP"
+				yield "ORG {0}\nPOIN {1}\n".format(hex(offset), tableName)
+
+		if not repoint:
+			yield "POP\n"
 
 def main():
 	sys.excepthook = show_exception_and_exit
@@ -118,7 +128,7 @@ def main():
 		sys.exit("File `{0}` doesn't exist".format(sys.argv[3]))
 
 	with open(sys.argv[2], 'w') as f:
-		f.writelines(map(lambda s: (s + '\n'), processed_lines(sys.argv[1], sys.argv[3])))
+		f.writelines(processed_lines(sys.argv[1], sys.argv[3]))
 
 if __name__ == '__main__':
 	main()
