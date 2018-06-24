@@ -72,6 +72,11 @@ def assemble(filepath, depth = 0):
 			if (includee[0] == '"'):
 				includee = includee.strip('"')
 			
+			dirpath = os.path.dirname(filepath)
+
+			if len(dirpath) > 0:
+				includee = dirpath + "/" + includee
+
 			tmp = assemble(includee, depth+1)
 			
 			if tmp:

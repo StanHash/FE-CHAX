@@ -12,6 +12,8 @@ FE*-*.png
 *.4bpp
 *.gbapal
 
+*Map.event
+
 Spritans/Portraits.event
 Writans/Text.event
 Writans/TextDefinitions.event
