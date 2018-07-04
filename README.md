@@ -6,7 +6,9 @@ GBAFE hacks (in C!) and `EA`/`make` template. See [FE8UASMHax](https://github.co
 
 **Yes, [using this EA build](https://www.dropbox.com/s/moxk5tnerzhdkgl/EventAssembler-Stan.18.05.31.7z?dl=0)** ([Source is available at `FireEmblemUniverse/Event-Assembler` branch `stan-edits`](https://github.com/FireEmblemUniverse/Event-Assembler/tree/stan-edits)).
 
-[`ColorzCore`](https://github.com/FireEmblemUniverse/ColorzCore) is ***not*** compatible with this setup as I write these lines (july 4th 2018, 10:14AM BST).
+Note: [`ColorzCore`](https://github.com/FireEmblemUniverse/ColorzCore) is ***not*** compatible with this setup as I write these lines (july 4th 2018, 10:14AM BST).
+
+Note 2: Because I'm bad, right now this setup only works on true unix systems (because EA Dependency generation does system directory separators, which conflicts with the filenames within the makefile on Windows).
 
 ## how2
 
