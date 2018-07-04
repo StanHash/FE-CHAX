@@ -48,7 +48,7 @@ def processed_lines(csvName, romName):
 		else:
 			macroDef += (argString + ' ')
 
-	yield '#define {0}({1}) "{2}"'.format(macroName, ",".join(macroArgs), macroDef)
+	yield '#define {0}({1}) "{2}"\n'.format(macroName, ",".join(macroArgs), macroDef)
 
 	with open(csvName, 'r') as myfile:
 		table = csv.reader(myfile)
@@ -56,7 +56,7 @@ def processed_lines(csvName, romName):
 		offsetCell = next(table)[0]
 
 		inline = False
-		repoint = True
+		repoint = False
 
 		tableName = ''
 
@@ -67,9 +67,7 @@ def processed_lines(csvName, romName):
 
 			if tableName[0:5] == "ALONE":
 				tableName = tableName[3:].strip()
-
-			else:
-				repoint = False
+				repoint = True
 
 			yield '{0}:\n'.format(tableName)
 
