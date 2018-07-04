@@ -35,6 +35,8 @@ DEPFILES := $(addprefix $(DEPSDIR)/, $(notdir $(CFILES:.c=.d)))
 EVENT_MAIN     := Main.event
 EVENT_MAIN_DEP := $(CACHE_DIR)/Main.d
 
+EVENT_SYMBOLS  := HACK.sym.event
+
 # ROMs
 ROM_SOURCE     := FE8U.gba
 ROM_TARGET     := HACK.gba
@@ -43,7 +45,7 @@ ROM_TARGET     := HACK.gba
 CDEPFLAGS = -MMD -MT "$*.o" -MT "$*.asm" -MF "$(DEPSDIR)/$(notdir $*).d" -MP
 
 # All files
-ALL_FILES := $(EVENT_MAIN_DEP) $(ROM_TARGET) $(OFILES) $(ASMFILES) $(LYNFILES) $(DMPFILES)
+ALL_FILES := $(EVENT_MAIN_DEP) $(ROM_TARGET) $(EVENT_SYMBOLS) $(OFILES) $(ASMFILES) $(LYNFILES) $(DMPFILES)
 
 # Variable listing all text files in the writans directory
 # The text installer depends on them (in case there was any change)
@@ -67,7 +69,7 @@ clean:
 $(ROM_TARGET): $(EVENT_MAIN) $(EVENT_MAIN_DEP) $(ROM_SOURCE)
 	$(PREPROCESS_MESSAGE)
 	@cp -f "$(ROM_SOURCE)" "$(ROM_TARGET)"
-	@$(EA) A FE8 -output $(ROM_TARGET) -input $(EVENT_MAIN)
+	@$(EA) A FE8 -output $(ROM_TARGET) -input $(EVENT_MAIN) -symOutput $(EVENT_SYMBOLS)
 
 $(EVENT_MAIN_DEP): $(EVENT_MAIN)
 	$(PREPROCESS_MESSAGE)

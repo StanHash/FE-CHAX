@@ -5,4 +5,5 @@ gbagfx*
 bin2ea*
 EventAssembler/*
 libevent/*
+StanR*
 *__pycache__*

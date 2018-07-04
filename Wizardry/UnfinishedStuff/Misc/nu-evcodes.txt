@@ -55,8 +55,7 @@ rX   -> sX
 
 # code A
 [0A40] CALL         -> CALL Label
-
-[0A40] TUTORIALCALL -> (remove)
+[0A40] TUTORIALCALL -> CALL_S1
 
 # code B
 ????
@@ -137,12 +136,12 @@ rX   -> sX
 [1921] CHECK_SOMETHING      -> (remove)
 
 # code 1A
-[1A20] TEXTSTART            -> TEXT_START
-[1A21] REMOVEPORTRAITS      -> TEXT_START_BACKGROUND
-[1A22]                      -> TEXT_START_UNK2
-[1A23] TUTORIALTEXTBOXSTART -> TEXT_START_TUTOBOX
-[1A24] SOLOTEXTBOXSTART     -> TEXT_START_SOLO (?)
-[1A25]                      -> TEXT_START_UNK5
+[1A20] TEXTSTART            -> TEXT_INIT
+[1A21] REMOVEPORTRAITS      -> TEXT_INIT_BACKGROUND
+[1A22]                      -> TEXT_INIT_UNK2
+[1A23] TUTORIALTEXTBOXSTART -> TEXT_INIT_TUTOBOX
+[1A24] SOLOTEXTBOXSTART     -> TEXT_INIT_SOLO (?)
+[1A25]                      -> TEXT_INIT_UNK5
 
 # code 1B
 [1B20] TEXTSHOW  -> TEXT_SHOW Id      # This will reset the text-skipping flag
@@ -153,7 +152,7 @@ rX   -> sX
 [1C20] TEXTCONT  -> TEXT_CONTINUE
 
 # code 1D
-[1D20] TEXTEND   -> TEXT_END
+[1D20] TEXTEND   -> TEXT_WAIT
 
 # code 1E
 ????

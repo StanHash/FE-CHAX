@@ -1,23 +1,25 @@
-# Stan's C Hax for FE8U
+# Stan's CHax for FE8U
 
-Headers, library and "hacks" for GBAFE; mostly written in C. See [FE8UASMHax](https://github.com/StanHash/FE8UASMHax) for older stuff (there's a lot more there than here).
+GBAFE hacks (in C!) and `EA`/`make` template. See [FE8UASMHax](https://github.com/StanHash/FE8UASMHax) for older stuff (there's a lot more hacks there than here).
 
 ## Do `make` & Event Assembler synergize
 
 **Yes, [using this EA build](https://www.dropbox.com/s/moxk5tnerzhdkgl/EventAssembler-Stan.18.05.31.7z?dl=0)** ([Source is available at `FireEmblemUniverse/Event-Assembler` branch `stan-edits`](https://github.com/FireEmblemUniverse/Event-Assembler/tree/stan-edits)).
 
+[`ColorzCore`](https://github.com/FireEmblemUniverse/ColorzCore) is ***not*** compatible with this setup as I write these lines (july 4th 2018, 10:14AM BST).
+
 ## how2
 
-- have [devkitARM](https://devkitpro.org/wiki/Getting_Started/devkitARM) installed, and the `DEVKITARM` env variable set.
+- have [devkitARM](https://devkitpro.org/wiki/Getting_Started) installed, and the `DEVKITARM` env variable set.
 - have `make` (and some kind of posix-compatible shell (if you're under Windows, devkitPro comes with msys bundled, which is more than enough) in you path.
 - have [python 3](https://www.python.org/) installed and in your path.
 - have the following tools in the `Tools` folder, with the correct name (or you can edit [`Tools.mak`](./Tools.mak) in case names don't match):
   - [`lyn`](https://github.com/StanHash/lyn/releases)
   - [`EventAssembler/Core` (and the rest of the EA installation of course)](https://www.dropbox.com/s/moxk5tnerzhdkgl/EventAssembler-Stan.18.05.31.7z?dl=0)
-    - **Using this custom build is _required_** (versions > 11.1 would probably work, but those have yet to exist as I am writing this)
+    - **Using this custom build is _required_** (versions > 11.1.x would probably work, but those have yet to exist as I am writing this)
   - [Colorz's `PortraitFormatter`](http://feuniverse.us/t/ea-ea-formatting-suite/1714?u=stanh)
   - [Colorz's `ParseFile`](http://feuniverse.us/t/ea-ea-formatting-suite/1714?u=stanh)
-  - [YamaArashi's (?) `gbagfx`](https://github.com/pret/pokeruby-tools)
+  - [YamaArashi's (?) `gbagfx`](https://github.com/pret/pokeruby-tools) (unused right now)
 - run your shell and go to this folder
   - you can `make` or `make hack` to build the demo ROM (requires `FE8U.gba` in the directory)
   - you can `make all` to make everything unconditionally.

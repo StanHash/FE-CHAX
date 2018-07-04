@@ -1,6 +1,7 @@
 .MkCache/*
 *.gba
 *.sav
+*.sym.event
 FE*-*.png
 
 *.lyn.event
