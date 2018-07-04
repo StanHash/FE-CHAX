@@ -1,0 +1,155 @@
+
+## textCh9OnFirstBoat
+
+[OpenMidRight][LoadFace][0x04][0x01]
+Miladysir your highness![A] Look out![A][NL]
+We are being assaulted by pirates![A][NL]
+
+[OpenLeft][LoadFace][0x02][0x01]
+Oh no! pirates![A][NL]
+
+[OpenLeft][ClearFace]
+[OpenMidRight][ClearFace]
+[CloseSpeechSlow]
+[LoadOverworldFaces]
+
+[OpenMidRight][LoadFace][0x02][0x01]
+Wait...[A] Monks?[A][NL]
+I thought we were[NL]
+going against pirates?[A][NL]
+
+[OpenLeft][LoadFace][0x04][0x01]
+Miladysir your highness![A][NL]
+Those are the dreaded monk-pirates[NL]
+of <somewhere>![A][NL]
+Their unparalleled faith give them[NL]
+the most potent light magic in all 6 seas![A][NL]
+
+[OpenMidRight][LoadFace][0x02][0x01]
+Oh...[A] Oh![A] Erm...[A][OpenLeft][ClearFace][OpenMidRight] Everyone![A][NL]
+In position! Now![A][NL]
+Our goal will be to defeat their[NL]
+commander[ToggleRed]s[ToggleRed] to make them retreat![A][NL]
+
+[X]
+
+
+## textCh9SecondBoatWarning
+
+[OpenLeft][LoadFace][0x04][0x01]
+Miladysir your highness![A][NL]
+Our scouts report a second pirate[NL]
+ship coming from the south![A][NL]
+
+[OpenMidRight][LoadFace][0x02][0x01]
+Understood.[A][OpenLeft][ClearFace][OpenMidRight] Everyone![A][NL]
+Take caution as we may get[NL]
+attacked from the east![A][NL]
+
+[X]
+
+
+## textCh9OnSecondBoat
+
+[OpenMidLeft][LoadFace][0x02][0x01]
+... Armoured knights?[A][NL]
+
+[OpenRight][LoadFace][0x04][0x01]
+Miladysir your highness![A][NL]
+Those are the dreaded armoured pirates[NL]
+of <somewhere else>![A][NL]
+Their amazingly thick armor makes for[NL]
+the sturdiest defense in all 6 seas![A][NL]
+
+[OpenMidLeft]
+Yet somehow their ship[NL]
+doesn't sink...[A][NL]
+I'll... tell the others[NL]
+to take caution.[A][NL]
+
+[X]
+
+
+## textCh9ThirdBoatWarning
+
+[OpenLeft][LoadFace][0x04][0x01]
+Miladysir your highness![A][NL]
+Our scouts report a third pirate[NL]
+ship coming from the east![A][NL]
+
+[X]
+
+
+## textCh9OnThirdBoat
+
+[OpenMidLeft][LoadFace][0x02][0x01]
+... Cavalry?[A] On a boat?[A][NL]
+
+[OpenRight][LoadFace][0x04][0x01]
+Miladysir your highness![A][NL]
+Those are the dreaded mounted pirates[NL]
+of <somewhere else again>![A][NL]
+Their stunningly fast mounts gives them[NL]
+the best land mobility in all 6 seas![A][NL]
+
+[OpenMidLeft]
+Land mobility...[A] at sea.[A][NL]
+Somehow it doesn't feel as threatning[NL]
+as you seem to want me think.[A][NL]
+
+[X]
+
+
+## textCh9FourthBoatWarning
+
+[OpenLeft][LoadFace][0x04][0x01]
+Miladysir your highness![A][NL]
+Our scouts report a third pirate[NL]
+ship coming from the north![A][NL]
+
+[X]
+
+
+## textCh9OnFourthBoat
+
+[OpenMidLeft][LoadFace][0x02][0x01]
+Are those...[A] Pegasi?[A][NL]
+
+[OpenRight][LoadFace][0x04][0x01]
+Miladysir your highness![A][NL]
+Those are the dreaded flying pirates[NL]
+of <somewhere else again>![A][NL]
+Their winged mounts warrants them the[NL]
+best raiding potential in all 6 seas![A][NL]
+
+[OpenMidLeft]
+But...[A] pegasi are usually so frail it takes[NL]
+no less than an arrow to take them down.[A][NL]
+I think I also question the need[NL]
+for them to travel by boat...[A][NL]
+It feels like it would be rather cumbersome...[A][NL]
+
+[X]
+
+## textCh9RecruitShowsUp
+
+[OpenMidLeft][LoadFace][0x05][0x01]
+Yarr harr ho etc.[A][NL]
+
+[X]
+
+## textCh9OnRecruit
+
+[OpenMidLeft][LoadFace][0x02][0x01]
+I'm too tired to write more dialogue.[A][NL]
+
+[X]
+
+## textCh9OnEnd
+
+[OpenMidLeft][LoadFace][0x02][0x01]
+The...[A] Erm...[A] "pirates"[A] are retreating.[A][NL]
+Everyone![A] Fall back![A] You all did well.[A][NL]
+
+[X]
+

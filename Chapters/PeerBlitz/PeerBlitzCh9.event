@@ -1,0 +1,891 @@
+#ifndef CHAPTER_STAN_CH9
+#define CHAPTER_STAN_CH9
+
+#include "EAstdlib.event"
+
+/*
+
+PUSH; ORG $9ECD4C
+	// temp because we need to have the boss(es) have a death quote that sets eid 2
+	// like every boss, but here we need it for that chapter
+	SHORT chrBossCommon; BYTE 0xFF 0xFF; SHORT 2; SHORT 0; WORD 0
+	SHORT 0xFFFF
+POP
+
+*/
+
+EventPointerTable(0x7, ThisChapter)
+
+// ============================
+// = EVENT HELPERS START HERE =
+// ============================
+
+// "Standard" callable events
+scPrepScreen         = $591FD8 // no args
+scNoSkipFadeOut      = $591F40 // no args
+scLoadReinforcements = $9EE274 // args: s2 = pointer to UNITs
+
+// Helpers
+s0 = r0
+s1 = r1
+s2 = r2
+s3 = r3
+s4 = r4
+s5 = r5
+s6 = r6
+s7 = r7
+s8 = r8
+s9 = r9
+sA = rA
+sB = rB
+sC = rC
+
+#ifndef IsPointer
+	#define IsPointer 0x8000000
+#endif // IsPointer
+
+#ifndef RedaPoolDefined
+	#define RedaPoolDefined
+	#define InlReda(aXTarget, aYTarget) "AddToPool(REDA [(aXTarget), (aYTarget)] 0 0 0 0)"
+#endif // RedaPoolDefined
+
+// ====================================
+// = ACTUAL CHAPTER EVENTS START HERE =
+// ====================================
+
+// GOAL: defeat 15 Bosses
+
+// uncomment to reduce the number of enemies by a bit
+// because it *may* be a bit much
+// #define CH9_TONE_DOWN_A_BIT
+
+chrGnrcMonk      = 0x80
+chrGnrcArmor     = 0x80
+chrGnrcCavalier  = 0x80
+chrGnrcPegasus   = 0x80
+chrGnrcHealDruid = 0x81 // Needs to be unique in this chapter for asmc reasons
+
+chrBossCommon    = Bone // Should have a death quote that sets eid 2
+
+chrLord          = Eirika // For talk event
+chrPirateRecruit = Ross
+
+lvlGnrcBase = 10 // unpromoted, max bonus is 3
+lvlBossBase = 5  // promoted, max bonus is 3
+
+eidSecondBoatComing = 10
+eidThirdBoatComing  = 11
+eidFourthBoatComing = 12
+eidRecruitReady     = 13
+eidFirstBoatReinf1  = 14
+eidFirstBoatReinf2  = 15
+eidSecondBoatReinf1 = 16
+eidSecondBoatReinf2 = 17
+eidThirdBoatReinf1  = 18
+eidThirdBoatReinf2  = 19
+eidFourthBoatReinf1 = 20
+eidFourthBoatReinf2 = 21
+eidRecruitTalk      = 22
+
+cntBossKillCount = 0 // Counter #0 is boss kill count
+cntBoat1Reinf    = 1 // Counter #1 is boat 1 reinf countdown
+cntBoat2Reinf    = 2 // Counter #2 is boat 2 reinf countdown
+cntBoat3Reinf    = 3 // Counter #3 is boat 3 reinf countdown
+cntBoat4Reinf    = 4 // Coutner #4 is boat 4 reinf countdown
+
+ALIGN 4
+ThisChapter:
+	POIN TurnEventList
+	POIN CharacterEventList
+	POIN LocationEventList
+	POIN ActionEventList
+	POIN DunnoList DunnoList DunnoList
+	POIN TutorialList
+	POIN TrapList TrapList2
+	POIN unPlayerList unPlayerList
+	WORD 0 0 0 0 0 0
+	POIN scBeginning scEnding
+
+ALIGN 4
+TurnEventList:
+	TURN eidSecondBoatComing scShowSecondBoat [0, 0xFF] 0
+	TURN eidThirdBoatComing  scShowThirdBoat  [0, 0xFF] 0
+	TURN eidFourthBoatComing scShowFourthBoat [0, 0xFF] 0
+
+	TURN 0 scCheckBoat1Reinf [0, 0xFF] 0
+	TURN 0 scCheckBoat2Reinf [0, 0xFF] 0
+	TURN 0 scCheckBoat3Reinf [0, 0xFF] 0
+	TURN 0 scCheckBoat4Reinf [0, 0xFF] 0
+
+	END_MAIN // end
+
+ALIGN 4
+CharacterEventList:
+	CHAR eidRecruitTalk scRecruitTalk chrLord chrPirateRecruit 0
+	END_MAIN
+
+ALIGN 4
+LocationEventList:
+	SecretShop(shpSecret, 11, 16)
+	END_MAIN
+
+ALIGN 4
+ActionEventList:
+	CauseGameOverIfLordDies
+	DefeatBoss(scOnBossDefeated)
+	END_MAIN
+
+ALIGN 4
+DunnoList:
+	END_MAIN
+
+ALIGN 4
+TutorialList:
+	WORD 0
+
+ALIGN 4
+TrapList:
+TrapList2:
+	ENDTRAP
+
+ALIGN 4
+shpSecret:
+	// =^)
+	SHLI IronSword IronLance IronBow IronAxe Fire Heal GuidingRing KnightCrest ElysianWhip Talisman
+
+ALIGN 4
+unPlayerList:
+	UNIT Eirika EirikaMasterLord 0 Level(20, Ally, True) [13, 12] 0 0 0 0 [Sieglinde, Runesword, MemberCard] NoAI
+	UNIT Moulder Bishop Eirika Level(20, Ally, True) [12, 12] 0 0 0 0 [Latona, Aura, Mend] NoAI
+	UNIT Innes Sniper Eirika Level(20, Ally, True) [13, 13] 0 0 0 0 [Nidhogg] NoAI
+	UNIT LArachel MageKnight_F Eirika Level(20, Ally, True) [12, 14] 0 0 0 0 [Excalibur, Heal, Vulnerary] NoAI
+	UNIT Gilliam General Eirika Level(20, Ally, True) [11, 14] 0 0 0 0 [Garm, Javelin] NoAI
+	UNIT Seth Paladin Eirika Level(20, Ally, True) [11, 13] 0 0 0 0 [Audhulma, SilverLance, Elixir] NoAI
+	UNIT Lute Sage_F Eirika Level(20, Ally, True) [13, 15] 0 0 0 0 [Ivaldi, Thunder, Warp] NoAI
+	UNIT Tana WyvernKnight_F Eirika Level(20, Ally, True) [14, 14] 0 0 0 0 [Vidofnir, Spear, Elixir] NoAI
+	UNIT Ewan Summoner Eirika Level(20, Ally, True) [12, 10] 0 0 0 0 [Gleipnir, Flux, Nosferatu, Nosferatu] NoAI
+	UNIT Marisa Swordmaster_F Eirika Level(20, Ally, True) [13, 11] 0 0 0 0 [BraveSword, Shamshir] NoAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemyFirstBoatInitialList:
+	UNIT chrGnrcMonk Monk 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(5, 13) [Lightning] NoAI
+	UNIT chrGnrcMonk Monk 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(2, 13) [Lightning] NoAI
+
+	UNIT chrGnrcMonk Monk 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(4, 10) [Lightning] NoAI
+	UNIT chrGnrcMonk Monk 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(2, 15) [Lightning] NoAI
+
+#ifndef CH9_TONE_DOWN_A_BIT
+	UNIT chrGnrcMonk Monk 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(5, 14) [Lightning] NoAI
+	UNIT chrGnrcMonk Monk 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(5, 11) [Lightning] NoAI
+#endif // CH9_TONE_DOWN_A_BIT
+
+	UNIT chrGnrcMonk Thief 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(4, 15) [IronSword, Lockpick] NoAI
+
+	UNIT chrGnrcMonk Cleric 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(2, 11) [Mend] NoAI
+	UNIT chrGnrcMonk Thief 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(3, 11) [SteelSword, Lockpick] NoAI
+
+	// 2 bosses
+	UNIT chrBossCommon Bishop 0 Level((lvlBossBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(3, 9) [Lightning] NoAI
+	UNIT chrBossCommon Bishop 0 Level((lvlBossBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(4, 15) [Lightning] NoAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemyFirstBoatReinf1List:
+	UNIT chrGnrcMonk Monk 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(4, 15) [Lightning] NoAI
+	UNIT chrGnrcMonk Monk 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(3, 11) [Lightning] NoAI
+
+#ifndef CH9_TONE_DOWN_A_BIT
+	UNIT chrGnrcMonk Monk 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(5, 13) [Lightning] NoAI
+#endif
+
+	UNIT chrGnrcMonk Thief 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(2, 12) [SteelSword, Lockpick] NoAI
+
+	// +1 boss
+	UNIT chrBossCommon Bishop 0 Level((lvlBossBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(2, 14) [Lightning] NoAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemyFirstBoatReinf2List:
+	UNIT chrGnrcMonk Monk 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(4, 13) [Lightning] NoAI
+	UNIT chrGnrcMonk Monk 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(4, 14) [Lightning] NoAI
+
+#ifndef CH9_TONE_DOWN_A_BIT
+	UNIT chrGnrcMonk Monk 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(2, 12) [Lightning] NoAI
+#endif
+
+	UNIT chrGnrcMonk Cleric 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(2, 14) [Mend] NoAI
+
+	// +1 boss
+	UNIT chrBossCommon Valkyrie 0 Level((lvlBossBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(3, 10) [Lightning] NoAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemyFirstBoatReinfBackupList:
+	// In case all reinforcements were called, but pirate guy still needs to come
+
+	UNIT chrGnrcMonk Cleric 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(5, 14) [Physic] NoAI
+	UNIT chrGnrcMonk Cleric 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(4, 15) [Physic] NoAI
+	UNIT chrGnrcMonk Cleric 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(2, 15) [Physic] NoAI
+	UNIT chrGnrcMonk Cleric 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(2, 13) [Physic] NoAI
+
+	UNIT // end
+
+ALIGN 4
+unRecruitableFirstBoatReinfList:
+	UNIT chrPirateRecruit Warrior 0 Level(1, Enemy, False) [3, 14] 0 0 1 InlReda(4, 13) [SteelAxe, KillerBow, Vulnerary] NoAI
+	UNIT // end
+
+ALIGN 4
+unEnemySecondBoatInitialList:
+	UNIT chrGnrcArmor Knight 0 Level((lvlGnrcBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(22, 11) [SteelLance] NoAI
+	UNIT chrGnrcArmor Knight 0 Level((lvlGnrcBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(21, 15) [SteelLance] NoAI
+	UNIT chrGnrcArmor Knight 0 Level((lvlGnrcBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(20, 13) [SteelLance] NoAI
+
+#ifndef CH9_TONE_DOWN_A_BIT
+	UNIT chrGnrcArmor Knight 0 Level((lvlGnrcBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(22, 14) [SteelLance] NoAI
+	UNIT chrGnrcArmor Knight 0 Level((lvlGnrcBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(23, 15) [SteelLance] NoAI
+#endif
+
+	UNIT chrGnrcArmor Thief 0 Level((lvlGnrcBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(21, 14) [SteelSword, Lockpick] NoAI
+
+	UNIT chrGnrcArmor Soldier 0 Level((lvlGnrcBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(20, 15) [IronLance] NoAI
+	UNIT chrGnrcArmor Soldier 0 Level((lvlGnrcBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(21, 16) [IronLance] NoAI
+
+	// 3 bosses
+	UNIT chrBossCommon General 0 Level((lvlBossBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(23, 17) [SilverLance] NoAI
+	UNIT chrBossCommon General 0 Level((lvlBossBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(22, 13) [SilverLance] NoAI
+	UNIT chrBossCommon General 0 Level((lvlBossBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(20, 16) [SilverLance] NoAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemySecondBoatReinf1List:
+	UNIT chrGnrcArmor Knight 0 Level((lvlGnrcBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(21, 15) [SteelLance] NoAI
+	UNIT chrGnrcArmor Knight 0 Level((lvlGnrcBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(23, 14) [SteelLance] NoAI
+
+#ifndef CH9_TONE_DOWN_A_BIT
+	UNIT chrGnrcArmor Knight 0 Level((lvlGnrcBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(23, 17) [SteelLance] NoAI
+#endif
+
+	UNIT chrGnrcArmor Soldier 0 Level((lvlGnrcBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(22, 14) [SteelLance] NoAI
+	UNIT chrGnrcArmor Thief 0 Level((lvlGnrcBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(23, 15) [SteelSword, Lockpick] NoAI
+
+	// +1 boss
+	UNIT chrBossCommon General 0 Level((lvlBossBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(22, 15) [SilverLance] NoAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemySecondBoatReinf2List:
+	UNIT chrGnrcArmor Knight 0 Level((lvlGnrcBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(22, 13) [SteelLance] NoAI
+	UNIT chrGnrcArmor Knight 0 Level((lvlGnrcBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(23, 13) [SteelLance] NoAI
+
+#ifndef CH9_TONE_DOWN_A_BIT
+	UNIT chrGnrcArmor Knight 0 Level((lvlGnrcBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(21, 16) [SteelLance] NoAI
+#endif
+
+	UNIT chrGnrcArmor Soldier 0 Level((lvlGnrcBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(23, 15) [SteelLance] NoAI
+	UNIT chrGnrcArmor Soldier 0 Level((lvlGnrcBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(21, 14) [SteelLance] NoAI
+
+	// +1 boss
+	UNIT chrBossCommon GreatKnight 0 Level((lvlBossBase + 1), Enemy, True) [22, 16] 0 0 1 InlReda(21, 16) [SilverAxe] NoAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemyThridBoatInitialList1:
+	UNIT chrGnrcCavalier Cavalier 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 18] 0 0 1 InlReda(29, 16) [SteelLance] NoAI
+	UNIT chrGnrcCavalier Cavalier 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 18] 0 0 1 InlReda(27, 18) [SteelSword] NoAI
+	UNIT chrGnrcCavalier Cavalier 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 18] 0 0 1 InlReda(27, 15) [SteelLance, SteelSword] NoAI
+
+#ifndef CH9_TONE_DOWN_A_BIT
+	UNIT chrGnrcCavalier Cavalier 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 18] 0 0 1 InlReda(28, 12) [SteelLance, SteelSword] NoAI
+	UNIT chrGnrcCavalier Troubadour 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 18] 0 0 1 InlReda(30, 14) [Mend] NoAI
+#endif
+
+	UNIT chrGnrcCavalier Troubadour 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 18] 0 0 1 InlReda(31, 17) [Mend] NoAI
+
+	// 2 bosses
+	UNIT chrBossCommon Paladin 0 Level((lvlBossBase + 2), Enemy, True) [30, 18] 0 0 1 InlReda(28, 19) [SteelLance] NoAI
+	UNIT chrBossCommon MageKnight 0 Level((lvlBossBase + 2), Enemy, True) [30, 18] 0 0 1 InlReda(30, 13) [Thunder, Heal] NoAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemyThridBoatInitialList2:
+	UNIT chrGnrcCavalier Cavalier 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 5] 0 0 1 InlReda(28, 9) [SteelLance] NoAI
+	UNIT chrGnrcCavalier Cavalier 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 5] 0 0 1 InlReda(29, 10) [SteelSword] NoAI
+	UNIT chrGnrcCavalier Cavalier 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 5] 0 0 1 InlReda(27, 5) [SteelLance, SteelSword] NoAI
+	UNIT chrGnrcCavalier Cavalier 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 5] 0 0 1 InlReda(30, 4) [SteelSword] NoAI
+
+#ifndef CH9_TONE_DOWN_A_BIT
+	UNIT chrGnrcCavalier Cavalier 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 5] 0 0 1 InlReda(29, 6) [SteelLance] NoAI
+	UNIT chrGnrcCavalier Troubadour 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 5] 0 0 1 InlReda(31, 8) [Physic] NoAI
+#endif
+
+	UNIT chrGnrcCavalier Troubadour 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 5] 0 0 1 InlReda(31, 5) [Physic] NoAI
+
+	// 2 bosses
+	UNIT chrBossCommon Paladin 0 Level((lvlBossBase + 2), Enemy, True) [30, 5] 0 0 1 InlReda(28, 4) [SteelLance] NoAI
+	UNIT chrBossCommon Ranger 0 Level((lvlBossBase + 2), Enemy, True) [30, 5] 0 0 1 InlReda(31, 9) [SilverBow, IronSword] NoAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemyThirdBoatReinf1List:
+	UNIT chrGnrcCavalier Cavalier 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 18] 0 0 1 InlReda(29, 16) [SteelLance] NoAI
+	UNIT chrGnrcCavalier Cavalier 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 18] 0 0 1 InlReda(27, 18) [SteelSword] NoAI
+	UNIT chrGnrcCavalier Cavalier 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 18] 0 0 1 InlReda(27, 15) [SteelLance, SteelSword] NoAI
+
+#ifndef CH9_TONE_DOWN_A_BIT
+	UNIT chrGnrcCavalier Cavalier 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 18] 0 0 1 InlReda(28, 12) [SteelLance, SteelSword] NoAI
+	UNIT chrGnrcCavalier Troubadour 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 18] 0 0 1 InlReda(30, 14) [Mend] NoAI
+#endif
+
+	UNIT chrGnrcCavalier Troubadour 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 18] 0 0 1 InlReda(31, 17) [Mend] NoAI
+
+	// +1 boss
+	UNIT chrBossCommon Paladin 0 Level((lvlBossBase + 2), Enemy, True) [30, 18] 0 0 1 InlReda(28, 19) [SteelLance] NoAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemyThirdBoatReinf2List:
+	UNIT chrGnrcCavalier Cavalier 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 5] 0 0 1 InlReda(28, 9) [SteelLance] NoAI
+	UNIT chrGnrcCavalier Cavalier 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 5] 0 0 1 InlReda(29, 10) [SteelSword] NoAI
+	UNIT chrGnrcCavalier Cavalier 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 5] 0 0 1 InlReda(27, 5) [SteelLance, SteelSword] NoAI
+	UNIT chrGnrcCavalier Cavalier 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 5] 0 0 1 InlReda(30, 4) [SteelSword] NoAI
+
+#ifndef CH9_TONE_DOWN_A_BIT
+	UNIT chrGnrcCavalier Cavalier 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 5] 0 0 1 InlReda(29, 6) [SteelLance] NoAI
+	UNIT chrGnrcCavalier Troubadour 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 5] 0 0 1 InlReda(31, 8) [Physic] NoAI
+#endif
+
+	UNIT chrGnrcCavalier Troubadour 0 Level((lvlGnrcBase + 2), Enemy, True) [30, 5] 0 0 1 InlReda(31, 5) [Physic] NoAI
+
+	// +1 boss
+	UNIT chrBossCommon Paladin 0 Level((lvlBossBase + 2), Enemy, True) [30, 5] 0 0 1 InlReda(28, 4) [SteelLance] NoAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemyFourthBoatInitialList:
+	UNIT chrGnrcPegasus PegasusKnight 0 Level((lvlGnrcBase + 3), Enemy, True) [18, 2] 0 0 1 InlReda(22, 4) [SteelLance] NoAI
+	UNIT chrGnrcPegasus PegasusKnight 0 Level((lvlGnrcBase + 3), Enemy, True) [19, 1] 0 0 1 InlReda(13, 2) [SteelLance] NoAI
+	UNIT chrGnrcPegasus PegasusKnight 0 Level((lvlGnrcBase + 3), Enemy, True) [19, 1] 0 0 1 InlReda(21, 1) [SteelLance] NoAI
+	UNIT chrGnrcPegasus PegasusKnight 0 Level((lvlGnrcBase + 3), Enemy, True) [18, 2] 0 0 1 InlReda(16, 3) [SteelLance] NoAI
+
+#ifndef CH9_TONE_DOWN_A_BIT
+	UNIT chrGnrcPegasus PegasusKnight 0 Level((lvlGnrcBase + 3), Enemy, True) [18, 2] 0 0 1 InlReda(19, 5) [SteelLance] NoAI
+	UNIT chrGnrcPegasus PegasusKnight 0 Level((lvlGnrcBase + 3), Enemy, True) [19, 1] 0 0 1 InlReda(18, 4) [SteelLance] NoAI
+#endif
+
+	UNIT chrGnrcHealDruid Druid 0 Level((lvlBossBase + 3), Enemy, True) [19, 1] 0 0 1 InlReda(19, 3) [Mend, Physic] NoAI
+	UNIT chrGnrcHealDruid Druid 0 Level((lvlBossBase + 3), Enemy, True) [19, 1] 0 0 1 InlReda(17, 1) [Mend, Physic] NoAI
+
+	// 2 bosses
+	UNIT chrBossCommon FalcoKnight 0 Level((lvlBossBase + 3), Enemy, True) [18, 2] 0 0 1 InlReda(15, 1) [SteelLance] NoAI
+	UNIT chrBossCommon FalcoKnight 0 Level((lvlBossBase + 3), Enemy, True) [19, 1] 0 0 1 InlReda(23, 2) [SteelSword] NoAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemyFourthBoatReinf1List:
+	UNIT chrGnrcPegasus PegasusKnight 0 Level((lvlGnrcBase + 3), Enemy, True) [18, 2] 0 0 1 InlReda(22, 4) [SteelLance] NoAI
+	UNIT chrGnrcPegasus PegasusKnight 0 Level((lvlGnrcBase + 3), Enemy, True) [19, 1] 0 0 1 InlReda(13, 2) [SteelLance] NoAI
+
+#ifndef CH9_TONE_DOWN_A_BIT
+	UNIT chrGnrcPegasus PegasusKnight 0 Level((lvlGnrcBase + 3), Enemy, True) [19, 1] 0 0 1 InlReda(21, 1) [SteelLance] NoAI
+	UNIT chrGnrcPegasus PegasusKnight 0 Level((lvlGnrcBase + 3), Enemy, True) [18, 2] 0 0 1 InlReda(16, 3) [SteelLance] NoAI
+#endif
+
+	// +2 bosses
+	UNIT chrBossCommon FalcoKnight 0 Level((lvlBossBase + 3), Enemy, True) [18, 2] 0 0 1 InlReda(15, 1) [SteelLance] NoAI
+	UNIT chrBossCommon FalcoKnight 0 Level((lvlBossBase + 3), Enemy, True) [19, 1] 0 0 1 InlReda(23, 2) [SteelSword] NoAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemyFourthBoatReinf2List:
+	UNIT chrGnrcPegasus PegasusKnight 0 Level((lvlGnrcBase + 3), Enemy, True) [18, 2] 0 0 1 InlReda(22, 4) [SteelLance] NoAI
+	UNIT chrGnrcPegasus PegasusKnight 0 Level((lvlGnrcBase + 3), Enemy, True) [19, 1] 0 0 1 InlReda(13, 2) [SteelLance] NoAI
+
+#ifndef CH9_TONE_DOWN_A_BIT
+	UNIT chrGnrcPegasus PegasusKnight 0 Level((lvlGnrcBase + 3), Enemy, True) [19, 1] 0 0 1 InlReda(21, 1) [SteelLance] NoAI
+	UNIT chrGnrcPegasus PegasusKnight 0 Level((lvlGnrcBase + 3), Enemy, True) [18, 2] 0 0 1 InlReda(16, 3) [SteelLance] NoAI
+#endif
+
+	// +2 bosses
+	UNIT chrBossCommon FalcoKnight 0 Level((lvlBossBase + 3), Enemy, True) [18, 2] 0 0 1 InlReda(15, 1) [SteelLance] NoAI
+	UNIT chrBossCommon FalcoKnight 0 Level((lvlBossBase + 3), Enemy, True) [19, 1] 0 0 1 InlReda(23, 2) [SteelSword] NoAI
+
+	UNIT // end
+
+ALIGN 4
+scBeginning:
+	LOAD1 0 unPlayerList
+	ENUN
+
+	// kill count = 0
+	COUNTER_SET cntBossKillCount 0
+
+	COUNTER_SET cntBoat1Reinf 3
+	COUNTER_SET cntBoat2Reinf 0
+	COUNTER_SET cntBoat3Reinf 0
+	COUNTER_SET cntBoat4Reinf 0
+
+	// Trigger those event ids. When we untrigger them, the corresponding events will be run.
+	ENUT eidSecondBoatComing
+	ENUT eidThirdBoatComing
+	ENUT eidFourthBoatComing
+
+	CALL scNoSkipFadeOut
+	CALL scShowFirstBoat
+	CALL scPrepScreen
+
+	ENDA
+
+ALIGN 4
+scShowFirstBoat:
+	CAM1 [1, 12] // Move camara
+	TILECHANGE 1 // Show first boat
+
+	TEXTSTART
+
+	TEXTSHOW textCh9OnFirstBoat
+	TEXTEND
+
+	SVAL s2 (IsPointer | unEnemyFirstBoatInitialList)
+	CALL scLoadReinforcements
+
+	TEXTCONT
+	TEXTEND
+
+	REMA
+
+	NoFade
+	ENDA
+
+ALIGN 4
+scShowSecondBoat:
+	CAM1 [21, 15] // Move camera
+	TILECHANGE 2 // Show second boat
+
+	SVAL s2 (IsPointer | unEnemySecondBoatInitialList)
+	CALL scLoadReinforcements
+
+	COUNTER_SET cntBoat2Reinf 4
+
+	TEXTSTART
+
+	TEXTSHOW textCh9OnSecondBoat
+	TEXTEND
+
+	REMA
+
+	NoFade
+	ENDA
+
+ALIGN 4
+scShowThirdBoat:
+	CAM1 [24, 15] // Move camera
+	TILECHANGE 3 // Show third boat
+
+	// Bottom part of the boat
+	SVAL s2 (IsPointer | unEnemyThridBoatInitialList1)
+	CALL scLoadReinforcements
+
+	CAM1 [24, 5] // Move camera again
+
+	// Top part of the boat
+	SVAL s2 (IsPointer | unEnemyThridBoatInitialList2)
+	CALL scLoadReinforcements
+
+	COUNTER_SET cntBoat3Reinf 3
+
+	TEXTSTART
+
+	TEXTSHOW textCh9OnThirdBoat
+	TEXTEND
+
+	REMA
+
+	NoFade
+	ENDA
+
+ALIGN 4
+scShowFourthBoat:
+	CAM1 [18, 4] // Move camera
+	TILECHANGE 4 // Show fourth boat
+
+	// Bottom part of the boat
+	SVAL s2 (IsPointer | unEnemyFourthBoatInitialList)
+	CALL scLoadReinforcements
+
+	COUNTER_SET cntBoat4Reinf 2
+
+	TEXTSTART
+
+	TEXTSHOW textCh9OnFourthBoat
+	TEXTEND
+
+	REMA
+
+	NoFade
+	ENDA
+
+ALIGN 4
+scCheckRecruit:
+	CHECK_EVENTID eidRecruitReady
+	BEQ 0x6C sC s0
+
+	SVAL s2 (IsPointer | unRecruitableFirstBoatReinfList)
+	CALL scLoadReinforcements
+
+	CUMO chrPirateRecruit
+	STAL 30
+	CURE
+
+	TEXTSTART
+
+	TEXTSHOW textCh9RecruitShowsUp
+	TEXTEND
+
+	REMA
+
+	ENUF eidRecruitReady
+
+LABEL 0x6C
+	NoFade
+	ENDA
+
+ALIGN 4
+scCheckBoat1Reinf:
+	COUNTER_CHECK cntBoat1Reinf
+	BEQ 0x6C sC s0
+
+	COUNTER_CHECK cntBoat1Reinf
+
+	SVAL  s7 1
+	BEQ 0 s7 sC
+
+	COUNTER_SUBTRACT cntBoat1Reinf 0
+	GOTO 0x6C
+
+LABEL 0
+	CHECK_EVENTID eidFirstBoatReinf1
+	BNE 1 sC s0
+
+	// reinf 1
+
+	SVAL s2 (IsPointer | unEnemyFirstBoatReinf1List)
+	CALL scLoadReinforcements
+
+	CALL scCheckRecruit
+
+	ENUT eidFirstBoatReinf1
+
+	COUNTER_SET cntBoat1Reinf 3
+	GOTO 0x6C
+
+LABEL 1
+	CHECK_EVENTID eidFirstBoatReinf2
+	BNE 2 sC s0
+
+	// reinf2
+
+	SVAL s2 (IsPointer | unEnemyFirstBoatReinf2List)
+	CALL scLoadReinforcements
+
+	CALL scCheckRecruit
+
+	ENUT eidFirstBoatReinf2
+
+	COUNTER_SET cntBoat1Reinf 2
+	GOTO 0x6C
+
+LABEL 2
+	CHECK_EVENTID eidRecruitReady
+	BNE 0x6C sC s0
+
+	// backup reinf
+
+	SVAL s2 (IsPointer | unEnemyFirstBoatReinfBackupList)
+	CALL scLoadReinforcements
+
+	CALL scCheckRecruit
+
+	COUNTER_SET cntBoat1Reinf 0
+
+LABEL 0x6C
+	NoFade
+	ENDA
+
+ALIGN 4
+scCheckBoat2Reinf:
+	COUNTER_CHECK cntBoat2Reinf
+	BEQ 0x6C sC s0
+
+	SVAL  s7 1
+	BEQ 0 s7 sC
+
+	COUNTER_SUBTRACT cntBoat2Reinf 0
+	GOTO 0x6C
+
+LABEL 0
+	CHECK_EVENTID eidSecondBoatReinf1
+	BNE 1 sC s0
+
+	// reinf 1
+
+	SVAL s2 (IsPointer | unEnemySecondBoatReinf1List)
+	CALL scLoadReinforcements
+
+	ENUT eidSecondBoatReinf1
+
+	COUNTER_SET cntBoat2Reinf 2
+	GOTO 0x6C
+
+LABEL 1
+	CHECK_EVENTID eidSecondBoatReinf2
+	BNE 0x6C sC s0
+
+	// reinf2
+
+	SVAL s2 (IsPointer | unEnemySecondBoatReinf2List)
+	CALL scLoadReinforcements
+
+	ENUT eidSecondBoatReinf2
+
+	COUNTER_SET cntBoat2Reinf 0
+	GOTO 0x6C
+
+LABEL 0x6C
+	NoFade
+	ENDA
+
+ALIGN 4
+scCheckBoat3Reinf:
+	COUNTER_CHECK cntBoat3Reinf
+	BEQ 0x6C sC s0
+
+	SVAL  s7 1
+	BEQ 0 s7 sC
+
+	COUNTER_SUBTRACT cntBoat3Reinf 0
+	GOTO 0x6C
+
+LABEL 0
+	CHECK_EVENTID eidThirdBoatReinf1
+	BNE 1 sC s0
+
+	// reinf 1
+
+	SVAL s2 (IsPointer | unEnemyThirdBoatReinf1List)
+	CALL scLoadReinforcements
+
+	ENUT eidThirdBoatReinf1
+
+	COUNTER_SET cntBoat3Reinf 2
+	GOTO 0x6C
+
+LABEL 1
+	CHECK_EVENTID eidThirdBoatReinf2
+	BNE 0x6C sC s0
+
+	// reinf2
+
+	SVAL s2 (IsPointer | unEnemyThirdBoatReinf2List)
+	CALL scLoadReinforcements
+
+	ENUT eidThirdBoatReinf2
+
+	COUNTER_SET cntBoat3Reinf 0
+	GOTO 0x6C
+
+LABEL 0x6C
+	NoFade
+	ENDA
+
+ALIGN 4
+scCheckBoat4Reinf:
+	COUNTER_CHECK cntBoat4Reinf
+	BEQ 0x6C sC s0
+
+	SVAL  s7 1
+	BEQ 0 s7 sC
+
+	COUNTER_SUBTRACT cntBoat4Reinf 0
+	GOTO 0x6C
+
+LABEL 0
+	CHECK_EVENTID eidFourthBoatReinf1
+	BNE 1 sC s0
+
+	// reinf 1
+
+	SVAL s2 (IsPointer | unEnemyFourthBoatReinf1List)
+	CALL scLoadReinforcements
+
+	ENUT eidFourthBoatReinf1
+
+#ifndef CH9_TONE_DOWN_A_BIT
+	COUNTER_SET cntBoat4Reinf 1
+#else
+	COUNTER_SET cntBoat4Reinf 2
+#endif
+
+	GOTO 0x6C
+
+LABEL 1
+	CHECK_EVENTID eidFourthBoatReinf2
+	BNE 0x6C sC s0
+
+	// reinf2
+
+	SVAL s2 (IsPointer | unEnemyFourthBoatReinf2List)
+	CALL scLoadReinforcements
+
+	ENUT eidFourthBoatReinf2
+
+	COUNTER_SET cntBoat4Reinf 0
+	GOTO 0x6C
+
+LABEL 0x6C
+	NoFade
+	ENDA
+
+ALIGN 4
+scOnBossDefeated:
+	ENUF 2 // allowing others bosses to also trigger that event
+
+	// Increment Counter (as we defeated a new boss)
+	// EA Raw is broken, there's only one argument and it's the counted id
+	COUNTER_ADD cntBossKillCount 0
+
+	COUNTER_CHECK cntBossKillCount
+
+	SVAL  s7 1
+	BNE 0 s7 sC
+
+	CALL scOnFirstBossDefeated
+	GOTO 0x6C
+
+LABEL 0
+	SVAL  s7 3
+	BNE 1 s7 sC
+
+	CALL scOnThirdBossDefeated
+	GOTO 0x6C
+
+LABEL 1
+	SVAL  s7 6
+	BNE 2 s7 sC
+
+	CALL scOnSixthBossDefeated
+	GOTO 0x6C
+
+LABEL 2
+	SVAL  s7 10
+	BNE 3 s7 sC
+
+	CALL scOnTenthBossDefeated
+	GOTO 0x6C
+
+LABEL 3
+	SVAL     s7 15
+	BNE 0x6C s7 sC
+
+	ENUT 3
+	CALL scEnding
+
+LABEL 0x6C
+	NoFade
+	ENDA
+
+ALIGN 4
+scOnFirstBossDefeated:
+	TEXTSTART
+
+	TEXTSHOW textCh9SecondBoatWarning
+	TEXTEND
+
+	REMA
+
+	ENUF eidSecondBoatComing
+
+	NoFade
+	ENDA
+
+ALIGN 4
+scOnThirdBossDefeated:
+	TEXTSTART
+
+	TEXTSHOW textCh9ThirdBoatWarning
+	TEXTEND
+
+	REMA
+
+	ENUF eidThirdBoatComing
+
+	NoFade
+	ENDA
+
+ALIGN 4
+scOnSixthBossDefeated:
+	ENUT eidRecruitReady
+
+	NoFade
+	ENDA
+
+ALIGN 4
+scOnTenthBossDefeated:
+	TEXTSTART
+
+	TEXTSHOW textCh9FourthBoatWarning
+	TEXTEND
+
+	REMA
+
+	ENUF eidFourthBoatComing
+
+	NoFade
+	ENDA
+
+ALIGN 4
+scRecruitTalk:
+	TEXTSTART
+
+	TEXTSHOW textCh9OnRecruit
+	TEXTEND
+
+	REMA
+
+	CUSA chrPirateRecruit
+
+	NoFade
+	ENDA
+
+ALIGN 4
+scEnding:
+	TEXTSTART
+
+	TEXTSHOW textCh9OnEnd
+	TEXTEND
+
+	REMA
+
+	// move to next chapter whatever it is
+	MNC2 1
+
+	ENDA
+
+ALIGN 4
+#pool // REDA pool goes here (automatically!)
+
+#endif // CHAPTER_STAN_CH9
