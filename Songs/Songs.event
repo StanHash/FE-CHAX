@@ -1,0 +1,24 @@
+#ifndef SONGS
+#define SONGS
+
+#include "drumfix_fe8.event"
+
+{
+
+SongTable = 0x224470
+
+BattleMusicGroup = 0
+MapMusicGroup    = 1
+SFXGroup         = 6
+
+#define SetSongEntry(aIndex, aSong, aGroup) "PUSH; ORG SongTable+(8*aIndex); POIN aSong; SHORT aGroup aGroup; POP"
+
+voicegroup000:
+	#incbin "FE8_NI_Map.bin"
+
+#include "FE5Attack.lyn.event"
+SetSongEntry(0x19, FE5_Attack, BattleMusicGroup)
+
+}
+
+#endif // SONGS
