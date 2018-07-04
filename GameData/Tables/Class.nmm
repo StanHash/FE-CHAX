@@ -1,0 +1,322 @@
+#FE8 Class Editor by SpyroDi
+#
+
+1
+FE8 Class Editor
+0x807164
+127
+84
+_ClassEditorList.txt
+NULL
+
+Name
+0
+2
+NEHU
+NULL
+
+Description
+2
+2
+NEHU
+NULL
+
+Number
+4
+1
+NEHU
+NULL
+
+Default Promotion
+5
+1
+NEHU
+NULL
+
+Standing Map Sprite Id
+6
+1
+NEHU
+NULL
+
+Slow Map Walking
+7
+1
+NEDU
+NULL
+
+Default Portrait
+8
+2
+NEHU
+NULL
+
+Base HP
+11
+1
+NEDS
+NULL
+
+Base Pwr
+12
+1
+NEDS
+NULL
+
+Base Skl
+13
+1
+NEDS
+NULL
+
+Base Spd
+14
+1
+NEDS
+NULL
+
+Base Def
+15
+1
+NEDS
+NULL
+
+Base Res
+16
+1
+NEDS
+NULL
+
+Base Con
+17
+1
+NEDS
+NULL
+
+Base Mov
+18
+1
+NEDS
+NULL
+
+Max HP
+19
+1
+NEDS
+NULL
+
+Max Pwr
+20
+1
+NEDS
+NULL
+
+Max Skl
+21
+1
+NEDS
+NULL
+
+Max Spd
+22
+1
+NEDS
+NULL
+
+Max Def
+23
+1
+NEDS
+NULL
+
+Max Res
+24
+1
+NEDS
+NULL
+
+Max Con
+25
+1
+NEDS
+NULL
+
+Class Relative Power
+26
+1
+NEDS
+NULL
+
+Growth HP
+27
+1
+NEDS
+NULL
+
+Growth Pwr
+28
+1
+NEDS
+NULL
+
+Growth Skl
+29
+1
+NEDS
+NULL
+
+Growth Spd
+30
+1
+NEDS
+NULL
+
+Growth Def
+31
+1
+NEDS
+NULL
+
+Growth Res
+32
+1
+NEDS
+NULL
+
+Growth Lck
+33
+1
+NEDS
+NULL
+
+Promotion HP
+34
+1
+NEDS
+NULL
+
+Promotion Pwr
+35
+1
+NEDS
+NULL
+
+Promotion Skl
+36
+1
+NEDS
+NULL
+
+Promotion Spd
+37
+1
+NEDS
+NULL
+
+Promotion Def
+38
+1
+NEDS
+NULL
+
+Promotion Res
+39
+1
+NEDS
+NULL
+
+Attributes
+40
+4
+NEHU
+NULL
+
+Sword Rank
+44
+1
+NEDU
+NULL
+
+Lance Rank
+45
+1
+NEDU
+NULL
+
+Axe Rank
+46
+1
+NEDU
+NULL
+
+Bow Rank
+47
+1
+NEDU
+NULL
+
+Staff Rank
+48
+1
+NEDU
+NULL
+
+Anima Rank
+49
+1
+NEDU
+NULL
+
+Light Rank
+50
+1
+NEDU
+NULL
+
+Dark Rank
+51
+1
+NEDU
+NULL
+
+Battle Animation Ptr
+52
+4
+NEHU
+NULL
+
+Mov Cost Ptr
+56
+4
+NEHU
+NULL
+
+Mov Cost Ptr (Rain)
+60
+4
+NEHU
+NULL
+
+Mov Cost Ptr (Snow)
+64
+4
+NEHU
+NULL
+
+Terrain Def Bonus Ptr
+68
+4
+NEHU
+NULL
+
+Terrain Avo Bonus Ptr
+72
+4
+NEHU
+NULL
+
+Terrain Res Bonus Ptr
+76
+4
+NEHU
+NULL

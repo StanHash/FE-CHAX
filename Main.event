@@ -17,6 +17,9 @@ ORG FreeSpace
 	#include "Wizardry/_FE8ProcNameFix.event"
 
 	ALIGN 4
+	#include "GameData/GameData.event"
+
+	ALIGN 4
 	#include "Writans/Text.event"
 
 	ALIGN 4

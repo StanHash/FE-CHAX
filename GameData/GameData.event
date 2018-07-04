@@ -1,0 +1,13 @@
+#ifndef GAMEDATA
+#define GAMEDATA
+
+#include "EAstdlib.event"
+
+#include "Constants.event"
+#include "Indices.event"
+
+#include "Tables/Class.event"
+#include "Tables/Character.event"
+#include "Tables/Item.event"
+
+#endif // GAMEDATA

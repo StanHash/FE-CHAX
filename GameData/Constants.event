@@ -1,0 +1,134 @@
+#ifndef GAMEDATA_CONSTANTS
+#define GAMEDATA_CONSTANTS
+
+#define W_SWORD     0x00
+#define W_LANCE     0x01
+#define W_AXE       0x02
+#define W_BOW       0x03
+#define W_STAFF     0x04
+#define W_ANIMA     0x05
+#define W_LIGHT     0x06
+#define W_DARK      0x07
+#define W_ITEM      0x09
+#define W_DISARMED  W_ITEM // For Animation Definition Readability
+#define W_MONSTER   0x0B
+#define W_DANCERING 0x0C
+
+#define WR_NONE 0
+#define WR_E    1
+#define WR_D    31
+#define WR_C    71
+#define WR_B    121
+#define WR_A    181
+#define WR_S    251
+
+#define CA_NONE                  0x00000000
+#define CA_MOUNTEDAID            0x00000001
+#define CA_CANTO                 0x00000002
+#define CA_STEAL                 0x00000004
+#define CA_LOCKPICK              0x00000008
+#define CA_DANCE                 0x00000010
+#define CA_PLAY                  0x00000020
+#define CA_CRITBONUS             0x00000040
+#define CA_BALLISTAE             0x00000080
+#define CA_PROMOTED              0x00000100
+#define CA_SUPPLY                0x00000200
+#define CA_MOUNTED               0x00000400
+#define CA_WYVERN                0x00000800
+#define CA_PEGASUS               0x00001000
+#define CA_LORD                  0x00002000
+#define CA_FEMALE                0x00004000
+#define CA_BOSS                  0x00008000
+#define CA_LOCK_1                0x00010000
+#define CA_LOCK_2                0x00020000
+#define CA_LOCK_3                0x00040000 // Dragons or Monster depending of game
+#define CA_MAXLEVEL10            0x00080000
+#define CA_UNSELECTABLE          0x00100000
+#define CA_TRIANGLEATTACK_PEGASI 0x00200000
+#define CA_TRIANGLEATTACK_ARMORS 0x00400000
+#define CA_LETHALITY             0x02000000
+#define CA_SUMMON                0x08000000
+#define CA_LOCK_4                0x10000000
+#define CA_LOCK_5                0x20000000
+#define CA_LOCK_6                0x40000000
+#define CA_LOCK_7                0x80000000
+
+#define WA_NONE            0x00000000
+#define WA_WEAPON          0x00000001
+#define WA_MAGIC           0x00000002
+#define WA_STAFF           0x00000004
+#define WA_UNBREAKABLE     0x00000008
+#define WA_UNSELLABLE      0x00000010
+#define WA_BRAVE           0x00000020
+#define WA_MAGICDAMAGE     0x00000040
+#define WA_UNCOUNTERABLE   0x00000080
+#define WA_REVERTTRIANGLE  0x00000100
+#define WA_HAMMERNE        0x00000200 // Defined as Hammerne effect in FE6 Nightmare module, but as ??? in FE7 & FE8.
+#define WA_LOCK_3          0x00000400 // Dragons or Monster depending of game
+#define WA_LOCK_1          0x00000800
+#define WA_LOCK_2          0x00001000
+#define WA_LOCK_0          0x00002000 // King in FE6
+#define WA_NEGATE_FLYING   0x00004000
+#define WA_NEGATE_CRIT     0x00008000
+#define WA_UNUSABLE        0x00010000
+#define WA_NEGATE_DEFENSE  0x00020000
+#define WA_LOCK_4          0x00040000
+#define WA_LOCK_5          0x00080000
+#define WA_LOCK_6          0x00100000
+#define WA_LOCK_7          0x00200000
+
+#define CA_LOCK_MYRMIDON CA_LOCK_2
+#define CA_LOCK_MONSTER  CA_LOCK_3
+#define CA_LOCK_EIRIKA   CA_LOCK_4
+#define CA_LOCK_EPHRAIM  CA_LOCK_5
+
+#define WA_LOCK_MYRMIDON WA_LOCK_2
+#define WA_LOCK_MONSTER  WA_LOCK_3
+#define WA_LOCK_EIRIKA   WA_LOCK_4
+#define WA_LOCK_EPHRAIM  WA_LOCK_5
+
+#define WE_NONE    0x00
+#define WE_POISON  0x01
+#define WE_HPDRAIN 0x02
+#define WE_HPHALF  0x03
+#define WE_DEVIL   0x04
+#define WE_STONE   0x05
+
+#define WEATHER_CLEAR     0x00
+#define WEATHER_FLURRIES  0x01
+#define WEATHER_BLIZZARD  0x02
+#define WEATHER_BLUEGRAD  0x03
+#define WEATHER_RAIN      0x04
+#define WEATHER_ASHES     0x05
+#define WEATHER_SANDSTORM 0x06
+#define WEATHER_CLOUDS    0x07
+
+#define TEXTCOLOR_NORMAL 0x00
+#define TEXTCOLOR_GRAY   0x01
+#define TEXTCOLOR_BLUE   0x02
+#define TEXTCOLOR_ORANGE 0x03
+#define TEXTCOLOR_GREEN  0x04
+#define TEXTCOLOR_BLACK  0x05
+
+#define GOAL_NONE_SEIZE    0x00
+#define GOAL_ENEMYCOUNT    0x01
+#define GOAL_TURNCOUNT     0x02
+#define GOAL_NONE_KILLBOSS 0x03
+#define GOAL_NONE_SPECIAL  0x04
+
+#define FACING_TARGET   0x00
+#define FACING_UP       0x01
+#define FACING_RIGHT    0x02
+#define FACING_STANDING 0x03
+
+#define FLASH_WHITE  0x00
+#define FLASH_DARK   0x01
+#define FLASH_RED    0x02
+#define FLASH_GREEN  0x03
+#define FLASH_BLUE   0x04
+#define FLASH_YELLOW 0x05
+
+#define NO_ANIMATION 0xFFFF
+#define ANIM_DEFAULT 0xFFFF
+
+#endif // GAMEDATA_CONSTANTS
