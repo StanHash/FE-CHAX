@@ -6,15 +6,18 @@ endif
 # including devkitARM tool definitions
 include $(DEVKITARM)/base_tools
 
-# setting up additional tools
+# python executable name
+export PYTHON := python3
+
+# additional tools
 export EA                := Tools/EventAssembler/Core
 export PARSEFILE         := Tools/ParseFile
 export PORTRAITFORMATTER := Tools/PortraitFormatter
 export LYN               := Tools/lyn
 export GBAGFX            := Tools/gbagfx
-export GENMUGS           := python3 Tools/py/genmugs.py
-export TEXTPROCESS       := python3 Tools/py/textprocess.py
-export C2EA              := python3 Tools/py/c2ea.py
-export TMX2EA            := python3 Tools/py/tmx2ea/tmx2ea.py
+export GENMUGS           := $(PYTHON) Tools/py/genmugs.py
+export TEXTPROCESS       := $(PYTHON) Tools/py/textprocess.py
+export C2EA              := $(PYTHON) Tools/py/c2ea.py
+export TMX2EA            := $(PYTHON) Tools/py/tmx2ea/tmx2ea.py
 
 PREPROCESS_MESSAGE = @echo "$(notdir $<) => $(notdir $@)"

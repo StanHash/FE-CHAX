@@ -12,7 +12,7 @@ Note: [`ColorzCore`](https://github.com/FireEmblemUniverse/ColorzCore) is ***not
 
 - have [devkitARM](https://devkitpro.org/wiki/Getting_Started) installed, and the `DEVKITARM` env variable set.
 - have `make` (and some kind of posix-compatible shell (if you're under Windows, devkitPro comes with msys bundled, which is more than enough) in you path.
-- have [python 3](https://www.python.org/) installed and in your path.
+- have [python 3](https://www.python.org/) installed and in your path. (the python executable is assumed to be called `python3`. Edit [`Tools.mak`](./Tools.mak) if you need to change that)
 - have the following tools in the `Tools` folder, with the correct name (or you can edit [`Tools.mak`](./Tools.mak) in case names don't match):
   - [`lyn`](https://github.com/StanHash/lyn/releases)
   - [`EventAssembler/Core` (and the rest of the EA installation of course)](https://www.dropbox.com/s/moxk5tnerzhdkgl/EventAssembler-Stan.18.05.31.7z?dl=0)
