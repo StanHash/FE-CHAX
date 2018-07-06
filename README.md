@@ -8,8 +8,6 @@ GBAFE hacks (in C!) and `EA`/`make` template. See [FE8UASMHax](https://github.co
 
 Note: [`ColorzCore`](https://github.com/FireEmblemUniverse/ColorzCore) is ***not*** compatible with this setup as I write these lines (july 4th 2018, 10:14AM BST).
 
-Note 2: Because I'm bad, right now this setup only works on true unix systems (because EA Dependency generation does system directory separators, which conflicts with the filenames within the makefile on Windows).
-
 ## how2
 
 - have [devkitARM](https://devkitpro.org/wiki/Getting_Started) installed, and the `DEVKITARM` env variable set.
