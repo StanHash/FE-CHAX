@@ -74,6 +74,7 @@ $(ROM_TARGET): $(EVENT_MAIN) $(EVENT_MAIN_DEP) $(ROM_SOURCE)
 $(EVENT_MAIN_DEP): $(EVENT_MAIN)
 	$(PREPROCESS_MESSAGE)
 	@$(EA) A FE8 -output $(ROM_TARGET) -input $(EVENT_MAIN) -quiet -MM -MG -MT $(EVENT_MAIN_DEP) -MF $(EVENT_MAIN_DEP)
+	@sed -i s/\\\\/\\//g $(EVENT_MAIN_DEP)
 
 # -------------------
 # SPECIAL FILES RULES
