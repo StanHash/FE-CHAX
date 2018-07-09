@@ -68,8 +68,8 @@ clean:
 
 $(ROM_TARGET): $(EVENT_MAIN) $(EVENT_MAIN_DEP) $(ROM_SOURCE)
 	$(PREPROCESS_MESSAGE)
-	@cp -f "$(ROM_SOURCE)" "$(ROM_TARGET)"
-	@$(EA) A FE8 -output $(ROM_TARGET) -input $(EVENT_MAIN) -symOutput $(EVENT_SYMBOLS)
+	@cp -f $(ROM_SOURCE) $(ROM_TARGET)
+	@$(EA) A FE8 -output $(ROM_TARGET) -input $(EVENT_MAIN) -symOutput $(EVENT_SYMBOLS) || (rm $(ROM_TARGET) && false)
 
 $(EVENT_MAIN_DEP): $(EVENT_MAIN)
 	$(PREPROCESS_MESSAGE)
