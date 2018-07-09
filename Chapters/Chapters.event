@@ -6,7 +6,12 @@
 // (Which would be useful if I had more than one)
 
 {
-#include "Demo/Demo.event"
+#include "PeerBlitz/PeerBlitzCh9.event"
+#include "PeerBlitz/PeerBlitzCh9Map.event"
+}
+
+{
+// #include "Demo/Demo.event"
 }
 
 #endif // CHAPTERS
