@@ -1,0 +1,12 @@
+#ifndef HAX_TEXTSCROLLSPEED
+#define HAX_TEXTSCROLLSPEED
+
+#ifndef TextScrollSpeed
+	#define TextScrollSpeed 1
+#endif // TextScrollSpeed
+
+PUSH; ORG $007FE6
+	BYTE (TextScrollSpeed)
+POP
+
+#endif // HAX_TEXTSCROLLSPEED

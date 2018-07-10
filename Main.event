@@ -16,6 +16,9 @@ ORG FreeSpace
 	#include "Wizardry/_FE8EssentialFixes.event"
 	#include "Wizardry/_FE8ProcNameFix.event"
 
+	#define TextScrollSpeed 4
+	#include "Wizardry/TextScrollSpeed.event"
+
 	ALIGN 4
 	#include "GameData/GameData.event"
 
