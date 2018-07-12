@@ -22,7 +22,7 @@
 #define ActionRoutine(apRoutine) "POIN (apRoutine)"
 #define ActionRoutine(apRoutine, abForcedYeild) "WORD (IsPointer | (apRoutine) | (abForcedYeild << 28))"
 
-#define SetUnitAction(aActionId, adActionRoutine) "PUSH; ORG (UnitActionCallTable + 4*aActionId); adActionRoutine; POP"
+#define InjectUnitAction(aActionId, adActionRoutine) "PUSH; ORG (UnitActionCallTable + 4*aActionId); adActionRoutine; POP"
 
 UnitActionCallTable:
 	NoActionRoutine               // 0x00 ?
@@ -74,6 +74,6 @@ UnitActionCallTable:
 	NoActionRoutine               // 0x2E FREE
 	NoActionRoutine               // 0x2F FREE etc...
 
-ORG (UnitActionCallTable+ACTION_TABLE_SIZE*4)
+	ORG UnitActionCallTable + (ACTION_TABLE_SIZE*4)
 
 #endif // HAX_AAR
