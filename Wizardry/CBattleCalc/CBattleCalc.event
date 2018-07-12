@@ -1,0 +1,49 @@
+#ifndef HAX_BATTLECALC
+#define HAX_BATTLECALC
+
+#ifndef _FE8_
+	ERROR FE8 Battle Calc Loop
+#endif // _FE8_
+
+#include "Extensions/Hack Installation.txt"
+#include "EAstdlib.event"
+
+{
+
+PUSH; ORG 0x2A95C
+	replaceWithHack(ComputeBattleStats)
+POP
+
+#include "src/BattleCalcCore.lyn.event"
+
+}
+
+ALIGN 4
+BattleStatCalcList: {
+	POIN BCDefRes
+	POIN BCPower
+	POIN BCASpd
+	POIN BCHit
+	POIN BCAvo
+	POIN BCCrit
+	POIN BCDodge
+	POIN BCSupport
+	POIN BCWRank
+	POIN BCStatus
+
+	WORD 0
+
+BCDefRes  = $2AA44+1
+BCPower   = $2AABC+1
+BCASpd    = $2AB74+1
+BCHit     = $2ABAC+1
+BCAvo     = $2ABE4+1
+BCCrit    = $2AC18+1
+BCDodge   = $2AC54+1
+BCSupport = $2A9D0+1
+BCWRank   = $2AD54+1
+BCStatus  = $2AD90+1
+
+}
+
+#endif // HAX_BATTLECALC
