@@ -4,18 +4,18 @@
 #include "proc.h"
 #include "hiobj.h"
 
-typedef struct _PortraitData      PortraitData;
-typedef struct _FaceProc          FaceProc;
-typedef struct _FaceGfxDefinition FaceGfxDefinition;
+typedef struct PortraitData      PortraitData;
+typedef struct FaceProc          FaceProc;
+typedef struct FaceGfxDefinition FaceGfxDefinition;
 
-struct _PortraitData {
+struct PortraitData {
 	/* 00 */ const void*     pPortraitGraphics;
 	/* 04 */ const void*     pMiniPortraitGraphics;
 	/* 08 */ const uint16_t* pPortraitPalette;
 	/* More */
 };
 
-struct _FaceProc {
+struct FaceProc {
 	/* 00 */ PROC_HEADER;
 
 	/* 2C */ const PortraitData* pPortraitData;
@@ -32,7 +32,7 @@ struct _FaceProc {
 	/* 48 */ Proc* pEyeWinkProc;
 };
 
-struct _FaceGfxDefinition {
+struct FaceGfxDefinition {
 	const void* pTileRoot;
 	uint16_t paletteIndex;
 };

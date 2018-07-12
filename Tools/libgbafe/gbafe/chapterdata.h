@@ -27,7 +27,7 @@ struct ChapterData {
 	/* 1B */ uint8_t  mode;
 };
 
-extern ChapterData gChapterData; //! FE8U = (0x202BCF0)
+extern struct ChapterData gChapterData; //! FE8U = (0x202BCF0)
 
 #pragma long_calls
 #pragma long_calls_off

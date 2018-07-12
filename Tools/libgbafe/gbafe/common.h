@@ -4,8 +4,8 @@
 #include <stddef.h>
 #include <stdint.h>
 
-typedef struct _Vector2  Vector2;
-typedef struct _Vector2U Vector2U;
+typedef struct Vector2  Vector2;
+typedef struct Vector2U Vector2U;
 
 typedef enum _UAllegiance UnitAllegiance;
 
@@ -18,7 +18,8 @@ enum _UnitState {
 	US_NOT_DEPLOYED = 0x00000008,
 	US_RESCUING     = 0x00000010,
 	US_RESCUED      = 0x00000020,
-	US_CANTOING     = 0x00000040,
+	US_HAS_MOVED    = 0x00000040,
+	US_CANTOING     = 0x00000040, // Alias
 	US_UNDER_A_ROOF = 0x00000080,
 	//              = 0x00000100,
 	//              = 0x00000200,
@@ -140,11 +141,11 @@ enum _StatusEffect {
 	STATUS_DUMMY
 };
 
-struct _Vector2 {
+struct Vector2 {
 	int16_t x, y;
 };
 
-struct _Vector2U {
+struct Vector2U {
 	uint16_t x, y;
 };
 

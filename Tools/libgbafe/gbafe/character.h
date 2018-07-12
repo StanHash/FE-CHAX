@@ -5,9 +5,9 @@
 
 #include "common.h"
 
-typedef struct _CharacterData CharacterData;
+typedef struct CharacterData CharacterData;
 
-struct _CharacterData {
+struct CharacterData {
 	uint16_t nameTextId;
 	uint16_t descTextId;
 	uint8_t  number;
@@ -49,6 +49,6 @@ struct _CharacterData {
 	void*    pU30;
 };
 
-extern const CharacterData gCharacterData[];
+extern const struct CharacterData gCharacterData[];
 
 #endif // GBAFE_CHARACTER_H

@@ -5,9 +5,9 @@
 
 #include "common.h"
 
-typedef struct _ClassData ClassData;
+typedef struct ClassData ClassData;
 
-struct _ClassData {
+struct ClassData {
 	uint16_t nameTextId;
 	uint16_t descTextId;
 	uint8_t  number;
@@ -62,6 +62,6 @@ struct _ClassData {
 	const void* _pU50;
 };
 
-extern const ClassData gClassData[];
+extern const struct ClassData gClassData[];
 
 #endif // GBAFE_CLASS_H
