@@ -1,0 +1,6 @@
+#ifndef HAX_FREESELECT
+#define HAX_FREESELECT
+
+#include "src/FreeSelect.lyn.event"
+
+#endif // HAX_FREESELECT
