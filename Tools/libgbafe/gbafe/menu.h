@@ -5,24 +5,24 @@
 
 #include "proc.h"
 
-typedef struct _MenuGeometry          MenuGeometry;
+typedef struct MenuGeometry          MenuGeometry;
 
-typedef struct _MenuDefinition        MenuDefinition;
-typedef struct _MenuCommandDefinition MenuCommandDefinition;
+typedef struct MenuDefinition        MenuDefinition;
+typedef struct MenuCommandDefinition MenuCommandDefinition;
 
-typedef struct _MenuProc              MenuProc;
-typedef struct _MenuCommandProc       MenuCommandProc;
+typedef struct MenuProc              MenuProc;
+typedef struct MenuCommandProc       MenuCommandProc;
 
-struct _MenuGeometry {
+struct MenuGeometry {
 	uint8_t x, y, h, w;
 };
 
-struct _MenuDefinition {
-	MenuGeometry geometry;
+struct MenuDefinition {
+	struct MenuGeometry geometry;
 
 	uint8_t style;
 
-	const MenuCommandDefinition* commandList;
+	const struct MenuCommandDefinition* commandList;
 
 	void(*onInit)(MenuProc*); // 0C
 	void(*onEnd)(MenuProc*); // 10
@@ -32,7 +32,7 @@ struct _MenuDefinition {
 	void(*onHelpBox)(MenuProc*, MenuCommandProc*); // 20
 };
 
-struct _MenuCommandDefinition {
+struct MenuCommandDefinition {
 	const char* rawName;
 
 	uint16_t nameId, helpId;
@@ -49,13 +49,13 @@ struct _MenuCommandDefinition {
 	void(*onSwitchOut)(MenuProc*, MenuCommandProc*);
 };
 
-struct _MenuProc {
+struct MenuProc {
 	PROC_FIELDS
 
-	MenuGeometry geometry;
+	struct MenuGeometry geometry;
 	const MenuDefinition* pDefinition;
 
-	MenuCommandProc* pCommandProc[11];
+	struct MenuCommandProc* pCommandProc[11];
 
 	uint8_t commandCount;
 	uint8_t commandIndex;
@@ -69,13 +69,13 @@ struct _MenuProc {
 	uint16_t _u68;
 };
 
-struct _MenuCommandProc {
+struct MenuCommandProc {
 	PROC_FIELDS
 
 	uint16_t xDrawTile;
 	uint16_t yDrawTile;
 
-	const MenuCommandDefinition* pDefinition;
+	const struct MenuCommandDefinition* pDefinition;
 
 	uint32_t _temp[2]; // TODO: TextHandle
 
@@ -83,13 +83,13 @@ struct _MenuCommandProc {
 	uint8_t availability;
 };
 
-enum _MenuCommandAvailability {
+enum MenuCommandAvailability {
 	MCA_USABLE    = 1,
 	MCA_GRAYED    = 2,
 	MCA_NONUSABLE = 3
 };
 
-enum _MenuEffect {
+enum MenuEffect {
 	ME_NONE      = 0x00,
 
 	ME_DISABLE   = 0x01,

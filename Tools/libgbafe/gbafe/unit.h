@@ -10,11 +10,11 @@
 #include "character.h"
 #include "class.h"
 
-typedef struct _Unit       Unit;
-typedef struct _BattleUnit BattleUnit;
-typedef struct _EventUnit  EventUnit;
+typedef struct Unit       Unit;
+typedef struct BattleUnit BattleUnit;
+typedef struct EventUnit  EventUnit;
 
-struct _Unit {
+struct Unit {
 	/* 00 */ const CharacterData* pCharacterData;
 	/* 04 */ const ClassData* pClassData;
 	
@@ -69,8 +69,8 @@ struct _Unit {
 	/* 47 */ uint8_t _u47;
 };
 
-struct _BattleUnit {
-	/* 00 */ Unit unit;
+struct BattleUnit {
+	/* 00 */ struct Unit unit;
 	
 	/* 48 */ uint16_t weaponAfter;
 	/* 4A */ uint16_t weaponBefore;
@@ -124,7 +124,7 @@ struct _BattleUnit {
 	/* 7F */ uint8_t  _u7F;
 };
 
-struct _EventUnit {
+struct EventUnit {
 	uint8_t charIndex;
 	uint8_t classIndex;
 	uint8_t leaderCharIndex;

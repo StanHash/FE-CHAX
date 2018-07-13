@@ -48,6 +48,7 @@ void  ApplyTrapMapChanges(void);                                                
 void  ApplyMapChangesById(int id);                                                     //! FE8U = (0x0802E58C+1)
 void  AddMapChange(int id);                                                            //! FE8U = (0x0802E5F8+1)
 void  RemoveMapChange(int id);                                                         //! FE8U = (0x0802E60C+1)
+int   AreMapChangeTriggered(int id);                                                   //! FE8U = 0x802E639
 
 void  HideIfUnderRoof(Unit*);                                                          //! FE8U = (0x0802E660+1)
 void  UpdateUnitsUnderRoof(void);                                                      //! FE8U = (0x0802E690+1)

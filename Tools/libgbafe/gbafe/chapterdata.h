@@ -8,23 +8,53 @@
 typedef struct ChapterData ChapterData;
 
 struct ChapterData {
-	/* 00 */ unsigned _u00;
-	/* 04 */ unsigned _u04;
-	/* 08 */ unsigned goldAmount;
-	/* 0C */ uint8_t  saveSlotIndex;
-	/* 0D */ uint8_t  visionRange;
-	/* 0E */ uint8_t  chapterIndex;
-	/* 0F */ uint8_t  currentPhase;
-	/* 10 */ uint16_t turnNumber;
-	/* 12 */ uint8_t  xCursorSaved;
-	/* 13 */ uint8_t  yCursorSaved;
-	/* 14 */ uint8_t  chapterStateBits;
-	/* 15 */ uint8_t  weather;
-	/* 16 */ uint16_t supportGainTotal;
-	/* 18 */ uint8_t  _u18;
-	/* 19 */ uint8_t  _u19;
-	/* 1A */ uint8_t  _u1A;
-	/* 1B */ uint8_t  mode;
+	/* 00 */ u32 _u00;
+	/* 04 */ u32 _u04;
+	/* 08 */ u32 goldAmount;
+	/* 0C */ u8  saveSlotIndex;
+	/* 0D */ u8  visionRange;
+	/* 0E */ u8  chapterIndex;
+	/* 0F */ u8  currentPhase;
+	/* 10 */ u16 turnNumber;
+	/* 12 */ u8  xCursorSaved;
+	/* 13 */ u8  yCursorSaved;
+	/* 14 */ u8  chapterStateBits;
+	/* 15 */ u8  weather;
+	/* 16 */ u16 supportGainTotal;
+	/* 18 */ u8  _u18;
+	/* 19 */ u8  _u19;
+	/* 1A */ u8  _u1A;
+	/* 1B */ u8  mode;
+	/* 1C */ u8  unk1C[4];
+
+	/* 20 */ char playerName[0x40 - 0x20]; // unused outside of link arena (was tactician name in FE7); Size unknown
+
+	// option byte 1 (of 3)
+	u32 unk40_1:5;
+	u32 textSpeedOption:2;
+	u32 unk40_8:1;
+
+	u32 unk41_1:1;
+	u32 muteSfxOption:1;
+	u32 unk41_3:6;
+
+	u32 unk42_1:1;
+	u32 unk42_2:1;
+	u32 unk42_3:1;
+	u32 unk42_4:1;
+	u32 unk42_5:1;
+	u32 unk42_6:1;
+	u32 unk42_7:1;
+	u32 unk42_8:1;
+
+	u32 unk43_1:8;
+
+	u8  unk44[0x48 - 0x44];
+
+	u16 unk48;
+
+	u16 unk4A_1 : 1;
+	u16 unk4A_2 : 3;
 };
 
 extern struct ChapterData gChapterData; //! FE8U = (0x202BCF0)
