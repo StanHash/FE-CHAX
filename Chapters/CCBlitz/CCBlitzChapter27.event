@@ -1,0 +1,392 @@
+#ifndef CCBLITZ_STAN_CH27
+#define CCBLITZ_STAN_CH27
+
+/*
+
+I hope y'all like Fog of war Desert Maps with one-tile hidden treasure
+and wind streams taken straight out of Fuga's wild ride =^)
+
+*/
+
+#include "EAstdlib.event"
+
+#include "CCBlitzChapter27Asmcs.lyn.event"
+
+#ifndef SetSymbolDefined
+	#define SetSymbolDefined
+
+	#define SetSymbol(aName, aValue) "PUSH; ORG (aValue); aName:; POP"
+//	#define SetSymbol(aName, aValue) "aName = (aValue)"
+#endif // SetSymbolDefined
+
+#ifndef IsPointer
+	#define IsPointer 0x8000000
+#endif // IsPointer
+
+/* // This doesn't work :(
+#ifndef RedaPoolDefined
+	#define RedaPoolDefined
+
+	#define InlReda(aXTarget, aYTarget) "AddToPool(REDA [(aXTarget), (aYTarget)] 0 0 0 0)"
+//	#define InlReda(aXTarget, aYTarget) "REDA ## aXTarget ## R ## aYTarget" // Uses Snakey's REDA helpers
+#endif // RedaPoolDefined
+*/
+
+SetSymbol(scPrepScreen,         $591FD8) // no args
+SetSymbol(scNoSkipFadeOut,      $591F40) // no args
+SetSymbol(scLoadReinforcements, $9EE274) // args: s2 = pointer to UNITs
+
+// ==============
+// CHAPTER CONFIG
+// ==============
+
+#define Chapter27Id         0x00
+#define Chapter27Map        0x49
+#define Chapter27MapChanges 0x4A
+#define Chapter27Events     0x07
+
+#define Ch27LvBase(aLevelModifier) "Level((15 + (aLevelModifier)), Enemy, True)"
+#define Ch27LvProm(aLevelModifier) "Level((5  + (aLevelModifier)), Enemy, True)"
+#define Ch27LvBoss(aLevelModifier) "Level((10 + (aLevelModifier)), Enemy, True)"
+
+// Local Event Ids
+SetSymbol(eidVillage,    10)
+SetSymbol(eidHumanReinf, 11)
+
+// ============
+// CHAPTER DATA
+// ============
+
+EventPointerTable(Chapter27Events, ThisChapter)
+
+ALIGN 4
+ThisChapter:
+	POIN TurnEventList
+	POIN CharacterEventList
+	POIN LocationEventList
+	POIN ActionEventList
+	POIN DunnoList DunnoList DunnoList
+	POIN TutorialList
+	POIN TrapList TrapList2
+	POIN unPlayerList unPlayerList
+	WORD 0 0 0 0 0 0
+	POIN scBeginning scEnding
+
+ALIGN 4
+TurnEventList:
+	TURN 0 scShiftSands [0, 0xFF] 0 // Shift sands every turn
+
+	TURN eidHumanReinf scHumanReinf [0, 0xFF] 0
+
+	END_MAIN
+
+ALIGN 4
+CharacterEventList:
+	END_MAIN
+
+ALIGN 4
+LocationEventList:
+	Village(eidVillage, scVillageVisit, 2, 4)
+	END_MAIN
+
+ALIGN 4
+ActionEventList:
+	END_MAIN
+
+ALIGN 4
+DunnoList:
+	END_MAIN
+
+ALIGN 4
+TutorialList:
+	WORD 0
+
+ALIGN 4
+TrapList:
+TrapList2:
+	ENDTRAP
+
+ALIGN 4
+unPlayerList:
+	UNIT Eirika   EirikaMasterLord 0 Level(20, Ally, True) [19, 13] 0 0 0 0 [Sieglinde, Runesword, MemberCard]     NoAI
+	UNIT Moulder  Bishop           0 Level(20, Ally, True) [20, 12] 0 0 0 0 [Latona, Aura, Mend]                   NoAI
+	UNIT Innes    Sniper           0 Level(20, Ally, True) [17, 12] 0 0 0 0 [Nidhogg, Longbow]                     NoAI
+	UNIT LArachel MageKnight_F     0 Level(20, Ally, True) [21, 14] 0 0 0 0 [Excalibur, Heal, Vulnerary]           NoAI
+	UNIT Gilliam  General          0 Level(20, Ally, True) [18, 14] 0 0 0 0 [Garm, Javelin]                        NoAI
+	UNIT Seth     Paladin          0 Level(20, Ally, True) [16, 12] 0 0 0 0 [Audhulma, SilverLance, Elixir]        NoAI
+	UNIT Lute     Sage_F           0 Level(20, Ally, True) [16, 13] 0 0 0 0 [Ivaldi, Thunder, Warp]                NoAI
+	UNIT Tana     WyvernKnight_F   0 Level(20, Ally, True) [17, 14] 0 0 0 0 [Vidofnir, Spear, Elixir]              NoAI
+	UNIT Ewan     Summoner         0 Level(20, Ally, True) [18, 13] 0 0 0 0 [Gleipnir, Flux, Nosferatu, Nosferatu] NoAI
+	UNIT Marisa   Swordmaster_F    0 Level(20, Ally, True) [20, 14] 0 0 0 0 [BraveSword, Shamshir]                 NoAI
+	UNIT Tethys   Dancer           0 Level(20, Ally, True) [21, 13] 0 0 0 0 [Elixir, PureWater]                    NoAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemyList:
+	UNIT 0x80 Soldier 0 Level(1, Enemy, False) [0, 0] 0 0 0 0 [SlimLance] AttackInRangeAI
+
+	UNIT // end
+
+ALIGN 4
+scBeginning:
+	LOAD1 0 unPlayerList
+	ENUN
+
+	LOAD1 0 unEnemyList
+	ENUN
+
+	VCWF 4 // FOG
+	WEA1 6 // SANDSTORM
+
+	// Initial tile changes
+	TILECHANGE 1
+	TILECHANGE 7
+
+	// Initial event id states
+	// ENUT eidHumanReinf
+
+	CALL scNoSkipFadeOut
+
+	NoFade
+	ENDA
+
+ALIGN 4
+scVillageVisit:
+	// TODO
+
+	NoFade
+	ENDA
+
+ALIGN 4
+scShiftSands:
+	ASMC SlideAllUnitsASMC
+
+	CHECK_TURNS
+
+	SVAL r7 6
+	SMOD slotsParam(r1, rC, r7)
+
+	SVAL r7 1
+	BNE 0 r1 r7
+
+	// Turn 1 - 7 - 13 - 19...
+
+	CAM1 [18, 12]
+
+	SVAL r2 (IsPointer | mclShift1)
+	ASMC MapChangeListASMC
+
+	CAM1 [4, 7]
+
+	SVAL r2 (IsPointer | mclShift7)
+	ASMC MapChangeListASMC
+
+	GOTO (-1)
+
+LABEL 0
+	SVAL r7 2
+	BNE 1 r1 r7
+
+	// Turn 2 - 8 - 14 - 20...
+
+	CAM1 [16, 16]
+
+	SVAL r2 (IsPointer | mclShift2)
+	ASMC MapChangeListASMC
+
+	CAM1 [5, 5]
+
+	SVAL r2 (IsPointer | mclShift8)
+	ASMC MapChangeListASMC
+
+	GOTO (-1)
+
+LABEL 1
+	SVAL r7 3
+	BNE 2 r1 r7
+
+	// Turn 3 - 9 - 15 - 21...
+
+	CAM1 [12, 17]
+
+	SVAL r2 (IsPointer | mclShift3)
+	ASMC MapChangeListASMC
+
+	CAM1 [8, 3]
+
+	SVAL r2 (IsPointer | mclShift9)
+	ASMC MapChangeListASMC
+
+	GOTO (-1)
+
+LABEL 2
+	SVAL r7 4
+	BNE 3 r1 r7
+
+	// Turn 4 - 10 - 16 - 22...
+
+	CAM1 [8, 17]
+
+	SVAL r2 (IsPointer | mclShift4)
+	ASMC MapChangeListASMC
+
+	CAM1 [13, 4]
+
+	SVAL r2 (IsPointer | mclShift10)
+	ASMC MapChangeListASMC
+
+	GOTO (-1)
+
+LABEL 3
+	SVAL r7 5
+	BNE 4 r1 r7
+
+	// Turn 5 - 11 - 17 - 23...
+
+	CAM1 [4, 15]
+
+	SVAL r2 (IsPointer | mclShift5)
+	ASMC MapChangeListASMC
+
+	CAM1 [14, 6]
+
+	SVAL r2 (IsPointer | mclShift11)
+	ASMC MapChangeListASMC
+
+	GOTO (-1)
+
+LABEL 4
+	SVAL r7 0
+	BNE 5 r1 r7
+
+	// Turn 6 - 12 - 18 - 24...
+
+	CAM1 [4, 12]
+
+	SVAL r2 (IsPointer | mclShift6)
+	ASMC MapChangeListASMC
+
+	CAM1 [17, 9]
+
+	SVAL r2 (IsPointer | mclShift12)
+	ASMC MapChangeListASMC
+
+	GOTO (-1)
+
+LABEL 5
+LABEL (-1)
+	NoFade
+	ENDA
+
+ALIGN 4
+scHumanReinf:
+	CAM1 [17, 2]
+
+	// TODO: load first group of unit
+
+	SVAL rB 0x20014
+
+	ASMC TorchStaffAnimASMC
+	ASMC TorchSetASMC
+
+	// TODO: have a mage or something cast spell
+
+	EARTHQUAKE_START 0
+
+	STAL 30
+
+	TILECHANGE 110
+
+	STAL 30
+
+	TILECHANGE 111
+
+	STAL 30
+
+	TILECHANGE 112
+
+	STAL 30
+
+	EARTHQUAKE_END
+
+	// TODO: load rest of group
+
+	NoFade
+	ENDA
+
+ALIGN 4
+scEnding:
+	// move to next chapter whatever it is
+	MNC2 1
+
+	ENDA
+
+// Those are tile change lists to be used with the ASMC
+// I use the asmc instead of the regular TILECHANGE/TILEREVERT events
+// because I want to display the tile change fade for more than one at the time
+// otherwise it would look kind of weird (especially for Shift7, that's in 2 parts)
+
+mclShift1:
+	SHORT 1 False
+	SHORT 2 True
+	SHORT (-1)
+
+mclShift2:
+	SHORT 2 False
+	SHORT 3 True
+	SHORT (-1)
+
+mclShift3:
+	SHORT 3 False
+	SHORT 4 True
+	SHORT (-1)
+
+mclShift4:
+	SHORT 4 False
+	SHORT 5 True
+	SHORT (-1)
+
+mclShift5:
+	SHORT 5 False
+	SHORT 6 True
+	SHORT (-1)
+
+mclShift6:
+	SHORT 6 False
+	SHORT 7 True
+	SHORT (-1)
+
+mclShift7:
+	SHORT 7  False
+	SHORT 8  True
+	SHORT 82 True
+	SHORT (-1)
+
+mclShift8:
+	SHORT 8  False
+	SHORT 82 False
+	SHORT 9  True
+	SHORT (-1)
+
+mclShift9:
+	SHORT 9  False
+	SHORT 10 True
+	SHORT (-1)
+
+mclShift10:
+	SHORT 10 False
+	SHORT 11 True
+	SHORT (-1)
+
+mclShift11:
+	SHORT 11 False
+	SHORT 12 True
+	SHORT (-1)
+
+mclShift12:
+	SHORT 12 False
+	SHORT 1  True
+	SHORT (-1)
+
+#endif // CCBLITZ_STAN_CH27

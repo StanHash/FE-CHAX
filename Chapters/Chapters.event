@@ -11,6 +11,11 @@
 }
 
 {
+// #include "CCBlitz/CCBlitzChapter27.event"
+// #include "CCBlitz/CCBlitzChapter27Map.event"
+}
+
+{
 // #include "Demo/Demo.event"
 }
 
