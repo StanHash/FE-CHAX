@@ -29,10 +29,10 @@ unsigned GetIconTileIndex(unsigned icon) {
 	return tile;
 }
 
-void LoadIconObjectGraphics(unsigned icon, unsigned tile) {
+void LoadIconObjectGraphics(int icon, unsigned tile) {
 	void* target = OBJ_VRAM0 + (tile * 0x20);
 
-	if (icon) {
+	if (icon >= 0) {
 		const void* source = GetIconGfx(icon);
 
 		RegisterTileGraphics(source,        target,         0x40);

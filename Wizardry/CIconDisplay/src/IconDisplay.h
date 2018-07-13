@@ -10,7 +10,7 @@ unsigned GetIconGfxTileIndex(unsigned slot) __attribute__((long_call));
 
 // Core functions
 unsigned GetIconTileIndex(unsigned icon);
-void LoadIconObjectGraphics(unsigned icon, unsigned tile);
+void LoadIconObjectGraphics(int icon, unsigned tile);
 void ResetIconGraphics(void);
 void ClearIconGfx(unsigned icon);
 

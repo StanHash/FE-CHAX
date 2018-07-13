@@ -1,5 +1,5 @@
-#ifndef HAX_ICON_DISPLAY
-#define HAX_ICON_DISPLAY
+#ifndef HAX_ICONDISPLAY
+#define HAX_ICONDISPLAY
 
 #ifndef _FE8_
 	ERROR this is for FE8 etc
@@ -55,4 +55,4 @@ IDRIconSheets:
 
 	ORG (IDRIconSheets + 4 * ICON_SHEET_COUNT)
 
-#endif // HAX_ICON_DISPLAY
+#endif // HAX_ICONDISPLAY
