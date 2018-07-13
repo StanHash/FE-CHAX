@@ -32,7 +32,7 @@ struct ChapterData {
 	// option byte 1 (of 3)
 	u32 unk40_1:5;
 	u32 textSpeedOption:2;
-	u32 unk40_8:1;
+	u32 gameSpeedOption:1;
 
 	u32 unk41_1:1;
 	u32 muteSfxOption:1;
