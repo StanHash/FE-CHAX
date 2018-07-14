@@ -30,7 +30,7 @@
    eJxjYBgFo2AUUBvoMUOwBiMDw0skPjKmhh0vgLQzEL8FYiNGTPsoBQKMEPPR8WsgVmeknj9OYLEDhjUZqWOHFg6/nAbik5RbAbbjFJA+g8WOtwzUCysQ5oL6hRtI8zFSP6xgmIMREjYgthAjgj8KRgEtAQC09xbZ
   </data>
  </layer>
- <layer name="Shift1" width="25" height="22">
+ <layer name="Shift1" width="25" height="22" visible="0">
   <properties>
    <property name="Height" value="(19 - 10)"/>
    <property name="ID" value="2"/>
@@ -42,7 +42,7 @@
    eJxjYBgFo2AUjALsQI8ZFWswMjAYM6KKUdMOLaDZzgwQrMlIGzveMSDseA3ELxmoZ4cJyM1IfoDht1SyQwuL2cgYFGaUAi4sdvACxYSBmAOIT1JuBcMLNPOPM2CmNUoBsj+wmU+tOAeFCTsjdvOpYcdIBADM1hV2
   </data>
  </layer>
- <layer name="Shift2" width="25" height="22">
+ <layer name="Shift2" width="25" height="22" visible="0">
   <properties>
    <property name="Height" value="(21 - 14)"/>
    <property name="ID" value="3"/>
@@ -54,7 +54,7 @@
    eJxjYBgFo2AUjIJRMNiAHjMm1mBkYHgJlHsFxOqMEDFq2QEyUw9opjOQfg3EbxggbE1G6tgBcjvMTHTMSQU7XuAwG4SPM1AeVlqMhM2n1I5TQMzHiDCTA8gWBGJ2RtS4ogTAzBBixJ7GqGEHpQAA+ngVPA==
   </data>
  </layer>
- <layer name="Shift3" width="25" height="22">
+ <layer name="Shift3" width="25" height="22" visible="0">
   <properties>
    <property name="Height" value="(21 - 14)"/>
    <property name="ID" value="4"/>
@@ -66,7 +66,7 @@
    eJxjYBgFo2AUjIJRMNBAj5kwfgVU95ICO0D61RkR5mkwQsxD5r8B8jkZybfDAKjXGUjrguyBsl8DsSES/yzUTnIBF9QcfPgthXaA9J4gYAcIa1IQViA7tJD8wgtkn2FAhBEHkC8IxCfJtwJsxykGiDnsjKj8kwyo6WuwAAAJVxjf
   </data>
  </layer>
- <layer name="Shift4" width="25" height="22">
+ <layer name="Shift4" width="25" height="22" visible="0">
   <properties>
    <property name="Height" value="(21 - 13)"/>
    <property name="ID" value="5"/>
@@ -78,7 +78,7 @@
    eJxjYBgFo2AUjIJRgAz0mBFYg5GBQZ0RVQyGKbUDZLYeEDszQPBzIDZipJ4dWkhmo2NdJH9RAk4BMR8ee0BYk5EyO2BhcQKPHZxUsgOEORgx/XSWgTpxjo7PofmBFnaA4kgQaDY7I3XSFa0BADO8E6k=
   </data>
  </layer>
- <layer name="Shift5" width="25" height="22">
+ <layer name="Shift5" width="25" height="22" visible="0">
   <properties>
    <property name="Height" value="(19 - 9)"/>
    <property name="ID" value="6"/>
@@ -102,7 +102,7 @@
    eJztkEEOQEAMRdvY2bkFFuIOLs+wcQoh3EEbZJqx/Vb6kpfZ/ZcpkfNXOnEWSyZa5W2yKIr+7qjHR42aY0OtGN/Ik4b9CwrdsvdSF8I30ns9N0OxiXuyP4oDLkEtx93J7CNvFcSCr91g9pENx3HenKr/GTQ=
   </data>
  </layer>
- <layer name="Shift7" width="25" height="22">
+ <layer name="Shift7" width="25" height="22" visible="0">
   <properties>
    <property name="Height" value="(12 - 5)"/>
    <property name="ID" value="8"/>
@@ -114,7 +114,7 @@
    eJxjYBgFIxU4Y8FnqWzHOTTzeRkZGE5S2Q4DRlQ7NIF8PWbq2sGFZsdrIH5JXSvAbj7BgGoPtcMKZIcWIyIu2GkQViDzTjEgzIbhUTAKRsEoIAYAAIFGDY8=
   </data>
  </layer>
- <layer name="Shift7_2" width="25" height="22">
+ <layer name="Shift7_2" width="25" height="22" visible="0">
   <properties>
    <property name="Height" value="(7 - 3)"/>
    <property name="ID" value="82"/>
@@ -126,7 +126,7 @@
    eJxjYBgF5ILXQKzOyMBgBMQaQGwIxC+pbIczFqzPSDs7zgIxB9D8k9S1Am4+L9RsPWYIHgWjYBSMglEwCpABAHPUCDE=
   </data>
  </layer>
- <layer name="Shift8" width="25" height="22">
+ <layer name="Shift8" width="25" height="22" visible="0">
   <properties>
    <property name="Height" value="(7 - 0)"/>
    <property name="ID" value="9"/>
@@ -138,7 +138,7 @@
    eJxjYEAFesy4sREjhKYUIJv5CshXB5qrATIbiJ2BfE1Gyu3QBZphDDX3DQPEXGTMSQU70M1Ex9Twx3k85vMCzT9JuRUMWowIM88CMQeQz4cUF9SI81NALMgIwSA3w+KfA4k/CkbBKBgFo2AUAAAACxF9
   </data>
  </layer>
- <layer name="Shift9" width="25" height="22">
+ <layer name="Shift9" width="25" height="22" visible="0">
   <properties>
    <property name="Height" value="(9 - 1)"/>
    <property name="ID" value="10"/>
@@ -150,7 +150,7 @@
    eJxjYBhY8AqI1RkZGDQYIbQRlP0SKK7HTB07DIDmOTNgYn1G6tnBhcOO1wwQv1ADgNx6Dosdp4H4JBXtOAWk+dD8w0nFsAKZA8MnoOZfRBKnth3I9mjSyB8wzMEIiQtq2TEKRsEoGAUjDQAAYnsUiQ==
   </data>
  </layer>
- <layer name="Shift10" width="25" height="22">
+ <layer name="Shift10" width="25" height="22" visible="0">
   <properties>
    <property name="Height" value="(11 - 2)"/>
    <property name="ID" value="11"/>
@@ -162,7 +162,7 @@
    eJxjYBhZQI8ZgY0YUfnUtuMFkO0MxJqMtLFDixFiPgi/ZaC+Ha+A+A0Dwg4Q1gXa+ZJ6VjBwMaKaD8P6jNSzQwCHHZxUtAMU7ifQzL/IQJt0dQ5q/nkGRPqith2ngGx2aLrlANInqWfFKBgFo2AU4AUAMb4T+A==
   </data>
  </layer>
- <layer name="Shift11" width="25" height="22">
+ <layer name="Shift11" width="25" height="22" visible="0">
   <properties>
    <property name="Height" value="(13 - 5)"/>
    <property name="ID" value="12"/>
@@ -198,7 +198,7 @@
    eJxjYBgFgxFMZR5oF4yCUTAKRsEoGAX0BwAw0QCZ
   </data>
  </layer>
- <layer name="ReinfSands1" width="25" height="22">
+ <layer name="ReinfSands1" width="25" height="22" visible="0">
   <properties>
    <property name="Height" value="(3 - 0)"/>
    <property name="ID" value="110"/>
@@ -210,7 +210,7 @@
    eJxjYKAcnALiM0DsjIaPU8FsuB2MDAxcjAizeYFsdiDWY6aeHSCzQJgDyWwYHgWjYBSMglEwCkYB7QEA6/QGEw==
   </data>
  </layer>
- <layer name="ReinfSands2" width="25" height="22">
+ <layer name="ReinfSands2" width="25" height="22" visible="0">
   <properties>
    <property name="Height" value="(5 - 1)"/>
    <property name="ID" value="111"/>
@@ -222,7 +222,7 @@
    eJxjYBga4BQjA4MBEDszQDAvkM3OSF07XgHxGwaEHZpA8/WYqWvHKSAWBporAsR8QPwayH9JXSvAbj4ONPslEB8DYg4gPkllO0bBKBgFo2AUjAJaAACxdgqi
   </data>
  </layer>
- <layer name="ReinfSands3" width="25" height="22">
+ <layer name="ReinfSands3" width="25" height="22" visible="0">
   <properties>
    <property name="Height" value="(5 - 0)"/>
    <property name="ID" value="112"/>

@@ -23,12 +23,12 @@ and wind streams taken straight out of Fuga's wild ride =^)
 	#define IsPointer 0x8000000
 #endif // IsPointer
 
-/* // This doesn't work :(
+/* // :(
 #ifndef RedaPoolDefined
 	#define RedaPoolDefined
 
 	#define InlReda(aXTarget, aYTarget) "AddToPool(REDA [(aXTarget), (aYTarget)] 0 0 0 0)"
-//	#define InlReda(aXTarget, aYTarget) "REDA ## aXTarget ## R ## aYTarget" // I can dream okay?
+//	#define InlReda(aXTarget, aYTarget) "REDA ## aXTarget ## R ## aYTarget" // It almost could work!
 #endif // RedaPoolDefined
 */
 
@@ -46,22 +46,29 @@ SetSymbol(scLoadReinforcements, $9EE274) // args: s2 = pointer to UNITs
 #define Chapter27Events     0x07
 
 #define Ch27LvBase(aLevelModifier) "Level((15 + (aLevelModifier)), Enemy, True)"
-#define Ch27LvProm(aLevelModifier) "Level((5  + (aLevelModifier)), Enemy, True)"
-#define Ch27LvBoss(aLevelModifier) "Level((10 + (aLevelModifier)), Enemy, True)"
+#define Ch27LvProm(aLevelModifier) "Level((10 + (aLevelModifier)), Enemy, True)"
+#define Ch27LvBoss(aLevelModifier) "Level((15 + (aLevelModifier)), Enemy, True)"
+
+#define Ch27MonsterSpawnCoords "[10, 12]"
+#define Ch27MonsterSpawnCoordsRaw 0xC000A
 
 // Character Indices
 #define Ch27ChrMGeneric    0x80 // Monster
 #define Ch27ChrHGeneric    0x81 // Human
 
 // Local Event Id Allocation
-SetSymbol(eidVillage,    10)
-SetSymbol(eidHumanReinf, 11)
-SetSymbol(eidEnemyDeath, 12)
+SetSymbol(eidEnemyDeath,       10)
+SetSymbol(eidVillage,          11)
+SetSymbol(eidHumanReinf,       12)
+SetSymbol(eidHumanReinfActive, 13)
 
 // Event Counter Allocation
-SetSymbol(cntKillCountLo,   0)
-SetSymbol(cntKillCountHi,   1)
-SetSymbol(cntKillCountTurn, 2)
+SetSymbol(cntKillCountLo,   0) // low 4 bits of total kill count
+SetSymbol(cntKillCountHi,   1) // high 4 bits of total kill count
+SetSymbol(cntKillCountTurn, 2) // this turn's kill count
+SetSymbol(cntMonsterCycle,  3) // what's the next monster slot to load
+SetSymbol(cntHumanCycle,    4) // what's the next human slot to load
+SetSymbol(cntHumanCounter,  5) // when the next human reinf comes
 
 // ============
 // CHAPTER DATA
@@ -94,9 +101,11 @@ ThisChapter:
 
 ALIGN 4
 TurnEventList:
-	TURN 0 scShiftSands [0, 0xFF] 0 // Shift sands every turn
+	TURN 0 scShiftSands       [0, 0xFF] 0 // Shift sands every turn
+	TURN 0 scTurnMonsterReinf [0, 0xFF] 0 // Call monster reinf every turn
 
 	TURN eidHumanReinf scHumanReinf [0, 0xFF] 0
+	TURN 0 scHumanReinfFurther [0, 0xFF] 0
 
 	END_MAIN
 
@@ -107,11 +116,15 @@ CharacterEventList:
 ALIGN 4
 LocationEventList:
 	Village(eidVillage, scVillageVisit, 2, 4)
+
 	END_MAIN
 
 ALIGN 4
 ActionEventList:
 	AFEV 0 scOnEnemyDeath eidEnemyDeath
+
+	// TODO: hidden treasure!
+	// TODO: mark them on the map with different tiles
 
 	END_MAIN
 
@@ -181,13 +194,82 @@ scGetKillCount: {
 }
 
 ALIGN 4
+scGetNextMonsterIndex: {
+	SetSymbol(inc, 0)
+	SetSymbol(end, 1)
+
+	COUNTER_CHECK cntMonsterCycle
+
+	SVAL r1 15
+	BNE inc rC r1
+
+	COUNTER_SET cntMonsterCycle 0
+
+LABEL inc
+	// EA Raw is broken, there's only one argument and it's the counted id
+	// This is an increment instruction, not an addition
+	COUNTER_ADD cntMonsterCycle 0
+
+LABEL end
+	COUNTER_CHECK cntMonsterCycle
+
+	NoFade
+	ENDA
+}
+
+ALIGN 4
+scGetNextHumanGroupIndex: {
+	SetSymbol(inc, 0)
+	SetSymbol(end, 1)
+
+	COUNTER_CHECK cntHumanCycle
+
+	SVAL r1 4
+	BNE inc rC r1
+
+	COUNTER_SET cntHumanCycle 0
+
+LABEL inc
+	// EA Raw is broken, there's only one argument and it's the counted id
+	// This is an increment instruction, not an addition
+	COUNTER_ADD cntHumanCycle 0
+
+LABEL end
+	COUNTER_CHECK cntHumanCycle
+
+	NoFade
+	ENDA
+}
+
+ALIGN 4
+scGetMonsterCoordsForShift: {
+	// Shift index in s2
+
+	SVAL r3 (IsPointer | MonsterWalkCoordLookup)
+	ASMC GetCoordsFromIndexASMC
+
+	NoFade
+	ENDA
+
+ALIGN 4
+MonsterWalkCoordLookup:
+	BYTE 15 17 // Shift 0  -> 1
+	BYTE 10 18 // Shift 1  -> 2
+	BYTE  6 16 // Shift 2  -> 3
+	BYTE  4 13 // Shift 3  -> 4
+	BYTE  5  9 // Shift 4  -> 5
+	BYTE  6  6 // Shift 5  -> 6
+	BYTE  9  3 // Shift 6  -> 7
+	BYTE 12  4 // Shift 7  -> 8
+	BYTE 14  8 // Shift 8  -> 9
+	BYTE 16 10 // Shift 9  -> 10
+	BYTE 19 12 // Shift 10 -> 11
+	BYTE 17 15 // Shift 11 -> 0
+
+}
+
+ALIGN 4
 scBeginning: {
-	LOAD1 0 unPlayerList
-	ENUN
-
-	LOAD1 0 unEnemyList
-	ENUN
-
 	VCWF 4 // FOG
 	WEA1 6 // SANDSTORM
 
@@ -198,9 +280,15 @@ scBeginning: {
 	// Initial event id states
 	// ENUT eidHumanReinf
 
+//	COUNTER_SET cntKillCountTurn 15
+
 	CALL scResetKillCount
 
+	LOAD1 0 unPlayerList
+	ENUN
+
 	CALL scNoSkipFadeOut
+	CALL scPrepScreen
 
 	NoFade
 	ENDA
@@ -353,14 +441,138 @@ LABEL end
 ALIGN 4
 scOnEnemyDeath: {
 	ENUF eidEnemyDeath // Allow the next enemy to also die
-	CALL scIncKillCount
 
-	// DEBUG
-	Call scGetKillCount
+	CALL scIncKillCount
+	CALL scHandleKillEvents
+
+	// EA Raw is broken, there's only one argument and it's the counted id
+	// This is an increment instruction, not an addition
+	COUNTER_ADD cntKillCountTurn 0
+
+#ifdef __DEBUG__
+	// Give the amount of enemies killed as money
+	// Easy way to keep track of the number
+
+	CALL scGetKillCount
 	SADD slotsParam(r3, rC, r0)
 
 	// Gib Mone
 	GIVEITEMTOMAIN 0
+#endif // __DEBUG__
+
+	NoFade
+	ENDA
+}
+
+ALIGN 4
+scTurnMonsterReinf: {
+	SetSymbol(loop, 0)
+	SetSymbol(end,  1)
+
+	SVAL r2 Ch27ChrMGeneric
+	ASMC BuffAllCharactersASMC
+
+	// EA Raw is broken, there's only one argument and it's the counted id
+	// This is an increment instruction, not an addition
+	COUNTER_ADD cntKillCountTurn 0
+
+	COUNTER_CHECK cntKillCountTurn
+	BEQ end rC r0
+
+LABEL loop
+	CALL scGetNextMonsterIndex
+
+	SADD slotsParam(r2, rC, r0)
+	SVAL r3 (IsPointer | MonsterUnitLookup)
+
+	// ldr s2, [s3, s2, lsl #2]
+	ASMC LoadIndexedWordAMSC
+	SADD slotsParam(r2, rC, r0)
+
+	CALL scLoadReinforcements
+
+	// Because Intelligent Systems/10, The Unit map doesn't work
+	// for units that are in the fog unless it is enemy phase.
+	// To address that issue, I'm silently disabling fog for the duration
+	// of the MOVEFORCED prep & call, and restoring immediately after.
+
+	ASMC FogHackBeginASMC
+
+	CHECK_TURNS
+
+	SVAL r2 1
+	SSUB slotsParam(rC, rC, r2)
+
+	SVAL r2 12
+	SMOD slotsParam(r2, rC, r2)
+
+	CALL scGetMonsterCoordsForShift
+
+	SADD slotsParam(r2, rC, r0) 
+	SVAL rB Ch27MonsterSpawnCoordsRaw
+
+	ASMC GetBestCoordsForUnitAtASMC
+
+	SVAL rD 0
+
+	SVAL r1 0xFFFF
+	SAND slotsParam(r1, rC, r1)
+
+	SVAL r2 16
+	SLSR slotsParam(r2, rC, r2)
+
+	SVAL r3 6
+	SLSL slotsParam(r3, r2, r3)
+
+	// Slot1 = (Coords & 0xFFFF) | (Coords >> 16 << 6);
+	SORR slotsParam(r1, r1, r3)
+	SAVETOQUEUE
+
+	SVAL r1 0
+	SAVETOQUEUE
+
+	MOVEFORCED 0 UnitAtCoordsSlotB 0
+
+	ASMC FogHackEndASMC
+
+	ENUN
+
+	// EA Raw is broken, there's only one argument and it's the counted id
+	// This is an decrement instruction, not a substraction
+	COUNTER_SUBTRACT cntKillCountTurn 0
+	COUNTER_SUBTRACT cntKillCountTurn 0
+
+	COUNTER_CHECK cntKillCountTurn
+	BNE loop rC r0
+
+LABEL end
+	NoFade
+	ENDA
+
+ALIGN 4
+MonsterUnitLookup:
+	POIN unEnemyMonster0
+	POIN unEnemyMonster1
+	POIN unEnemyMonster2
+	POIN unEnemyMonster3
+	POIN unEnemyMonster4
+	POIN unEnemyMonster5
+	POIN unEnemyMonster6
+	POIN unEnemyMonster7
+	POIN unEnemyMonster8
+	POIN unEnemyMonster9
+	POIN unEnemyMonster10
+	POIN unEnemyMonster11
+	POIN unEnemyMonster12
+	POIN unEnemyMonster13
+	POIN unEnemyMonster14
+	POIN unEnemyMonster15
+
+}
+
+ALIGN 4
+scHandleKillEvents: {
+	// TODO
 
 	NoFade
 	ENDA
@@ -370,14 +582,21 @@ ALIGN 4
 scHumanReinf: {
 	CAM1 [17, 2]
 
-	// TODO: load first group of unit
+	LOAD1 0 unEnemyHumanInitialTorcher
+	ENUN
 
+	// [20, 2]
 	SVAL rB 0x20014
 
 	ASMC TorchStaffAnimASMC
 	ASMC TorchSetASMC
 
-	// TODO (polish): have a mage or something animate and cast spell
+	STAL 20
+
+	LOAD1 0 unEnemyHumanInitialSandCleaner
+	ENUN
+
+	// TODO (polish): have mage animate and cast spell
 	// TODO (polish): play windy sound?
 
 	EARTHQUAKE_START 0
@@ -398,10 +617,55 @@ scHumanReinf: {
 
 	EARTHQUAKE_END
 
-	// TODO: load rest of group
+	LOAD1 0 unEnemyHumanInitialWave
+	ENUN
+
+	ENUT eidHumanReinfActive
+
+	COUNTER_SET cntHumanCounter 2
 
 	NoFade
 	ENDA
+}
+
+ALIGN 4
+scHumanReinfFurther: {
+	SetSymbol(end, 0)
+
+	CHECK_EVENTID eidHumanReinfActive
+	BEQ end rC r0
+
+	// EA Raw is broken, there's only one argument and it's the counted id
+	// This is an decrement instruction, not a substraction
+	COUNTER_SUBTRACT cntHumanCounter 0
+
+	COUNTER_CHECK cntHumanCounter
+	BNE end rC r0
+
+	CALL scGetNextHumanGroupIndex
+
+	SADD slotsParam(r2, rC, r0)
+	SVAL r3 (IsPointer | HumanUnitGroupLookup)
+
+	ASMC LoadIndexedWordAMSC
+	SADD slotsParam(r2, rC, r0)
+
+	CALL scLoadReinforcements
+
+	COUNTER_SET cntHumanCounter 2
+
+LABEL end
+	NoFade
+	ENDA
+
+ALIGN 4
+HumanUnitGroupLookup:
+	POIN unEnemyHumanWave0
+	POIN unEnemyHumanWave1
+	POIN unEnemyHumanWave2
+	POIN unEnemyHumanWave3
+	POIN unEnemyHumanWave4
+
 }
 
 ALIGN 4
@@ -502,11 +766,177 @@ unPlayerList:
 	UNIT // end
 
 ALIGN 4
-unEnemyList:
-	UNIT Ch27ChrHGeneric Soldier 0 Level(1, Enemy, False) [0, 0] 0 0 0 0 [SlimLance] AttackInRangeAI
-	UNIT Ch27ChrHGeneric Soldier 0 Level(1, Enemy, False) [0, 1] 0 0 0 0 [IronLance] AttackInRangeAI
-	UNIT Ch27ChrHGeneric Soldier 0 Level(1, Enemy, False) [0, 2] 0 0 0 0 [IronLance] AttackInRangeAI
+unEnemyMonster0:
+	UNIT Ch27ChrMGeneric Bonewalker 0 Ch27LvBase(1) Ch27MonsterSpawnCoords 0 0 0 0 [SilverSword] PursueWithoutHeedAI
+	UNIT // end
+
+ALIGN 4
+unEnemyMonster1:
+	UNIT Ch27ChrMGeneric Revenant 0 Ch27LvBase(1) Ch27MonsterSpawnCoords 0 0 0 0 [FetidClaw] PursueWithoutHeedAI
+	UNIT // end
+
+ALIGN 4
+unEnemyMonster2:
+	UNIT Ch27ChrMGeneric Bonewalker 0 Ch27LvBase(1) Ch27MonsterSpawnCoords 0 0 0 0 [Lancereaver] PursueWithoutHeedAI
+	UNIT // end
+
+ALIGN 4
+unEnemyMonster3:
+	UNIT Ch27ChrMGeneric Entombed 0 Ch27LvProm(1) Ch27MonsterSpawnCoords 0 0 0 0 [FetidClaw] PursueWithoutHeedAI
+	UNIT // end
+
+ALIGN 4
+unEnemyMonster4:
+	UNIT Ch27ChrMGeneric Bonewalker_Bow 0 Ch27LvBase(1) Ch27MonsterSpawnCoords 0 0 0 0 [SilverBow] PursueWithoutHeedAI
+	UNIT // end
+
+ALIGN 4
+unEnemyMonster5:
+	UNIT Ch27ChrMGeneric Wight 0 Ch27LvProm(1) Ch27MonsterSpawnCoords 0 0 0 0 [SilverSword] PursueWithoutHeedAI
+	UNIT // end
+
+ALIGN 4
+unEnemyMonster6:
+	UNIT Ch27ChrMGeneric Revenant 0 Ch27LvBase(1) Ch27MonsterSpawnCoords 0 0 0 0 [PoisonClaw] PursueWithoutHeedAI
+	UNIT // end
+
+ALIGN 4
+unEnemyMonster7:
+	UNIT Ch27ChrMGeneric Cyclops 0 Ch27LvProm(1) Ch27MonsterSpawnCoords 0 0 0 0 [SilverAxe] PursueWithoutHeedAI
+	UNIT // end
+
+ALIGN 4
+unEnemyMonster8:
+	UNIT Ch27ChrMGeneric Wight_Bow 0 Ch27LvProm(1) Ch27MonsterSpawnCoords 0 0 0 0 [SilverBow] PursueWithoutHeedAI
+	UNIT // end
+
+ALIGN 4
+unEnemyMonster9:
+	UNIT Ch27ChrMGeneric Revenant 0 Ch27LvBase(1) Ch27MonsterSpawnCoords 0 0 0 0 [PoisonClaw] PursueWithoutHeedAI
+	UNIT // end
+
+ALIGN 4
+unEnemyMonster10:
+	UNIT Ch27ChrMGeneric Entombed 0 Ch27LvProm(1) Ch27MonsterSpawnCoords 0 0 0 0 [FetidClaw] PursueWithoutHeedAI
+	UNIT // end
+
+ALIGN 4
+unEnemyMonster11:
+	UNIT Ch27ChrMGeneric Wight 0 Ch27LvProm(1) Ch27MonsterSpawnCoords 0 0 0 0 [SilverSword] PursueWithoutHeedAI
+	UNIT // end
+
+ALIGN 4
+unEnemyMonster12:
+	UNIT Ch27ChrMGeneric Cyclops 0 Ch27LvProm(1) Ch27MonsterSpawnCoords 0 0 0 0 [SilverAxe] PursueWithoutHeedAI
+	UNIT // end
+
+ALIGN 4
+unEnemyMonster13:
+	UNIT Ch27ChrMGeneric Bonewalker 0 Ch27LvBase(1) Ch27MonsterSpawnCoords 0 0 0 0 [SilverLance] PursueWithoutHeedAI
+	UNIT // end
+
+ALIGN 4
+unEnemyMonster14:
+	UNIT Ch27ChrMGeneric Bonewalker 0 Ch27LvBase(1) Ch27MonsterSpawnCoords 0 0 0 0 [Axereaver] PursueWithoutHeedAI
+	UNIT // end
+
+ALIGN 4
+unEnemyMonster15:
+	UNIT Ch27ChrMGeneric Revenant 0 Ch27LvBase(1) Ch27MonsterSpawnCoords 0 0 0 0 [PoisonClaw] PursueWithoutHeedAI
+	UNIT // end
+
+ALIGN 4
+unEnemyHumanInitialTorcher:
+	UNIT Ch27ChrHGeneric Bishop 0 Ch27LvProm(3) [20, 0] 2 0 1 redaHumanCenterLeft [Aura, TorchStaff, Sleep] PursueWithoutHeedAI
+	UNIT // end
+
+ALIGN 4
+unEnemyHumanInitialSandCleaner:
+	UNIT Ch27ChrHGeneric Sage 0 Ch27LvProm(3) [21, 0] 0 0 1 redaHumanCenterRight [Fimbulvetr] PursueWithoutHeedAI
+	UNIT // end
+
+ALIGN 4
+unEnemyHumanInitialWave:
+	UNIT Ch27ChrHGeneric Mage 0 Ch27LvBase(3) [19, 0] 0 0 1 redaHumanBottomLeft  [0] PursueWithoutHeedAI
+	UNIT Ch27ChrHGeneric Mage 0 Ch27LvBase(3) [22, 0] 0 0 1 redaHumanBottomRight [0] PursueWithoutHeedAI
+
+	UNIT Ch27ChrHGeneric WyvernRider 0 Ch27LvBase(2) [20, 0] 0 0 1 redaHumanTopLeft  [0] PursueWithoutHeedAI
+	UNIT Ch27ChrHGeneric WyvernRider 0 Ch27LvBase(2) [21, 0] 0 0 1 redaHumanTopRight [0] PursueWithoutHeedAI
+
+	UNIT Ch27ChrHGeneric WyvernKnight 0 Ch27LvProm(2) [18, 0] 0 0 1 redaHumanLeft  [0] PursueWithoutHeedAI
+	UNIT Ch27ChrHGeneric WyvernKnight 0 Ch27LvProm(2) [23, 0] 0 0 1 redaHumanRight [0] PursueWithoutHeedAI
 
 	UNIT // end
+
+ALIGN 4
+unEnemyHumanWave0:
+	UNIT Ch27ChrHGeneric Mage 0 Ch27LvBase(4) [19, 0] 0 0 1 redaHumanTopLeft  [0] PursueWithoutHeedAI
+	UNIT Ch27ChrHGeneric Mage 0 Ch27LvBase(4) [22, 0] 0 0 1 redaHumanTopRight [0] PursueWithoutHeedAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemyHumanWave1:
+	UNIT Ch27ChrHGeneric WyvernKnight 0 Ch27LvProm(3) [18, 0] 0 0 1 redaHumanLeft2  [0] PursueWithoutHeedAI
+	UNIT Ch27ChrHGeneric WyvernKnight 0 Ch27LvProm(3) [23, 0] 0 0 1 redaHumanRight2 [0] PursueWithoutHeedAI
+
+	UNIT Ch27ChrHGeneric WyvernRider 0 Ch27LvBase(3) [20, 0] 0 0 1 redaHumanBottomLeft  [0] PursueWithoutHeedAI
+	UNIT Ch27ChrHGeneric WyvernRider 0 Ch27LvBase(3) [21, 0] 0 0 1 redaHumanBottomRight [0] PursueWithoutHeedAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemyHumanWave2:
+	UNIT Ch27ChrHGeneric Sage 0 Ch27LvProm(4) [20, 0] 0 0 1 redaHumanTopLeft  [0] PursueWithoutHeedAI
+	UNIT Ch27ChrHGeneric Sage 0 Ch27LvProm(4) [21, 0] 0 0 1 redaHumanTopRight [0] PursueWithoutHeedAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemyHumanWave3:
+	UNIT Ch27ChrHGeneric WyvernRider 0 Ch27LvBase(3) [20, 0] 0 0 1 redaHumanCenterLeft  [0] PursueWithoutHeedAI
+	UNIT Ch27ChrHGeneric WyvernRider 0 Ch27LvBase(3) [21, 0] 0 0 1 redaHumanCenterRight [0] PursueWithoutHeedAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemyHumanWave4:
+	UNIT Ch27ChrHGeneric FalcoKnight 0 Ch27LvProm(4) [19, 0] 0 0 1 redaHumanBottomLeft  [0] PursueWithoutHeedAI
+	UNIT Ch27ChrHGeneric FalcoKnight 0 Ch27LvProm(4) [22, 0] 0 0 1 redaHumanBottomRight [0] PursueWithoutHeedAI
+
+	UNIT Ch27ChrHGeneric PegasusKnight 0 Ch27LvBase(4) [18, 0] 0 0 1 redaHumanLeft2  [0] PursueWithoutHeedAI
+	UNIT Ch27ChrHGeneric PegasusKnight 0 Ch27LvBase(4) [23, 0] 0 0 1 redaHumanRight2 [0] PursueWithoutHeedAI
+
+	UNIT // end
+
+redaHumanCenterLeft:
+	REDA [20, 2] 0 0 0 0
+
+redaHumanCenterRight:
+	REDA [21, 2] 0 0 0 0
+
+redaHumanBottomLeft:
+	REDA [19, 3] 0 0 0 0
+
+redaHumanBottomRight:
+	REDA [22, 3] 0 0 0 0
+
+redaHumanTopLeft:
+	REDA [19, 0] 0 0 0 0
+
+redaHumanTopRight:
+	REDA [22, 0] 0 0 0 0
+
+redaHumanLeft:
+	REDA [18, 1] 0 0 0 0
+
+redaHumanRight:
+	REDA [23, 1] 0 0 0 0
+
+redaHumanLeft2:
+	REDA [18, 2] 0 0 0 0
+
+redaHumanRight2:
+	REDA [23, 2] 0 0 0 0
 
 #endif // CCBLITZ_STAN_CH27

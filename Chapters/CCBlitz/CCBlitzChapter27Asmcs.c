@@ -1,11 +1,14 @@
 #include "gbafe.h"
 
+extern int FindClosestBestPosition(Unit* unit, int x, int y, Vector2U* out) __attribute__((long_call));
+
 extern int gEventSlot[];
 
 // FIXME
 static const Vector2* const pCameraDisplayPosition = (const Vector2*) (0x0202BCB0 + 0x0C);
 
 static int sign(int value) { return (value>>31) - (-value>>31); }
+static int min(int a, int b) { return (a > b) ? b : a; }
 
 static int CanUnitBeOnPosition(Unit* unit, int x, int y) {
 	if (x < 0 || y < 0)
@@ -88,10 +91,85 @@ void TorchSetASMC(Proc* proc) {
 	InitMapChangeGraphics(); // copy bg3 to bg2 (for fade)
 
 	RefreshEntityMaps();
+	SMS_UpdateFromGameData();
+
 	RefreshTileMaps();
 	DrawTileGraphics();
 
 	StartBlockingBMXFADE(1, proc); // fade from bg2 to bg3
+}
+
+void GetCoordsFromIndexASMC(Proc* proc) {
+	unsigned   index  = gEventSlot[2];
+	const u16* lookup = (const u16*)(gEventSlot[3]);
+
+	gEventSlot[0xC] = (lookup[index] & 0xFF) | ((lookup[index] << 8) & 0xFF0000);
+}
+
+void GetBestCoordsForUnitAtASMC(Proc* proc) {
+	int xUnit = (gEventSlot[0xB] & 0xFFFF);
+	int yUnit = (gEventSlot[0xB] >> 16);
+
+	int xTarget = (gEventSlot[0x2] & 0xFFFF);
+	int yTarget = (gEventSlot[0x2] >> 16);
+
+	Unit* unit = GetUnit(gMapUnit[yUnit][xUnit]);
+
+	Vector2U position;
+
+	if (!FindClosestBestPosition(unit, xTarget, yTarget, &position)) {
+		gEventSlot[0xC] = gEventSlot[0xB];
+		return;
+	}
+
+	gEventSlot[0xC] = position.x + (position.y << 16);
+}
+
+void FogHackBeginASMC(Proc* proc) {
+	gChapterData.visionRange = 0;
+	RefreshEntityMaps();
+}
+
+void FogHackEndASMC(Proc* proc) {
+	gChapterData.visionRange = 4;
+	RefreshEntityMaps();
+}
+
+void LoadIndexedWordAMSC(Proc* proc) {
+	unsigned   index  = gEventSlot[2];
+	const u32* lookup = (const u32*)(gEventSlot[3]);
+
+	gEventSlot[0xC] = lookup[index];
+}
+
+void BuffAllCharactersASMC(Proc* proc) {
+	unsigned charIndex = gEventSlot[2];
+	unsigned index;
+
+	for (index = 0; index < 0x100; ++index) {
+		Unit* unit = GetUnit(index);
+
+		if (!unit)
+			continue;
+
+		if (!unit->pCharacterData)
+			continue;
+
+		if (unit->pCharacterData->number != charIndex)
+			continue;
+
+		if (unit->state & (US_RESCUED | US_NOT_DEPLOYED | US_DEAD | 0x00010000))
+			continue;
+
+		if (UNIT_ATTRIBUTES(unit) & CA_PROMOTED)
+			continue;
+
+		unit->pow = min(unit->pow + 1, 15);
+		unit->skl = min(unit->skl + 1, 15);
+		unit->spd = min(unit->spd + 1, 15);
+		unit->def = min(unit->def + 1, 15);
+		unit->res = min(unit->res + 1, 15);
+	}
 }
 
 struct UnitSlideAnimProc {
@@ -216,7 +294,7 @@ enum {
 };
 
 // Clockwise rotation
-static const u8 sDirectionMapLookup[] = {
+static const u8 sMainDirectionMapLookup[] = {
 	DIR_RIGHT, DIR_RIGHT, DIR_RIGHT, DIR_RIGHT, DIR_DOWN,
 	DIR_UP,    DIR_RIGHT, DIR_RIGHT, DIR_DOWN,  DIR_DOWN,
 	DIR_UP,    DIR_UP,    DIR_NONE,  DIR_DOWN,  DIR_DOWN,
@@ -224,12 +302,13 @@ static const u8 sDirectionMapLookup[] = {
 	DIR_UP,    DIR_LEFT,  DIR_LEFT,  DIR_LEFT,  DIR_LEFT,
 };
 
+// Push inwards
 static const u8 sFallbackDirectionMapLookup[] = {
-	DIR_UP,    DIR_UP,    DIR_UP,    DIR_UP,    DIR_RIGHT,
-	DIR_LEFT,  DIR_UP,    DIR_UP,    DIR_RIGHT, DIR_RIGHT,
-	DIR_LEFT,  DIR_LEFT,  DIR_NONE,  DIR_RIGHT, DIR_RIGHT,
-	DIR_LEFT,  DIR_LEFT,  DIR_DOWN,  DIR_DOWN,  DIR_RIGHT,
-	DIR_LEFT,  DIR_DOWN,  DIR_DOWN,  DIR_DOWN,  DIR_DOWN,
+	DIR_DOWN,  DIR_DOWN,  DIR_DOWN, DIR_DOWN, DIR_LEFT,
+	DIR_RIGHT, DIR_DOWN,  DIR_DOWN, DIR_LEFT, DIR_LEFT,
+	DIR_RIGHT, DIR_RIGHT, DIR_NONE, DIR_LEFT, DIR_LEFT,
+	DIR_RIGHT, DIR_RIGHT, DIR_UP,   DIR_UP,   DIR_LEFT,
+	DIR_RIGHT, DIR_UP,    DIR_UP,   DIR_UP,   DIR_UP,
 };
 
 static const Vector2 sDirectionOffsetLookup[] = {
@@ -251,7 +330,7 @@ void USEOnLoop(struct UnitSlideEffectProc* proc) {
 			int xGrid = Div(unit->xPos * DIR_MAP_WIDTH,  gMapSize.x);
 			int yGrid = Div(unit->yPos * DIR_MAP_HEIGHT, gMapSize.y);
 
-			int direction = sDirectionMapLookup[xGrid + DIR_MAP_WIDTH * yGrid];
+			int direction = sMainDirectionMapLookup[xGrid + DIR_MAP_WIDTH * yGrid];
 
 			if (direction == DIR_NONE)
 				continue;
