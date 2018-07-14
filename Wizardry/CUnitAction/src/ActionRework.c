@@ -7,8 +7,15 @@ typedef int (*ActionFunc) (Proc*);
 extern const ActionFunc UnitActionCallTable[];
 
 static int RequiresProcYield(ActionFunc func) {
-	const u32 raw = (const u32)(func);
+	const u32 raw = (u32)(func);
 	return (raw >> 28) ? 1 : 0;
+}
+
+static ActionFunc FilterFunc(ActionFunc func) {
+	const u32 raw           = (u32)(func);
+	const ActionFunc result = (ActionFunc)(raw & 0xFFFFFFF);
+
+	return result;
 }
 
 int ApplyUnitAction(Proc* proc) {
@@ -29,6 +36,7 @@ int ApplyUnitAction(Proc* proc) {
 
 	if (func) {
 		if (RequiresProcYield(func)) {
+			func = FilterFunc(func);
 			func(proc);
 			return 0;
 		}
