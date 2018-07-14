@@ -28,7 +28,7 @@ and wind streams taken straight out of Fuga's wild ride =^)
 	#define RedaPoolDefined
 
 	#define InlReda(aXTarget, aYTarget) "AddToPool(REDA [(aXTarget), (aYTarget)] 0 0 0 0)"
-//	#define InlReda(aXTarget, aYTarget) "REDA ## aXTarget ## R ## aYTarget" // Uses Snakey's REDA helpers
+//	#define InlReda(aXTarget, aYTarget) "REDA ## aXTarget ## R ## aYTarget" // I can dream okay?
 #endif // RedaPoolDefined
 */
 
@@ -49,13 +49,33 @@ SetSymbol(scLoadReinforcements, $9EE274) // args: s2 = pointer to UNITs
 #define Ch27LvProm(aLevelModifier) "Level((5  + (aLevelModifier)), Enemy, True)"
 #define Ch27LvBoss(aLevelModifier) "Level((10 + (aLevelModifier)), Enemy, True)"
 
-// Local Event Ids
+// Character Indices
+#define Ch27ChrMGeneric    0x80 // Monster
+#define Ch27ChrHGeneric    0x81 // Human
+
+// Local Event Id Allocation
 SetSymbol(eidVillage,    10)
 SetSymbol(eidHumanReinf, 11)
+SetSymbol(eidEnemyDeath, 12)
+
+// Event Counter Allocation
+SetSymbol(cntKillCountLo,   0)
+SetSymbol(cntKillCountHi,   1)
+SetSymbol(cntKillCountTurn, 2)
 
 // ============
 // CHAPTER DATA
 // ============
+
+// Temporary hack because >Editing the death quote table
+// We need to have the generics have a death quote that sets eidEnemyDeath
+
+PUSH; ORG $9ECD4C
+	SHORT Ch27ChrMGeneric; BYTE 0xFF 0xFF; SHORT eidEnemyDeath; SHORT 0; WORD 0
+	SHORT Ch27ChrHGeneric; BYTE 0xFF 0xFF; SHORT eidEnemyDeath; SHORT 0; WORD 0
+
+	SHORT 0xFFFF
+POP
 
 EventPointerTable(Chapter27Events, ThisChapter)
 
@@ -91,6 +111,8 @@ LocationEventList:
 
 ALIGN 4
 ActionEventList:
+	AFEV 0 scOnEnemyDeath eidEnemyDeath
+
 	END_MAIN
 
 ALIGN 4
@@ -107,29 +129,59 @@ TrapList2:
 	ENDTRAP
 
 ALIGN 4
-unPlayerList:
-	UNIT Eirika   EirikaMasterLord 0 Level(20, Ally, True) [19, 13] 0 0 0 0 [Sieglinde, Runesword, MemberCard]     NoAI
-	UNIT Moulder  Bishop           0 Level(20, Ally, True) [20, 12] 0 0 0 0 [Latona, Aura, Mend]                   NoAI
-	UNIT Innes    Sniper           0 Level(20, Ally, True) [17, 12] 0 0 0 0 [Nidhogg, Longbow]                     NoAI
-	UNIT LArachel MageKnight_F     0 Level(20, Ally, True) [21, 14] 0 0 0 0 [Excalibur, Heal, Vulnerary]           NoAI
-	UNIT Gilliam  General          0 Level(20, Ally, True) [18, 14] 0 0 0 0 [Garm, Javelin]                        NoAI
-	UNIT Seth     Paladin          0 Level(20, Ally, True) [16, 12] 0 0 0 0 [Audhulma, SilverLance, Elixir]        NoAI
-	UNIT Lute     Sage_F           0 Level(20, Ally, True) [16, 13] 0 0 0 0 [Ivaldi, Thunder, Warp]                NoAI
-	UNIT Tana     WyvernKnight_F   0 Level(20, Ally, True) [17, 14] 0 0 0 0 [Vidofnir, Spear, Elixir]              NoAI
-	UNIT Ewan     Summoner         0 Level(20, Ally, True) [18, 13] 0 0 0 0 [Gleipnir, Flux, Nosferatu, Nosferatu] NoAI
-	UNIT Marisa   Swordmaster_F    0 Level(20, Ally, True) [20, 14] 0 0 0 0 [BraveSword, Shamshir]                 NoAI
-	UNIT Tethys   Dancer           0 Level(20, Ally, True) [21, 13] 0 0 0 0 [Elixir, PureWater]                    NoAI
+scResetKillCount: {
+	COUNTER_SET cntKillCountLo 0
+	COUNTER_SET cntKillCountHi 0
 
-	UNIT // end
+	NoFade
+	ENDA
+}
 
 ALIGN 4
-unEnemyList:
-	UNIT 0x80 Soldier 0 Level(1, Enemy, False) [0, 0] 0 0 0 0 [SlimLance] AttackInRangeAI
+scIncKillCount: {
+	SetSymbol(inc_regular, 0)
+	SetSymbol(end,         1)
 
-	UNIT // end
+	COUNTER_CHECK cntKillCountLo // sC = LoKillCount
+	SVAL r7 15 // 15 is max for any counter (because 4 bits)
+
+	BNE inc_regular rC r7
+
+	COUNTER_SET cntKillCountLo 0
+
+	// EA Raw is broken, there's only one argument and it's the counted id
+	// This is an increment instruction, not an addition
+	COUNTER_ADD cntKillCountHi 0
+
+	GOTO end
+
+LABEL inc_regular
+	COUNTER_ADD cntKillCountLo 0
+
+LABEL end
+	NoFade
+	ENDA
+}
 
 ALIGN 4
-scBeginning:
+scGetKillCount: {
+	COUNTER_CHECK cntKillCountHi
+
+	// r1 = KillCountHi << 4
+	SVAL r2 4
+	SLSL slotsParam(r1, rC, r2)
+
+	COUNTER_CHECK cntKillCountLo
+
+	// rC = (KillCountHi << 4) + KillCountLo
+	SADD slotsParam(rC, rC, r1)
+
+	NoFade
+	ENDA
+}
+
+ALIGN 4
+scBeginning: {
 	LOAD1 0 unPlayerList
 	ENUN
 
@@ -146,21 +198,37 @@ scBeginning:
 	// Initial event id states
 	// ENUT eidHumanReinf
 
+	CALL scResetKillCount
+
 	CALL scNoSkipFadeOut
 
 	NoFade
 	ENDA
+}
 
 ALIGN 4
-scVillageVisit:
+scVillageVisit: {
 	// TODO
 
 	NoFade
 	ENDA
+}
 
 ALIGN 4
-scShiftSands:
+scShiftSands: {
+	SetSymbol(not_turn1, 0)
+	SetSymbol(not_turn2, 1)
+	SetSymbol(not_turn3, 2)
+	SetSymbol(not_turn4, 3)
+	SetSymbol(not_turn5, 4)
+	SetSymbol(not_turn6, 5)
+	SetSymbol(end,       6)
+
 	ASMC SlideAllUnitsASMC
+
+	EARTHQUAKE_START 0
+
+	// TODO (polish): play windy sound?
 
 	CHECK_TURNS
 
@@ -168,7 +236,7 @@ scShiftSands:
 	SMOD slotsParam(r1, rC, r7)
 
 	SVAL r7 1
-	BNE 0 r1 r7
+	BNE not_turn1 r1 r7
 
 	// Turn 1 - 7 - 13 - 19...
 
@@ -182,11 +250,11 @@ scShiftSands:
 	SVAL r2 (IsPointer | mclShift7)
 	ASMC MapChangeListASMC
 
-	GOTO (-1)
+	GOTO end
 
-LABEL 0
+LABEL not_turn1
 	SVAL r7 2
-	BNE 1 r1 r7
+	BNE not_turn2 r1 r7
 
 	// Turn 2 - 8 - 14 - 20...
 
@@ -200,11 +268,11 @@ LABEL 0
 	SVAL r2 (IsPointer | mclShift8)
 	ASMC MapChangeListASMC
 
-	GOTO (-1)
+	GOTO end
 
-LABEL 1
+LABEL not_turn2
 	SVAL r7 3
-	BNE 2 r1 r7
+	BNE not_turn3 r1 r7
 
 	// Turn 3 - 9 - 15 - 21...
 
@@ -218,11 +286,11 @@ LABEL 1
 	SVAL r2 (IsPointer | mclShift9)
 	ASMC MapChangeListASMC
 
-	GOTO (-1)
+	GOTO end
 
-LABEL 2
+LABEL not_turn3
 	SVAL r7 4
-	BNE 3 r1 r7
+	BNE not_turn4 r1 r7
 
 	// Turn 4 - 10 - 16 - 22...
 
@@ -236,11 +304,11 @@ LABEL 2
 	SVAL r2 (IsPointer | mclShift10)
 	ASMC MapChangeListASMC
 
-	GOTO (-1)
+	GOTO end
 
-LABEL 3
+LABEL not_turn4
 	SVAL r7 5
-	BNE 4 r1 r7
+	BNE not_turn5 r1 r7
 
 	// Turn 5 - 11 - 17 - 23...
 
@@ -254,11 +322,11 @@ LABEL 3
 	SVAL r2 (IsPointer | mclShift11)
 	ASMC MapChangeListASMC
 
-	GOTO (-1)
+	GOTO end
 
-LABEL 4
+LABEL not_turn5
 	SVAL r7 0
-	BNE 5 r1 r7
+	BNE not_turn6 r1 r7
 
 	// Turn 6 - 12 - 18 - 24...
 
@@ -272,15 +340,34 @@ LABEL 4
 	SVAL r2 (IsPointer | mclShift12)
 	ASMC MapChangeListASMC
 
-	GOTO (-1)
+	GOTO end
 
-LABEL 5
-LABEL (-1)
+LABEL not_turn6
+LABEL end
+	EARTHQUAKE_END
+
 	NoFade
 	ENDA
+}
 
 ALIGN 4
-scHumanReinf:
+scOnEnemyDeath: {
+	ENUF eidEnemyDeath // Allow the next enemy to also die
+	CALL scIncKillCount
+
+	// DEBUG
+	Call scGetKillCount
+	SADD slotsParam(r3, rC, r0)
+
+	// Gib Mone
+	GIVEITEMTOMAIN 0
+
+	NoFade
+	ENDA
+}
+
+ALIGN 4
+scHumanReinf: {
 	CAM1 [17, 2]
 
 	// TODO: load first group of unit
@@ -290,7 +377,8 @@ scHumanReinf:
 	ASMC TorchStaffAnimASMC
 	ASMC TorchSetASMC
 
-	// TODO: have a mage or something cast spell
+	// TODO (polish): have a mage or something animate and cast spell
+	// TODO (polish): play windy sound?
 
 	EARTHQUAKE_START 0
 
@@ -314,13 +402,15 @@ scHumanReinf:
 
 	NoFade
 	ENDA
+}
 
 ALIGN 4
-scEnding:
+scEnding: {
 	// move to next chapter whatever it is
 	MNC2 1
 
 	ENDA
+}
 
 // Those are tile change lists to be used with the ASMC
 // I use the asmc instead of the regular TILECHANGE/TILEREVERT events
@@ -388,5 +478,35 @@ mclShift12:
 	SHORT 12 False
 	SHORT 1  True
 	SHORT (-1)
+
+// ==================
+// CHAPTER UNIT LISTS
+// ==================
+
+ALIGN 4
+unPlayerList:
+	// Feature Testing Crew
+
+	UNIT Eirika   FalcoKnight    0 Level(20, Ally, True) [19, 13] 0 0 0 0 [Sieglinde, Runesword, MemberCard]     NoAI
+	UNIT Moulder  Bishop         0 Level(20, Ally, True) [20, 12] 0 0 0 0 [Latona, Aura, Mend]                   NoAI
+	UNIT Innes    Sniper         0 Level(20, Ally, True) [17, 12] 0 0 0 0 [Nidhogg, Longbow]                     NoAI
+	UNIT LArachel MageKnight_F   0 Level(20, Ally, True) [21, 14] 0 0 0 0 [Excalibur, Heal, Vulnerary]           NoAI
+	UNIT Gilliam  General        0 Level(20, Ally, True) [18, 14] 0 0 0 0 [Garm, Javelin]                        NoAI
+	UNIT Seth     Paladin        0 Level(20, Ally, True) [16, 12] 0 0 0 0 [SilverSword, SilverLance, Elixir]     NoAI
+	UNIT Lute     Sage_F         0 Level(20, Ally, True) [16, 13] 0 0 0 0 [Ivaldi, Thunder, Warp]                NoAI
+	UNIT Tana     WyvernKnight_F 0 Level(20, Ally, True) [17, 14] 0 0 0 0 [Vidofnir, Spear, Elixir]              NoAI
+	UNIT Ewan     Summoner       0 Level(20, Ally, True) [18, 13] 0 0 0 0 [Gleipnir, Flux, Nosferatu, Rescue]    NoAI
+	UNIT Marisa   Swordmaster_F  0 Level(20, Ally, True) [20, 14] 0 0 0 0 [Audhulma, BraveSword, Shamshir]       NoAI
+	UNIT Tethys   Dancer         0 Level(20, Ally, True) [21, 13] 0 0 0 0 [Elixir, PureWater]                    NoAI
+
+	UNIT // end
+
+ALIGN 4
+unEnemyList:
+	UNIT Ch27ChrHGeneric Soldier 0 Level(1, Enemy, False) [0, 0] 0 0 0 0 [SlimLance] AttackInRangeAI
+	UNIT Ch27ChrHGeneric Soldier 0 Level(1, Enemy, False) [0, 1] 0 0 0 0 [IronLance] AttackInRangeAI
+	UNIT Ch27ChrHGeneric Soldier 0 Level(1, Enemy, False) [0, 2] 0 0 0 0 [IronLance] AttackInRangeAI
+
+	UNIT // end
 
 #endif // CCBLITZ_STAN_CH27

@@ -82,7 +82,8 @@ void TorchSetASMC(Proc* proc) {
 	int x = (gEventSlot[0xB] & 0xFFFF);
 	int y = (gEventSlot[0xB] >> 16);
 
-	AddTrap(x, y, 10, 8);
+	// Trap id 0x0A is for Torchlight
+	AddTrap(x, y, 0x0A, 8);
 
 	InitMapChangeGraphics(); // copy bg3 to bg2 (for fade)
 
@@ -121,7 +122,7 @@ static const ProcCode sProc_UnitSlideAnim[] = {
 	PROC_END
 };
 
-struct UnitSlideAnimProc* StartUnitSlideAnim(Unit* unit, int xTarget, int yTarget, Proc* parent) {
+static struct UnitSlideAnimProc* StartUnitSlideAnim(Unit* unit, int xTarget, int yTarget, Proc* parent) {
 	struct UnitSlideAnimProc* result;
 
 	if (parent)
@@ -147,6 +148,7 @@ void USAOnInit(struct UnitSlideAnimProc* proc) {
 }
 
 void USAOnLoop(struct UnitSlideAnimProc* proc) {
+	// FIXME
 	static const void(*DrawUnitSMS)(int, int, int, Unit*) = (void(*)(int, int, int, Unit*))(0x8027B60+1);
 
 	proc->xNow += sign(proc->xTarget - proc->xNow) * 2 * (1 + gChapterData.gameSpeedOption);
@@ -168,6 +170,9 @@ void USAOnEnd(struct UnitSlideAnimProc* proc) {
 
 	RefreshEntityMaps();
 	SMS_UpdateFromGameData();
+
+	RefreshTileMaps();
+	DrawTileGraphics();
 }
 
 struct UnitSlideEffectProc {
@@ -184,6 +189,7 @@ static const ProcCode sProc_UnitSlideEffect[] = {
 
 	PROC_CALL_ROUTINE(USEOnInit),
 	PROC_LOOP_ROUTINE(USEOnLoop),
+
 	PROC_END
 };
 
@@ -218,6 +224,14 @@ static const u8 sDirectionMapLookup[] = {
 	DIR_UP,    DIR_LEFT,  DIR_LEFT,  DIR_LEFT,  DIR_LEFT,
 };
 
+static const u8 sFallbackDirectionMapLookup[] = {
+	DIR_UP,    DIR_UP,    DIR_UP,    DIR_UP,    DIR_RIGHT,
+	DIR_LEFT,  DIR_UP,    DIR_UP,    DIR_RIGHT, DIR_RIGHT,
+	DIR_LEFT,  DIR_LEFT,  DIR_NONE,  DIR_RIGHT, DIR_RIGHT,
+	DIR_LEFT,  DIR_LEFT,  DIR_DOWN,  DIR_DOWN,  DIR_RIGHT,
+	DIR_LEFT,  DIR_DOWN,  DIR_DOWN,  DIR_DOWN,  DIR_DOWN,
+};
+
 static const Vector2 sDirectionOffsetLookup[] = {
 	{  0,  0 }, // DIR_NONE
 
@@ -245,8 +259,15 @@ void USEOnLoop(struct UnitSlideEffectProc* proc) {
 			int xNew = unit->xPos + sDirectionOffsetLookup[direction].x;
 			int yNew = unit->yPos + sDirectionOffsetLookup[direction].y;
 
-			if (!CanUnitBeOnPosition(unit, xNew, yNew))
-				continue;
+			if (!CanUnitBeOnPosition(unit, xNew, yNew)) {
+				direction = sFallbackDirectionMapLookup[xGrid + DIR_MAP_WIDTH * yGrid];
+
+				xNew = unit->xPos + sDirectionOffsetLookup[direction].x;
+				yNew = unit->yPos + sDirectionOffsetLookup[direction].y;
+
+				if (!CanUnitBeOnPosition(unit, xNew, yNew))
+					continue;
+			}
 
 			if (gMapFog[yNew][xNew] || gMapFog[unit->yPos][unit->xPos]) {
 				StartUnitSlideAnim(unit, xNew, yNew, (Proc*)(proc));

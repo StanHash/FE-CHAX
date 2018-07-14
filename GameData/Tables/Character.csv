@@ -1,5 +1,5 @@
 0x803d64,Name,Description,Number,Default Class,Portrait,Mini Portrait,Affinity,##UNKNOWN##,Base Level,Base HP,Base Pwr,Base Skl,Base Spd,Base Def,Base Res,Base Lck,Base Con,Sword Rank,Lance Rank,Axe Rank,Bow Rank,Staff Rank,Anima Rank,Light Rank,Dark Rank,HP Growth,Pwr Growth,Skl Growth,Spd Growth,Def Growth,Res Growth,Lck Growth,##UNKNOWN##,Attributes,Support Data Pointer,##UNKNOWN##
-Eirika,0x212,0x26e,0x1,classEirikaLord,0x2,0x0,6,0x1,1,0,0,0,0,0,0,5,0,WR_E,WR_NONE,WR_NONE,WR_NONE,WR_NONE,WR_NONE,WR_NONE,WR_NONE,70,40,60,60,30,30,60,0x0,CA_FEMALE,0x88aebac,0x7
+Eirika,0x212,0x26e,0x1,classEirikaLord,0x2,0x0,6,0x1,1,0,0,0,0,0,0,5,0,WR_E,WR_NONE,WR_NONE,WR_NONE,WR_NONE,WR_NONE,WR_NONE,WR_NONE,70,40,60,60,30,30,60,0x0,CA_FEMALE | CA_LOCK_EIRIKA,0x88aebac,0x7
 Seth,0x213,0x26f,0x2,classPaladin,0x4,0x0,7,0x3,1,7,7,9,5,3,5,13,0,WR_A,WR_A,WR_NONE,WR_NONE,WR_NONE,WR_NONE,WR_NONE,WR_NONE,90,50,45,45,40,30,25,0x0,CA_NONE,0x88aebdc,0x3
 Gilliam,0x214,0x270,0x3,classKnight,0x5,0x0,2,0x7,4,8,4,4,3,0,3,3,1,WR_NONE,WR_C,WR_NONE,WR_NONE,WR_NONE,WR_NONE,WR_NONE,WR_NONE,90,45,35,30,55,20,30,0x0,CA_NONE,0x88aec0c,0x4
 Franz,0x215,0x271,0x4,classCavalier,0x6,0x0,6,0x6,1,0,2,3,2,0,1,2,0,WR_E,WR_D,WR_NONE,WR_NONE,WR_NONE,WR_NONE,WR_NONE,WR_NONE,80,40,40,50,25,20,40,0x0,CA_NONE,0x88aebf4,0x3
