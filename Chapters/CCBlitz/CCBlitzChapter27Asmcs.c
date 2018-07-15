@@ -6,9 +6,11 @@ extern int gEventSlot[];
 
 // FIXME
 static const Vector2* const pCameraDisplayPosition = (const Vector2*) (0x0202BCB0 + 0x0C);
+static const void(*DrawUnitSMS)(int, int, int, Unit*) = (void(*)(int, int, int, Unit*))(0x8027B60+1);
+
+extern int gChapter27FogLevel;
 
 static int sign(int value) { return (value>>31) - (-value>>31); }
-static int min(int a, int b) { return (a > b) ? b : a; }
 
 static int CanUnitBeOnPosition(Unit* unit, int x, int y) {
 	if (x < 0 || y < 0)
@@ -52,6 +54,8 @@ static void ApplyListedMapChanges(const short* list) {
 }
 
 void MapChangeListASMC(Proc* proc) {
+	// pointer to list in slot 2
+
 	InitMapChangeGraphics(); // copy bg3 to bg2 (for fade)
 
 	ApplyListedMapChanges((const short*)(gEventSlot[2]));
@@ -64,6 +68,8 @@ void MapChangeListASMC(Proc* proc) {
 }
 
 void TorchStaffAnimASMC(Proc* proc) {
+	// Position in slot B
+
 	static const ProcCode* procCode = (const ProcCode*)(0x89A3C24);
 
 	struct TorchAnimProc {
@@ -82,6 +88,8 @@ void TorchStaffAnimASMC(Proc* proc) {
 }
 
 void TorchSetASMC(Proc* proc) {
+	// Torch position in slot B
+
 	int x = (gEventSlot[0xB] & 0xFFFF);
 	int y = (gEventSlot[0xB] >> 16);
 
@@ -100,6 +108,8 @@ void TorchSetASMC(Proc* proc) {
 }
 
 void GetCoordsFromIndexASMC(Proc* proc) {
+	// Returns Coords from the byte pair at (slot3 + 2 * slot2)
+
 	unsigned   index  = gEventSlot[2];
 	const u16* lookup = (const u16*)(gEventSlot[3]);
 
@@ -107,6 +117,10 @@ void GetCoordsFromIndexASMC(Proc* proc) {
 }
 
 void GetBestCoordsForUnitAtASMC(Proc* proc) {
+	// Unit   position in slot B
+	// Target position in slot 2
+	// Returns (int slot C) the closest position to target that's also free
+
 	int xUnit = (gEventSlot[0xB] & 0xFFFF);
 	int yUnit = (gEventSlot[0xB] >> 16);
 
@@ -126,16 +140,23 @@ void GetBestCoordsForUnitAtASMC(Proc* proc) {
 }
 
 void FogHackBeginASMC(Proc* proc) {
+	// For unit map from events shenanigans
+	// Such as properly functioning REDAs
+
 	gChapterData.visionRange = 0;
 	RefreshEntityMaps();
 }
 
 void FogHackEndASMC(Proc* proc) {
-	gChapterData.visionRange = 4;
+	// Restoring state to what it should be
+
+	gChapterData.visionRange = gChapter27FogLevel;
 	RefreshEntityMaps();
 }
 
 void LoadIndexedWordAMSC(Proc* proc) {
+	// slotC = Word at [slot3 + 4 * slot2]
+
 	unsigned   index  = gEventSlot[2];
 	const u32* lookup = (const u32*)(gEventSlot[3]);
 
@@ -143,6 +164,9 @@ void LoadIndexedWordAMSC(Proc* proc) {
 }
 
 void BuffAllCharactersASMC(Proc* proc) {
+	// Character index in slot2
+	// Affects *all* units with that characted index
+
 	unsigned charIndex = gEventSlot[2];
 	unsigned index;
 
@@ -161,14 +185,143 @@ void BuffAllCharactersASMC(Proc* proc) {
 		if (unit->state & (US_RESCUED | US_NOT_DEPLOYED | US_DEAD | 0x00010000))
 			continue;
 
-		if (UNIT_ATTRIBUTES(unit) & CA_PROMOTED)
+		if (unit->pow < 15) unit->pow++;
+		if (unit->skl < 15) unit->skl++;
+		if (unit->spd < 15) unit->spd++;
+		if (unit->def < 10) unit->def++;
+		if (unit->res < 10) unit->res++;
+	}
+}
+
+void GetBestCoordsForDRAGONASMC(Proc* proc) {
+	// returns slotC = position
+
+	// position is determined by how much units are in 2 range of it
+	// but can't be directly adjacent to any unit
+	// also can't be in the top row
+
+	unsigned index;
+
+	ClearMapWith(gMapMovement2, 0);
+
+	// Step 1: for each ally: inc in range
+	for (index = 0; index < 0x40; ++index) {
+		Unit* unit = GetUnit(index);
+
+		if (!unit)
 			continue;
 
-		unit->pow = min(unit->pow + 1, 15);
-		unit->skl = min(unit->skl + 1, 15);
-		unit->spd = min(unit->spd + 1, 15);
-		unit->def = min(unit->def + 1, 15);
-		unit->res = min(unit->res + 1, 15);
+		if (!unit->pCharacterData)
+			continue;
+
+		if (unit->state & (US_RESCUED | US_NOT_DEPLOYED | US_DEAD | 0x00010000))
+			continue;
+
+		MapAddInRange(unit->xPos, unit->yPos, 2, 2);
+	}
+
+	// Step 2: for each ally: set adjacent tiles to 0
+	for (index = 0; index < 0x40; ++index) {
+		Unit* unit = GetUnit(index);
+
+		if (!unit)
+			continue;
+
+		if (!unit->pCharacterData)
+			continue;
+
+		if (unit->state & (US_RESCUED | US_NOT_DEPLOYED | US_DEAD | 0x00010000))
+			continue;
+
+		MapSetInRange(unit->xPos, unit->yPos, 1, 0);
+	}
+
+	// Step 3: find best tile
+
+	unsigned xFind = 0, yFind = 0;
+	unsigned bestWeight = 0;
+
+	unsigned ix, iy;
+
+	for (iy = 1; iy < gMapSize.y; ++iy) {
+		// iy starts at 1 because we don't want to spawn the dragon on the top row
+		// (because then Denis would spawn out of bounds)
+
+		for (ix = 0; ix < gMapSize.x; ++ix) {
+			unsigned weight = gMapMovement2[iy][ix];
+
+			if (weight < bestWeight)
+				continue;
+
+			bestWeight = weight;
+
+			xFind = ix;
+			yFind = iy;
+		}
+	}
+
+	gEventSlot[0xC] = xFind | (yFind << 16);
+}
+
+struct UnitFlyAnimProc {
+	PROC_HEADER;
+
+	Unit* unit;
+
+	short yNow;
+	short xNow;
+
+	short ySpeed;
+};
+
+static void UFAOnLoop(struct UnitFlyAnimProc*);
+
+static const ProcCode sProc_UnitFlyAnim[] = {
+	PROC_SET_NAME("Stan:CCBlitzCh27:UnitFlyAnim"),
+
+	PROC_YIELD,
+
+	PROC_LOOP_ROUTINE(UFAOnLoop),
+	PROC_END
+};
+
+void UFAOnLoop(struct UnitFlyAnimProc* proc) {
+	proc->yNow += ((--proc->ySpeed) / 8);
+
+	int xDisplay = proc->xNow - pCameraDisplayPosition->x;
+	int yDisplay = proc->yNow - pCameraDisplayPosition->y;
+
+	DrawUnitSMS(7, xDisplay, yDisplay, proc->unit);
+
+	if (yDisplay < -0x20)
+		BreakProcLoop((Proc*)(proc));
+}
+
+void SendActiveUnitAwayASMC(Proc* proc) {
+	// I really shouldn't be allowed to do things like that
+	// But I am so here we go!
+
+	// We want to overwrite player phase behavior with our own wierd hack
+	// So we are going to get E_PLAYERPHASE to go to its idle phase.
+
+	Proc* pp;
+
+	if ((pp = FindProc(gProc_PlayerPhase))) {
+		GotoProcLabel(pp, 0);
+
+		EndAllMoveUnits();
+
+		struct UnitFlyAnimProc* np = (struct UnitFlyAnimProc*)StartBlockingProc(sProc_UnitFlyAnim, proc);
+
+		np->unit   = gActiveUnit;
+
+		np->xNow   = gActiveUnit->xPos * 16;
+		np->yNow   = gActiveUnit->yPos * 16;
+
+		np->ySpeed = 0;
+
+		gActiveUnit->state |= US_NOT_DEPLOYED | 0x00010000; // idk maybe I need to do something better
+		gActiveUnit->xPos = -1;
 	}
 }
 
@@ -226,9 +379,6 @@ void USAOnInit(struct UnitSlideAnimProc* proc) {
 }
 
 void USAOnLoop(struct UnitSlideAnimProc* proc) {
-	// FIXME
-	static const void(*DrawUnitSMS)(int, int, int, Unit*) = (void(*)(int, int, int, Unit*))(0x8027B60+1);
-
 	proc->xNow += sign(proc->xTarget - proc->xNow) * 2 * (1 + gChapterData.gameSpeedOption);
 	proc->yNow += sign(proc->yTarget - proc->yNow) * 2 * (1 + gChapterData.gameSpeedOption);
 
@@ -302,7 +452,7 @@ static const u8 sMainDirectionMapLookup[] = {
 	DIR_UP,    DIR_LEFT,  DIR_LEFT,  DIR_LEFT,  DIR_LEFT,
 };
 
-// Push inwards
+/*/ Push inwards
 static const u8 sFallbackDirectionMapLookup[] = {
 	DIR_DOWN,  DIR_DOWN,  DIR_DOWN, DIR_DOWN, DIR_LEFT,
 	DIR_RIGHT, DIR_DOWN,  DIR_DOWN, DIR_LEFT, DIR_LEFT,
@@ -310,6 +460,7 @@ static const u8 sFallbackDirectionMapLookup[] = {
 	DIR_RIGHT, DIR_RIGHT, DIR_UP,   DIR_UP,   DIR_LEFT,
 	DIR_RIGHT, DIR_UP,    DIR_UP,   DIR_UP,   DIR_UP,
 };
+// */
 
 static const Vector2 sDirectionOffsetLookup[] = {
 	{  0,  0 }, // DIR_NONE
@@ -339,6 +490,9 @@ void USEOnLoop(struct UnitSlideEffectProc* proc) {
 			int yNew = unit->yPos + sDirectionOffsetLookup[direction].y;
 
 			if (!CanUnitBeOnPosition(unit, xNew, yNew)) {
+				continue;
+
+				/*/
 				direction = sFallbackDirectionMapLookup[xGrid + DIR_MAP_WIDTH * yGrid];
 
 				xNew = unit->xPos + sDirectionOffsetLookup[direction].x;
@@ -346,6 +500,7 @@ void USEOnLoop(struct UnitSlideEffectProc* proc) {
 
 				if (!CanUnitBeOnPosition(unit, xNew, yNew))
 					continue;
+				// */
 			}
 
 			if (gMapFog[yNew][xNew] || gMapFog[unit->yPos][unit->xPos]) {
