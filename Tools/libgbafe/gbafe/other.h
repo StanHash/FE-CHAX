@@ -10,6 +10,7 @@ extern const int16_t gSinLookup[]; //! FE8U = (0x080D751C)
 extern const int16_t gCosLookup[]; //! FE8U = (0x080D759C)
 
 extern const ProcCode gProc_GoBackToUnitMenu[];
+extern const ProcCode gProc_PlayerPhase[];
 
 #pragma long_calls
 
