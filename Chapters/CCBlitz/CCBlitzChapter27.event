@@ -163,17 +163,15 @@ ActionEventList:
 	CauseGameOverIfLordDies
 	AFEV 3 scEnding 2
 
-	AREA 0 scYouShouldntBeHere [10, 12] [11, 13]
+	AREA 0 scYouShouldntBeHere Ch27MonsterSpawnCoords Ch27MonsterSpawnCoords
 
 	// Hidden trasure!
 	// They're marked on the map!
-	AREA eidTreasure1 scTreasure1 [15, 17] [16, 18]
-	AREA eidTreasure2 scTreasure2 [6,  17] [7,  18]
-	AREA eidTreasure3 scTreasure3 [4,  9]  [5,  10]
-	AREA eidTreasure4 scTreasure4 [11, 3]  [12, 4]
 
-	// TODO: hidden treasure!
-	// TODO: mark them on the map with different tiles
+	AREA eidTreasure1 scTreasure1 [15, 17] [15, 17]
+	AREA eidTreasure2 scTreasure2 [6,  17] [6,  17]
+	AREA eidTreasure3 scTreasure3 [4,  9]  [4,  9]
+	AREA eidTreasure4 scTreasure4 [11, 3]  [11, 3]
 
 	END_MAIN
 
@@ -319,25 +317,25 @@ scGetMonsterCoordsForShift: {
 	// Shift index in s2
 
 	SVAL r3 (IsPointer | MonsterWalkCoordLookup)
-	ASMC GetCoordsFromIndexASMC
+	ASMC LoadIndexedWordAMSC
 
 	NoFade
 	ENDA
 
 ALIGN 4
 MonsterWalkCoordLookup:
-	BYTE 15 17 // Shift 0  -> 1
-	BYTE 10 18 // Shift 1  -> 2
-	BYTE  6 16 // Shift 2  -> 3
-	BYTE  4 13 // Shift 3  -> 4
-	BYTE  5  9 // Shift 4  -> 5
-	BYTE  6  6 // Shift 5  -> 6
-	BYTE  9  3 // Shift 6  -> 7
-	BYTE 12  4 // Shift 7  -> 8
-	BYTE 14  8 // Shift 8  -> 9
-	BYTE 16 10 // Shift 9  -> 10
-	BYTE 19 12 // Shift 10 -> 11
-	BYTE 17 15 // Shift 11 -> 0
+	SHORT 15 17 // Shift 0  -> 1
+	SHORT 10 18 // Shift 1  -> 2
+	SHORT  6 16 // Shift 2  -> 3
+	SHORT  4 13 // Shift 3  -> 4
+	SHORT  5  9 // Shift 4  -> 5
+	SHORT  6  6 // Shift 5  -> 6
+	SHORT  9  3 // Shift 6  -> 7
+	SHORT 12  4 // Shift 7  -> 8
+	SHORT 14  8 // Shift 8  -> 9
+	SHORT 16 10 // Shift 9  -> 10
+	SHORT 19 12 // Shift 10 -> 11
+	SHORT 17 15 // Shift 11 -> 0
 
 }
 
@@ -347,9 +345,9 @@ scBeginning: {
 	WEA1 6            // SANDSTORM
 
 	// Initial tile changes
-	TILECHANGE 1
-	TILECHANGE 7
-	TILECHANGE 72
+	TILECHANGE 10
+	TILECHANGE 70
+	TILECHANGE 71
 
 	// Initial event id states
 	ENUT eidGargoyles
@@ -359,12 +357,17 @@ scBeginning: {
 
 	CALL scResetKillCount
 
+#ifdef __DEBUG__
 	LOAD1 0 unPlayerList
+#endif // __DEBUG__
 
 	LOAD1 0 unEnemyInitialMonsterGroup1
 	LOAD1 0 unEnemyInitialMonsterGroup2
 	LOAD1 0 unEnemyInitialMonsterGroup3
 	LOAD1 0 unEnemyInitialMonsterGroup4
+
+	// TODO (polish): Maybe add some more starting enemies?
+	// The map feels pretty empty initially imo
 
 	ENUN
 
@@ -779,15 +782,15 @@ scHumanReinf: {
 
 	STAL 30
 
-	TILECHANGE 210
+	TILECHANGE 5
 
 	STAL 30
 
-	TILECHANGE 211
+	TILECHANGE 6
 
 	STAL 30
 
-	TILECHANGE 212
+	TILECHANGE 7
 
 	STAL 30
 
@@ -970,21 +973,21 @@ scEnding: {
 // Format is SHORT <mapChangeId> <Bool: True => Trigger, False => Revert>
 
 mclShift1:
-	SHORT 1  False
-	SHORT 2  True
-	SHORT 22 True
+	SHORT 10 False
+	SHORT 20 True
+	SHORT 21 True
 	SHORT (-1)
 
 mclShift2:
-	SHORT 2  False
-	SHORT 22 False
-	SHORT 3  True
+	SHORT 20 False
+	SHORT 21 False
+	SHORT 30 True
 	SHORT (-1)
 
 mclShift3:
-	SHORT 3  False
-	SHORT 4  True
-	SHORT 42 True
+	SHORT 30 False
+	SHORT 40 True
+	SHORT 41 True
 	SHORT (-1)
 
 mclShift4:
@@ -995,54 +998,54 @@ mclShift4:
 	SHORT (-1)
 
 mclShift5:
-	SHORT 5  False
-	SHORT 52 False
-	SHORT 6  True
+	SHORT 50 False
+	SHORT 51 False
+	SHORT 60 True
 	SHORT (-1)
 
 mclShift6:
-	SHORT 6  False
-	SHORT 7  True
-	SHORT 72 True
+	SHORT 60 False
+	SHORT 70 True
+	SHORT 71 True
 	SHORT (-1)
 
 mclShift7:
-	SHORT 7  False
-	SHORT 72 False
-	SHORT 8  True
-	SHORT 82 True
+	SHORT 70 False
+	SHORT 71 False
+	SHORT 80 True
+	SHORT 81 True
 	SHORT (-1)
 
 mclShift8:
-	SHORT 8  False
-	SHORT 82 False
-	SHORT 9  True
+	SHORT 80 False
+	SHORT 81 False
+	SHORT 90 True
 	SHORT (-1)
 
 mclShift9:
-	SHORT 9   False
-	SHORT 10  True
-	SHORT 102 True
+	SHORT 90  False
+	SHORT 100 True
+	SHORT 101 True
 	SHORT (-1)
 
 mclShift10:
-	SHORT 10  False
-	SHORT 102 False
-	SHORT 11  True
-	SHORT 112 True
+	SHORT 100 False
+	SHORT 101 False
+	SHORT 110 True
+	SHORT 111 True
 	SHORT (-1)
 
 mclShift11:
-	SHORT 11  False
-	SHORT 112 False
-	SHORT 12  True
-	SHORT 122 True
+	SHORT 110 False
+	SHORT 111 False
+	SHORT 120 True
+	SHORT 121 True
 	SHORT (-1)
 
 mclShift12:
-	SHORT 12  False
-	SHORT 122 False
-	SHORT 1   True
+	SHORT 120 False
+	SHORT 121 False
+	SHORT 10  True
 	SHORT (-1)
 
 ALIGN 4
@@ -1057,17 +1060,18 @@ ALIGN 4
 unPlayerList:
 	// Feature Testing Crew
 
-	UNIT Eirika   FalcoKnight    0 Level(20, Ally, True) [19, 13] 0 0 0 0 [Sieglinde, Runesword, MemberCard]     NoAI
-	UNIT Moulder  Bishop         0 Level(20, Ally, True) [20, 12] 0 0 0 0 [Latona, Aura, Mend]                   NoAI
+	UNIT Eirika   FalcoKnight    0 Level(20, Ally, True) [17, 14] 0 0 0 0 [Sieglinde, Runesword, MemberCard]     NoAI
+	UNIT Moulder  Bishop         0 Level(20, Ally, True) [19, 15] 0 0 0 0 [Latona, Aura, Mend]                   NoAI
 	UNIT Innes    Sniper         0 Level(20, Ally, True) [17, 12] 0 0 0 0 [Nidhogg, Longbow]                     NoAI
-	UNIT LArachel MageKnight_F   0 Level(20, Ally, True) [21, 14] 0 0 0 0 [Excalibur, Heal, Vulnerary]           NoAI
+	UNIT LArachel MageKnight_F   0 Level(20, Ally, True) [15, 12] 0 0 0 0 [Excalibur, Heal, Vulnerary]           NoAI
 	UNIT Gilliam  General        0 Level(20, Ally, True) [18, 14] 0 0 0 0 [Garm, Javelin]                        NoAI
 	UNIT Seth     Paladin        0 Level(20, Ally, True) [16, 12] 0 0 0 0 [SilverSword, SilverLance, Elixir]     NoAI
 	UNIT Lute     Sage_F         0 Level(20, Ally, True) [16, 13] 0 0 0 0 [Ivaldi, Thunder, Warp]                NoAI
-	UNIT Tana     WyvernKnight_F 0 Level(20, Ally, True) [17, 14] 0 0 0 0 [Vidofnir, Spear, Elixir]              NoAI
+	UNIT Tana     WyvernKnight_F 0 Level(20, Ally, True) [19, 13] 0 0 0 0 [Vidofnir, Spear, Elixir]              NoAI
 	UNIT Ewan     Summoner       0 Level(20, Ally, True) [18, 13] 0 0 0 0 [Gleipnir, Flux, Nosferatu, Rescue]    NoAI
-	UNIT Marisa   Swordmaster_F  0 Level(20, Ally, True) [20, 14] 0 0 0 0 [Audhulma, BraveSword, Shamshir]       NoAI
-	UNIT Tethys   Dancer         0 Level(20, Ally, True) [21, 13] 0 0 0 0 [Elixir, PureWater]                    NoAI
+	UNIT Marisa   Swordmaster_F  0 Level(20, Ally, True) [16, 14] 0 0 0 0 [Audhulma, BraveSword, Shamshir]       NoAI
+	UNIT Colm     Rogue          0 Level(20, Ally, True) [20, 14] 0 0 0 0 [KillingEdge, Elixir]                  NoAI
+	UNIT Tethys   Dancer         0 Level(20, Ally, True) [15, 14] 0 0 0 0 [Elixir, PureWater]                    NoAI
 
 	UNIT // end
 
@@ -1102,7 +1106,7 @@ ALIGN 4
 unEnemyInitialMonsterGroup3:
 	UNIT Ch27ChrMGeneric Cyclops        0 Ch27LvProm(2) [8, 3] 2 0 0 0 [SilverAxe, Tomahawk] AttackInRangeAI
 
-	UNIT Ch27ChrMGeneric Bonewalker     0 Ch27LvBase(2) [7, 2] 0 0 0 0 [SilverSword] AttackInRangeAI
+	UNIT Ch27ChrMGeneric Bonewalker     0 Ch27LvBase(2) [7, 2] 0 0 0 0 [Lancereaver] AttackInRangeAI
 	UNIT Ch27ChrMGeneric Bonewalker_Bow 0 Ch27LvBase(2) [9, 4] 0 0 0 0 [BraveBow] AttackInRangeAI
 	UNIT Ch27ChrMGeneric Revenant       0 Ch27LvBase(2) [7, 4] 0 0 0 0 [PoisonClaw] AttackInRangeAI
 	UNIT Ch27ChrMGeneric Revenant       0 Ch27LvBase(2) [9, 2] 0 0 0 0 [SharpClaw] AttackInRangeAI
@@ -1111,12 +1115,12 @@ unEnemyInitialMonsterGroup3:
 
 ALIGN 4
 unEnemyInitialMonsterGroup4:
-	UNIT Ch27ChrMGeneric Cyclops        0 Ch27LvProm(2) [1, 20] 0 0 0 0 [SilverAxe] AttackInRangeAI
+	UNIT Ch27ChrMGeneric Wight_Bow      0 Ch27LvProm(2) [1, 20] 2 0 0 0 [SilverBow, Longbow] AttackInRangeAI
 
 	UNIT Ch27ChrMGeneric Bonewalker     0 Ch27LvBase(2) [0, 19] 0 0 0 0 [SilverSword] AttackInRangeAI
-	UNIT Ch27ChrMGeneric Bonewalker_Bow 0 Ch27LvBase(2) [2, 21] 0 0 0 0 [BraveBow] AttackInRangeAI
+	UNIT Ch27ChrMGeneric Wight          0 Ch27LvProm(2) [2, 21] 0 0 0 0 [Axereaver] AttackInRangeAI
 	UNIT Ch27ChrMGeneric Revenant       0 Ch27LvBase(2) [0, 21] 0 0 0 0 [PoisonClaw] AttackInRangeAI
-	UNIT Ch27ChrMGeneric Revenant       0 Ch27LvBase(2) [2, 19] 0 0 0 0 [SharpClaw] AttackInRangeAI
+	UNIT Ch27ChrMGeneric Entombed       0 Ch27LvBase(2) [2, 19] 0 0 0 0 [SharpClaw] AttackInRangeAI
 
 	UNIT // end
 
@@ -1150,7 +1154,7 @@ unEnemyMonster1:
 
 ALIGN 4
 unEnemyMonster2:
-	UNIT Ch27ChrMGeneric Bonewalker 0 Ch27LvBase(1) Ch27MonsterSpawnCoords 0 0 0 0 [Lancereaver] PursueWithoutHeedAI
+	UNIT Ch27ChrMGeneric Bonewalker 0 Ch27LvBase(1) Ch27MonsterSpawnCoords 0 0 0 0 [KillingEdge] PursueWithoutHeedAI
 	UNIT // end
 
 ALIGN 4

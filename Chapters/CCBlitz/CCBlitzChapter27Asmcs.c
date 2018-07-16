@@ -1,3 +1,25 @@
+/*
+
+Build with libgbafe in your include path (https://github.com/StanHash/FE-CHAX/tree/master/Tools/libgbafe)
+lyn against fe8u.o (https://github.com/StanHash/FE-CHAX/blob/master/Tools/libgbafe/fe8u.s)
+
+Collection of ASMC-able functions for use by CCBlitz Chapter 27.
+
+List:
+- MapChangeListASMC: Applies/Reverts multiple tile changes
+- TorchStaffAnimASMC: Displays torch staff animation
+- TorchSetASMC: Sets torchlight at given coordinates
+- GetBestCoordsForUnitAtASMC: Finds closest valid coordinates to target coords for unit at given coords
+- FogHackBeginASMC: Silently disables fog
+- FogHackEndASMC: Silently re-enables fog (fog level at extern gChapter27FogLevel)
+- LoadIndexedWordAMSC: Given a pointer to a word list and an index, gets word at pointer + 4*index
+- BuffAllCharactersASMC: Given a char id, add 1 to every stat (capped) of every unit with that char id
+- GetBestCoordsForDRAGONASMC: Finds square that have the most blue units in 2 range of it, while not being adjacent to any
+- SendActiveUnitAwayASMC: Animates Active unit sprite to fly up to the sky, then undeploy them
+- SlideAllUnitsASMC: Make all units slide one tile away from their current position in a clockwise rotation around the center of the map
+
+*/
+
 #include "gbafe.h"
 
 extern int FindClosestBestPosition(Unit* unit, int x, int y, Vector2U* out) __attribute__((long_call));
@@ -105,15 +127,6 @@ void TorchSetASMC(Proc* proc) {
 	DrawTileGraphics();
 
 	StartBlockingBMXFADE(1, proc); // fade from bg2 to bg3
-}
-
-void GetCoordsFromIndexASMC(Proc* proc) {
-	// Returns Coords from the byte pair at (slot3 + 2 * slot2)
-
-	unsigned   index  = gEventSlot[2];
-	const u16* lookup = (const u16*)(gEventSlot[3]);
-
-	gEventSlot[0xC] = (lookup[index] & 0xFF) | ((lookup[index] << 8) & 0xFF0000);
 }
 
 void GetBestCoordsForUnitAtASMC(Proc* proc) {
