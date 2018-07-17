@@ -1,0 +1,29 @@
+#ifndef HAX_REWARP_COMMAND
+#define HAX_REWARP_COMMAND
+
+#ifndef _FE8_
+	ERROR CRewarp is for FE8 only
+#endif // _FE8_
+
+#ifndef HAX_FREESELECT
+	ERROR please include CFreeSelect before CRewarp
+#endif // HAX_FREESELECT
+
+#ifndef HAX_AAR
+	ERROR please include CUnitAction before CRewarp
+#endif // HAX_AAR
+
+#ifndef ACTION_REWARP
+	#define ACTION_REWARP 0x27
+#endif // ACTION_REWARP
+
+InjectUnitAction(ACTION_REWARP, ActionRoutine(RCAction))
+
+#include "src/Rewarp.lyn.event"
+#include "src/RewarpAnim.lyn.event"
+
+ALIGN 4
+RewarpActionId:
+	WORD ACTION_REWARP
+
+#endif // HAX_REWARP_COMMAND
