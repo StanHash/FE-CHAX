@@ -3,6 +3,7 @@
 Florina[X]
 
 # 0x0903 textDummy
-Hi[X]
+This is a placeholder[X]
 
+#include "TextRewarp.txt"
 #include "PeerBlitzCh9Text.txt"

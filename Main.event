@@ -1,6 +1,10 @@
 #ifndef MAIN
 #define MAIN
 
+// #define _FEATURE_SASSIGN
+
+#define __DEBUG__
+
 #include "Extensions/Hack Installation.txt"
 #include "EAstdlib.event"
 
@@ -13,17 +17,27 @@ ORG FreeSpace_BLRange
 	// Nothing !
 
 ORG FreeSpace
+	#include "Writans/Text.event"
+
+	ALIGN 4
+
 	#include "Wizardry/_FE8EssentialFixes.event"
 	#include "Wizardry/_FE8ProcNameFix.event"
 
 	#define TextScrollSpeed 4
 	#include "Wizardry/TextScrollSpeed.event"
 
-	ALIGN 4
-	#include "GameData/GameData.event"
+	#include "Wizardry/CUnitAction/UnitAction.event"
+	#include "Wizardry/CIconDisplay/IconDisplay.event"
+	#include "Wizardry/CBattleCalc/CBattleCalc.event"
+
+	#include "Wizardry/CFreeSelect/FreeSelect.event"
+	#include "Wizardry/CRewarp/Rewarp.event"
+
+	#include "Wizardry/UnitMenu.event"
 
 	ALIGN 4
-	#include "Writans/Text.event"
+	#include "GameData/GameData.event"
 
 	ALIGN 4
 	#include "Spritans/Portraits.event"
