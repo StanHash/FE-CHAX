@@ -77,8 +77,14 @@ int DoesMovingMoveUnitExist();                                                 /
 void SetMoveUnitMoveManual(MoveUnitState* moveunit, uint8_t* moveManual);      //! FE8U = (0x08078790+1)
 void EndAllMoveUnits();                                                        //! FE8U = (0x080790A4+1)
 void EndMoveUnit(MoveUnitState* moveunit);                                     //! FE8U = (0x080790B4+1)
+void SetupSomeMoveunitAnim(MoveUnitState* moveunit);                           //! FE8U = 0x80798B1
+void SetMOVEUNITField40To1(MoveUnitState* moveunit);                           //! FE8U = 0x80797D5
 void SetMoveUnitDisplayPosition(MoveUnitState* moveunit, int x, int y);        //! FE8U = (0x080797E4+1)
 
 #pragma long_calls_off
+
+#define BeginMoveUnitActionAnimation SetupSomeMoveunitAnim
+#define HideMoveUnit SetMOVEUNITField40To1
+#define ShowMoveUnit ((void(*)(MoveUnitState*))(0x80797DC+1))
 
 #endif // GBAFE_MOVEUNIT_H

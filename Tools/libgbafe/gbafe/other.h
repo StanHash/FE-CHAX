@@ -16,7 +16,7 @@ extern const ProcCode gProc_PlayerPhase[];
 
 void SetCursorMapPosition(int x, int y);                   //! FE8U = 0x8015BBD
 
-void EnsureCameraOntoPosition(Proc* parent, int x, int y); //! FE8U = 0x8015E0D
+int EnsureCameraOntoPosition(Proc* parent, int x, int y);  //! FE8U = 0x8015E0D
 
 void DisplayMoveRangeGraphics(unsigned param);             //! FE8U = 0x801DA99
 void HideMoveRangeGraphics(void);                          //! FE8U = 0x801DACD
