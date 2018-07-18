@@ -38,7 +38,7 @@ def processed_lines(csvName, nmmName, romName):
 	macroArgs     = []
 	macroCodes    = []
 
-	for i, entry in zip(range(nmm.colNum), nmm.columns):
+	for i, entry in enumerate(nmm.columns):
 		argString = "_ARG{:03d}".format(i)
 		macroArgs.append(argString)
 
