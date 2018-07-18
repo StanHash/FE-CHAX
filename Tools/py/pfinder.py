@@ -38,8 +38,8 @@ def main():
 
 	print("PUSH")
 
-	for offset in pfind.pointer_iter(rom, target):
-		print("ORG {0}".format(hex(offset)))
+	for offset in pfind.pointer_offsets(rom, target):
+		print("ORG {}".format(hex(offset)))
 		print(replacement)
 
 	print("POP")
