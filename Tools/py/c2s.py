@@ -14,7 +14,10 @@ def gen_lines(csvName, nmmName):
 	with open(csvName, 'r') as csvFile:
 		table = csv.reader(csvFile)
 
-		next(table)
+		tableName = next(table)[0]
+
+		yield '.global {}'.format(tableName)
+		yield '{}:'.format(tableName)
 
 		for row in table:
 			if len(row) < (nmm.colNum + 1):

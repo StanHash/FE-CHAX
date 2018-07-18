@@ -9,7 +9,7 @@ def show_exception_and_exit(exc_type, exc_value, tb):
 
 def get_entry_ea_code(nmmentry):
 	"""takes the nmm entry object and returns the appropriate EA code"""
-	
+
 	if nmmentry.length == 4:
 		if (nmmentry.offset % 4) == 0:
 			return "WORD"
