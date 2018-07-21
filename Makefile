@@ -29,7 +29,7 @@ OFILES   := $(CFILES:.c=.o) $(SFILES:.s=.o)
 ASMFILES := $(CFILES:.c=.asm)
 LYNFILES := $(OFILES:.o=.lyn.event)
 DMPFILES := $(OFILES:.o=.dmp)
-DEPFILES := $(addprefix $(DEPSDIR)/, $(notdir $(CFILES:.c=.d)))
+DEPFILES := $(addprefix $(DEPSDIR)/, $(notdir $(CFILES:.c=.d) $(SFILES:.s=.d)))
 
 # EA Files
 EVENT_MAIN     := Main.event
@@ -41,8 +41,9 @@ EVENT_SYMBOLS  := HACK.sym.event
 ROM_SOURCE     := FE8U.gba
 ROM_TARGET     := HACK.gba
 
-# defining C dependency flags
+# defining dependency flags
 CDEPFLAGS = -MMD -MT "$*.o" -MT "$*.asm" -MF "$(DEPSDIR)/$(notdir $*).d" -MP
+SDEPFLAGS = --MD "$(DEPSDIR)/$(notdir $*).d"
 
 # All files
 ALL_FILES := $(EVENT_MAIN_DEP) $(ROM_TARGET) $(EVENT_SYMBOLS) $(OFILES) $(ASMFILES) $(LYNFILES) $(DMPFILES)
@@ -105,7 +106,7 @@ Writans/Text.event Writans/TextDefinitions.event: $(WRITANS_ALL_TEXT)
 # ASM to OBJ rule
 %.o: %.s
 	@echo "$(notdir $<) => $(notdir $@)"
-	@$(AS) $(ARCH) -I $(dir $<) $< -o $@ $(ERROR_FILTER)
+	@$(AS) $(ARCH) $(SDEPFLAGS) -I $(dir $<) $< -o $@ $(ERROR_FILTER)
 
 # OBJ to DMP rule
 %.dmp: %.o
