@@ -6,11 +6,21 @@ endif
 # including devkitARM tool definitions
 include $(DEVKITARM)/base_tools
 
-# python executable name
-export PYTHON := python3
+# OS-specific tool calls (EA)
+ifeq ($(OS),Windows_NT)
+	export EA := Tools/EventAssembler/Core.exe
+else
+	export EA := mono Tools/EventAssembler/Core.exe
+endif
+
+# Making sure we are using python 3
+ifeq ($(shell python -c 'import sys; print int(sys.version_info[0] > 2)'),1)
+	export PYTHON := python
+else
+	export PYTHON := python3
+endif
 
 # additional tools
-export EA                := Tools/EventAssembler/Core
 export PARSEFILE         := Tools/ParseFile
 export PORTRAITFORMATTER := Tools/PortraitFormatter
 export LYN               := Tools/lyn
