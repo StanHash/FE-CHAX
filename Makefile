@@ -45,8 +45,22 @@ ROM_TARGET     := HACK.gba
 CDEPFLAGS = -MMD -MT "$*.o" -MT "$*.asm" -MF "$(DEPSDIR)/$(notdir $*).d" -MP
 SDEPFLAGS = --MD "$(DEPSDIR)/$(notdir $*).d"
 
+ifeq ($(MAKECMDGOALS),clean)
+
+# Clean-only stuff.
+
+# NMMs and generated events
+NMMS := $(shell find -type f -name '*.nmm')
+TABLE_EVENTS := $(NMMS:.nmm=.event)
+
+# TMXs and generated files
+TMXS := $(shell find -type f -name '*.tmx')
+MAP_GENFILES := $(TMXS:.tmx=.event) $(TMXS:.tmx=_data.dmp) 
+
+endif
+
 # All files
-ALL_FILES := $(EVENT_MAIN_DEP) $(ROM_TARGET) $(EVENT_SYMBOLS) $(OFILES) $(ASMFILES) $(LYNFILES) $(DMPFILES)
+ALL_FILES := $(EVENT_MAIN_DEP) $(ROM_TARGET) $(EVENT_SYMBOLS) $(OFILES) $(ASMFILES) $(LYNFILES) $(DMPFILES) $(TABLE_EVENTS) $(MAP_GENFILES)
 
 # Variable listing all text files in the writans directory
 # The text installer depends on them (in case there was any change)
@@ -60,9 +74,8 @@ hack: $(ROM_TARGET);
 all:  $(ALL_FILES);
 
 clean:
-	@echo "cleaning..."
 	@rm -f $(ALL_FILES)
-	@echo "done."
+	@echo all clean!
 
 # -------------------
 # ACTUAL TARGET RULES
@@ -146,6 +159,7 @@ Writans/Text.event Writans/TextDefinitions.event: $(WRITANS_ALL_TEXT)
 # Untested
 %.event: %.csv %.nmm
 	$(C2EA) $*.csv $*.event $(ROM_SOURCE)
+	@#echo | $(C2EA) -csv $*.csv -out $*.event $(ROM_SOURCE)
 
 # TMX to event + dmp
 %.event %_data.dmp: %.tmx
@@ -154,5 +168,9 @@ Writans/Text.event Writans/TextDefinitions.event: $(WRITANS_ALL_TEXT)
 # --------------------
 # INCLUDE DEPENDENCIES
 
+ifneq ($(MAKECMDGOALS),clean)
+
 -include $(DEPFILES)
 -include $(EVENT_MAIN_DEP)
+
+endif
