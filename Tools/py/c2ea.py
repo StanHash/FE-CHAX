@@ -30,7 +30,7 @@ def get_entry_ea_code(nmmentry):
 def processed_lines(csvName, nmmName, romName):
 	"""Takes a csv and generates corresponding event lines. Requires a nmm with the same name in the same folder."""
 
-	macroName = "_C2EA_{}_ENTRY".format(csvName.split('.')[0].replace(os.path.sep, "_"))
+	macroName = "_C2EA_{}".format(os.path.split(os.path.splitext(csvName)[0])[1].replace(' ', '_'))
 
 	nmm = nightmare.NightmareTable(nmmName)
 
