@@ -75,6 +75,7 @@ all:  $(ALL_FILES);
 
 clean:
 	@rm -f $(ALL_FILES)
+	@rm -rf Writans/.TextEntries Writans/Text.event Writans/TextDefinitions.event
 	@echo all clean!
 
 # -------------------
