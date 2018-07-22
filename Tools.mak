@@ -14,7 +14,7 @@ else
 endif
 
 # Making sure we are using python 3
-ifeq ($(shell python -c 'import sys; print int(sys.version_info[0] > 2)'),1)
+ifeq ($(shell python -c 'import sys; print(int(sys.version_info[0] > 2))'),1)
 	export PYTHON := python
 else
 	export PYTHON := python3
