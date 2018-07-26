@@ -4,7 +4,7 @@ int CanUnitBeOnPosition(Unit* unit, int x, int y) {
 	if (x < 0 || y < 0)
 		return 0; // position out of bounds
 	
-	if (x >= gMapSize.x || y >= gMapSize.y)
+	if (x >= gMapSize.width || y >= gMapSize.height)
 		return 0; // position out of bounds
 	
 	if (gMapUnit[y][x])

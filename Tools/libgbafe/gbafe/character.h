@@ -1,52 +1,50 @@
 #ifndef GBAFE_CHARACTER_H
 #define GBAFE_CHARACTER_H
 
-#include <stdint.h>
-
 #include "common.h"
 
 typedef struct CharacterData CharacterData;
 
 struct CharacterData {
-	uint16_t nameTextId;
-	uint16_t descTextId;
-	uint8_t  number;
-	uint8_t  defaultClass;
-	uint16_t portraitId;
-	uint8_t  miniPortrait;
-	uint8_t  affinity;
-	uint8_t  u0A;
+	u16 nameTextId;
+	u16 descTextId;
+	u8 number;
+	u8 defaultClass;
+	u16 portraitId;
+	u8 miniPortrait;
+	u8 affinity;
+	u8 u0A;
 	
-	uint8_t  baseLevel;
-	uint8_t  baseHP;
-	uint8_t  basePow;
-	uint8_t  baseSkl;
-	uint8_t  baseSpd;
-	uint8_t  baseDef;
-	uint8_t  baseRes;
-	uint8_t  baseLck;
-	uint8_t  baseCon;
+	u8 baseLevel;
+	u8 baseHP;
+	u8 basePow;
+	u8 baseSkl;
+	u8 baseSpd;
+	u8 baseDef;
+	u8 baseRes;
+	u8 baseLck;
+	u8 baseCon;
 	
-	uint8_t  ranks[8];
+	u8 ranks[8];
 	
-	uint8_t  growthHP;
-	uint8_t  growthPow;
-	uint8_t  growthSkl;
-	uint8_t  growthSpd;
-	uint8_t  growthDef;
-	uint8_t  growthRes;
-	uint8_t  growthLck;
+	u8 growthHP;
+	u8 growthPow;
+	u8 growthSkl;
+	u8 growthSpd;
+	u8 growthDef;
+	u8 growthRes;
+	u8 growthLck;
 	
-	uint8_t  u23;
-	uint8_t  u24;
-	uint8_t  u25;
-	uint8_t  u26;
-	uint8_t  u27;
+	u8 u23;
+	u8 u24;
+	u8 u25;
+	u8 u26;
+	u8 u27;
 	
-	uint32_t attributes;
+	u32 attributes;
 	
-	void*    pSupportData;
-	void*    pU30;
+	void* pSupportData;
+	void* pU30;
 };
 
 extern const struct CharacterData gCharacterData[];

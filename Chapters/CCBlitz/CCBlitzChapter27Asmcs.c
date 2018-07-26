@@ -38,7 +38,7 @@ static int CanUnitBeOnPosition(Unit* unit, int x, int y) {
 	if (x < 0 || y < 0)
 		return 0; // position out of bounds
 
-	if (x >= gMapSize.x || y >= gMapSize.y)
+	if (x >= gMapSize.width || y >= gMapSize.height)
 		return 0; // position out of bounds
 
 	if (gMapUnit[y][x])
@@ -256,11 +256,11 @@ void GetBestCoordsForDRAGONASMC(Proc* proc) {
 
 	unsigned ix, iy;
 
-	for (iy = 1; iy < gMapSize.y; ++iy) {
+	for (iy = 1; iy < gMapSize.height; ++iy) {
 		// iy starts at 1 because we don't want to spawn the dragon on the top row
 		// (because then Denis would spawn out of bounds)
 
-		for (ix = 0; ix < gMapSize.x; ++ix) {
+		for (ix = 0; ix < gMapSize.width; ++ix) {
 			unsigned weight = gMapMovement2[iy][ix];
 
 			if (weight < bestWeight)
@@ -491,8 +491,8 @@ void USEOnLoop(struct UnitSlideEffectProc* proc) {
 		Unit* unit = GetUnit(proc->unitIndex);
 
 		if (unit && unit->pCharacterData && !(unit->state & (US_RESCUED | US_NOT_DEPLOYED | US_DEAD | 0x00010000))) {
-			int xGrid = Div(unit->xPos * DIR_MAP_WIDTH,  gMapSize.x);
-			int yGrid = Div(unit->yPos * DIR_MAP_HEIGHT, gMapSize.y);
+			int xGrid = Div(unit->xPos * DIR_MAP_WIDTH,  gMapSize.width);
+			int yGrid = Div(unit->yPos * DIR_MAP_HEIGHT, gMapSize.height);
 
 			int direction = sMainDirectionMapLookup[xGrid + DIR_MAP_WIDTH * yGrid];
 

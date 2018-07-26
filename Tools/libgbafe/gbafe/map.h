@@ -6,73 +6,73 @@
 #include "common.h"
 #include "unit.h"
 
-typedef uint8_t** MapData;
+typedef u8** MapData;
 
-extern Vector2 gMapSize;        //! FE8U = (0x0202E4D4)
+extern struct { short width, height; } gMapSize; //! FE8U = (0x0202E4D4)
 
-extern MapData gMapUnit;      //! FE8U = (0x0202E4D8)
-extern MapData gMapTerrain;   //! FE8U = (0x0202E4DC)
-extern MapData gMapMovement;  //! FE8U = (0x0202E4E0)
-extern MapData gMapRange;     //! FE8U = (0x0202E4E4)
-extern MapData gMapFog;       //! FE8U = (0x0202E4E8)
-extern MapData gMapHidden;    //! FE8U = (0x0202E4EC)
+extern MapData gMapUnit; //! FE8U = (0x0202E4D8)
+extern MapData gMapTerrain; //! FE8U = (0x0202E4DC)
+extern MapData gMapMovement; //! FE8U = (0x0202E4E0)
+extern MapData gMapRange; //! FE8U = (0x0202E4E4)
+extern MapData gMapFog; //! FE8U = (0x0202E4E8)
+extern MapData gMapHidden; //! FE8U = (0x0202E4EC)
 extern MapData gMapMovement2; //! FE8U = (0x0202E4F0)
 
-extern uint16_t** const gMapRawTiles; //! FE8U = (0x0859A9D4)
+extern u16** const gMapRawTiles; //! FE8U = (0x0859A9D4)
 
 #pragma long_calls
 
-void InitChapterMap(uint8_t chapterIndex);                                    //! FE8U = 0x80194BD
+void InitChapterMap(u8 chapterIndex); //! FE8U = 0x80194BD
 void SetupMapRowPointers(void* pool, MapData* target, int width, int height); //! FE8U = 0x80197A5
 
-void ClearMapWith(MapData, uint8_t value);                                    //! FE8U = 0x80197E5
+void ClearMapWith(MapData, u8 value); //! FE8U = 0x80197E5
 
-void LoadChapterMap(void* buffer, uint8_t chapterIndex);                      //! FE8U = 0x80198AD
-void LoadChapterMapGfx(uint8_t chapterIndex);                                 //! FE8U = 0x801990D
-void SyncTilesFromMapBuffer(void);                                              //! FE8U = 0x80199A5
+void LoadChapterMap(void* buffer, u8 chapterIndex); //! FE8U = 0x80198AD
+void LoadChapterMapGfx(u8 chapterIndex); //! FE8U = 0x801990D
+void SyncTilesFromMapBuffer(void); //! FE8U = 0x80199A5
 
-void RefreshTerrainMap(void);                                                   //! FE8U = 0x8019A65
+void RefreshTerrainMap(void); //! FE8U = 0x8019A65
 
-uint8_t GetSomeTerrainToChangeAtSomePosition(int x, int y);                   //! FE8U = 0x8019AF5
+u8 GetSomeTerrainToChangeAtSomePosition(int x, int y); //! FE8U = 0x8019AF5
 
-void UpdateGameTileGfx(uint16_t* bg, int x, int y, int xTile, int yTile);     //! FE8U = 0x8019B19
-void DrawTileGraphics(void);                                                  //! FE8U = 0x8019C3D
+void UpdateGameTileGfx(u16* bg, int x, int y, int xTile, int yTile); //! FE8U = 0x8019B19
+void DrawTileGraphics(void); //! FE8U = 0x8019C3D
 
-void InitMapChangeGraphics(void);                                             //! FE8U = 0x8019CBD
+void InitMapChangeGraphics(void); //! FE8U = 0x8019CBD
 
-void RefreshUnitMapAndVision(void);                                            //! FE8U = 0x8019FA1
-void RefreshTrapFogVision(void);                                               //! FE8U = 0x801A175
-void RefreshTrapHiddenStates(void);                                            //! FE8U = 0x801A1A1
-void RefreshEntityMaps(void);                                                 //! FE8U = 0x801A1F4
+void RefreshUnitMapAndVision(void); //! FE8U = 0x8019FA1
+void RefreshTrapFogVision(void); //! FE8U = 0x801A175
+void RefreshTrapHiddenStates(void); //! FE8U = 0x801A1A1
+void RefreshEntityMaps(void); //! FE8U = 0x801A1F4
 
-char* GetTerrainNameString(uint8_t);                                          //! FE8U = 0x801A241
-int   GetTerrainHealAmount(uint8_t);                                          //! FE8U = 0x801A259
-int   GetTerrainSomething(uint8_t);                                           //! FE8U = 0x801A269
+char* GetTerrainNameString(u8); //! FE8U = 0x801A241
+int GetTerrainHealAmount(u8); //! FE8U = 0x801A259
+int GetTerrainSomething(u8); //! FE8U = 0x801A269
 
-void RevertMapChangesById(int id);                                            //! FE8U = 0x801A2ED
+void RevertMapChangesById(int id); //! FE8U = 0x801A2ED
 
-void FillMovementMapForUnit(const Unit*);                                     //! FE8U = 0x801A38D
-void FillMovementMapForUnitAndMovement(const Unit*, int movement);            //! FE8U = 0x801A3CD
-void FillMovementMapForUnitPosition(const Unit*);                             //! FE8U = 0x801A409
-void FillMovementRangeMapForPosition(int x, int y, const uint8_t costTable[]);    //! FE8U = 0x801A43D
-void FillMovementMapForPosition(int x, int y, const uint8_t costTable[]);         //! FE8U = 0x801A46D
-void FillMovementMapForUnitAt(const Unit*, int x, int y, int movement);       //! FE8U = 0x801A49D
-void StoreMovCostTable(const uint8_t table[]);                                //! FE8U = 0x801A4CD
-void FillMovementMap(int x, int y, int movement, uint8_t unitIndex);          //! FE8U = 0x801A4ED
+void FillMovementMapForUnit(const struct Unit*); //! FE8U = 0x801A38D
+void FillMovementMapForUnitAndMovement(const struct Unit*, int movement); //! FE8U = 0x801A3CD
+void FillMovementMapForUnitPosition(const struct Unit*); //! FE8U = 0x801A409
+void FillMovementRangeMapForPosition(int x, int y, const u8 costTable[]); //! FE8U = 0x801A43D
+void FillMovementMapForPosition(int x, int y, const u8 costTable[]); //! FE8U = 0x801A46D
+void FillMovementMapForUnitAt(const struct Unit*, int x, int y, int movement); //! FE8U = 0x801A49D
+void StoreMovCostTable(const u8 table[]); //! FE8U = 0x801A4CD
+void FillMovementMap(int x, int y, int movement, u8 unitIndex); //! FE8U = 0x801A4ED
 
-void ProcessUnitMovement(Unit*, int xStart, int yStart);          //! FE8U = 0x801A82D
+void ProcessUnitMovement(struct Unit*, int xStart, int yStart); //! FE8U = 0x801A82D
 
-void MapAddInRange(int x, int y, int range, int value);                       //! FE8U = 0x801AABD
-void MapSetInRange(int x, int y, int range, int value);               //! FE8U = 0x801ABC1
+void MapAddInRange(int x, int y, int range, int value); //! FE8U = 0x801AABD
+void MapSetInRange(int x, int y, int range, int value); //! FE8U = 0x801ABC1
 
-void FillMapAttackRangeForUnit(const Unit*);                                  //! FE8U = 0x801ACBD
-void FillRangeMapByRangeMask(const Unit*, uint32_t mask);                        //! FE8U = 0x801B461
-void FillMapStaffRangeForUnit(const Unit*);                                   //! FE8U = 0x801B619
-void FillRangeMapForDangerZone(int boolStaff);                                    //! FE8U = 0x801B811
-void SetSubjectMap(MapData);                                                  //! FE8U = 0x801B999
-void MapIncInBoundedRange(int x, int y, int minRange, int maxRange);                  //! FE8U = 0x801B9A5
+void FillMapAttackRangeForUnit(const struct Unit*); //! FE8U = 0x801ACBD
+void FillRangeMapByRangeMask(const struct Unit*, u32 mask); //! FE8U = 0x801B461
+void FillMapStaffRangeForUnit(const struct Unit*); //! FE8U = 0x801B619
+void FillRangeMapForDangerZone(int boolStaff); //! FE8U = 0x801B811
+void SetSubjectMap(MapData); //! FE8U = 0x801B999
+void MapIncInBoundedRange(int x, int y, int minRange, int maxRange); //! FE8U = 0x801B9A5
 
-uint8_t GetCurrentMovCostTable(void);                                         //! FE8U = 0x801B9E5
+u8 GetCurrentMovCostTable(void); //! FE8U = 0x801B9E5
 
 #pragma long_calls_off
 

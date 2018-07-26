@@ -41,7 +41,7 @@ struct VESUnitDisplayProc* VESStartUnitDisplay(struct VESProc* proc, unsigned li
 	newProc->pVESMain = proc;
 	newProc->pUnit    = unit;
 
-	Text_Init(&newProc->text, 7);
+	Text_InitClear(&newProc->text, 7);
 
 	return newProc;
 }

@@ -152,7 +152,7 @@ static void css_stats_draw_text_2D(void* target, const char* statName, unsigned 
 
 	Font_InitForObj(&font, target, 0);
 
-	SetFontGlyphSet(0);
+	Font_SetGlyphSet(0);
 	font.drawGlyph = css_stats_draw_glyph;
 
 	css_stats_text_init(&text, 0, 1);

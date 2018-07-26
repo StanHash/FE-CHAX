@@ -5,22 +5,22 @@
 
 #include "proc.h"
 
-typedef struct MenuGeometry          MenuGeometry;
+typedef struct MenuGeometry MenuGeometry;
 
-typedef struct MenuDefinition        MenuDefinition;
+typedef struct MenuDefinition MenuDefinition;
 typedef struct MenuCommandDefinition MenuCommandDefinition;
 
-typedef struct MenuProc              MenuProc;
-typedef struct MenuCommandProc       MenuCommandProc;
+typedef struct MenuProc MenuProc;
+typedef struct MenuCommandProc MenuCommandProc;
 
 struct MenuGeometry {
-	uint8_t x, y, h, w;
+	u8 x, y, h, w;
 };
 
 struct MenuDefinition {
 	struct MenuGeometry geometry;
 
-	uint8_t style;
+	u8 style;
 
 	const struct MenuCommandDefinition* commandList;
 
@@ -35,8 +35,8 @@ struct MenuDefinition {
 struct MenuCommandDefinition {
 	const char* rawName;
 
-	uint16_t nameId, helpId;
-	uint8_t colorId, _u09;
+	u16 nameId, helpId;
+	u8 colorId, _u09;
 
 	int(*isAvailable)(const MenuCommandDefinition*, int);
 
@@ -57,43 +57,43 @@ struct MenuProc {
 
 	struct MenuCommandProc* pCommandProc[11];
 
-	uint8_t commandCount;
-	uint8_t commandIndex;
-	uint8_t prevCommandIndex;
-	uint8_t stateBits;
+	u8 commandCount;
+	u8 commandIndex;
+	u8 prevCommandIndex;
+	u8 stateBits;
 
-	uint8_t backBgId  : 3;
-	uint8_t frontBgId : 3;
+	u8 backBgId : 3;
+	u8 frontBgId : 3;
 
-	uint16_t tileBase;
-	uint16_t _u68;
+	u16 tileBase;
+	u16 _u68;
 };
 
 struct MenuCommandProc {
 	PROC_FIELDS
 
-	uint16_t xDrawTile;
-	uint16_t yDrawTile;
+	u16 xDrawTile;
+	u16 yDrawTile;
 
 	const struct MenuCommandDefinition* pDefinition;
 
-	uint32_t _temp[2]; // TODO: TextHandle
+	u32 _temp[2]; // TODO: TextHandle
 
-	uint8_t commandDefinitionIndex;
-	uint8_t availability;
+	u8 commandDefinitionIndex;
+	u8 availability;
 };
 
 enum MenuCommandAvailability {
-	MCA_USABLE    = 1,
-	MCA_GRAYED    = 2,
+	MCA_USABLE = 1,
+	MCA_GRAYED = 2,
 	MCA_NONUSABLE = 3
 };
 
 enum MenuEffect {
-	ME_NONE      = 0x00,
+	ME_NONE = 0x00,
 
-	ME_DISABLE   = 0x01,
-	ME_END       = 0x02,
+	ME_DISABLE = 0x01,
+	ME_END = 0x02,
 	ME_PLAY_BEEP = 0x04,
 	ME_PLAY_BOOP = 0x08,
 	ME_CLEAR_GFX = 0x10,
@@ -109,9 +109,9 @@ void UpdateHandCursor(int x, int y); //! FE8U = (0804E79C+1)
 MenuProc* StartMenuAdjusted(const MenuDefinition*, int xScreen, int xLeft, int xRight); //! FE8U = 0x804EB99
 MenuProc* StartMenuChild(const MenuDefinition*, Proc* parent); //! FE8U = 0x804EBC9
 MenuProc* StartMenu(const MenuDefinition*); //! FE8U = 0x804EBE5
-MenuProc* StartMenuExt2(const MenuDefinition*, int backBgId, uint16_t baseTile, int frontBgId, int idk, Proc* parent); //! FE8U = 0x804EC35
+MenuProc* StartMenuExt2(const MenuDefinition*, int backBgId, u16 baseTile, int frontBgId, int idk, Proc* parent); //! FE8U = 0x804EC35
 MenuProc* StartMenuAt(const MenuDefinition*, MenuGeometry, Proc* parent); //! FE8U = 0x804EC99
-MenuProc* StartMenuExt(const MenuDefinition*, MenuGeometry, int backBgId, uint16_t baseTile, int frontBgId, int idk, Proc* parent); //! FE8U = 0x804ECB1
+MenuProc* StartMenuExt(const MenuDefinition*, MenuGeometry, int backBgId, u16 baseTile, int frontBgId, int idk, Proc* parent); //! FE8U = 0x804ECB1
 
 Proc* EndMenu(MenuProc*); //! FE8U = 0x804EEA9
 void EndAllMenus(MenuProc*); //! FE8U = 0x804EF21
@@ -131,7 +131,7 @@ int MenuCommandAlwaysGrayed(const MenuCommandDefinition*, int); //! FE8U = 0x804
 int MenuCommandNeverUsable(const MenuCommandDefinition*, int); //! FE8U = 0x804F451
 
 // menu state modifiers
-void MenuCallHelpBox(MenuProc*, uint16_t textId); //! FE8U = 0x804F581
+void MenuCallHelpBox(MenuProc*, u16 textId); //! FE8U = 0x804F581
 
 // void MarkSomethingInMenu(void); // Draw Cursor while disabled //! FE8U = 0x804F60D
 

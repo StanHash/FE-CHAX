@@ -71,7 +71,7 @@ void css_disable_game_gfx(CSSCoreProc* proc) {
 void css_load_gfx(CSSCoreProc* proc) {
 	LoadBgConfig(css_bg_config);
 
-	Font_InitForUIDefault();
+	Font_InitDefault();
 
 	const Vector2 zeroVec = { 0, 0 };
 

@@ -105,7 +105,7 @@ static void css_lpanel_show_face(CSSLPanelProc* proc) {
 
 static void css_lpanel_hide_face(CSSLPanelProc* proc) {
 	if (proc->faceDisplayed)
-		DeleteFaceByIndex(0);
+		EndFaceById(0);
 	
 	proc->faceDisplayed = 0;
 }
