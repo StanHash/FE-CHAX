@@ -66,7 +66,7 @@ void TargetSelection_GetRealCursorPosition(TargetSelectionProc*, int* xTarget, i
 void TargetSelection_Loop(TargetSelectionProc*); //! FE8U = 0x804F96D
 
 TargetSelectionProc* StartTargetSelection(const TargetSelectionDefinition*); //! FE8U = 0x804FA3D
-TargetSelectionProc* StartTargetSelection_Specialized(const TargetSelectionDefinition*, int(*)(TargetSelectionProc*, TargetEntry*)); //! FE8U = 0x804FAA5
+TargetSelectionProc* StartTargetSelectionExt(const TargetSelectionDefinition*, int(*)(TargetSelectionProc*, TargetEntry*)); //! FE8U = 0x804FAA5
 
 void EndTargetSelection(TargetSelectionProc*); //! FE8U = 0x804FAB9
 
@@ -81,7 +81,5 @@ unsigned int GetTargetListSize(void);       //! FE8U = 0x804FD29
 TargetEntry* GetTarget(unsigned int index); //! FE8U = 0x804FD35
 
 #pragma long_calls_off
-
-#define StartTargetSelectionExt StartTargetSelection_Specialized
 
 #endif // GBAFE_TARGETSELECT_H

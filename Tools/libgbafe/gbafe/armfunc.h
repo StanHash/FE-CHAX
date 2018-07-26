@@ -20,6 +20,6 @@ void BgTileMap_CopyRect(const uint16_t* source, uint16_t* target, int width, int
 // decomp compat
 #define StoreRoutinesToIRAM InitRamFuncs
 #define CallARM_DecompText HuffmanTextDecomp
-#define CallARM_FillMovementMapCore FillMovementMapCore
+#define CallARM_FillMovementMap FillMovementMapCore
 
 #endif // GBAFE_ARMFUNC_H

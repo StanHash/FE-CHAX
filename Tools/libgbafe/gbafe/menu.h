@@ -135,7 +135,7 @@ void MenuCallHelpBox(MenuProc*, uint16_t textId); //! FE8U = 0x804F581
 
 // void MarkSomethingInMenu(void); // Draw Cursor while disabled //! FE8U = 0x804F60D
 
-// MenuProc* StartMenuExt_AndDoSomethingCommands(const MenuDefinition*, int xScreen, int xLeft, int xRight); //! FE8U = 0x804F64D
+// MenuProc* StartMenu_AndDoSomethingCommands(const MenuDefinition*, int xScreen, int xLeft, int xRight); //! FE8U = 0x804F64D
 // void Menu_UpdateMovingCursorGfxPosition(MenuProc*, int, int*); //! FE8U = 0x804F6A5
 // void ClearMenuRelatedList(void); //! FE8U = 0x804F6F9
 

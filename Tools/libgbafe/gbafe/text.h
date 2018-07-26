@@ -119,7 +119,7 @@ const char*     GetCharTextWidthAscii(const char* in, size_t* out);             
 size_t          GetStringTextWidthAscii(const char*);                                                 //! FE8U = 0x8004569
 
 void            Font_InitForObj(FontData*, void* vram, int pal);                    //! FE8U = 0x800459D
-void            Text_InitClear3(TextHandle*);                                                               //! FE8U = 0x80045D9
+void            Text_Init2DLine(TextHandle*);                                                               //! FE8U = 0x80045D9
 void            Text_Fill2DLine(TextHandle*);                                                             //! FE8U = 0x80046B5
 
 #pragma long_calls_off
