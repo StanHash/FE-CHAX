@@ -1,11 +1,22 @@
 //Essential Fixes for FE8
 //Install with Event Assembler
 PUSH
+
+//Fix Stone's map animation crashing no$ due to a bad decompression
+ORG $7E2B4
+BYTE 0x8
+
 //Set Default Options
   ORG $30d8a  //animations type 2
   SHORT $3306
   ORG $30da6  //Game/text speed Fast, Autocursor off
   SHORT $22d0
+
+//Allow Visit from any tile
+  PUSH
+  ORG $23072
+  SHORT $e00d
+  POP
 
 //Break HP Cap for Players/NPCs (credit Solum)
   ORG $181ee
@@ -18,6 +29,10 @@ PUSH
   SHORT 0
   ORG $58c90
   POIN $596cc
+
+//allow Wyvern Knights to triangle attack
+  ORG $2b168
+  SHORT 0
 
 //12 Tracks/16 Sounds Fix (credit Agro/Brendor)
   ORG $2900
