@@ -1,8 +1,6 @@
 #ifndef MAIN
 #define MAIN
 
-// #define _FEATURE_SASSIGN
-
 #define __DEBUG__
 
 #include "Extensions/Hack Installation.txt"
@@ -17,9 +15,11 @@ ORG FreeSpace_BLRange
 	// Nothing !
 
 ORG FreeSpace
+	ALIGN 4
 	#include "Writans/Text.event"
 
 	ALIGN 4
+	#include "GameData/GameData.event"
 
 	#include "Wizardry/_FE8EssentialFixes.event"
 	#include "Wizardry/_FE8ProcNameFix.event"
@@ -33,11 +33,9 @@ ORG FreeSpace
 
 	#include "Wizardry/CFreeSelect/FreeSelect.event"
 	#include "Wizardry/CRewarp/Rewarp.event"
+	#include "Wizardry/CLolStats/LolStats.event"
 
 	#include "Wizardry/UnitMenu.event"
-
-	ALIGN 4
-	#include "GameData/GameData.event"
 
 	ALIGN 4
 	#include "Spritans/Portraits.event"
