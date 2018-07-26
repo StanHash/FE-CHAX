@@ -22,9 +22,9 @@ Tethys
 Marisa
 Saleh
 Ewan
-L'Arachel
+LArachel
 Dozla
-[Enemy]
+Enemy1
 Rennac
 Duessel
 Myrrh
@@ -32,224 +32,224 @@ Knoll
 Joshua
 Syrene
 Tana
-Lyon (CC)
-Orson (CC)
-Glen (CC)
-Selena (CC)
-Valter (CC)
-Riev (CC)
-Caellach (CC)
-Fado (CC)
-Ismaire (CC)
-Hayden (CC)
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-Summon (Lyon)
-Summon (Unknown)
-Summon (Unknown)
-Summon (Knoll)
-Summon (Ewan)
-Lyon (Ch17 Boss)
-Morva (Ch20 Boss)
-Orson (Ch5x Ally)
-Valter (Ch15 Boss)
-Selena (Ch10&13 Boss)
-Valter (Prologue)
-Breguet (Ch1 Boss)
-Bone (Ch2 Boss)
-Bazba (Ch3 Boss)
-Entombed (Ch4 Boss)
-Saar (Ch5 Boss)
-Novala (Ch6 Boss)
-Murray (Ch7 Boss)
-Tirado (Ch8 Boss)
-Binks (Ch9A Boss)
-Pablo (Ch10A Boss)
-Maelduin (Ch12A Boss)
-Aias (Ch13A Boss)
-Carlyle (Ch14A Boss)
-Caellach (Ch15 Boss)
-Pablo (Ch13A Boss)
-[Enemy]
-Gorgon (Ch18 Boss)
-Riev (Ch19&20 Boss)
-[Enemy]
-[Enemy]
-Gheb (Ch9B Boss)
-Beran (Ch10B Boss)
-Cyclops (Ch12B Boss)
-Wight (Ch11A Boss)
-Deathgoyle (Ch11B Boss)
-Entombed
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Hunter]
-[Bandit]
-[Bandit]
-[Bandit]
-O'Neill (Prologue Boss)
-Glen (Cutscene)
-Zonta (Ch5x Boss)
-Vigarde (Ch14B Boss)
-Lyon (ChFinal Boss)
-Orson (Ch16 Boss)
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Soldier]
-[Soldier]
-[Soldier]
-[Soldier]
-[Soldier]
-[Soldier]
-[Soldier]
-[Soldier]
-[Soldier]
-[Soldier]
-[Soldier]
-[Soldier]
-[Soldier]
-[Soldier]
-[Remnant]
-[Cutthroat]
-[Remnant]
-[Remnant]
-[Remnant]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Mercenary]
-[Sellsword]
-[Remnant]
-[Monster]
-[Monster]
-[Monster]
-[Monster]
-[Monster]
-[Monster]
-[Monster]
-[Monster]
-[Monster]
-[Monster]
-[Monster]
-[Monster]
-[Monster]
-[Monster]
-[Monster]
-[Monster]
-[Monster]
-[Monster]
-[Monster]
-[Monster]
-Formortiis
-[Enemy]
-[Frelian]
-[Frelian]
-[Enemy]
-[Enemy]
-[Enemy]
-Fado (Prologue)
-[Enemy]
-Hayden (Frelia)
-Mansel (Rausten)
-Klimt (Carcino)
-Dara (Caer Pelyn)
-Ismaire (Jehanna)
-[Pegasus Messenger]
-[Rausten Knight]
-[Rausten Knight]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[Enemy]
-[River Folk (Child F)]
-[River Folk (F)]
-[River Folk]
-[River Folk (F)]
-[River Folk (Child)]
-[Renais Civilian (Child F)]
-[Renais Civilian]
-[Renais Civilian (F)]
-[Old Civilian]
-[Enemy]
-WALL
-SNAG
+LyonCC
+OrsonCC
+GlenCC
+SelenaCC
+ValterCC
+RievCC
+CaellachCC
+FadoCC
+IsmaireCC
+HaydenCC
+Enemy2
+Enemy3
+Enemy4
+Enemy5
+Enemy6
+Enemy7
+Enemy8
+Enemy9
+Enemy10
+Enemy11
+Enemy12
+Enemy13
+Enemy14
+Enemy15
+LyonSummon
+UnknownSummon1
+UnknownSummon2
+KnollSummon
+EwanSummon
+LyonCh17
+MorvaCh20
+OrsonCh5x
+ValterCh15
+SelenaCh10BAnd13B
+ValterPrologue
+Breguet
+Bone
+Bazba
+EntombedBoss
+Saar
+Novala
+Murray
+Tirado
+Binks
+PabloCh10A
+Macdaire
+Aias
+Carlyle
+Caellach
+PabloCh13A
+Enemy16
+GorgonBoss
+Riev
+Enemy17
+Enemy18
+Gheb
+Beran
+CyclopsBoss
+WightBoss
+DeathgoyleBoss
+Mummy
+Enemy19
+Enemy20
+Enemy21
+Enemy22
+Hunter
+Bandit1
+Bandit2
+Bandit3
+ONeill
+Glen
+Zonta
+Vigarde
+LyonFinal
+OrsonBoss
+Enemy23
+Enemy24
+Enemy25
+Enemy26
+Enemy27
+Enemy28
+Enemy29
+Enemy30
+Enemy31
+Enemy32
+Enemy33
+Enemy34
+Enemy35
+Enemy36
+Enemy37
+Enemy38
+Enemy39
+Soldier1
+Soldier2
+Soldier3
+Soldier4
+Soldier5
+Soldier6
+Soldier7
+Soldier8
+Soldier9
+Soldier10
+Soldier11
+Soldier12
+Soldier13
+Soldier14
+Remnant1
+Cutthroat
+Remnant2
+Remnant3
+Remnant4
+Enemy40
+Enemy41
+Enemy42
+Enemy43
+Enemy44
+Enemy45
+Enemy46
+Enemy47
+Enemy48
+Enemy49
+Enemy50
+Enemy51
+Enemy52
+Enemy53
+Enemy54
+Enemy55
+Enemy56
+Enemy57
+Enemy58
+Enemy59
+Enemy60
+Mercenary
+Sellsword
+Remnant5
+Monster1
+Monster2
+Monster3
+Monster4
+Monster5
+Monster6
+Monster7
+Monster8
+Monster9
+Monster10
+Monster11
+Monster12
+Monster13
+Monster14
+Monster15
+Monster16
+Monster17
+Monster18
+Monster19
+Monster20
+Fomortiis
+Enemy61
+Frelian1
+Frelian2
+Enemy62
+Enemy63
+Enemy64
+Fado
+Enemy65
+Hayden
+Mansel
+Klimt
+Dara
+Ismaire
+PegasusMessenger
+RaustenKnight1
+RaustenKnight2
+Enemy66
+Enemy67
+Enemy68
+Enemy69
+Enemy70
+Enemy71
+Enemy72
+Enemy73
+Enemy74
+Enemy75
+Enemy76
+Enemy77
+Enemy78
+Enemy79
+Enemy80
+Enemy81
+Enemy82
+Enemy83
+Enemy84
+Enemy85
+Enemy86
+Enemy87
+Enemy88
+Enemy89
+Enemy90
+Enemy91
+Enemy92
+Enemy93
+Enemy94
+Enemy95
+Enemy96
+Enemy97
+Enemy98
+Enemy99
+Enemy100
+Enemy101
+Enemy102
+RiverFolkChildF
+RiverFolkF
+RiverFolk
+RiverFolkF2
+RiverFolkChild
+RenaisCivilianChildF
+RenaisCivilian
+RenaisCivilianF
+OldCivilian
+Enemy103
+Wall
+Snag

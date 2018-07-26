@@ -2,410 +2,410 @@
 #define GAMEDATA_INDICES
 
 #ifndef NO_VANILLA_CHAPTERS
-	#define chapterPrologue 0x00
-	#define chapterCh1 0x01
-	#define chapterCh2 0x02
-	#define chapterCh3 0x03
-	#define chapterCh4 0x04
-	#define chapterZahaWoods 0x04
-	#define chapterCh5x 0x05
-	#define chapterCh5 0x06
-	#define chapterCh6 0x07
-	#define chapterAdlasPlains 0x07
-	#define chapterCh7 0x08
-	#define chapterCh8 0x09
-	#define chapterCh9Eirika 0x0A
-	#define chapterCh10Eirika 0x0B
-	#define chapterTerasPlateau 0x0B
-	#define chapterCh12Eirika 0x0C
-	#define chapterCh13Eirika 0x0D
-	#define chapterCh14Eirika 0x0E
-	#define chapterCh15Eirika 0x0F
-	#define chapterCh16Eirika 0x10
-	#define chapterCh17Eirika 0x11
-	#define chapterNarubeRiver 0x11
-	#define chapterCh18Eirika 0x12
-	#define chapterNelerasPeak 0x12
-	#define chapterCh19Eirika 0x13
-	#define chapterCh20Eirika 0x14
-	#define chapterFinalCh1Eirika 0x15
-	#define chapterFinalCh2Erika 0x16
-	#define chapterCh9Ephraim 0x17
-	#define chapterCh10Ephraim 0x18
-	#define chapterBethroen 0x18
-	#define chapterCh12Ephraim 0x19
-	#define chapterCh13Ephraim 0x1A
-	#define chapterZaabadulMarsh 0x1A
-	#define chapterCh14Ephraim 0x1B
-	#define chapterCh15Ephraim 0x1C
-	#define chapterCh16Ephraim 0x1D
-	#define chapterCh17Ephraim 0x1E
-	#define chapterNarubeRiver2 0x1E
-	#define chapterCh18Ephraim 0x1F
-	#define chapterNelerasPeak2 0x1F
-	#define chapterCh19Ephraim 0x20
-	#define chapterCh20Ephraim 0x21
-	#define chapterFinalCh1Ephraim 0x22
-	#define chapterFinalCh2Ephraim 0x23
-	#define chapterTowerofValni1 0x24
-	#define chapterTowerofValni2 0x25
-	#define chapterTowerofValni3 0x26
-	#define chapterTowerofValni4 0x27
-	#define chapterTowerofValni5 0x28
-	#define chapterTowerofValni6 0x29
-	#define chapterTowerofValni7 0x2A
-	#define chapterTowerofValni8 0x2B
-	#define chapterTowerofValni8Clone 0x2C
-	#define chapterTowerofValni8Clone2 0x2D
-	#define chapterLagdouRuins1 0x2E
-	#define chapterLagdouRuins2 0x2F
-	#define chapterLagdouRuins3 0x30
-	#define chapterLagdouRuins4 0x31
-	#define chapterLagdouRuins5 0x32
-	#define chapterLagdouRuins6 0x33
-	#define chapterLagdouRuins7 0x34
-	#define chapterLagdouRuins8 0x35
-	#define chapterLagdouRuins9 0x36
-	#define chapterLagdouRuins10 0x37
-	#define chapterLordsSplitUp 0x38
-	#define chapterMelkaenCoast 0x39
-	#define chapterLinkArena 0x3A
-	#define chapterTheInterestingMap 0x3B
-	#define chapterDebugMap 0x3C
-	#define chapterCh11Eirika 0x3D
-	#define chapterCh11Ephraim 0x3E
-	#define chapterGradoCastle 0x3F
-	#define chapterRenaisCastle 0x40
-	#define chapterCaerPelyn 0x41
-	#define chapterRenaisThrone 0x42
-	#define chapterRenaisAudience 0x43
-	#define chapterRenvalGate 0x44
-	#define chapterGradoBorders 0x45
-	#define chapterGradoPrison 0x46
-	#define chapterGradoShrinePast 0x47
-	#define chapterRenaisShrine 0x48
-	#define chapterSomePath 0x49
-	#define chapterSomeBuilding 0x4A
-	#define chapterAnotherShrine 0x4B
-	#define chapterAnotherPath 0x4C
-	#define chapterGradoShrinePresent 0x4D
-	#define chapterCh5TownPast 0x4E
+	#define ChPrologue 0x00
+	// #define Ch1 0x01
+	// #define Ch2 0x02
+	// #define Ch3 0x03
+	// #define Ch4 0x04
+	#define ChZahaWoods 0x04
+	// #define Ch5x 0x05
+	// #define Ch5 0x06
+	// #define Ch6 0x07
+	#define ChAdlasPlains 0x07
+	// #define Ch7 0x08
+	// #define Ch8 0x09
+	// #define Ch9Eirika 0x0A
+	// #define Ch10Eirika 0x0B
+	#define ChTerasPlateau 0x0B
+	// #define Ch12Eirika 0x0C
+	// #define Ch13Eirika 0x0D
+	// #define Ch14Eirika 0x0E
+	// #define Ch15Eirika 0x0F
+	// #define Ch16Eirika 0x10
+	// #define Ch17Eirika 0x11
+	#define ChNarubeRiver 0x11
+	// #define Ch18Eirika 0x12
+	#define ChNelerasPeak 0x12
+	// #define Ch19Eirika 0x13
+	// #define Ch20Eirika 0x14
+	#define ChFinalCh1Eirika 0x15
+	#define ChFinalCh2Erika 0x16
+	// #define Ch9Ephraim 0x17
+	// #define Ch10Ephraim 0x18
+	#define ChBethroen 0x18
+	// #define Ch12Ephraim 0x19
+	// #define Ch13Ephraim 0x1A
+	#define ChZaabadulMarsh 0x1A
+	// #define Ch14Ephraim 0x1B
+	// #define Ch15Ephraim 0x1C
+	// #define Ch16Ephraim 0x1D
+	// #define Ch17Ephraim 0x1E
+	#define ChNarubeRiver2 0x1E
+	// #define Ch18Ephraim 0x1F
+	#define ChNelerasPeak2 0x1F
+	// #define Ch19Ephraim 0x20
+	// #define Ch20Ephraim 0x21
+	#define ChFinalCh1Ephraim 0x22
+	#define ChFinalCh2Ephraim 0x23
+	#define ChTowerofValni1 0x24
+	#define ChTowerofValni2 0x25
+	#define ChTowerofValni3 0x26
+	#define ChTowerofValni4 0x27
+	#define ChTowerofValni5 0x28
+	#define ChTowerofValni6 0x29
+	#define ChTowerofValni7 0x2A
+	#define ChTowerofValni8 0x2B
+	#define ChTowerofValni8Clone 0x2C
+	#define ChTowerofValni8Clone2 0x2D
+	#define ChLagdouRuins1 0x2E
+	#define ChLagdouRuins2 0x2F
+	#define ChLagdouRuins3 0x30
+	#define ChLagdouRuins4 0x31
+	#define ChLagdouRuins5 0x32
+	#define ChLagdouRuins6 0x33
+	#define ChLagdouRuins7 0x34
+	#define ChLagdouRuins8 0x35
+	#define ChLagdouRuins9 0x36
+	#define ChLagdouRuins10 0x37
+	#define ChLordsSplitUp 0x38
+	#define ChMelkaenCoast 0x39
+	#define ChLinkArena 0x3A
+	#define ChTheInterestingMap 0x3B
+	#define ChDebugMap 0x3C
+	// #define Ch11Eirika 0x3D
+	// #define Ch11Ephraim 0x3E
+	#define ChGradoCastle 0x3F
+	#define ChRenaisCastle 0x40
+	#define ChCaerPelyn 0x41
+	#define ChRenaisThrone 0x42
+	#define ChRenaisAudience 0x43
+	#define ChRenvalGate 0x44
+	#define ChGradoBorders 0x45
+	#define ChGradoPrison 0x46
+	#define ChGradoShrinePast 0x47
+	#define ChRenaisShrine 0x48
+	#define ChSomePath 0x49
+	#define ChSomeBuilding 0x4A
+	#define ChAnotherShrine 0x4B
+	#define ChAnotherPath 0x4C
+	#define ChGradoShrinePresent 0x4D
+	#define Ch5TownPast 0x4E
 #endif // NO_VANILLA_CHAPTERS
 
 #ifndef NO_VANILLA_CHARACTERS
-	#define charNone 0x00
-	#define charEirika 0x01
-	#define charSeth 0x02
-	#define charGilliam 0x03
-	#define charFranz 0x04
-	#define charMoulder 0x05
-	#define charVanessa 0x06
-	#define charRoss 0x07
-	#define charNeimi 0x08
-	#define charColm 0x09
-	#define charGarcia 0x0A
-	#define charInnes 0x0B
-	#define charLute 0x0C
-	#define charNatasha 0x0D
-	#define charCormag 0x0E
-	#define charEphraim 0x0F
-	#define charForde 0x10
-	#define charKyle 0x11
-	#define charAmelia 0x12
-	#define charArtur 0x13
-	#define charGerik 0x14
-	#define charTethys 0x15
-	#define charMarisa 0x16
-	#define charSaleh 0x17
-	#define charEwan 0x18
-	#define charLArachel 0x19
-	#define charDozla 0x1A
-	#define charEnemy1 0x1B
-	#define charRennac 0x1C
-	#define charDuessel 0x1D
-	#define charMyrrh 0x1E
-	#define charKnoll 0x1F
-	#define charJoshua 0x20
-	#define charSyrene 0x21
-	#define charTana 0x22
-	#define charLyonCC 0x23
-	#define charOrsonCC 0x24
-	#define charGlenCC 0x25
-	#define charSelenaCC 0x26
-	#define charValterCC 0x27
-	#define charRievCC 0x28
-	#define charCaellachCC 0x29
-	#define charFadoCC 0x2A
-	#define charIsmaireCC 0x2B
-	#define charHaydenCC 0x2C
-	#define charEnemy2 0x2D
-	#define charEnemy3 0x2E
-	#define charEnemy4 0x2F
-	#define charEnemy5 0x30
-	#define charEnemy6 0x31
-	#define charEnemy7 0x32
-	#define charEnemy8 0x33
-	#define charEnemy9 0x34
-	#define charEnemy10 0x35
-	#define charEnemy11 0x36
-	#define charEnemy12 0x37
-	#define charEnemy13 0x38
-	#define charEnemy14 0x39
-	#define charEnemy15 0x3A
-	#define charLyonSummon 0x3B
-	#define charUnknownSummon1 0x3C
-	#define charUnknownSummon2 0x3D
-	#define charKnollSummon 0x3E
-	#define charEwanSummon 0x3F
-	#define charLyonCh17 0x40
-	#define charMorvaCh20 0x41
-	#define charOrsonCh5x 0x42
-	#define charValterCh15 0x43
-	#define charSelenaCh10BAnd13B 0x44
-	#define charValterPrologue 0x45
-	#define charBreguet 0x46
-	#define charBone 0x47
-	#define charBazba 0x48
-	#define charEntombedBoss 0x49
-	#define charSaar 0x4A
-	#define charNovala 0x4B
-	#define charMurray 0x4C
-	#define charTirado 0x4D
-	#define charBinks 0x4E
-	#define charPabloCh10A 0x4F
-	#define charMacdaire 0x50
-	#define charAias 0x51
-	#define charCarlyle 0x52
-	#define charCaellach 0x53
-	#define charPabloCh13A 0x54
-	#define charEnemy16 0x55
-	#define charGorgonBoss 0x56
-	#define charRiev 0x57
-	#define charEnemy17 0x58
-	#define charEnemy18 0x59
-	#define charGheb 0x5A
-	#define charBeran 0x5B
-	#define charCyclopsBoss 0x5C
-	#define charWightBoss 0x5D
-	#define charDeathgoyleBoss 0x5E
-	#define charMummy 0x5F
-	#define charEnemy19 0x60
-	#define charEnemy20 0x61
-	#define charEnemy21 0x62
-	#define charEnemy22 0x63
-	#define charHunter 0x64
-	#define charBandit1 0x65
-	#define charBandit2 0x66
-	#define charBandit3 0x67
-	#define charONeill 0x68
-	#define charGlen 0x69
-	#define charZonta 0x6A
-	#define charVigarde 0x6B
-	#define charLyonFinal 0x6C
-	#define charOrsonBoss 0x6D
-	#define charEnemy23 0x6E
-	#define charEnemy24 0x6F
-	#define charEnemy25 0x70
-	#define charEnemy26 0x71
-	#define charEnemy27 0x72
-	#define charEnemy28 0x73
-	#define charEnemy29 0x74
-	#define charEnemy30 0x75
-	#define charEnemy31 0x76
-	#define charEnemy32 0x77
-	#define charEnemy33 0x78
-	#define charEnemy34 0x79
-	#define charEnemy35 0x7A
-	#define charEnemy36 0x7B
-	#define charEnemy37 0x7C
-	#define charEnemy38 0x7D
-	#define charEnemy39 0x7E
-	#define charSoldier1 0x7F
-	#define charSoldier2 0x80
-	#define charSoldier3 0x81
-	#define charSoldier4 0x82
-	#define charSoldier5 0x83
-	#define charSoldier6 0x84
-	#define charSoldier7 0x85
-	#define charSoldier8 0x86
-	#define charSoldier9 0x87
-	#define charSoldier10 0x88
-	#define charSoldier11 0x89
-	#define charSoldier12 0x8A
-	#define charSoldier13 0x8B
-	#define charSoldier14 0x8C
-	#define charRemnant1 0x8D
-	#define charCutthroat 0x8E
-	#define charRemnant2 0x8F
-	#define charRemnant3 0x90
-	#define charRemnant4 0x91
-	#define charEnemy40 0x92
-	#define charEnemy41 0x93
-	#define charEnemy42 0x94
-	#define charEnemy43 0x95
-	#define charEnemy44 0x96
-	#define charEnemy45 0x97
-	#define charEnemy46 0x98
-	#define charEnemy47 0x99
-	#define charEnemy48 0x9A
-	#define charEnemy49 0x9B
-	#define charEnemy50 0x9C
-	#define charEnemy51 0x9D
-	#define charEnemy52 0x9E
-	#define charEnemy53 0x9F
-	#define charEnemy54 0xA0
-	#define charEnemy55 0xA1
-	#define charEnemy56 0xA2
-	#define charEnemy57 0xA3
-	#define charEnemy58 0xA4
-	#define charEnemy59 0xA5
-	#define charEnemy60 0xA6
-	#define charMercenary 0xA7
-	#define charSellsword 0xA8
-	#define charRemnant5 0xA9
-	#define charMonster1 0xAA
-	#define charMonster2 0xAB
-	#define charMonster3 0xAC
-	#define charMonster4 0xAD
-	#define charMonster5 0xAE
-	#define charMonster6 0xAF
-	#define charMonster7 0xB0
-	#define charMonster8 0xB1
-	#define charMonster9 0xB2
-	#define charMonster10 0xB3
-	#define charMonster11 0xB4
-	#define charMonster12 0xB5
-	#define charMonster13 0xB6
-	#define charMonster14 0xB7
-	#define charMonster15 0xB8
-	#define charMonster16 0xB9
-	#define charMonster17 0xBA // Uses different text id for some reason
-	#define charMonster18 0xBB
-	#define charMonster19 0xBC
-	#define charMonster20 0xBD
-	#define charFomortiis 0xBE
-	#define charEnemy61 0xBF
-	#define charFrelian1 0xC0
-	#define charFrelian2 0xC1
-	#define charEnemy62 0xC2
-	#define charEnemy63 0xC3
-	#define charEnemy64 0xC4
-	#define charFado 0xC5
-	#define charEnemy65 0xC6
-	#define charHayden 0xC7
-	#define charMansel 0xC8
-	#define charKlimt 0xC9
-	#define charDara 0xCA
-	#define charIsmaire 0xCB
-	#define charPegasusMessenger 0xCC
-	#define charRaustenKnight1 0xCD
-	#define charRaustenKnight2 0xCE
-	#define charEnemy66 0xCF
-	#define charEnemy67 0xD0
-	#define charEnemy68 0xD1
-	#define charEnemy69 0xD2
-	#define charEnemy70 0xD3
-	#define charEnemy71 0xD4
-	#define charEnemy72 0xD5
-	#define charEnemy73 0xD6
-	#define charEnemy74 0xD7
-	#define charEnemy75 0xD8
-	#define charEnemy76 0xD9
-	#define charEnemy77 0xDA
-	#define charEnemy78 0xDB
-	#define charEnemy79 0xDC
-	#define charEnemy80 0xDD
-	#define charEnemy81 0xDE
-	#define charEnemy82 0xDF
-	#define charEnemy83 0xE0
-	#define charEnemy84 0xE1
-	#define charEnemy85 0xE2
-	#define charEnemy86 0xE3
-	#define charEnemy87 0xE4
-	#define charEnemy88 0xE5
-	#define charEnemy89 0xE6
-	#define charEnemy90 0xE7
-	#define charEnemy91 0xE8
-	#define charEnemy92 0xE9
-	#define charEnemy93 0xEA
-	#define charEnemy94 0xEB
-	#define charEnemy95 0xEC
-	#define charEnemy96 0xED
-	#define charEnemy97 0xEE
-	#define charEnemy98 0xEF
-	#define charEnemy99 0xF0
-	#define charEnemy100 0xF1
-	#define charEnemy101 0xF2
-	#define charEnemy102 0xF3
-	#define charRiverFolkChildF 0xF4
-	#define charRiverFolkF 0xF5
-	#define charRiverFolk 0xF6
-	#define charRiverFolkF2 0xF7
-	#define charRiverFolkChild 0xF8
-	#define charRenaisCivilianChildF 0xF9
-	#define charRenaisCivilian 0xFA
-	#define charRenaisCivilianF 0xFB
-	#define charOldCivilian 0xFC
-	#define charEnemy103 0xFD
-	#define charWall 0xFE
-	#define charSnag 0xFF
+	#define None 0x00
+	// #define Eirika 0x01
+	// #define Seth 0x02
+	// #define Gilliam 0x03
+	// #define Franz 0x04
+	// #define Moulder 0x05
+	// #define Vanessa 0x06
+	// #define Ross 0x07
+	// #define Neimi 0x08
+	// #define Colm 0x09
+	// #define Garcia 0x0A
+	// #define Innes 0x0B
+	// #define Lute 0x0C
+	// #define Natasha 0x0D
+	// #define Cormag 0x0E
+	// #define Ephraim 0x0F
+	// #define Forde 0x10
+	// #define Kyle 0x11
+	// #define Amelia 0x12
+	// #define Artur 0x13
+	// #define Gerik 0x14
+	// #define Tethys 0x15
+	// #define Marisa 0x16
+	// #define Saleh 0x17
+	// #define Ewan 0x18
+	// #define LArachel 0x19
+	// #define Dozla 0x1A
+	#define Enemy1 0x1B
+	// #define Rennac 0x1C
+	// #define Duessel 0x1D
+	// #define Myrrh 0x1E
+	// #define Knoll 0x1F
+	// #define Joshua 0x20
+	// #define Syrene 0x21
+	// #define Tana 0x22
+	// #define LyonCC 0x23
+	// #define OrsonCC 0x24
+	// #define GlenCC 0x25
+	// #define SelenaCC 0x26
+	// #define ValterCC 0x27
+	// #define RievCC 0x28
+	// #define CaellachCC 0x29
+	// #define FadoCC 0x2A
+	// #define IsmaireCC 0x2B
+	// #define HaydenCC 0x2C
+	#define Enemy2 0x2D
+	#define Enemy3 0x2E
+	#define Enemy4 0x2F
+	#define Enemy5 0x30
+	#define Enemy6 0x31
+	#define Enemy7 0x32
+	#define Enemy8 0x33
+	#define Enemy9 0x34
+	#define Enemy10 0x35
+	#define Enemy11 0x36
+	#define Enemy12 0x37
+	#define Enemy13 0x38
+	#define Enemy14 0x39
+	#define Enemy15 0x3A
+	// #define LyonSummon 0x3B
+	#define UnknownSummon1 0x3C
+	#define UnknownSummon2 0x3D
+	// #define KnollSummon 0x3E
+	#define EwanSummon 0x3F
+	#define LyonCh17 0x40
+	#define MorvaCh20 0x41
+	#define OrsonCh5x 0x42
+	#define ValterCh15 0x43
+	#define SelenaCh10BAnd13B 0x44
+	#define ValterPrologue 0x45
+	// #define Breguet 0x46
+	// #define Bone 0x47
+	// #define Bazba 0x48
+	#define EntombedBoss 0x49
+	// #define Saar 0x4A
+	// #define Novala 0x4B
+	// #define Murray 0x4C
+	// #define Tirado 0x4D
+	// #define Binks 0x4E
+	#define PabloCh10A 0x4F
+	// #define Macdaire 0x50
+	// #define Aias 0x51
+	// #define Carlyle 0x52
+	// #define Caellach 0x53
+	#define PabloCh13A 0x54
+	#define Enemy16 0x55
+	#define GorgonBoss 0x56
+	// #define Riev 0x57
+	#define Enemy17 0x58
+	#define Enemy18 0x59
+	// #define Gheb 0x5A
+	// #define Beran 0x5B
+	#define CyclopsBoss 0x5C
+	#define WightBoss 0x5D
+	#define DeathgoyleBoss 0x5E
+	#define Mummy 0x5F
+	#define Enemy19 0x60
+	#define Enemy20 0x61
+	#define Enemy21 0x62
+	#define Enemy22 0x63
+	#define Hunter 0x64
+	#define Bandit1 0x65
+	#define Bandit2 0x66
+	#define Bandit3 0x67
+	// #define ONeill 0x68
+	// #define Glen 0x69
+	// #define Zonta 0x6A
+	// #define Vigarde 0x6B
+	#define LyonFinal 0x6C
+	#define OrsonBoss 0x6D
+	#define Enemy23 0x6E
+	#define Enemy24 0x6F
+	#define Enemy25 0x70
+	#define Enemy26 0x71
+	#define Enemy27 0x72
+	#define Enemy28 0x73
+	#define Enemy29 0x74
+	#define Enemy30 0x75
+	#define Enemy31 0x76
+	#define Enemy32 0x77
+	#define Enemy33 0x78
+	#define Enemy34 0x79
+	#define Enemy35 0x7A
+	#define Enemy36 0x7B
+	#define Enemy37 0x7C
+	#define Enemy38 0x7D
+	#define Enemy39 0x7E
+	#define Soldier1 0x7F
+	#define Soldier2 0x80
+	#define Soldier3 0x81
+	#define Soldier4 0x82
+	#define Soldier5 0x83
+	#define Soldier6 0x84
+	#define Soldier7 0x85
+	#define Soldier8 0x86
+	#define Soldier9 0x87
+	#define Soldier10 0x88
+	#define Soldier11 0x89
+	#define Soldier12 0x8A
+	#define Soldier13 0x8B
+	#define Soldier14 0x8C
+	#define Remnant1 0x8D
+	#define Cutthroat 0x8E
+	#define Remnant2 0x8F
+	#define Remnant3 0x90
+	#define Remnant4 0x91
+	#define Enemy40 0x92
+	#define Enemy41 0x93
+	#define Enemy42 0x94
+	#define Enemy43 0x95
+	#define Enemy44 0x96
+	#define Enemy45 0x97
+	#define Enemy46 0x98
+	#define Enemy47 0x99
+	#define Enemy48 0x9A
+	#define Enemy49 0x9B
+	#define Enemy50 0x9C
+	#define Enemy51 0x9D
+	#define Enemy52 0x9E
+	#define Enemy53 0x9F
+	#define Enemy54 0xA0
+	#define Enemy55 0xA1
+	#define Enemy56 0xA2
+	#define Enemy57 0xA3
+	#define Enemy58 0xA4
+	#define Enemy59 0xA5
+	#define Enemy60 0xA6
+	#define MercenaryChar 0xA7
+	#define Sellsword 0xA8
+	#define Remnant5 0xA9
+	#define Monster1 0xAA
+	#define Monster2 0xAB
+	#define Monster3 0xAC
+	#define Monster4 0xAD
+	#define Monster5 0xAE
+	#define Monster6 0xAF
+	#define Monster7 0xB0
+	#define Monster8 0xB1
+	#define Monster9 0xB2
+	#define Monster10 0xB3
+	#define Monster11 0xB4
+	#define Monster12 0xB5
+	#define Monster13 0xB6
+	#define Monster14 0xB7
+	#define Monster15 0xB8
+	#define Monster16 0xB9
+	#define Monster17 0xBA // Uses different text id for some reason
+	#define Monster18 0xBB
+	#define Monster19 0xBC
+	#define Monster20 0xBD
+	// #define Fomortiis 0xBE
+	#define Enemy61 0xBF
+	#define Frelian1 0xC0
+	#define Frelian2 0xC1
+	#define Enemy62 0xC2
+	#define Enemy63 0xC3
+	#define Enemy64 0xC4
+	// #define Fado 0xC5
+	#define Enemy65 0xC6
+	// #define Hayden 0xC7
+	// #define Mansel 0xC8
+	// #define Klimt 0xC9
+	// #define Dara 0xCA
+	// #define Ismaire 0xCB
+	// #define PegasusMessenger 0xCC
+	#define RaustenKnight1 0xCD
+	#define RaustenKnight2 0xCE
+	#define Enemy66 0xCF
+	#define Enemy67 0xD0
+	#define Enemy68 0xD1
+	#define Enemy69 0xD2
+	#define Enemy70 0xD3
+	#define Enemy71 0xD4
+	#define Enemy72 0xD5
+	#define Enemy73 0xD6
+	#define Enemy74 0xD7
+	#define Enemy75 0xD8
+	#define Enemy76 0xD9
+	#define Enemy77 0xDA
+	#define Enemy78 0xDB
+	#define Enemy79 0xDC
+	#define Enemy80 0xDD
+	#define Enemy81 0xDE
+	#define Enemy82 0xDF
+	#define Enemy83 0xE0
+	#define Enemy84 0xE1
+	#define Enemy85 0xE2
+	#define Enemy86 0xE3
+	#define Enemy87 0xE4
+	#define Enemy88 0xE5
+	#define Enemy89 0xE6
+	#define Enemy90 0xE7
+	#define Enemy91 0xE8
+	#define Enemy92 0xE9
+	#define Enemy93 0xEA
+	#define Enemy94 0xEB
+	#define Enemy95 0xEC
+	#define Enemy96 0xED
+	#define Enemy97 0xEE
+	#define Enemy98 0xEF
+	#define Enemy99 0xF0
+	#define Enemy100 0xF1
+	#define Enemy101 0xF2
+	#define Enemy102 0xF3
+	#define RiverFolkChildF 0xF4
+	#define RiverFolkF 0xF5
+	// #define RiverFolk 0xF6
+	#define RiverFolkF2 0xF7
+	// #define RiverFolkChild 0xF8
+	#define RenaisCivilianChildF 0xF9
+	// #define RenaisCivilian 0xFA
+	#define RenaisCivilianF 0xFB
+	// #define OldCivilian 0xFC
+	#define Enemy103 0xFD
+	// #define Wall 0xFE
+	// #define Snag 0xFF
 #endif // NO_VANILLA_CHARACTERS
 
 #ifndef NO_VANILLA_BACKGROUNDS
-	#define backgroundHouse 0x00
-	#define backgroundSalehHouse 0x01
-	#define backgroundVillage 0x02
-	#define backgroundOutsideVillageDay 0x03
-	#define backgroundOutsideVillageEvening 0x04
-	#define backgroundTownDay 0x05
-	#define backgroundTownPast 0x06
-	#define backgroundHarbor 0x07
-	#define backgroundShip 0x08
-	#define backgroundInn 0x09
-	#define backgroundCastleHall 0x0A
-	#define backgroundCastleHallNight 0x0B
-	#define backgroundCastleHall2 0x0C
-	#define backgroundCastleHall2Past 0x0D
-	#define backgroundCastleRoom 0x0E
-	#define backgroundCastleRoomPast 0x0F
-	#define backgroundCastleHall3 0x10
-	#define backgroundCastleHall3Night 0x11
-	#define backgroundCastleHall4 0x12
-	#define backgroundCastleGarden 0x13
-	#define backgroundCastleGardenPast 0x14
-	#define backgroundCastleOutside 0x15
-	#define backgroundCastleOutsidePast 0x16
-	#define backgroundPrisonCell 0x17
-	#define backgroundPlain 0x18
-	#define backgroundPlainEvening 0x19
-	#define backgroundPlainFog 0x1A
-	#define backgroundPlain2 0x1B
-	#define backgroundPlain3 0x1C
-	#define backgroundWoodland 0x1D
-	#define backgroundWoodlandFog 0x1E
-	#define backgroundWoodlandEvening 0x1F
-	#define backgroundWoodlandNight 0x20
-	#define backgroundRiverside 0x21
-	#define backgroundForest 0x22
-	#define backgroundForest2 0x23
-	#define backgroundTownGate 0x24
-	#define backgroundFortOutside 0x25
-	#define backgroundFort 0x26
-	#define backgroundFortEvening 0x27
-	#define backgroundFortRuins 0x28
-	#define backgroundFortRuinsOutside 0x29
-	#define backgroundFort2 0x2A
-	#define backgroundFort2Burning 0x2B
-	#define backgroundShrine 0x2C
-	#define backgroundShrineLighter 0x2D
-	#define backgroundShrine2 0x2E
-	#define backgroundShrine3 0x2F
-	#define backgroundDesert 0x30
-	#define backgroundForestDense 0x31
-	#define backgroundVolcano 0x32
-	#define backgroundTempleGate 0x33
-	#define backgroundTempleRuinsInside 0x34
-	#define backgroundBlack 0x35
+	#define bgHouse 0x00
+	#define bgSalehHouse 0x01
+	#define bgVillage 0x02
+	#define bgOutsideVillageDay 0x03
+	#define bgOutsideVillageEvening 0x04
+	#define bgTownDay 0x05
+	#define bgTownPast 0x06
+	#define bgHarbor 0x07
+	#define bgShip 0x08
+	#define bgInn 0x09
+	#define bgCastleHall 0x0A
+	#define bgCastleHallNight 0x0B
+	#define bgCastleHall2 0x0C
+	#define bgCastleHall2Past 0x0D
+	#define bgCastleRoom 0x0E
+	#define bgCastleRoomPast 0x0F
+	#define bgCastleHall3 0x10
+	#define bgCastleHall3Night 0x11
+	#define bgCastleHall4 0x12
+	#define bgCastleGarden 0x13
+	#define bgCastleGardenPast 0x14
+	#define bgCastleOutside 0x15
+	#define bgCastleOutsidePast 0x16
+	#define bgPrisonCell 0x17
+	#define bgPlain 0x18
+	#define bgPlainEvening 0x19
+	#define bgPlainFog 0x1A
+	#define bgPlain2 0x1B
+	#define bgPlain3 0x1C
+	#define bgWoodland 0x1D
+	#define bgWoodlandFog 0x1E
+	#define bgWoodlandEvening 0x1F
+	#define bgWoodlandNight 0x20
+	#define bgRiverside 0x21
+	#define bgForest 0x22
+	#define bgForest2 0x23
+	#define bgTownGate 0x24
+	#define bgFortOutside 0x25
+	#define bgFort 0x26
+	#define bgFortEvening 0x27
+	#define bgFortRuins 0x28
+	#define bgFortRuinsOutside 0x29
+	#define bgFort2 0x2A
+	#define bgFort2Burning 0x2B
+	#define bgShrine 0x2C
+	#define bgShrineLighter 0x2D
+	#define bgShrine2 0x2E
+	#define bgShrine3 0x2F
+	#define bgDesert 0x30
+	#define bgForestDense 0x31
+	#define bgVolcano 0x32
+	#define bgTempleGate 0x33
+	#define bgTempleRuinsInside 0x34
+	#define bgBlack 0x35
 #endif // NO_VANILLA_BACKGROUNDS
 
 #ifndef NO_VANILLA_MUSIC
@@ -485,325 +485,325 @@
 #endif // NO_VANILLA_MUSIC
 
 #ifndef NO_VANILLA_CLASSES
-	#define classEphraimLord 0x01
-	#define classEirikaLord 0x02
-	#define classEphraimMasterLord 0x03
-	#define classEirikaMasterLord 0x04
-	#define classCavalier 0x05
-	#define classCavalierF 0x06
-	#define classPaladin 0x07
-	#define classPaladinF 0x08
-	#define classKnight 0x09
-	#define classKnightF 0x0A
-	#define classGeneral 0x0B
-	#define classGeneralF 0x0C
-	#define classThief 0x0D
-	#define classManakete 0x0E
-	#define classMercenary 0x0F
-	#define classMercenaryF 0x10
-	#define classHero 0x11
-	#define classHeroF 0x12
-	#define classMyrmidon 0x13
-	#define classMyrmidonF 0x14
-	#define classSwordmaster 0x15
-	#define classSwordmasterF 0x16
-	#define classAssassin 0x17
-	#define classAssassinF 0x18
-	#define classArcher 0x19
-	#define classArcherF 0x1A
-	#define classSniper 0x1B
-	#define classSniperF 0x1C
-	#define classRanger 0x1D
-	#define classRangerF 0x1E
-	#define classWywernRider 0x1F
-	#define classWywernRiderF 0x20
-	#define classWywernLord 0x21
-	#define classWywernLordF 0x22
-	#define classWyvernKnight 0x23
-	#define classWyvernKnightF 0x24
-	#define classMage 0x25
-	#define classMageF 0x26
-	#define classSage 0x27
-	#define classSageF 0x28
-	#define classMageKnight 0x29
-	#define classMageKnightF 0x2A
-	#define classBishop 0x2B
-	#define classBishopF 0x2C
-	#define classShaman 0x2D
-	#define classShamanF 0x2E
-	#define classDruid 0x2F
-	#define classDruidF 0x30
-	#define classSummoner 0x31
-	#define classSummonerF 0x32
-	#define classRogue 0x33
-	#define classGorgonEgg 0x34
-	#define classGreatKnight 0x35
-	#define classGreatKnightF 0x36
-	#define classRecruit2 0x37
-	#define classJourneyman3 0x38
-	#define classPupil3 0x39
-	#define classRecruit3 0x3A
-	#define classManakete2 0x3B
-	#define classManakete2F 0x3C
-	#define classJourneyman1 0x3D
-	#define classPupil1 0x3E
-	#define classFighter 0x3F
-	#define classWarrior 0x40
-	#define classBrigand 0x41
-	#define classPirate 0x42
-	#define classBerserker 0x43
-	#define classMonk 0x44
-	#define classPriest 0x45
-	#define classBard 0x46
-	#define classRecruit1 0x47
-	#define classPegasusKnight 0x48
-	#define classFalcoKnight 0x49
-	#define classCleric 0x4A
-	#define classTroubadour 0x4B
-	#define classValkyrie 0x4C
-	#define classDancer 0x4D
-	#define classSoldier 0x4E
-	#define classNecromancer 0x4F
-	#define classFleet 0x50
-	#define classGhostFighter 0x51
-	#define classRenevant 0x52
-	#define classEntombed 0x53
-	#define classBonewalker 0x54
-	#define classBonewalkerBow 0x55
-	#define classWight 0x56
-	#define classWightBow 0x57
-	#define classBael 0x58
-	#define classElderBael 0x59
-	#define classCyclops 0x5A
-	#define classMauthedoog 0x5B
-	#define classGwyllgi 0x5C
-	#define classTarvos 0x5D
-	#define classMaelduin 0x5E
-	#define classMogall 0x5F
-	#define classArchMogall 0x60
-	#define classGorgon 0x61
-	#define classGorgonEgg2 0x62
-	#define classGargoyle 0x63
-	#define classDeathgoyle 0x64
-	#define classDracoZombie 0x65
-	#define classDemonKing 0x66
-	#define classArcherOnBallista 0x67
-	#define classArcherOnIronBallista 0x68
-	#define classArcherOnKillerBallista 0x69
-	#define classEmptyBallista 0x6A
-	#define classEmptyIronBallista 0x6B
-	#define classEmptyKillerBallista 0x6C
-	#define classCivilian 0x6D
-	#define classCivilianF 0x6E
-	#define classCivilian2 0x6F
-	#define classCivilianF2 0x70
-	#define classCivilian3 0x71
-	#define classCivilianF3 0x72
-	#define classPeer 0x73
-	#define classQueen 0x74
-	#define classPrince 0x75
-	#define classQueen2 0x76
-	#define classFallenPrince 0x78
-	#define classTent 0x79
-	#define classPontifex 0x7A
-	#define classFallenPeer 0x7B
-	#define classCyclops2 0x7C
-	#define classElderBael2 0x7D
-	#define classJourneyman2 0x7E
-	#define classPupil2 0x7F
+	// #define EphraimLord 0x01
+	// #define EirikaLord 0x02
+	// #define EphraimMasterLord 0x03
+	// #define EirikaMasterLord 0x04
+	// #define Cavalier 0x05
+	#define CavalierF 0x06
+	// #define Paladin 0x07
+	#define PaladinF 0x08
+	// #define Knight 0x09
+	#define KnightF 0x0A
+	// #define General 0x0B
+	#define GeneralF 0x0C
+	// #define Thief 0x0D
+	// #define Manakete 0x0E
+	// #define Mercenary 0x0F
+	#define MercenaryF 0x10
+	// #define Hero 0x11
+	#define HeroF 0x12
+	// #define Myrmidon 0x13
+	#define MyrmidonF 0x14
+	// #define Swordmaster 0x15
+	#define SwordmasterF 0x16
+	// #define Assassin 0x17
+	#define AssassinF 0x18
+	// #define Archer 0x19
+	#define ArcherF 0x1A
+	// #define Sniper 0x1B
+	#define SniperF 0x1C
+	// #define Ranger 0x1D
+	#define RangerF 0x1E
+	// #define WyvernRider 0x1F
+	#define WyvernRiderF 0x20
+	// #define WyvernLord 0x21
+	#define WyvernLordF 0x22
+	// #define WyvernKnight 0x23
+	#define WyvernKnightF 0x24
+	// #define Mage 0x25
+	#define MageF 0x26
+	// #define Sage 0x27
+	#define SageF 0x28
+	// #define MageKnight 0x29
+	#define MageKnightF 0x2A
+	// #define Bishop 0x2B
+	#define BishopF 0x2C
+	// #define Shaman 0x2D
+	#define ShamanF 0x2E
+	// #define Druid 0x2F
+	#define DruidF 0x30
+	// #define Summoner 0x31
+	#define SummonerF 0x32
+	// #define Rogue 0x33
+	// #define GorgonEgg 0x34
+	// #define GreatKnight 0x35
+	#define GreatKnightF 0x36
+	#define Recruit2 0x37
+	#define Journeyman3 0x38
+	#define Pupil3 0x39
+	#define Recruit3 0x3A
+	#define Manakete2 0x3B
+	#define Manakete2F 0x3C
+	#define Journeyman1 0x3D
+	#define Pupil1 0x3E
+	// #define Fighter 0x3F
+	// #define Warrior 0x40
+	// #define Brigand 0x41
+	// #define Pirate 0x42
+	// #define Berserker 0x43
+	// #define Monk 0x44
+	// #define Priest 0x45
+	// #define Bard 0x46
+	#define Recruit1 0x47
+	// #define PegasusKnight 0x48
+	// #define FalcoKnight 0x49
+	// #define Cleric 0x4A
+	// #define Troubadour 0x4B
+	// #define Valkyrie 0x4C
+	// #define Dancer 0x4D
+	// #define Soldier 0x4E
+	// #define Necromancer 0x4F
+	// #define Fleet 0x50
+	// #define GhostFighter 0x51
+	// #define Revenant 0x52
+	// #define Entombed 0x53
+	// #define Bonewalker 0x54
+	#define BonewalkerBow 0x55
+	// #define Wight 0x56
+	#define WightBow 0x57
+	// #define Bael 0x58
+	// #define ElderBael 0x59
+	// #define Cyclops 0x5A
+	// #define Mauthedoog 0x5B
+	// #define Gwyllgi 0x5C
+	// #define Tarvos 0x5D
+	// #define Maelduin 0x5E
+	// #define Mogall 0x5F
+	// #define ArchMogall 0x60
+	// #define Gorgon 0x61
+	#define GorgonEgg2 0x62
+	// #define Gargoyle 0x63
+	// #define Deathgoyle 0x64
+	// #define DracoZombie 0x65
+	// #define DemonKing 0x66
+	#define ArcherOnBallista 0x67
+	#define ArcherOnIronBallista 0x68
+	#define ArcherOnKillerBallista 0x69
+	// #define EmptyBallista 0x6A
+	// #define EmptyIronBallista 0x6B
+	// #define EmptyKillerBallista 0x6C
+	// #define Civilian 0x6D
+	#define CivilianF 0x6E
+	#define Civilian2 0x6F
+	#define CivilianF2 0x70
+	#define Civilian3 0x71
+	#define CivilianF3 0x72
+	// #define Peer 0x73
+	// #define Queen 0x74
+	// #define Prince 0x75
+	#define Queen2 0x76
+	// #define FallenPrince 0x78
+	// #define Tent 0x79
+	// #define Pontifex 0x7A
+	// #define FallenPeer 0x7B
+	#define Cyclops2 0x7C
+	#define ElderBael2 0x7D
+	#define Journeyman2 0x7E
+	#define Pupil2 0x7F
 #endif // NO_VANILLA_CLASSES
 
 #ifndef NO_VANILLA_ITEMS
-	#define itemIronSword 0x01
-	#define itemSlimSword 0x02
-	#define itemSteelSword 0x03
-	#define itemSilverSword 0x04
-	#define itemIronBlade 0x05
-	#define itemSteelBlade 0x06
-	#define itemSilverBlade 0x07
-	#define itemPoisonSword 0x08
-	#define itemRapier 0x09
-	#define itemManiKatti 0x0A
-	#define itemBraveSword 0x0B
-	#define itemShamshir 0x0C
-	#define itemKillingEdge 0x0D
-	#define itemArmourslayer 0x0E
-	#define itemWyrmslayer 0x0F
-	#define itemLightBrand 0x10
-	#define itemRunesword 0x11
-	#define itemLancereaver 0x12
-	#define itemLongsword 0x13
-	#define itemIronLance 0x14
-	#define itemSlimLance 0x15
-	#define itemSteelLance 0x16
-	#define itemSilverLance 0x17
-	#define itemPoisonLance 0x18
-	#define itemBraveLance 0x19
-	#define itemKillerLance 0x1A
-	#define itemHorseslayer 0x1B
-	#define itemJavelin 0x1C
-	#define itemSpear 0x1D
-	#define itemAxereaver 0x1E
-	#define itemIronAxe 0x1F
-	#define itemSteelAxe 0x20
-	#define itemSilverAxe 0x21
-	#define itemPoisonAxe 0x22
-	#define itemBraveAxe 0x23
-	#define itemKillerAxe 0x24
-	#define itemHalberd 0x25
-	#define itemHammer 0x26
-	#define itemDevilAxe 0x27
-	#define itemHandAxe 0x28
-	#define itemTomahawk 0x29
-	#define itemSwordreaver 0x2A
-	#define itemSwordslayer 0x2B
-	#define itemHatchet 0x2C
-	#define itemIronBow 0x2D
-	#define itemSteelBow 0x2E
-	#define itemSilverBow 0x2F
-	#define itemPoisonBow 0x30
-	#define itemKillerBow 0x31
-	#define itemBraveBow 0x32
-	#define itemShortBow 0x33
-	#define itemLongbow 0x34
-	#define itemBallista 0x35
-	#define itemIronBallista 0x36
-	#define itemKillerBallista 0x37
-	#define itemFire 0x38
-	#define itemThunder 0x39
-	#define itemElfire 0x3A
-	#define itemBolting 0x3B
-	#define itemFimbulvetr 0x3C
-	#define itemForblaze 0x3D
-	#define itemExcalibur 0x3E
-	#define itemLightning 0x3F
-	#define itemShine 0x40
-	#define itemDivine 0x41
-	#define itemPurge 0x42
-	#define itemAura 0x43
-	#define itemLuce 0x44
-	#define itemFlux 0x45
-	#define itemLuna 0x46
-	#define itemNosferatu 0x47
-	#define itemEclipse 0x48
-	#define itemFenrir 0x49
-	#define itemGleipnir 0x4A
-	#define itemHeal 0x4B
-	#define itemMend 0x4C
-	#define itemRecover 0x4D
-	#define itemPhysic 0x4E
-	#define itemFortify 0x4F
-	#define itemRestore 0x50
-	#define itemSilence 0x51
-	#define itemSleep 0x52
-	#define itemBerserk 0x53
-	#define itemWarp 0x54
-	#define itemRescue 0x55
-	#define itemTorchStaff 0x56
-	#define itemHammerne 0x57
-	#define itemUnlock 0x58
-	#define itemBarrier 0x59
-	#define itemDragonAxe 0x5A
-	#define itemAngelicRobe 0x5B
-	#define itemEnergyRing 0x5C
-	#define itemSecretBook 0x5D
-	#define itemSpeedwings 0x5E
-	#define itemGoddessIcon 0x5F
-	#define itemDragonshield 0x60
-	#define itemTalisman 0x61
-	#define itemBoots 0x62
-	#define itemBodyRing 0x63
-	#define itemHeroCrest 0x64
-	#define itemHerosCrest 0x64
-	#define itemKnightCrest 0x65
-	#define itemKnightsCrest 0x65
-	#define itemOrionBolt 0x66
-	#define itemOrionsBolt 0x66
-	#define itemElysianWhip 0x67
-	#define itemGuidingRing 0x68
-	#define itemChestKey 0x69
-	#define itemDoorKey 0x6A
-	#define itemLockpick 0x6B
-	#define itemVulnerary 0x6C
-	#define itemElixir 0x6D
-	#define itemPureWater 0x6E
-	#define itemAntidote 0x6F
-	#define itemTorch 0x70
-	#define itemDelphiShield 0x71
-	#define itemMemberCard 0x72
-	#define itemSilverCard 0x73
-	#define itemWhiteGem 0x74
-	#define itemBlueGem 0x75
-	#define itemRedGem 0x76
-	#define itemGold 0x77
-	#define itemReginleif 0x78
-	#define itemChestKey5 0x79
-	#define itemMine 0x7A
-	#define itemLightRune 0x7B
-	#define itemHoplonShield 0x7C
-	#define itemFillasMight 0x7D
-	#define itemNinissGrace 0x7E
-	#define itemThorsIre 0x7F
-	#define itemSetsLitany 0x80
-	#define itemShadowKiller 0x81
-	#define itemBrightLance 0x82
-	#define itemFiendCleaver 0x83
-	#define itemBeaconBow 0x84
-	#define itemSieglind 0x85
-	#define itemBattleAxe 0x86
-	#define itemIvaldi 0x87
-	#define itemMasterProof 0x88
-	#define itemMetissTome 0x89
-	#define itemHeavenSeal 0x8A
-	#define itemSharpClaw 0x8B
-	#define itemLatona 0x8C
-	#define itemDragonSpear 0x8D
-	#define itemVidofnir 0x8E
-	#define itemNaglfar 0x8F
-	#define itemWretchedAir 0x90
-	#define itemAudomra 0x91
-	#define itemSiegmund 0x92
-	#define itemGarm 0x93
-	#define itemNidhogg 0x94
-	#define itemHeavySpear 0x95
-	#define itemShortSpear 0x96
-	#define itemConquerorsProof 0x97
-	#define itemMoonBracelet 0x98
-	#define itemSunBracelet 0x99
-	#define item1G 0x9A
-	#define item5G 0x9B
-	#define item10G 0x9C
-	#define item50G 0x9D
-	#define item100G 0x9E
-	#define item3000G 0x9F
-	#define item5000G 0xA0
-	#define itemWindSword 0xA1
-	#define itemVulnerary2 0xA2
-	#define itemGreennote 0xA3
-	#define itemRednote 0xA4
-	#define itemDance 0xA5
-	#define itemNightmare 0xA6
-	#define itemDemonShard 0xA7
-	#define itemDemonLight 0xA8
-	#define itemRavager 0xA9
-	#define itemHolyDragonStone 0xAA
-	#define itemDemonSurge 0xAB
-	#define itemShadowshot 0xAC
-	#define itemRottenClaw 0xAD
-	#define itemFetidClaw 0xAE
-	#define itemPoisonClaw 0xAF
-	#define itemLongPoisonClaw 0xB0
-	#define itemFireFang 0xB1
-	#define itemHellFang 0xB2
-	#define itemEvilEye 0xB3
-	#define itemBloodyEye 0xB4
-	#define itemStone 0xB5
-	#define itemAircalibur 0xB6
-	#define itemJunaFruit 0xB7
-	#define item150G 0xB8
-	#define item200G 0xB9
-	#define itemBlackGem 0xBA
-	#define itemGoldGem 0xBB
+	// #define IronSword 0x01
+	// #define SlimSword 0x02
+	// #define SteelSword 0x03
+	// #define SilverSword 0x04
+	// #define IronBlade 0x05
+	// #define SteelBlade 0x06
+	// #define SilverBlade 0x07
+	// #define PoisonSword 0x08
+	// #define Rapier 0x09
+	// #define ManiKatti 0x0A
+	// #define BraveSword 0x0B
+	// #define Shamshir 0x0C
+	// #define KillingEdge 0x0D
+	// #define Armourslayer 0x0E
+	// #define Wyrmslayer 0x0F
+	// #define LightBrand 0x10
+	// #define Runesword 0x11
+	// #define Lancereaver 0x12
+	// #define Longsword 0x13
+	// #define IronLance 0x14
+	// #define SlimLance 0x15
+	// #define SteelLance 0x16
+	// #define SilverLance 0x17
+	// #define PoisonLance 0x18
+	// #define BraveLance 0x19
+	// #define KillerLance 0x1A
+	// #define Horseslayer 0x1B
+	// #define Javelin 0x1C
+	// #define Spear 0x1D
+	// #define Axereaver 0x1E
+	// #define IronAxe 0x1F
+	// #define SteelAxe 0x20
+	// #define SilverAxe 0x21
+	// #define PoisonAxe 0x22
+	// #define BraveAxe 0x23
+	// #define KillerAxe 0x24
+	// #define Halberd 0x25
+	// #define Hammer 0x26
+	// #define DevilAxe 0x27
+	// #define HandAxe 0x28
+	// #define Tomahawk 0x29
+	// #define Swordreaver 0x2A
+	// #define Swordslayer 0x2B
+	// #define Hatchet 0x2C
+	// #define IronBow 0x2D
+	// #define SteelBow 0x2E
+	// #define SilverBow 0x2F
+	// #define PoisonBow 0x30
+	// #define KillerBow 0x31
+	// #define BraveBow 0x32
+	// #define ShortBow 0x33
+	// #define Longbow 0x34
+	// #define Ballista 0x35
+	// #define IronBallista 0x36
+	// #define KillerBallista 0x37
+	// #define Fire 0x38
+	// #define Thunder 0x39
+	// #define Elfire 0x3A
+	// #define Bolting 0x3B
+	// #define Fimbulvetr 0x3C
+	// #define Forblaze 0x3D
+	// #define Excalibur 0x3E
+	// #define Lightning 0x3F
+	// #define Shine 0x40
+	// #define Divine 0x41
+	// #define Purge 0x42
+	// #define Aura 0x43
+	// #define Luce 0x44
+	// #define Flux 0x45
+	// #define Luna 0x46
+	// #define Nosferatu 0x47
+	// #define Eclipse 0x48
+	// #define Fenrir 0x49
+	// #define Gleipnir 0x4A
+	// #define Heal 0x4B
+	// #define Mend 0x4C
+	// #define Recover 0x4D
+	// #define Physic 0x4E
+	// #define Fortify 0x4F
+	// #define Restore 0x50
+	// #define Silence 0x51
+	// #define Sleep 0x52
+	// #define Berserk 0x53
+	// #define Warp 0x54
+	// #define Rescue 0x55
+	// #define TorchStaff 0x56
+	// #define Hammerne 0x57
+	// #define Unlock 0x58
+	// #define Barrier 0x59
+	// #define DragonAxe 0x5A
+	// #define AngelicRobe 0x5B
+	// #define EnergyRing 0x5C
+	// #define SecretBook 0x5D
+	// #define Speedwings 0x5E
+	// #define GoddessIcon 0x5F
+	// #define Dragonshield 0x60
+	// #define Talisman 0x61
+	// #define Boots 0x62
+	// #define BodyRing 0x63
+	// #define HeroCrest 0x64
+	// #define HerosCrest 0x64
+	// #define KnightCrest 0x65
+	// #define KnightsCrest 0x65
+	// #define OrionBolt 0x66
+	// #define OrionsBolt 0x66
+	// #define ElysianWhip 0x67
+	// #define GuidingRing 0x68
+	// #define ChestKey 0x69
+	// #define DoorKey 0x6A
+	// #define Lockpick 0x6B
+	// #define Vulnerary 0x6C
+	// #define Elixir 0x6D
+	// #define PureWater 0x6E
+	// #define Antidote 0x6F
+	// #define Torch 0x70
+	// #define DelphiShield 0x71
+	// #define MemberCard 0x72
+	// #define SilverCard 0x73
+	// #define WhiteGem 0x74
+	// #define BlueGem 0x75
+	// #define RedGem 0x76
+	// #define Gold 0x77
+	// #define Reginleif 0x78
+	#define ChestKey5 0x79
+	// #define Mine 0x7A
+	// #define LightRune 0x7B
+	// #define HoplonShield 0x7C
+	// #define FillasMight 0x7D
+	// #define NinissGrace 0x7E
+	// #define ThorsIre 0x7F
+	// #define SetsLitany 0x80
+	// #define ShadowKiller 0x81
+	// #define BrightLance 0x82
+	// #define FiendCleaver 0x83
+	// #define BeaconBow 0x84
+	// #define Sieglind 0x85
+	// #define BattleAxe 0x86
+	// #define Ivaldi 0x87
+	// #define MasterProof 0x88
+	// #define MetissTome 0x89
+	// #define HeavenSeal 0x8A
+	// #define SharpClaw 0x8B
+	// #define Latona 0x8C
+	// #define DragonSpear 0x8D
+	// #define Vidofnir 0x8E
+	// #define Naglfar 0x8F
+	// #define WretchedAir 0x90
+	// #define Audulma 0x91
+	// #define Siegmund 0x92
+	// #define Garm 0x93
+	// #define Nidhogg 0x94
+	// #define HeavySpear 0x95
+	// #define ShortSpear 0x96
+	// #define ConquerorsProof 0x97
+	// #define MoonBracelet 0x98
+	// #define SunBracelet 0x99
+	#define Item1G 0x9A
+	#define Item5G 0x9B
+	#define Item10G 0x9C
+	#define Item50G 0x9D
+	#define Item100G 0x9E
+	#define Item3000G 0x9F
+	#define Item5000G 0xA0
+	// #define WindSword 0xA1
+	#define Vulnerary2 0xA2
+	// #define Greennote 0xA3
+	// #define Rednote 0xA4
+	// #define Dance 0xA5
+	// #define Nightmare 0xA6
+	// #define DemonShard 0xA7
+	// #define DemonLight 0xA8
+	// #define Ravager 0xA9
+	// #define HolyDragonStone 0xAA
+	// #define DemonSurge 0xAB
+	// #define Shadowshot 0xAC
+	// #define RottenClaw 0xAD
+	// #define FetidClaw 0xAE
+	// #define PoisonClaw 0xAF
+	// #define LongPoisonClaw 0xB0
+	// #define FireFang 0xB1
+	// #define HellFang 0xB2
+	// #define EvilEye 0xB3
+	// #define BloodyEye 0xB4
+	// #define Stone 0xB5
+	// #define Aircalibur 0xB6
+	// #define JunaFruit 0xB7
+	#define Item150G 0xB8
+	#define Item200G 0xB9
+	// #define BlackGem 0xBA
+	// #define GoldGem 0xBB
 #endif // NO_VANILLA_ITEMS
 
 #endif // GAMEDATA_INDICES
