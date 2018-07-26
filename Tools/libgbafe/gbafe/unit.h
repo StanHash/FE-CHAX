@@ -194,9 +194,9 @@ Unit* GetNonAllyUnitStructById(uint8_t, UnitAllegiance); //! FE8U = 0x80182D9
 
 int CanUnitRescue(const Unit*, const Unit*);             //! FE8U = 0x801831D
 void UnitRescue(Unit*, Unit*);                           //! FE8U = 0x801834D
-void UpdateRescuingData(Unit*, int x, int y); // (Drop)  //! FE8U = 0x8018371
-void UpdateRescueData(Unit*, Unit*); // (Give)           //! FE8U = 0x80183C9
-void HandleAllegianceChange(Unit*, UnitAllegiance);      //! FE8U = 0x8018431
+void UnitDrop(Unit*, int x, int y); // (Drop)  //! FE8U = 0x8018371
+void UnitGive(Unit*, Unit*); // (Give)           //! FE8U = 0x80183C9
+void ChangeUnitAllegiance(Unit*, UnitAllegiance);      //! FE8U = 0x8018431
 void ApplyUnitMovement(Unit*);                           //! FE8U = 0x801849D
 
 void SetupActiveUnit(Unit*);                             //! FE8U = 0x801865D
@@ -205,25 +205,25 @@ void MoveActiveUnit(int x, int y);                       //! FE8U = 0x8018741
 
 void SetAllUnitNotBackSprite(void);                      //! FE8U = 0x801895D
 
-void ValidateUnitItem(Unit*, int slot);                  //! FE8U = 0x8018995
+void UnitDecreaseItemUse(Unit*, int slot);                  //! FE8U = 0x8018995
 
 int GetUnitAid(const Unit*);                             //! FE8U = 0x80189B9
 int GetUnitMagBy2Range(const Unit*);                     //! FE8U = 0x8018A1D
 int UnitHasMagicRank(const Unit*);                       //! FE8U = 0x8018A59
 int GetUnitUseFlags(const Unit*);                        //! FE8U = 0x8018B29
 
-int CanUnitMove(void);                                   //! FE8U = 0x8018BD9
+int CanActiveUnitMove(void);                                   //! FE8U = 0x8018BD9
 
-int IsPosMagicSealed(int x, int y);                      //! FE8U = 0x8018C99
+int IsPositionMagicSealed(int x, int y);                      //! FE8U = 0x8018C99
 int CanUnitNotUseMagic(const Unit*);                     //! FE8U = 0x8018D09
 
 uint16_t GetUnitLastItem(const Unit*);                   //! FE8U = 0x8018D35
 
-const uint8_t* GetMovCostTablePtr(const Unit*);          //! FE8U = 0x8018D4D
+const uint8_t* GetUnitMovCostTable(const Unit*);          //! FE8U = 0x8018D4D
 
 uint8_t GetClassStandingMapSpriteId(uint8_t);            //! FE8U = 0x8018D91
 
-void UpdatePrevDeployStates(void);                       //! FE8U = 0x8018DB1
+void MapMain_UpdatePrevDeployStates(void);                       //! FE8U = 0x8018DB1
 void LoadUnitPrepScreenPositions(void);                  //! FE8U = 0x8018E31
 int IsUnitSlotAvailable(UnitAllegiance);                 //! FE8U = 0x8018F49
 void ClearCutsceneUnits(void);                           //! FE8U = 0x80190B5
@@ -248,25 +248,13 @@ char* GetUnitStatusString(const Unit*);                  //! FE8U = 0x8019415
 
 Unit* GetUnit(uint8_t index);                            //! FE8U = 0x8019431
 
-ClassData GetROMClassStruct(uint8_t);                    //! FE8U = 0x8019445
-CharacterData GetROMCharStruct(uint8_t);                 //! FE8U = 0x8019465
+ClassData GetClassData(uint8_t);                    //! FE8U = 0x8019445
+CharacterData GetCharacterData(uint8_t);                 //! FE8U = 0x8019465
 
 void RemoveUnitItem(Unit*, int slot);                    //! FE8U = 0x8019485
 
 int CanUnitCrossTerrain(const Unit*, uint8_t terrain);   //! FE8U = 0x801949D
 
 #pragma long_calls_off
-
-// Better names that were not updated in fe8u.s yet
-#define UnitDrop UpdateRescuingData
-#define UnitGive UpdateRescueData
-#define UnitDecreaseItemUse ValidateUnitItem
-#define CanActiveUnitMove CanUnitMove
-#define IsPositionMagicSealed IsPosMagicSealed
-#define GetClassData GetROMClassStruct
-#define GetCharacterData GetROMCharStruct
-
-// compat with early versions
-#define active_unit gActiveUnit
 
 #endif // GBAFE_UNIT_H

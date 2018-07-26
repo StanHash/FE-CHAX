@@ -61,15 +61,15 @@ extern FontData* gpCurrentFont;
 
 #pragma long_calls
 
-void            Font_InitForUIDefault(void);                                                           //! FE8U = 0x8003C95
+void            Font_InitDefault(void);                                                           //! FE8U = 0x8003C95
 void            Font_InitForUI(FontData* pData, void* pVRAMTileRoot, uint16_t tileBase, int palIndex); //! FE8U = 0x8003CB9
-void            SetFontGlyphSet(FontGlyphType);                                                        //! FE8U = 0x8003CF5
+void            Font_SetGlyphSet(FontGlyphType);                                                        //! FE8U = 0x8003CF5
 void            Font_ResetAllocation(void);                                                            //! FE8U = 0x8003D21
 void            SetFont(FontData*);                                                                    //! FE8U = 0x8003D39
 
-void            Text_Init(TextHandle*, size_t tileWidth);                                              //! FE8U = 0x8003D5D
-void            Text_Allocate(TextHandle*, size_t tileWidth);                                          //! FE8U = 0x8003D85
-void            InitTextBatch(const TextBatchEntry[]);                                                 //! FE8U = 0x8003DAD
+void            Text_InitClear(TextHandle*, size_t tileWidth);                                              //! FE8U = 0x8003D5D
+void            Text_InitDB(TextHandle*, size_t tileWidth);                                          //! FE8U = 0x8003D85
+void            InitClearTextBatch(const TextBatchEntry[]);                                                 //! FE8U = 0x8003DAD
 
 void            Text_Clear(TextHandle*);                                                               //! FE8U = 0x8003DC9
 
@@ -99,36 +99,29 @@ void            Text_AppendChar(TextHandle*, char);                             
 // TODO: figure more out
 // (I only have vague knowledge on what most things past here does)
 
-void*           GetVRAMPointerForTextMaybe(TextHandle*);                                               //! FE8U = 0x80041E9
-const uint16_t* GetSomeTextDrawingRelatedTablePointer(int);                                            //! FE8U = 0x8004209
-void            Font_StandardGlyphDrawer(TextHandle*, const FontGlyphData*);                           //! FE8U = 0x8004219
-void            Font_SpecializedGlyphDrawer(TextHandle*, const FontGlyphData*);                        //! FE8U = 0x8004269
+void*           Text_Get1DVRAMTarget(TextHandle*);                                               //! FE8U = 0x80041E9
+const uint16_t* Get2bppTo4bppLookup(int);                                            //! FE8U = 0x8004209
+void            DrawGlyph1DTile(TextHandle*, const FontGlyphData*);                           //! FE8U = 0x8004219
+void            DrawGlyph1DTileNoClear(TextHandle*, const FontGlyphData*);                        //! FE8U = 0x8004269
 
 void            Font_LoadForUI(void);                                                                  //! FE8U = 0x80043A9
 void            Font_LoadForDialogue(void);                                                            //! FE8U = 0x80043E9
-void            Font_SetSomeSpecialDrawingRoutine(void);                                               //! FE8U = 0x8004429
+void            Font_SetDraw1DTileNoClear(void);                                               //! FE8U = 0x8004429
 
 void            DrawTextInline(TextHandle*, uint16_t* bg, int color, int xStart, int tileWidth, const char* cstring); //! FE8U = 0x800443D
 void            Text_InsertString(TextHandle*, int xPos, int color, const char* str);                  //! FE8U = 0x8004481
 void            Text_InsertNumberOr2Dashes(TextHandle*, int xPos, int color, uint8_t);                 //! FE8U = 0x80044A5
 
-void            Text_AppendStringSimple(TextHandle*, const char*);                                     //! FE8U = 0x80044C9
-void            Text_AppendCharSimple(TextHandle*, char);                                              //! FE8U = 0x8004505
+void            Text_AppendStringAscii(TextHandle*, const char*);                                     //! FE8U = 0x80044C9
+void            Text_AppendCharAscii(TextHandle*, char);                                              //! FE8U = 0x8004505
 
-const char*     GetCharTextWidthSimple(const char* in, size_t* out);                                   //! FE8U = 0x8004539
-size_t          GetStringTextWidthSimple(const char*);                                                 //! FE8U = 0x8004569
+const char*     GetCharTextWidthAscii(const char* in, size_t* out);                                   //! FE8U = 0x8004539
+size_t          GetStringTextWidthAscii(const char*);                                                 //! FE8U = 0x8004569
 
-void            InitSomeOtherGraphicsRelatedStruct(FontData*, void* vram, int pal);                    //! FE8U = 0x800459D
-void            Text_Init3(TextHandle*);                                                               //! FE8U = 0x80045D9
-void            Text_80046B4(TextHandle*);                                                             //! FE8U = 0x80046B5
+void            Font_InitForObj(FontData*, void* vram, int pal);                    //! FE8U = 0x800459D
+void            Text_InitClear3(TextHandle*);                                                               //! FE8U = 0x80045D9
+void            Text_Fill2DLine(TextHandle*);                                                             //! FE8U = 0x80046B5
 
 #pragma long_calls_off
-
-#define Get2bppTo4bppLookup GetSomeTextDrawingRelatedTablePointer
-
-#define DrawGlyph1DTile Font_StandardGlyphDrawer
-#define DrawGlyph1DTileNoClear Font_SpecializedGlyphDrawer
-
-#define Font_SetDraw1DTileNoClear Font_SetSomeSpecialDrawingRoutine
 
 #endif // GBAFE_TEXT_H

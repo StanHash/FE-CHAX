@@ -39,12 +39,12 @@ struct FaceGfxDefinition {
 
 #pragma long_calls
 
-const PortraitData* GetPortraitStructPointer(int portraitId);                   //! FE8U = 0x8005515
-void                ResetFaces(void);                                           //! FE8U = 0x8005529
-void                SetupFaceGfxData(const FaceGfxDefinition[4]);               //! FE8U = 0x8005545
+const PortraitData* GetPortraitData(int portraitId);                   //! FE8U = 0x8005515
+void                InitFaces(void);                                           //! FE8U = 0x8005529
+void                SetFaceGfxConfig(const FaceGfxDefinition[4]);               //! FE8U = 0x8005545
 FaceProc*           NewFace(int faceId, int portraitId, int x, int y, int idk); //! FE8U = 0x800563D
-void                DeleteFaceByPointer(FaceProc*);                             //! FE8U = 0x8005739
-void                DeleteFaceByIndex(int index);                               //! FE8U = 0x8005759
+void                EndFace(FaceProc*);                             //! FE8U = 0x8005739
+void                EndFaceById(int index);                               //! FE8U = 0x8005759
 int                 ShouldPortraitBeSmol(int portraitId);                       //! FE8U = 0x8005C25
 
 #pragma long_calls_off

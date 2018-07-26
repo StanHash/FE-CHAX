@@ -3,8 +3,7 @@
 // FIXME
 static const Vector2* const pCameraDisplayPosition = (const Vector2*) (0x0202BCB0 + 0x0C);
 
-void New6C_SomethingFlashy(Unit* unit, int x, int y) __attribute__((long_call));
-#define StartUnitWarpRing New6C_SomethingFlashy
+void StartUnitWarpRing(Unit* unit, int x, int y) __attribute__((long_call));
 
 void StartStarExplosionEffect(int x, int y) __attribute__((long_call));
 void StartStarImplosionEffect(int x, int y) __attribute__((long_call));

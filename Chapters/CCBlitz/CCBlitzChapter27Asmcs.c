@@ -82,7 +82,7 @@ void MapChangeListASMC(Proc* proc) {
 
 	ApplyListedMapChanges((const short*)(gEventSlot[2]));
 
-	RefreshTileMaps();
+	RefreshTerrainMap();
 	UpdateUnitsUnderRoof();
 
 	DrawTileGraphics(); // update bg3
@@ -123,7 +123,7 @@ void TorchSetASMC(Proc* proc) {
 	RefreshEntityMaps();
 	SMS_UpdateFromGameData();
 
-	RefreshTileMaps();
+	RefreshTerrainMap();
 	DrawTileGraphics();
 
 	StartBlockingBMXFADE(1, proc); // fade from bg2 to bg3
@@ -412,7 +412,7 @@ void USAOnEnd(struct UnitSlideAnimProc* proc) {
 	RefreshEntityMaps();
 	SMS_UpdateFromGameData();
 
-	RefreshTileMaps();
+	RefreshTerrainMap();
 	DrawTileGraphics();
 }
 

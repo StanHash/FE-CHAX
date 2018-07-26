@@ -45,11 +45,11 @@ void LoadIconObjectGraphics(int icon, unsigned tile) {
 	}
 }
 
-void ResetIconGraphics(void) {
+void ClearIcons(void) {
 	CpuFill32(-1, IDRIconUsageLookup, MAX_SIMULTANEOUS_ICONS * sizeof(u16));
 }
 
-void ClearIconGfx(unsigned icon) {
+void ClearIcon(unsigned icon) {
 	u16* it  = IDRIconUsageLookup;
 	u16* end = IDRIconUsageLookup + MAX_SIMULTANEOUS_ICONS;
 

@@ -131,7 +131,7 @@ int       GetBgIdFromMapBuffer(const uint16_t*);               //! FE8U = 0x8001
 void      SetBgDepth(int bg, int depth);                       //! FE8U = 0x8001E6D
 int       GetBgDepth(int bg);                                  //! FE8U = 0x8001E8D
 
-void      SetSpecialColorEffectsParameters(int id, int eva, int evb, int evy); //! FE8U = 0x8001EA1
+void      SetColorEffectsParameters(int id, int eva, int evb, int evy); //! FE8U = 0x8001EA1
 void      SetDefaultColorEffects(void);                        //! FE8U = 0x8001F81
 
 void      EnablePaletteSync(void);                             //! FE8U = 0x8001F95
@@ -143,8 +143,6 @@ void      EnableBgSyncByIndex(int bg);                         //! FE8U = 0x8001
 
 // better names
 #define gLCDIOBuffer gLCDControlBuffer
-
-#define SetColorEffectParameters SetSpecialColorEffectsParameters
 
 // TODO: add to list
 #define SetColorEffectFirstTarget ((void(*)(int, int, int, int, int))(0x08001F0D))

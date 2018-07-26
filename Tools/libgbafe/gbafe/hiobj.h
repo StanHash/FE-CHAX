@@ -7,9 +7,9 @@
 
 #pragma long_calls
 
-void ClearIntermediateOAMBuffers(void); //! FE8U = 0x80053A5
-void RegisterObjectAttributes_SafeMaybe(int node, uint16_t xBase, uint16_t yBase, const ObjData* pData, uint16_t tileBase); //! FE8U = 0x80053E9
-void RegisterObjectAttributes(int node, uint16_t xBase, uint16_t yBase, const ObjData* pData, uint16_t tileBase); //! FE8U = 0x8005429
+void HiObjClear(void); //! FE8U = 0x80053A5
+void HiObjInsertSafe(int node, uint16_t xBase, uint16_t yBase, const ObjData* pData, uint16_t tileBase); //! FE8U = 0x80053E9
+void HiObjInsert(int node, uint16_t xBase, uint16_t yBase, const ObjData* pData, uint16_t tileBase); //! FE8U = 0x8005429
 void HiObjProcess(void); //! FE8U = 0x8005459
 
 // TODO
@@ -17,10 +17,5 @@ void HiObjProcess(void); //! FE8U = 0x8005459
 // void  MoveHiObjProc(Proc* proc, uint16_t xBase, uint16_t yBase);
 
 #pragma long_calls_off
-
-// better names
-#define HiObjClear      ClearIntermediateOAMBuffers
-#define HiObjInsertSafe RegisterObjectAttributes_SafeMaybe
-#define HiObjInsert     RegisterObjectAttributes
 
 #endif // GBAFE_HIOBJ_H

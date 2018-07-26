@@ -68,7 +68,7 @@ void ChangeSingleTileExt(int x, int y, int tileID, int display, Proc* parent) {
 		SET_TRAP_CHANGE_TILE(trap, tileID);
 		ApplySingleTileChange(TRAP_CHANGE_X(trap), TRAP_CHANGE_Y(trap), GET_TRAP_CHANGE_TILE(trap));
 		
-		RefreshTileMaps();
+		RefreshTerrainMap();
 		UpdateUnitsUnderRoof();
 		DrawTileGraphics();
 		

@@ -3,9 +3,7 @@
 // FIXME and update fe8u.s
 
 extern void HandlePlayerCursorMovement(void) __attribute__((long_call));
-extern void PlaySound(int) __attribute__((long_call));
-
-#define m4aSongNumStart PlaySound
+extern void m4aSongNumStart(int) __attribute__((long_call));
 
 extern const u16 gAP_SelectCursorThing[];
 

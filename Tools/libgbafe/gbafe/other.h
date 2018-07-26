@@ -28,9 +28,9 @@ int BMXFADEExists();                                       //! FE8U = (0x0801DE1
 
 unsigned GetPhaseAbleUnitCount(unsigned phase);            //! FE8U = (0x08024CED+1)
 
-Proc* NewBottomHelpText(Proc*, const char*);               //! FE8U = 0x8035709
-void DeleteEach6CBB(void);                                 //! FE8U = 0x8035749
-int BBExists(void);                                        //! FE8U = 0x8035759
+Proc* StartBottomHelpText(Proc*, const char*);               //! FE8U = 0x8035709
+void EndBottomHelpText(void);                                 //! FE8U = 0x8035749
+int IsBottomHelpTextActive(void);                                        //! FE8U = 0x8035759
 
 // int div(int, int); // FE8U = (0x080D1AD4+1)
 // int mod(int, int); // FE8U = (0x080D1B4C+1)
@@ -39,9 +39,5 @@ void* memcpy(void* dest, const void* src, unsigned int count); //! FE8U = (0x080
 void* memset(void* dest, int ch, unsigned int count);          //! FE8U = (0x080D1C6C+1)
 
 #pragma long_calls_off
-
-#define StartBottomHelpText NewBottomHelpText
-#define EndBottomHelpText DeleteEach6CBB
-#define IsBottomHelpTextActive BBExists
 
 #endif // GBAFE_OTHER_H
