@@ -1,0 +1,29 @@
+#ifndef DATA_LIST_FORCEDEPLOY
+#define DATA_LIST_FORCEDEPLOY
+
+{
+
+#ifndef ForceDeployedDefined
+	#define ForceDeployedDefined
+
+	#define ForceDeployed(aCharacter) "SHORT (aCharacter); BYTE 0xFF 0xFF"
+	#define ForceDeployed(aCharacter, aChapter) "SHORT (aCharacter); BYTE (aChapter) 0xFF"
+	#define ForceDeployed(aCharacter, aChapter, aMode) "SHORT (aCharacter); BYTE (aChapter) (aMode)"
+	#define ForceDeployedEnd "SHORT 0xFFFF 0"
+#endif // ForceDeployedDefined
+
+// Repointing the Force Deploy Table
+
+PUSH; ORG $8483C
+	POIN ForceDeployList
+POP
+
+ALIGN 4
+ForceDeployList:
+	ForceDeployed(Eirika)
+
+	ForceDeployedEnd
+
+}
+
+#endif // DATA_LIST_FORCEDEPLOY
