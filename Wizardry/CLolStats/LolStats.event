@@ -1,0 +1,20 @@
+#ifndef HAX_LOLSTATS
+#define HAX_LOLSTATS
+
+#ifndef _FE8_
+	ERROR LOLSTATS is for FE8
+#endif
+
+#include "Extensions/Hack Installation.txt"
+
+{
+
+PUSH; ORG 0x2B9A0
+	jumpToHack(GetStatIncrease)
+POP
+
+#include "src/LolStats.lyn.event"
+
+}
+
+#endif // HAX_LOLSTATS
