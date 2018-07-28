@@ -1,0 +1,58 @@
+#ifndef WIZARDRY
+#define WIZARDRY
+
+#include "_FE8EssentialFixes.event"
+#include "_FE8ProcNameFix.event"
+
+#define TextScrollSpeed 4
+#include "TextScrollSpeed.event"
+
+#include "CUnitAction/UnitAction.event"
+#include "CIconDisplay/IconDisplay.event"
+
+#include "CFreeSelect/FreeSelect.event"
+#include "CRewarp/Rewarp.event"
+#include "CLolStats/LolStats.event"
+
+#include "UnitMenu.event"
+
+/*
+
+// Custom BattleCalc/TradeCheck and what not lists here
+// Example:
+
+ALIGN 4
+BattleStatCalcList:
+	POIN BCalcDefRes
+	POIN BCalcPower
+	POIN BCalcASpd
+	POIN BCalcHit
+	POIN BCalcAvo
+	POIN BCalcCrit
+	POIN BCalcDodge
+	POIN BCalcSupport
+	POIN BCalcWRank
+	POIN BCalcStatus
+
+	// Extra things
+
+	WORD 0 // end
+
+#define BattleStatCalcListDeclared
+
+TradeCheckList:
+	POIN AreUnitsSameAllegiance
+	POIN AreNeitherUnitPhantomClass
+
+	// Extra things
+
+	WORD 0 // end
+
+#define TradeCheckListDeclared
+
+*/
+
+#include "CBattleCalc/CBattleCalc.event"
+#include "TradeCheck/TradeCheck.event"
+
+#endif // WIZARDRY

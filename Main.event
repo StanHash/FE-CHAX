@@ -21,21 +21,8 @@ ORG FreeSpace
 	ALIGN 4
 	#include "GameData/GameData.event"
 
-	#include "Wizardry/_FE8EssentialFixes.event"
-	#include "Wizardry/_FE8ProcNameFix.event"
-
-	#define TextScrollSpeed 4
-	#include "Wizardry/TextScrollSpeed.event"
-
-	#include "Wizardry/CUnitAction/UnitAction.event"
-	#include "Wizardry/CIconDisplay/IconDisplay.event"
-	#include "Wizardry/CBattleCalc/CBattleCalc.event"
-
-	#include "Wizardry/CFreeSelect/FreeSelect.event"
-	#include "Wizardry/CRewarp/Rewarp.event"
-	#include "Wizardry/CLolStats/LolStats.event"
-
-	#include "Wizardry/UnitMenu.event"
+	ALIGN 4
+	#include "Wizardry/_WizardryMain.event"
 
 	ALIGN 4
 	#include "Spritans/Portraits.event"
