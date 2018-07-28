@@ -8,6 +8,17 @@
 #include "Extensions/Hack Installation.txt"
 #include "EAstdlib.event"
 
+BCalcDefRes  = $2AA44+1
+BCalcPower   = $2AABC+1
+BCalcASpd    = $2AB74+1
+BCalcHit     = $2ABAC+1
+BCalcAvo     = $2ABE4+1
+BCalcCrit    = $2AC18+1
+BCalcDodge   = $2AC54+1
+BCalcSupport = $2A9D0+1
+BCalcWRank   = $2AD54+1
+BCalcStatus  = $2AD90+1
+
 {
 
 PUSH; ORG 0x2A95C
@@ -16,33 +27,24 @@ POP
 
 #include "src/BattleCalcCore.lyn.event"
 
-}
+#ifndef BattleStatCalcListDeclared
 
 ALIGN 4
-BattleStatCalcList: {
-	POIN BCDefRes
-	POIN BCPower
-	POIN BCASpd
-	POIN BCHit
-	POIN BCAvo
-	POIN BCCrit
-	POIN BCDodge
-	POIN BCSupport
-	POIN BCWRank
-	POIN BCStatus
+BattleStatCalcList:
+	POIN BCalcDefRes
+	POIN BCalcPower
+	POIN BCalcASpd
+	POIN BCalcHit
+	POIN BCalcAvo
+	POIN BCalcCrit
+	POIN BCalcDodge
+	POIN BCalcSupport
+	POIN BCalcWRank
+	POIN BCalcStatus
 
 	WORD 0
 
-BCDefRes  = $2AA44+1
-BCPower   = $2AABC+1
-BCASpd    = $2AB74+1
-BCHit     = $2ABAC+1
-BCAvo     = $2ABE4+1
-BCCrit    = $2AC18+1
-BCDodge   = $2AC54+1
-BCSupport = $2A9D0+1
-BCWRank   = $2AD54+1
-BCStatus  = $2AD90+1
+#endif // BattleStatCalcListDeclared
 
 }
 
