@@ -3,6 +3,13 @@
 
 #include "common.h"
 
+enum {
+	MLV_MOVE_BLUE = 0x01,
+	MLV_RANGE_RED = 0x02,
+	MLV_RANGE_GREEN = 0x04,
+	MLV_RANGE_BLUE = 0x08,
+};
+
 #define COS_LOOKUP(value) (gSinLookup[(value)])
 #define SIN_LOOKUP(value) (gCosLookup[(value)])
 
@@ -13,6 +20,8 @@ extern const ProcCode gProc_GoBackToUnitMenu[];
 extern const ProcCode gProc_PlayerPhase[];
 
 #pragma long_calls
+
+char* GetStringFromIndex(int index); //! FE8U = 0x800A241
 
 void SetCursorMapPosition(int x, int y); //! FE8U = 0x8015BBD
 
@@ -31,6 +40,8 @@ unsigned GetPhaseAbleUnitCount(unsigned phase); //! FE8U = (0x08024CED+1)
 Proc* StartBottomHelpText(Proc*, const char*); //! FE8U = 0x8035709
 void EndBottomHelpText(void); //! FE8U = 0x8035749
 int IsBottomHelpTextActive(void); //! FE8U = 0x8035759
+
+void StartStatScreen(const struct Unit* unit, struct Proc* parent); //! FE8U = 0x808894D
 
 // int div(int, int); // FE8U = (0x080D1AD4+1)
 // int mod(int, int); // FE8U = (0x080D1B4C+1)

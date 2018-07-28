@@ -3,6 +3,8 @@
 
 #include "proc.h"
 
+struct TargetSelectionProc;
+
 typedef struct TargetEntry TargetEntry;
 typedef struct TargetSelectionDefinition TargetSelectionDefinition;
 typedef struct TargetSelectionProc TargetSelectionProc;
@@ -17,17 +19,17 @@ struct TargetEntry {
 };
 
 struct TargetSelectionDefinition {
-	/* 00 */ void(*onInit)(TargetSelectionProc*);
-	/* 04 */ void(*onEnd)(TargetSelectionProc*);
+	/* 00 */ void(*onInit)(struct TargetSelectionProc*);
+	/* 04 */ void(*onEnd)(struct TargetSelectionProc*);
 	
-	/* 08 */ void(*onInitTarget)(TargetSelectionProc*, TargetEntry*);
+	/* 08 */ void(*onInitTarget)(struct TargetSelectionProc*, struct TargetEntry*);
 
-	/* 0C */ void(*onSwitchIn)(TargetSelectionProc*, TargetEntry*);
-	/* 10 */ void(*onSwitchOut)(TargetSelectionProc*, TargetEntry*);
+	/* 0C */ void(*onSwitchIn)(struct TargetSelectionProc*, struct TargetEntry*);
+	/* 10 */ void(*onSwitchOut)(struct TargetSelectionProc*, struct TargetEntry*);
 
-	/* 14 */ int(*onAPress)(TargetSelectionProc*, TargetEntry*);
-	/* 18 */ int(*onBPress)(TargetSelectionProc*, TargetEntry*);
-	/* 1C */ int(*onRPress)(TargetSelectionProc*, TargetEntry*);
+	/* 14 */ int(*onAPress)(struct TargetSelectionProc*, struct TargetEntry*);
+	/* 18 */ int(*onBPress)(struct TargetSelectionProc*, struct TargetEntry*);
+	/* 1C */ int(*onRPress)(struct TargetSelectionProc*, struct TargetEntry*);
 };
 
 struct TargetSelectionProc {
@@ -62,23 +64,31 @@ void InitTargets(int x, int y); //! FE8U = 0x804F8A5
 void AddTarget(int x, int y, u8 unit, u8 trap); //! FE8U = 0x804F8BD
 void LinkTargets(void); //! FE8U = 0x804F911
 
-void TargetSelection_GetRealCursorPosition(TargetSelectionProc*, int* xTarget, int* yTarget); //! FE8U = 0x804F959
-void TargetSelection_Loop(TargetSelectionProc*); //! FE8U = 0x804F96D
+void TargetSelection_GetRealCursorPosition(struct TargetSelectionProc*, int* xTarget, int* yTarget); //! FE8U = 0x804F959
+void TargetSelection_Loop(struct TargetSelectionProc*); //! FE8U = 0x804F96D
 
-TargetSelectionProc* StartTargetSelection(const TargetSelectionDefinition*); //! FE8U = 0x804FA3D
-TargetSelectionProc* StartTargetSelectionExt(const TargetSelectionDefinition*, int(*)(TargetSelectionProc*, TargetEntry*)); //! FE8U = 0x804FAA5
+struct TargetSelectionProc* StartTargetSelection(const struct TargetSelectionDefinition*); //! FE8U = 0x804FA3D
+struct TargetSelectionProc* StartTargetSelectionExt(const struct TargetSelectionDefinition*, int(*)(struct TargetSelectionProc*, struct TargetEntry*)); //! FE8U = 0x804FAA5
 
-void EndTargetSelection(TargetSelectionProc*); //! FE8U = 0x804FAB9
+struct Proc* EndTargetSelection(struct TargetSelectionProc*); //! FE8U = 0x804FAB9
 
 // TargetSelection_HandleMoveInput //! FE8U = 0x804FAED
 // TargetSelection_HandleSelectInput //! FE8U = 0x804FB65
 
-unsigned int GetFarthestTargetIndex(void); //! FE8U = 0x804FBFD
-TargetEntry* LinkTargetsOrdered(void); //! FE8U = 0x804FC5D
-TargetEntry* GetLinkedTargetList(void); //! FE8U = 0x804FD01
-TargetEntry* GetFirstTargetPointer(void); //! FE8U = 0x804FD11
-unsigned int GetTargetListSize(void); //! FE8U = 0x804FD29
-TargetEntry* GetTarget(unsigned int index); //! FE8U = 0x804FD35
+unsigned GetFarthestTargetIndex(void); //! FE8U = 0x804FBFD
+struct TargetEntry* LinkTargetsOrdered(void); //! FE8U = 0x804FC5D
+struct TargetEntry* GetLinkedTargetList(void); //! FE8U = 0x804FD01
+struct TargetEntry* GetFirstTargetPointer(void); //! FE8U = 0x804FD11
+unsigned GetTargetListSize(void); //! FE8U = 0x804FD29
+struct TargetEntry* GetTarget(unsigned index); //! FE8U = 0x804FD35
+
+void ForEachUnitInRange(void(*)(struct Unit*)); //! FE8U = 0x8024EAD
+void ForEachPosInRange(void(*)(int, int)); //! FE8U = 0x8024F19
+void ForEachAdjacentUnit(int x, int y, void(*)(struct Unit*)); //! FE8U = 0x8024F71
+void ForEachAdjacentPosition(int x, int y, void(*)(int, int)); //! FE8U = 0x8024FA5
+
+int GenericSelection_BackToUM(TargetSelectionProc*, TargetEntry*); //! FE8U = 0x8022749
+int GenericSelection_BackToUM_CamWait(TargetSelectionProc*, TargetEntry*); //! FE8U = 0x802282D
 
 #pragma long_calls_off
 
