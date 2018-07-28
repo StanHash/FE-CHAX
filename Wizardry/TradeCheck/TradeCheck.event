@@ -1,0 +1,25 @@
+#ifndef HAX_TRADECHECK
+#define HAX_TRADECHECK
+
+{
+
+PUSH; ORG $25224
+	#include "src/TradeCheckHook.lyn.event"
+POP
+
+#include "src/TradeCheckLoop.lyn.event"
+
+#ifndef TradeCheckListDeclared
+
+TradeCheckList:
+	POIN AreUnitsSameAllegiance
+	POIN AreNeitherUnitPhantomClass
+	WORD 0
+
+#endif // TradeCheckListDeclared
+
+}
+
+#include "src/TradeCheckVanilla.lyn.event"
+
+#endif // HAX_TRADECHECK
