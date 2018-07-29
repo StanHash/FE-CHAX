@@ -35,6 +35,7 @@ extern "C" {
 #include "gbafe/trap.h"
 #include "gbafe/action.h"
 #include "gbafe/chapterdata.h"
+#include "gbafe/animinterpreter.h"
 #include "gbafe/other.h"
 
 #ifdef __cplusplus
