@@ -14,12 +14,9 @@
 #include "CRewarp/Rewarp.event"
 #include "CLolStats/LolStats.event"
 
+#include "Mimic/Mimic.event"
+
 #include "UnitMenu.event"
-
-/*
-
-// Custom BattleCalc/TradeCheck and what not lists here
-// Example:
 
 ALIGN 4
 BattleStatCalcList:
@@ -44,13 +41,13 @@ TradeCheckList:
 	POIN AreUnitsSameAllegiance
 	POIN AreNeitherUnitPhantomClass
 
-	// Extra things
+#ifdef HAX_MIMIC
+	POIN AreNeitherUnitMimics
+#endif // HAX_MIMIC
 
 	WORD 0 // end
 
 #define TradeCheckListDeclared
-
-*/
 
 #include "CBattleCalc/CBattleCalc.event"
 #include "TradeCheck/TradeCheck.event"

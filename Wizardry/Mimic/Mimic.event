@@ -1,0 +1,46 @@
+#ifndef HAX_MIMIC
+#define HAX_MIMIC
+
+#ifndef HAX_AAR
+	ERROR please include CUnitAction before Mimic
+#endif // HAX_AAR
+
+#ifndef CHARACTER_MIMIC
+	#define CHARACTER_MIMIC 0xC0
+#endif // CHARACTER_MIMIC
+
+#ifndef ACTION_MIMIC
+	#define ACTION_MIMIC 0x28
+#endif // ACTION_MIMIC
+
+#include "src/Mimic.lyn.event"
+#include "src/MimicSelection.lyn.event"
+#include "src/MimicEffect.lyn.event"
+
+InjectUnitAction(ACTION_MIMIC, ActionRoutine(MimicAction))
+
+ALIGN 4
+MimicCharacterId:
+	WORD CHARACTER_MIMIC
+
+ALIGN 4
+MimicCommandActionId:
+	WORD ACTION_MIMIC
+
+ALIGN 4
+MimicUnitSelectHelpTextId:
+#ifdef textMimicUnitSelectHelp
+	WORD textMimicUnitSelectHelp
+#else
+	WORD 0
+#endif
+
+ALIGN 4
+MimicPositionSelectHelpTextId:
+#ifdef textMimicPositionSelectHelp
+	WORD textMimicPositionSelectHelp
+#else
+	WORD 0
+#endif
+
+#endif // HAX_MIMIC

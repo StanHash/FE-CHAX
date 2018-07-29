@@ -1,0 +1,13 @@
+
+## textMimicCommandName
+ Mimic[X]
+
+## textMimicCommandDesc
+Summons a copy of[NL]
+another unit.[X]
+
+## textMimicUnitSelectHelp
+Choose a unit to make a copy of.[X]
+
+## textMimicPositionSelectHelp
+Choose where to spawn the copy.[X]
