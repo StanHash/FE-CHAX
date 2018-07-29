@@ -29,7 +29,7 @@ static void IBIUnpauseAllMainAIs(struct Proc*);
 static const struct ProcInstruction sProc_IncorrectBlitzInputMessage[] = {
 	PROC_SET_NAME("Stan:CCBlitz:IncorrectBlitzInput"),
 
-	PROC_LOOP_ROUTINE(IBIPauseAllMainAIs),
+	PROC_CALL_ROUTINE(IBIPauseAllMainAIs),
 
 	PROC_CALL_ROUTINE(IBIStartHideNamewin),
 	PROC_LOOP_ROUTINE(IBIWaitForNamewin),
@@ -90,10 +90,6 @@ static void IBIHBlankPalEffect(void) {
 static void IBIPauseAllMainAIs(struct IBIProc* proc) {
 	for (unsigned i = 0; i < 4; ++i)
 		gBattleAnimMainAIs[i]->state = gBattleAnimMainAIs[i]->state | 0x0008;
-
-	// Hopefully we can bruteforce our way through disabling AIs with this
-	if ((--proc->countDown) <= 0)
-		BreakProcLoop((Proc*)(proc));
 }
 
 static void IBIStartHideNamewin(struct Proc* proc) {
