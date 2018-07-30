@@ -108,11 +108,10 @@ static void IBIDrawBox(struct Proc* proc) {
 	// Init font
 	struct FontData font; {
 		Font_InitForUI(&font, (void*)(VRAM + 0x20 * (boxGfxTileBase + 9)), (boxGfxTileBase + 9), boxGfxPalId);
-		Font_SetGlyphSet(FONT_GLYPH_DIALOGUE);
-
-		font.drawGlyph = DrawGlyph1DTileNoClear;
-
 		SetFont(&font);
+
+		Font_SetGlyphSet(FONT_GLYPH_DIALOGUE);
+		Font_SetDraw1DTileNoClear();
 	}
 
 	// Load window graphics
@@ -155,8 +154,8 @@ static void IBIDrawBox(struct Proc* proc) {
 	Text_AppendString(&text, "Incorrect Blitz Input!");
 	Text_Draw(&text, BG_LOCATED_TILE(gBg1MapBuffer, 1, 1));
 
-	// Sync bg 0 & 1
-	EnableBgSyncByMask(0b11);
+	// Sync bg 1
+	EnableBgSyncByMask(0b10);
 
 	// Set the sweet palette effect thing as HBlank thing
 	SetPrimaryHBlankCallback(IBIHBlankPalEffect);
@@ -176,7 +175,7 @@ static void IBIWaitCountDown(struct IBIProc* proc) {
 
 static void IBIClearBox(struct Proc* proc) {
 	FillBgMap(gBg1MapBuffer, 0);
-	EnableBgSyncByIndex(1);
+	EnableBgSyncByMask(0b10);
 
 	SetPrimaryHBlankCallback(NULL);
 }
