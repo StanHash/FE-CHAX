@@ -35,6 +35,8 @@ SetSymbol(scPrepScreen,         $591FD8) // no args
 SetSymbol(scNoSkipFadeOut,      $591F40) // no args
 SetSymbol(scLoadReinforcements, $9EE274) // args: s2 = pointer to UNITs
 
+SetSymbol(sfxWind, 0x122)
+
 // ==============
 // CHAPTER CONFIG
 // ==============
@@ -142,6 +144,8 @@ TurnEventList:
 	TURN eidBoss       scBossWantsToFight [0, 0xFF] 0
 
 	TURN 0 scHumanReinfFurther [0, 0xFF] 0
+	
+	TURN 0 scTurnOneIntro [1] 0
 
 	END_MAIN
 
@@ -275,6 +279,8 @@ scGetNextMonsterIndex: {
 	BNE inc rC r1
 
 	COUNTER_SET cntMonsterCycle 0
+	
+	GOTO end
 
 LABEL inc
 	// EA Raw is broken, there's only one argument and it's the counted id
@@ -299,6 +305,8 @@ scGetNextHumanGroupIndex: {
 	BNE inc rC r1
 
 	COUNTER_SET cntHumanCycle 0
+	
+	GOTO end
 
 LABEL inc
 	// EA Raw is broken, there's only one argument and it's the counted id
@@ -358,6 +366,7 @@ scBeginning: {
 	CALL scResetKillCount
 
 #ifdef __DEBUG__
+	// Extra Help Debug Team
 	LOAD1 0 unPlayerList
 #endif // __DEBUG__
 
@@ -373,10 +382,18 @@ scBeginning: {
 
 	// Uncomment if we want some dialogue before prep screen
 	// CALL scNoSkipFadeOut
-
+	
 	// TODO (polish): Some intro text maybe
-
+	
 	CALL scPrepScreen
+
+	NoFade
+	ENDA
+}
+
+ALIGN 4
+scTurnOneIntro: {
+	// TODO (polish): Post prep screen intro text
 
 	NoFade
 	ENDA
@@ -398,7 +415,7 @@ scShiftSands: {
 
 	ASMC SlideAllUnitsASMC
 
-	// TODO (polish): play windy sound?
+	SOUN sfxWind
 
 	CHECK_TURNS
 
@@ -775,8 +792,7 @@ scHumanReinf: {
 	LOAD1 0 unEnemyHumanInitialSandCleaner
 	ENUN
 
-	// TODO (polish): have mage animate and cast spell
-	// TODO (polish): play windy sound?
+	SOUN sfxWind
 
 	EARTHQUAKE_START 0
 
@@ -798,6 +814,8 @@ scHumanReinf: {
 
 	LOAD1 0 unEnemyHumanInitialWave
 	ENUN
+	
+	// TODO (polish): "oho who them?"
 
 	ENUT eidHumanReinfActive
 
@@ -867,6 +885,9 @@ scBossWantsToFight: {
 
 	// TODO (polish): Text where people are "ono a dragn"
 
+	CALL scNoSkipFadeOut
+	EVBIT_MODIFY 1 // Disable Start-Skip
+	
 	SVAL r1 0x00010000
 	SSUB slotsParam(rB, rB, r1)
 
@@ -889,16 +910,14 @@ scBossWantsToFight: {
 	MOVEFORCED 0 Ch27ChrZomboss 0
 	ENUN
 
-	// TODO (polish): Text where Denis says he scared the dragn off for now but we must defeat him
-
+	EVBIT_MODIFY 0 // Re-enable Start-Skip
+	
 	_0x2620 0xFFFF
 
 	ASMC TorchStaffAnimASMC
 	ASMC TorchSetASMC
 
 	STAL 20
-
-	// TODO (polish): Maybe be like "here he is!"
 
 	SVAL r2 (IsPointer | unEnemyMonsterDragonSupport)
 	CALL scLoadReinforcements
@@ -911,10 +930,36 @@ scBossWantsToFight: {
 
 ALIGN 4
 scYouShouldntBeHere: {
+	SetSymbol(end, 0)
+
+	CHECK_ALLEGIANCE ActiveUnit
+	BNE end rC r0
+
 	ASMC SendActiveUnitAwayASMC
 
-	// TODO (polish): Text box/popup saying "X was undeployed." or something
+LABEL end
+	NoFade
+	ENDA
+}
 
+ALIGN 4
+scTreasureCommon: {
+	SetSymbol(not_ally, 0)
+	SetSymbol(end,      1)
+
+	CHECK_ALLEGIANCE ActiveUnit
+	BNE not_ally rC r0
+
+	GIVEITEMTO ActiveUnit
+
+	GOTO end
+
+LABEL not_ally
+	CHECK_EVENTID // wtf EA Raws (there's two of those raws with the same name that do pretty different things
+	SADD slotsParam(r2, rC, r0)
+	ENUF_SLOT2
+
+LABEL end
 	NoFade
 	ENDA
 }
@@ -922,7 +967,7 @@ scYouShouldntBeHere: {
 ALIGN 4
 scTreasure1: {
 	SVAL r3 EnergyRing
-	GIVEITEMTO ActiveUnit
+	CALL scTreasureCommon
 
 	NoFade
 	ENDA
@@ -931,7 +976,7 @@ scTreasure1: {
 ALIGN 4
 scTreasure2: {
 	SVAL r3 Boots
-	GIVEITEMTO ActiveUnit
+	CALL scTreasureCommon
 
 	NoFade
 	ENDA
@@ -940,7 +985,7 @@ scTreasure2: {
 ALIGN 4
 scTreasure3: {
 	SVAL r3 Dracoshield 
-	GIVEITEMTO ActiveUnit
+	CALL scTreasureCommon
 
 	NoFade
 	ENDA
@@ -949,7 +994,7 @@ scTreasure3: {
 ALIGN 4
 scTreasure4: {
 	SVAL r3 Speedwings
-	GIVEITEMTO ActiveUnit
+	CALL scTreasureCommon
 
 	NoFade
 	ENDA
@@ -991,10 +1036,10 @@ mclShift3:
 	SHORT (-1)
 
 mclShift4:
-	SHORT 4  False
-	SHORT 42 False
-	SHORT 5  True
-	SHORT 52 True
+	SHORT 40 False
+	SHORT 41 False
+	SHORT 50 True
+	SHORT 51 True
 	SHORT (-1)
 
 mclShift5:
@@ -1077,7 +1122,7 @@ unPlayerList:
 
 ALIGN 4
 unAllyDenis:
-	UNIT Ch27ChrDenis Bishop 0 Level(14, Ally, False) [21, 0] 0 0 1 redaDenis [Aura, Physic, Latona] NoAI
+	UNIT Ch27ChrDenis Bishop 0 Level(14, Ally, False) [21, 0] 0 0 1 redaDenis [Divine, Physic, Latona] NoAI
 	UNIT // end
 
 ALIGN 4
@@ -1224,7 +1269,7 @@ unEnemyMonster15:
 
 ALIGN 4
 unEnemyMonsterBoss:
-	UNIT Ch27ChrZomboss DracoZombie 0 Ch27LvBoss(3) Ch27MonsterSpawnCoords 0 0 0 0 [WretchedAir] NeverMoveAI
+	UNIT Ch27ChrZomboss DracoZombie 0 Ch27LvBoss(3) Ch27MonsterSpawnCoords 0 0 1 redaMonsterMiddle [WretchedAir] NeverMoveAI
 	UNIT // end
 
 ALIGN 4
@@ -1304,6 +1349,9 @@ unEnemyHumanWave4:
 	UNIT Ch27ChrHGeneric PegasusKnight 0 Ch27LvBase(4) [23, 0] 0 0 1 redaHumanRight2 [ShortSpear] PursueWithoutHeedAI
 
 	UNIT // end
+
+redaMonsterMiddle:
+	REDA Ch27MonsterSpawnCoords 0 0 0 0
 
 redaMonsterBBL:
 	REDA [9, 14] 0 0 0 0
