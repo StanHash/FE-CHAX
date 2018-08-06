@@ -34,7 +34,7 @@ void DanceAiTryDecide(int(*isUnitEnemy)(struct Unit*)) {
 			if (isUnitEnemy(unit))
 				continue; // We don't want to dance for the enemy
 
-			if (!(unit->state & US_HAS_MOVED))
+			if (!(unit->state & 0x400))
 				continue; // We don't want to dance for someone that hasn't moved yet!
 
 			if (UNIT_ATTRIBUTES(unit) & (CA_DANCE | CA_PLAY))
