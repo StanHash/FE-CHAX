@@ -127,10 +127,10 @@ int GetItemCostPerUse(Item); //! FE8U = 0x8017755
 int GetItemMaxCost(Item); //! FE8U = 0x801776D
 int GetItemWExp(Item); //! FE8U = 0x8017799
 
-const ItemData* GetROMItemStructPtr(u8); //! FE8U = 0x80177B1
+const ItemData* GetItemData(u8); //! FE8U = 0x80177B1
 
 #pragma long_calls_off
 
-#define GetItemData GetROMItemStructPtr
+#define GetItemData GetItemData
 
 #endif // GBAFE_ITEM_H

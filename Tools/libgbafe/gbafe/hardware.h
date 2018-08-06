@@ -65,7 +65,7 @@ struct KeyStatusBuffer {
 	u16 timeSinceNonStartSelect; // Time since last Non-Start Non-Select Button was pressed
 };
 
-extern struct LCDIOBuffer gLCDControlBuffer; //! FE8U = 0x3003080
+extern struct LCDIOBuffer gLCDIOBuffer; //! FE8U = 0x3003080
 
 extern u16 gPaletteBuffer[0x200]; //! FE8U = 0x20228A8
 
@@ -146,6 +146,6 @@ void EnableBgSyncByIndex(int bg); //! FE8U = 0x8001FBD
 #pragma long_calls_off
 
 // better names
-#define gLCDIOBuffer gLCDControlBuffer
+#define gLCDIOBuffer gLCDIOBuffer
 
 #endif // GBAFE_HARDWARE_H

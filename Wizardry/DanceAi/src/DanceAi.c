@@ -26,7 +26,7 @@ void DanceAiTryDecide(int(*isUnitEnemy)(struct Unit*)) {
 			if (!otherIndex)
 				continue; // No unit there
 
-			if (otherIndex == gActiveUnitIndex)
+			if (otherIndex == gActiveUnitId)
 				continue; // We are there!
 
 			struct Unit* unit = GetUnit(otherIndex);
