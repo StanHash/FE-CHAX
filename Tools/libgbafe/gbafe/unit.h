@@ -152,6 +152,9 @@ extern struct Unit gUnitArray[]; //! FE8U = 0x202BE4C
 extern struct Unit* gActiveUnit; //! FE8U = 0x3004E50
 extern struct Unit* const gUnitLookup[]; //! FE8U = 0x859A5D0
 
+extern u8 gActiveUnitIndex; //! FE8U = 0x202BE44
+extern struct Vector2 gActiveUnitPosition; //! FE8U = 0x202BE48
+
 #pragma long_calls
 
 void ClearUnits(void); //! FE8U = 0x80177C5
