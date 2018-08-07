@@ -1,5 +1,5 @@
 .SUFFIXES:
-.PHONY: hack all clean
+.PHONY: hack all retry clean
 
 include Tools.mak
 
@@ -73,8 +73,13 @@ WRITANS_ALL_TEXT := $(wildcard Writans/*.txt)
 hack: $(ROM_TARGET);
 all:  $(ALL_FILES);
 
+retry:
+	@rm -f $(EVENT_MAIN_DEP)
+	@$(MAKE) hack
+
 clean:
 	@rm -f $(ALL_FILES)
+	@rm -rf $(CACHE_DIR)
 	@rm -rf Writans/.TextEntries Writans/Text.event Writans/TextDefinitions.event
 	@echo all clean!
 
