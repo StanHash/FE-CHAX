@@ -15,11 +15,14 @@ struct SMSHandle {
 
 #pragma long_calls
 
-void HideUnitSMS(struct Unit* unit); //! FE8U = (0x0802810C+1)
-void ShowUnitSMS(struct Unit* unit); //! FE8U = (0x08028130+1)
+unsigned GetUnitSpritePaletteIndexWrapper(const struct Unit*); //! FE8U = 0x802713D
+unsigned GetUnitMapSpritePaletteIndex(const struct Unit*); //! FE8U = 0x8027169
 
 void SMS_UpdateFromGameData(void); //! FE8U = (0x80271A1)
 void SMS_DisplayAllFromInfoStructs(void); //! FE8U = 0x80273A5
+
+void HideUnitSMS(struct Unit* unit); //! FE8U = (0x0802810C+1)
+void ShowUnitSMS(struct Unit* unit); //! FE8U = (0x08028130+1)
 
 #pragma long_calls_off
 
