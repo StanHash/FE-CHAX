@@ -10,6 +10,12 @@ struct ObjData {
 	u16 data[]; // NOTE: C99+ only
 };
 
+// "Standard" single-object datas
+extern const struct ObjData gOAM_8x8Obj;
+extern const struct ObjData gOAM_16x16Obj;
+extern const struct ObjData gOAM_32x32Obj;
+extern const struct ObjData gOAM_16x32Obj;
+
 #pragma long_calls
 
 void ClearTileRegistry(void); //! FE8U = 0x8001FE1

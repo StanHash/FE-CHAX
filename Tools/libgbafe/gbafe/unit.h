@@ -14,6 +14,8 @@ typedef struct Unit Unit;
 typedef struct BattleUnit BattleUnit;
 typedef struct EventUnit EventUnit;
 
+struct SMSHandle;
+
 struct Unit {
 	/* 00 */ const CharacterData* pCharacterData;
 	/* 04 */ const ClassData* pClassData;
@@ -58,8 +60,8 @@ struct Unit {
 	/* 3A */ u8 _u3A;
 	/* 3B */ u8 _u3B;
 
-	/* 3C */ void* pMapSpriteHandle;
-	
+	/* 3C */ struct SMSHandle* pMapSpriteHandle;
+
 	/* 40 */ u16 ai3And4;
 	/* 42 */ u8 ai1;
 	/* 43 */ u8 ai1data;

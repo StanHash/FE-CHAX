@@ -5,6 +5,8 @@
 
 #pragma long_calls
 
+int GetGameClock(void); //! FE8U = 0x8000D29
+
 int LockGameLogic(void); //! FE8U = (0x08015360+1)
 int UnlockGameLogic(void); //! FE8U = (0x08015370+1)
 int GetGameLogicLock(void); //! FE8U = (0x08015380+1)
