@@ -1,0 +1,117 @@
+#ifndef HAX_BMAPMAIN
+#define HAX_BMAPMAIN
+
+// This is the vanilla BMAPMAIN proc in event form
+// For reference and/or edits.
+// Assembling this file against vanilla FE8U should have no effective consequence
+
+#include "Extensions/ProcDefinitions.txt"
+
+PUSH; ORG $59A1F0
+
+ProcBMapMain: {
+	chapter_intro       = 0
+	chapter_start       = 1
+	fast_chapter_intro  = 2
+	phase_switch        = 3
+	resume_phase_idle   = 4
+	phase_start_control = 5
+	resume_action       = 6
+	resume_berserk      = 7
+	resume_phase_start  = 8
+	phase_start         = 9
+	resume_arena        = 10
+	chapter_start_end   = 11
+
+	PROC_SLEEP(0)
+	PROC_SET_NAME($0D79C4) // "BMAPMAIN"
+	PROC_15 // ??
+	PROC_SET_MARK(2)
+	PROC_SLEEP(0)
+
+PROC_LABEL(chapter_intro)
+	PROC_CALL_ROUTINE($01550D) // MapMain_StartIntroFx
+	PROC_SLEEP(0)
+
+PROC_LABEL(chapter_start)
+	PROC_CALL_ROUTINE($085971) // TriggerDisableMapIcons
+	PROC_CALL_ROUTINE($018DB1) // MapMain_UpdatePrevDeployStates 
+	PROC_CALL_ROUTINE_2($0153D5) // MapMain_CallBeginningEvent
+	PROC_CALL_ROUTINE($015545) // MapMain_DeployEveryone
+
+PROC_LABEL(chapter_start_end)
+	PROC_CALL_ROUTINE($08597D) // UnTriggerDisableMapIcons
+
+PROC_LABEL(phase_switch)
+	PROC_CALL_ROUTINE_2($015411) // MapMain_SwitchPhases
+	PROC_CALL_ROUTINE($0154F5) // MapMain_Suspend
+
+PROC_LABEL(phase_start)
+	PROC_NEW_CHILD($59AE00) // gProc_ResetCursorPosition
+	PROC_NEW_CHILD_BLOCKING($59AF80) // gProc_PhaseSwitchGfx
+	PROC_WHILE_EXISTS($59A548) // gProc_CameraMovement
+	PROC_CALL_ROUTINE($018859) // MapMain_UpdateUnitStatus
+	PROC_NEW_CHILD_BLOCKING($59E438) // gProc_StatusDepletionLoop
+	PROC_NEW_CHILD_BLOCKING($59E308) // gProc_TerrainHealLoop
+	PROC_NEW_CHILD_BLOCKING($59E368) // gProc_PoisonDamageLoop
+	PROC_NEW_CHILD_BLOCKING($59E3D0) // gProc_GorgonEggHatchLoop
+	PROC_NEW_CHILD_BLOCKING($59AE00) // gProc_ResetCursorPosition
+	PROC_CALL_ROUTINE_2($015435) // ThisProbablyUsedToBeEventRelatedInEarlierGames
+
+PROC_LABEL(phase_start_control)
+	PROC_LOOP_ROUTINE($015451) // MapMain_StartPhaseController
+	PROC_NEW_CHILD_BLOCKING($5A7F30) // gProc_BerserkPhase
+	PROC_CALL_ROUTINE_2($0154C9) // MapMain_UpdateTraps
+	PROC_GOTO(phase_switch)
+
+PROC_LABEL(fast_chapter_intro)
+	PROC_CALL_ROUTINE($0155C5) // MapMain_ChapterSwitch
+	PROC_SLEEP(0)
+	PROC_NEW_CHILD_BLOCKING($59B578) // gProc_ChapterIntroTitleOnly
+	PROC_SLEEP(0)
+	PROC_GOTO(chapter_start)
+
+PROC_LABEL(resume_phase_idle) // Suspend Actions #0 (player phase idle) & #2 (cp phase idle)
+	PROC_CALL_ROUTINE($019C3D) // DrawTileGraphics
+	PROC_CALL_ROUTINE($0160D1) // UpdatePlayMapMusic
+	PROC_CALL_ROUTINE($013D8D) // StartFadeOutBlackMedium
+	PROC_LOOP_ROUTINE($014069) // WaitForFade
+	PROC_GOTO(phase_start_control)
+
+PROC_LABEL(resume_action) // Suspend actions #1 (before action)
+	PROC_CALL_ROUTINE($019C3D) // DrawTileGraphics
+	PROC_CALL_ROUTINE($0160D1) // UpdatePlayMapMusic
+	PROC_CALL_ROUTINE($013D8D) // StartFadeOutBlackMedium
+	PROC_LOOP_ROUTINE($014069) // WaitForFade
+	PROC_LOOP_ROUTINE($0154A5) // StartPlayerPhaseAndApplyAction
+	PROC_NEW_CHILD_BLOCKING($5A7F30) // gProc_BerserkPhase
+	PROC_GOTO(phase_switch)
+
+PROC_LABEL(resume_arena) // Suspend action #4 (during arena fight)
+	PROC_SLEEP(0)
+	PROC_LOOP_ROUTINE($0154A5) // StartPlayerPhaseAndApplyAction
+	PROC_NEW_CHILD_BLOCKING($5A7F30) // gProc_BerserkPhase
+	PROC_GOTO(phase_switch)
+
+PROC_LABEL(resume_phase_start) // Suspend action #9 (during phase switch)
+	PROC_CALL_ROUTINE($019C3D) // DrawTileGraphics
+	PROC_CALL_ROUTINE($0160D1) // UpdatePlayMapMusic
+	PROC_CALL_ROUTINE($013D8D) // StartFadeOutBlackMedium
+	PROC_LOOP_ROUTINE($014069) // WaitForFade
+	PROC_GOTO(phase_start)
+
+PROC_LABEL(resume_berserk)
+	PROC_CALL_ROUTINE($019C3D) // DrawTileGraphics
+	PROC_CALL_ROUTINE($0160D1) // UpdatePlayMapMusic
+	PROC_CALL_ROUTINE($013D8D) // StartFadeOutBlackMedium
+	PROC_LOOP_ROUTINE($014069) // WaitForFade
+	PROC_NEW_CHILD_BLOCKING($5A7F30) // gProc_BerserkPhase
+	PROC_GOTO(phase_switch)
+
+	PROC_END // end
+
+}
+
+POP
+
+#endif // HAX_BMAPMAIN
