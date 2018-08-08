@@ -112,6 +112,6 @@ PROC_LABEL(resume_berserk)
 
 }
 
-POP
+ASSERT ($59A438 - CURRENTOFFSET); POP
 
 #endif // HAX_BMAPMAIN
