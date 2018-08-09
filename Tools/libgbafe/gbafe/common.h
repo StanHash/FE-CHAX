@@ -135,10 +135,11 @@ enum UnitAllegiance {
 enum StatusEffect {
 	STATUS_NONE = 0,
 
-	// idk
-	// status 2 is sleep?
+	STATUS_POISON = 1,
+	STATUS_SLEEP = 2,
+	STATUS_BERSERK = 4,
 
-	STATUS_DUMMY
+	// TODO: more
 };
 
 struct Vector2 {

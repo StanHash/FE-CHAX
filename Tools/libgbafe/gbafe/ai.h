@@ -6,6 +6,9 @@
 typedef struct AiDecision AiDecision;
 typedef struct AiData     AiData;
 
+typedef void(*CpOrderFunc)(struct Proc*);
+typedef void(*AiDecitionMakerFunc)(void);
+
 struct AiDecision {
 	/* 00 */ u8 decisionType;
 
@@ -59,9 +62,24 @@ enum {
 
 extern struct AiData gAiData;
 
+extern AiDecitionMakerFunc gpAiDecisionMaker;
+
+extern const struct ProcInstruction gProc_CpOrder[];
+extern const struct ProcInstruction gProc_CpDecide[];
+
 #pragma long_calls
 
-// TODO: more of that
+// TODO: address comments for reference
+
+int MakeAiUnitQueue(void);
+void SortAiUnitQueue(int size);
+void ClearAiDecision(void);
+
+void AiDecisionMaker_HealEscape(void);
+void AiDecisionMaker_AiScript1(void);
+void AiDecisionMaker_AiScript2(void);
+void AiDecisionMaker_SpecialItems(void);
+
 void AiFillMovementMapForUnit(struct Unit*);
 int GetAiSafestAccessibleAdjacentPosition(int x, int y, struct Vector2* out);
 void SetAiActionParameters(int xPos, int yPos, int actionId, int targetId, int itemSlot, int xPos2, int yPos2);
