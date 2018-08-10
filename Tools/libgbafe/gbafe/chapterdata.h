@@ -19,16 +19,19 @@ struct ChapterState {
 	/* 14 */ u8 chapterStateBits;
 	/* 15 */ u8 weather;
 	/* 16 */ u16 supportGainTotal;
-	/* 18 */ u8 _u18;
+	/* 18 */ u8 playthroughId;
 	/* 19 */ u8 _u19;
-	/* 1A */ u8 _u1A;
+	/* 1A */ u8 lastUnitListSortType;
 	/* 1B */ u8 mode;
-	/* 1C */ u8 unk1C[4];
+	/* 1C */ u8 unk1C[4]; // Weapon type lookup by weapon specifying which character ids may bypass the unusable bit????? (see FE8U:80174AC)
 
 	/* 20 */ char playerName[0x40 - 0x20]; // unused outside of link arena (was tactician name in FE7); Size unknown
 
 	// option byte 1 (of 3)
-	u32 unk40_1:5;
+	u32 unk40_1:1;
+	u32 terrainWindowOption:1;
+	u32 unitWindowOption:2;
+	u32 autocursorOption:1;
 	u32 textSpeedOption:2;
 	u32 gameSpeedOption:1;
 
