@@ -3,7 +3,6 @@
 // FIXME and update fe8u.s
 
 extern void HandlePlayerCursorMovement(void) __attribute__((long_call));
-extern void m4aSongNumStart(int) __attribute__((long_call));
 
 extern const u16 gAP_SelectCursorThing[];
 
@@ -97,16 +96,14 @@ void FSOnLoop(struct FSProc* proc) {
 }
 
 int FSHandleResult(struct FSProc* proc, int result) {
-	if (!gChapterData.muteSfxOption) {
-		if (result & FS_SND_BEEP)
-			m4aSongNumStart(0x6A);
+	if (result & FS_SND_BEEP)
+		PlaySfx(0x6A);
 
-		if (result & FS_SND_BOOP)
-			m4aSongNumStart(0x6B);
+	if (result & FS_SND_BOOP)
+		PlaySfx(0x6B);
 
-		if (result & FS_SND_GURR)
-			m4aSongNumStart(0x6C);
-	}
+	if (result & FS_SND_GURR)
+		PlaySfx(0x6C);
 
 	if (result & FS_GFX_VALID)
 		AP_SwitchAnimation(proc->pCursorAp, 0);
