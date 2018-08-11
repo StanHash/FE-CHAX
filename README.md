@@ -1,31 +1,31 @@
 # Stan's CHax for FE8U
 
-GBAFE hacks (in C!) and `EA`/`make` template. See [FE8UASMHax](https://github.com/StanHash/FE8UASMHax) for older stuff (there's a lot more hacks there than here).
-
-## Do `make` & Event Assembler synergize
-
-**Yes, [using this EA build](https://www.dropbox.com/s/moxk5tnerzhdkgl/EventAssembler-Stan.18.05.31.7z?dl=0)** ([Source is available at `FireEmblemUniverse/Event-Assembler` branch `stan-edits`](https://github.com/FireEmblemUniverse/Event-Assembler/tree/stan-edits)).
-
-Note: [`ColorzCore`](https://github.com/FireEmblemUniverse/ColorzCore) is ***not*** compatible with this setup as I write these lines (july 4th 2018, 10:14AM BST).
+GBAFE hacks (in C!) and `EA`/`make` template. See [FE8UASMHax](https://github.com/StanHash/FE8UASMHax) for older stuff (there's still a few things left there that I haven't ported to here yet).
 
 ## how2
 
 - have [devkitARM](https://devkitpro.org/wiki/Getting_Started) installed, and the `DEVKITARM` env variable set.
-- have `make` (and some kind of posix-compatible shell (if you're under Windows, devkitPro comes with msys bundled, which is more than enough) in you path.
-- have [python 3](https://www.python.org/) installed and in your path. (the python executable is assumed to be called `python3`. Edit [`Tools.mak`](./Tools.mak) if you need to change that)
-- have the following tools in the `Tools` folder, with the correct name (or you can edit [`Tools.mak`](./Tools.mak) in case names don't match):
-  - [`lyn`](https://github.com/StanHash/lyn/releases)
-  - [`EventAssembler/Core` (and the rest of the EA installation of course)](https://www.dropbox.com/s/moxk5tnerzhdkgl/EventAssembler-Stan.18.05.31.7z?dl=0)
-    - **Using this custom build is _required_** (versions > 11.1.x would probably work, but those have yet to exist as I am writing this)
-  - [Colorz's `PortraitFormatter`](http://feuniverse.us/t/ea-ea-formatting-suite/1714?u=stanh)
-  - [Colorz's `ParseFile`](http://feuniverse.us/t/ea-ea-formatting-suite/1714?u=stanh)
-  - [YamaArashi's (?) `gbagfx`](https://github.com/pret/pokeruby-tools) (unused right now)
+- have `make` and some kind of posix-compliant shell (`sh`) (if you're under Windows, devkitPro comes with msys bundled, which includes it among other things) in you path.
+- have [python 3](https://www.python.org/) installed and in your path. (the makefile should be able to find the correct python executable name. See [`Tools.mak`](./Tools.mak)).
+- have the following tools in the `Tools` folder, with the correct name (edit [`Tools.mak`](./Tools.mak) in case names don't match):
+  - [`EventAssembler/Core` (with the rest of the EA installation of course)](https://www.dropbox.com/s/moxk5tnerzhdkgl/EventAssembler-Stan.18.05.31.7z?dl=0)
+    - **Using this custom build is _required_** (versions > 11.1.x would probably work, but those have yet to exist as I am writing this).
+    - [`ColorzCore`](https://github.com/FireEmblemUniverse/ColorzCore) is ***not*** compatible with CHAX yet (2018-08-11).
+  - [`lyn`](https://github.com/StanHash/lyn/releases) (used for all wizardry and songs)
+  - [Colorz's `PortraitFormatter`](http://feuniverse.us/t/ea-ea-formatting-suite/1714?u=stanh) (used for portraits (duh))
+  - [Colorz's `ParseFile`](http://feuniverse.us/t/ea-ea-formatting-suite/1714?u=stanh) (used for text)
+  - [YamaArashi's (?) `gbagfx`](https://github.com/pret/pokeruby-tools) (used for [`IncorrectBlitzInput`](./Wizardry/IncorrectBlitzInput/) and [`3rdParty/HpBars`](./Wizardry/3rdParty/HpBars/))
 - run your shell and go to this folder
   - you can `make` or `make hack` to build the demo ROM (requires `FE8U.gba` in the directory)
   - you can `make all` to make everything unconditionally.
   - you can `make SomeFile.[o|asm|dmp|lyn.event]` to make a specific file (`asm` files are generated from C).
   - run `make clean` when you're done.
 - hf :)
+
+## General `make`/EA guidelines
+
+- **_Never_ use spaces in filenames/paths.** This breaks `make` horribly. This is one of the main reason I had to modify most of circles tools for them to work with this setup.
+- Don't use `#incext`/`#inctext` unless you *really* need to. Use `#include`/`#incbin` with files generated from Makefile rules instead. This speeds up the build process tremendously.
 
 ## Big thankies
 

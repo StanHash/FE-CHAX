@@ -21,7 +21,7 @@ struct TargetEntry {
 struct TargetSelectionDefinition {
 	/* 00 */ void(*onInit)(struct TargetSelectionProc*);
 	/* 04 */ void(*onEnd)(struct TargetSelectionProc*);
-	
+
 	/* 08 */ void(*onInitTarget)(struct TargetSelectionProc*, struct TargetEntry*);
 
 	/* 0C */ void(*onSwitchIn)(struct TargetSelectionProc*, struct TargetEntry*);

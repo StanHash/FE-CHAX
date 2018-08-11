@@ -3,7 +3,8 @@
 *.sav
 *.ss*
 *.sym.event
-FE*-*.png
+FE8U-*.png
+HACK-*.png
 
 *.lyn.event
 *.asm

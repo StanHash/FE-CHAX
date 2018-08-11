@@ -1,5 +1,5 @@
 .SUFFIXES:
-.PHONY: hack all retry clean
+.PHONY: hack hack_recursive all clean
 
 include Tools.mak
 
@@ -68,12 +68,12 @@ WRITANS_ALL_TEXT := $(wildcard Writans/*.txt)
 # ------------------
 # PHONY TARGET RULES
 
-hack: $(ROM_TARGET);
-all:  $(ALL_FILES);
-
-retry:
+hack:
 	@rm -f $(EVENT_MAIN_DEP)
-	@$(MAKE) hack
+	@$(MAKE) hack_recursive
+
+hack_recursive: $(ROM_TARGET);
+all: $(ALL_FILES);
 
 clean:
 	@rm -f $(ALL_FILES)
@@ -85,12 +85,12 @@ clean:
 # ACTUAL TARGET RULES
 
 $(ROM_TARGET): $(EVENT_MAIN) $(EVENT_MAIN_DEP) $(ROM_SOURCE)
-	$(PREPROCESS_MESSAGE)
+	@echo Building $(ROM_TARGET).
 	@cp -f $(ROM_SOURCE) $(ROM_TARGET)
 	@$(EA) A FE8 -output $(ROM_TARGET) -input $(EVENT_MAIN) -symOutput $(EVENT_SYMBOLS) || (rm $(ROM_TARGET) && false)
 
-$(EVENT_MAIN_DEP): $(EVENT_MAIN)
-	$(PREPROCESS_MESSAGE)
+$(EVENT_MAIN_DEP):
+	@echo Refreshing dependencies.
 	@$(EA) A FE8 -output $(ROM_TARGET) -input $(EVENT_MAIN) -quiet -MM -MG -MT $(EVENT_MAIN_DEP) -MF $(EVENT_MAIN_DEP)
 	@sed -i s/\\\\/\\//g $(EVENT_MAIN_DEP)
 
