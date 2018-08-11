@@ -46,17 +46,15 @@ CDEPFLAGS = -MMD -MT "$*.o" -MT "$*.asm" -MF "$(DEPSDIR)/$(notdir $*).d" -MP
 SDEPFLAGS = --MD "$(DEPSDIR)/$(notdir $*).d"
 
 ifeq ($(MAKECMDGOALS),clean)
+  # Clean-only stuff.
 
-# Clean-only stuff.
+  # NMMs and generated events
+  NMMS := $(shell find -type f -name '*.nmm')
+  TABLE_EVENTS := $(NMMS:.nmm=.event)
 
-# NMMs and generated events
-NMMS := $(shell find -type f -name '*.nmm')
-TABLE_EVENTS := $(NMMS:.nmm=.event)
-
-# TMXs and generated files
-TMXS := $(shell find -type f -name '*.tmx')
-MAP_GENFILES := $(TMXS:.tmx=.event) $(TMXS:.tmx=_data.dmp) 
-
+  # TMXs and generated files
+  TMXS := $(shell find -type f -name '*.tmx')
+  MAP_GENFILES := $(TMXS:.tmx=.event) $(TMXS:.tmx=_data.dmp) 
 endif
 
 # All files
@@ -173,8 +171,6 @@ Writans/Text.event Writans/TextDefinitions.event: $(WRITANS_ALL_TEXT)
 # INCLUDE DEPENDENCIES
 
 ifneq ($(MAKECMDGOALS),clean)
-
--include $(DEPFILES)
--include $(EVENT_MAIN_DEP)
-
+  -include $(DEPFILES)
+  -include $(EVENT_MAIN_DEP)
 endif
