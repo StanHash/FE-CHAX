@@ -162,10 +162,8 @@ Writans/Text.event Writans/TextDefinitions.event: $(WRITANS_ALL_TEXT)
 	$(PORTRAITFORMATTER) $<
 
 # CSV+NMM to event
-# Untested
 %.event: %.csv %.nmm
-	$(C2EA) $*.csv $*.event $(ROM_SOURCE)
-	@#echo | $(C2EA) -csv $*.csv -out $*.event $(ROM_SOURCE)
+	@echo | $(C2EA) -csv $*.csv -nmm $*.nmm -out $*.event $(ROM_SOURCE)
 
 # TMX to event + dmp
 %.event %_data.dmp: %.tmx

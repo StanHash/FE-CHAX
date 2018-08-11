@@ -27,7 +27,7 @@ export LYN               := Tools/lyn
 export GBAGFX            := Tools/gbagfx
 export GENMUGS           := $(PYTHON) Tools/py/genmugs.py
 export TEXTPROCESS       := $(PYTHON) Tools/py/textprocess.py
-export C2EA              := $(PYTHON) Tools/py/c2ea.py
+export C2EA              := $(PYTHON) Tools/py/NMM2CSV/c2ea.py
 export TMX2EA            := $(PYTHON) Tools/py/tmx2ea/tmx2ea.py
 
 PREPROCESS_MESSAGE = @echo "$(notdir $<) => $(notdir $@)"

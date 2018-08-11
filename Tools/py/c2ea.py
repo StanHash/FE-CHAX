@@ -1,6 +1,10 @@
 import sys, csv, os
 import nightmare, pfind
 
+# This version of c2ea is deprecated and shouldn't be used anymore.
+# Kept because the code here is still cleaner than the main c2ea
+# So this would be good reference when we'll want to make main c2ea cleaner
+
 def show_exception_and_exit(exc_type, exc_value, tb):
 	import traceback
 
