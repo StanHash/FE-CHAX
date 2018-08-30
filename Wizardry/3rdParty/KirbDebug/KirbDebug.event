@@ -1,6 +1,9 @@
 #ifndef HAX_KIRB_DEBUG
 #define HAX_KIRB_DEBUG
 
+// Original 'Kirb-o-matic' at-runtime-unit-stat-editor-debug-tool hack by Kirb
+// Ported to CHAX and improved a bit by me
+
 #include "src/KirbDebug.lyn.event"
 
 // Replace Guide
