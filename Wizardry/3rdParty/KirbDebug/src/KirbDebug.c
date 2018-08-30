@@ -120,7 +120,7 @@ void SetupDebugUnitEditorPage1(UnitEditorProc *proc) {
 	proc->StatsPage1[9]  = proc->pUnit->movBonus;
 	proc->StatsPage1[10] = proc->pUnit->statusIndex;
 	proc->StatsPage1[11] = proc->pUnit->statusDuration;
-	proc->StatsPage1[12] = proc->pUnit->pCharacterData->number;
+	proc->StatsPage1[12] = proc->pUnit->pClassData->number;
 }
 
 void UpdateDebugUnitEditorPage1(UnitEditorProc* proc) {
