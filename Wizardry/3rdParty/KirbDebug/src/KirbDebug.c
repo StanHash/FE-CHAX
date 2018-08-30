@@ -160,7 +160,7 @@ void UpdateDebugUnitEditorPage1(UnitEditorProc *proc, struct Unit* CurrentUnitPo
 	}
 	
 	//Check for L
-	if ((gKeyStatus.pressedKeys & R_BUTTON)) {
+	if ((gKeyStatus.pressedKeys & L_BUTTON)) {
 		if (CurrentUnitPool[proc->UnitPoolIndex - 1].pCharacterData  != 0) {
 			proc->UnitPoolIndex--;
 			SetupDebugUnitEditorPage1(proc, CurrentUnitPool);
