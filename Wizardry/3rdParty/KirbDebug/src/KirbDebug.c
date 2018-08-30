@@ -310,8 +310,9 @@ void PrintConstantsPage2() {
 
 	DrawTextInline(NULL, BG_LOCATED_TILE(gBg0MapBuffer, 0, 0), 0, 0, 12, "Kirb's debug-o-matic.");
 	DrawTextInline(NULL, BG_LOCATED_TILE(gBg0MapBuffer, 13, 0), 3, 0, 16, "Press Select to switch pages.");
-	DrawTextInline(NULL, BG_LOCATED_TILE(gBg0MapBuffer, 0, 18), 4, 0, 9, "Donate To Kirb.");
-	DrawTextInline(NULL, BG_LOCATED_TILE(gBg0MapBuffer, 9, 18), 4, 0, 20, "https://www.patreon.com/Kirb1337");
+
+	DrawTextInline(NULL, BG_LOCATED_TILE(gBg0MapBuffer, 0, 18), 4, 0, 20, " Donate to those that need it.");
+
 	DBG_BG_Print(BG_LOCATED_TILE(gBg0MapBuffer, 6, 5), "Item 1:");
 	DBG_BG_Print(BG_LOCATED_TILE(gBg0MapBuffer, 6, 6), "Item 2:");
 	DBG_BG_Print(BG_LOCATED_TILE(gBg0MapBuffer, 6, 7), "Item 3:");
