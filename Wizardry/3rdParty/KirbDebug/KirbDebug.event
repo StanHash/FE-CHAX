@@ -1,0 +1,6 @@
+#ifndef HAX_KIRB_DEBUG
+#define HAX_KIRB_DEBUG
+
+#include "src/KirbDebug.lyn.event"
+
+#endif // HAX_KIRB_DEBUG
