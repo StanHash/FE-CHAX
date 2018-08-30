@@ -17,7 +17,7 @@ PUSH
 	// Display prediction icons on the side of the screen
 	// (replaces the mist thing background effect that breaks hpbars anyway)
 	ORG $59D93C
-		POIN LTF_DisplayPhasePredictions
+//		POIN LTF_DisplayPhasePredictions
 
 	// Update map sprite palettes when R button press changes state
 	// (Hopefully allows the player to be less confused as to what color is what unit)
@@ -115,6 +115,8 @@ PUSH
 		PROC_SET_NAME($0D79C4) // "BMAPMAIN"
 		PROC_SET_MARK(2)
 
+		PROC_CALL_ROUTINE(LTF_StartPredictionDisplay)
+
 		PROC_SLEEP(0)
 
 	PROC_LABEL(chapter_intro)
@@ -133,7 +135,7 @@ PUSH
 
 	PROC_LABEL(turn_start)
 		PROC_NEW_CHILD($59AE00) // gProc_ResetCursorPosition
-		PROC_NEW_CHILD_BLOCKING($59AF80) // gProc_PhaseSwitchGfx
+//		PROC_NEW_CHILD_BLOCKING($59AF80) // gProc_PhaseSwitchGfx
 
 		PROC_WHILE_EXISTS($59A548) // gProc_CameraMovement
 
@@ -244,8 +246,15 @@ POP
 // Done: Redo the Berserk AI in the same way the regular AI was redone
 // Done: Autocursor takes the first unit *that hasn't moved yet*
 // Fixed: Autocursor Off is broken
+
+// FixMe: some AI2 seem broken
+// Todo: Restore the additional AI behaviors (escaping/lockpicking)
 // Todo: Not display the things sometimes (during cutscenes/menus/stuff?)
 // Todo: Change phase switch screen effect to show something like "TURN xyz" instead of "PLAYER PHASE"
 // Todo: Test
+
+// TEST RESULTS:
+
+// Ch2 AI broke (non moving brigands unless in range)
 
 #endif // HAX_LTF

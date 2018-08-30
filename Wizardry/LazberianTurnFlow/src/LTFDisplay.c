@@ -1,5 +1,112 @@
 #include "LTF.h"
 
+struct LTFPredictionDisplayProc;
+
+static void LTFDisplay_OnInit(struct LTFPredictionDisplayProc* proc);
+static void LTFDisplay_OnLoop(struct LTFPredictionDisplayProc* proc);
+static void LTFDisplayLock_OnInit(struct Proc* proc);
+static void LTFDisplayLock_OnEnd(struct Proc* proc);
+
+static unsigned LTFDisplay_GetPhaseObjPalette(unsigned phase);
+
+struct LTFPredictionDisplayProc {
+	PROC_HEADER;
+
+	u8 prediction[LTF_PHASE_PREDICTION_MAX_COUNT];
+	unsigned predictionCount;
+
+	unsigned doDisplay;
+};
+
+static const struct ProcInstruction sProc_LTFPhasePredictionDisplay[] = {
+	PROC_SET_NAME("Stan:LTF:PredictionDisplay"),
+
+	PROC_CALL_ROUTINE(LTFDisplay_OnInit),
+	PROC_SLEEP(0),
+
+	PROC_LOOP_ROUTINE(LTFDisplay_OnLoop),
+
+	PROC_END
+};
+
+static const struct ProcInstruction sProc_LTFPhasePredictionDisplayLock[] = {
+	PROC_SET_NAME("Stan:LTF:PredictionDisplayLock"),
+	PROC_SET_DESTRUCTOR(LTFDisplayLock_OnEnd),
+
+	PROC_CALL_ROUTINE(LTFDisplayLock_OnInit),
+
+	PROC_BLOCK,
+	PROC_END
+};
+
+static void LTFDisplay_OnInit(struct LTFPredictionDisplayProc* proc) {
+	proc->predictionCount = 0;
+	proc->doDisplay = FALSE;
+}
+
+static void LTFDisplay_OnLoop(struct LTFPredictionDisplayProc* proc) {
+	if (!proc->doDisplay)
+		return;
+
+	for (unsigned i = 0; i < proc->predictionCount; ++i) {
+		PushToHiOAM(
+			240 - 10, 55 + (i * 10),
+			&gOAM_8x8Obj, 3 + (LTFDisplay_GetPhaseObjPalette(proc->prediction[i]) << 12)
+		);
+	}
+}
+
+static void LTFDisplayLock_OnInit(struct Proc* proc) {
+	StartProc(sProc_LTFPhasePredictionDisplay, ROOT_PROC_3);
+}
+
+static void LTFDisplayLock_OnEnd(struct Proc* proc) {
+	EndProc(FindProc(sProc_LTFPhasePredictionDisplay));
+}
+
+static unsigned LTFDisplay_GetPhaseObjPalette(unsigned phase) {
+	static const u8 phaseToPalIdLookup[4] = { 0xC, 0xE, 0xD, 0xF };
+	return phaseToPalIdLookup[phase];
+}
+
+void LTF_StartPredictionDisplay(struct Proc* parent) {
+	StartProc(sProc_LTFPhasePredictionDisplayLock, parent);
+}
+
+void LTF_UpdatePredictionDisplay(void) {
+	struct LTFPredictionDisplayProc* proc = (struct LTFPredictionDisplayProc*) FindProc(sProc_LTFPhasePredictionDisplay);
+
+	if (proc) {
+		const unsigned maxCounts[4] = {
+			LTF_GetPhaseEffectiveUnitCount(UA_BLUE),
+			LTF_GetPhaseEffectiveUnitCount(UA_GREEN),
+			LTF_GetPhaseEffectiveUnitCount(UA_RED),
+			LTF_GetBerserkEffectiveUnitCount(),
+		};
+
+		unsigned ableCounts[4] = {
+			LTF_GetPhaseAbleUnitCount(UA_BLUE),
+			LTF_GetPhaseAbleUnitCount(UA_GREEN),
+			LTF_GetPhaseAbleUnitCount(UA_RED),
+			LTF_GetBerserkAbleUnitCount(),
+		};
+
+		unsigned i = 0;
+
+		for (; i < LTF_PHASE_PREDICTION_MAX_COUNT; ++i) {
+			if ((ableCounts[0] == 0) && (ableCounts[1] == 0) && (ableCounts[2] == 0) && (ableCounts[3] == 0))
+				break;
+
+			unsigned nextPhase = LTF_PredictNextPhase(ableCounts, maxCounts);
+
+			proc->prediction[i] = nextPhase;
+			ableCounts[nextPhase]--;
+		}
+
+		proc->predictionCount = i;
+	}
+}
+
 void LTF_DisplayPhasePredictions(struct Proc* maptaskProc) {
 	static const u8 phaseToPalIdLookup[4] = { 0xC, 0xE, 0xD, 0xF };
 

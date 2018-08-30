@@ -3,6 +3,10 @@
 
 #include "gbafe.h"
 
+// config
+
+enum { LTF_PHASE_PREDICTION_MAX_COUNT = 5 };
+
 // in LTFCore.c
 
 unsigned LTF_IsUnitReadyToMove(const struct Unit*);
@@ -22,6 +26,9 @@ int LTF_MapMainPhaseSwitch(struct Proc* mapMainProc);
 
 // in LTFDisplay.c
 
-void LTF_DisplayPhasePredictions(struct Proc* maptaskProc);
+void LTF_StartPredictionDisplay(struct Proc* parent);
+void LTF_UpdatePredictionDisplay(void);
+
+void LTF_DisplayPhasePredictions(struct Proc* maptaskProc); // old
 
 #endif // LTF_H
