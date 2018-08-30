@@ -63,112 +63,91 @@ void DebugScreenSetup(UnitEditorProc* proc) {
 	//Setup the unit editor™
 	proc->PageIndex = 0;
 	proc->CursorIndex = 0;
-	proc->UnitPoolIndex = 0;
-	proc->CurrentUnitPool = 0;
 
-	SetupDebugUnitEditorPage1(proc, GetUnit(UA_BLUE + 1));
+	proc->pUnit = GetUnit(1); // Start with the first unit
+
+	SetupDebugUnitEditorPage1(proc);
 }
 
 void DebugScreenLoop(UnitEditorProc* proc) {
-	// UpdateBG3HOffset(); // Let's not do that
-
-	if ((gKeyStatus.heldKeys & B_BUTTON) && proc->KonamiCodeCounter != 10) {
+	if ((gKeyStatus.pressedKeys & B_BUTTON) && proc->KonamiCodeCounter != 10) {
 		BreakProcLoop((struct Proc*)(proc));
 		PlaySfx(0x6B); 
 	}
 	
 	if ((gKeyStatus.pressedKeys & START_BUTTON)) {
-		proc->UnitPoolIndex = 0;
+		proc->pUnit = GetUnit(1); // Reset unit
 
-		if (proc->CurrentUnitPool == 0) {
-			proc->CurrentUnitPool = 1;
-
-			SetupDebugUnitEditorPage1(proc, GetUnit(UA_RED + 1));
-			SetupDebugUnitEditorPage2(proc, GetUnit(UA_RED + 1));
-		} else {
-			proc->CurrentUnitPool = 0;
-
-			SetupDebugUnitEditorPage1(proc, GetUnit(UA_BLUE + 1));
-			SetupDebugUnitEditorPage2(proc, GetUnit(UA_BLUE + 1));
-		}
+		SetupDebugUnitEditorPage1(proc);
+		SetupDebugUnitEditorPage2(proc);
 	}
-	
+
 	if ((gKeyStatus.pressedKeys & SELECT_BUTTON)) {
 		if (proc->PageIndex == 0) {
 			proc->CursorIndex = 0;
 			proc->PageIndex   = 1;
 
-			if (proc->CurrentUnitPool == 0)
-				SetupDebugUnitEditorPage2(proc, GetUnit(UA_BLUE + 1));
-			else
-				SetupDebugUnitEditorPage2(proc, GetUnit(UA_RED + 1));
-
+			SetupDebugUnitEditorPage2(proc);
 			PrintConstantsPage2();
 		} else {
 			proc->CursorIndex = 0;
 			proc->PageIndex   = 0;
 
-			if (proc->CurrentUnitPool == 0)
-				SetupDebugUnitEditorPage1(proc, GetUnit(UA_BLUE + 1));
-			else
-				SetupDebugUnitEditorPage1(proc, GetUnit(UA_RED + 1));
-
+			SetupDebugUnitEditorPage1(proc);
 			PrintConstantsPage1();
 		}
 	} else {
 		if (proc->PageIndex == 0) {
-			if (proc->CurrentUnitPool == 0)
-				UpdateDebugUnitEditorPage1(proc, GetUnit(UA_BLUE + 1));
-			else
-				UpdateDebugUnitEditorPage1(proc, GetUnit(UA_RED + 1));
+			UpdateDebugUnitEditorPage1(proc);
 		} else {
-			if (proc->CurrentUnitPool == 0)
-				UpdateDebugUnitEditorPage2(proc, GetUnit(UA_BLUE + 1));
-			else
-				UpdateDebugUnitEditorPage2(proc, GetUnit(UA_RED + 1));
+			UpdateDebugUnitEditorPage2(proc);
 		}
 
 		CheckKonamiCode(proc);
 	}
 }
 
-
-
-void SetupDebugUnitEditorPage1(UnitEditorProc *proc, struct Unit* CurrentUnitPool) {
-	proc->StatsPage1[0] = CurrentUnitPool[proc->UnitPoolIndex].pow;
-	proc->StatsPage1[1] = CurrentUnitPool[proc->UnitPoolIndex].skl;
-	proc->StatsPage1[2] = CurrentUnitPool[proc->UnitPoolIndex].spd;
-	proc->StatsPage1[3] = CurrentUnitPool[proc->UnitPoolIndex].lck;
-	proc->StatsPage1[4] = CurrentUnitPool[proc->UnitPoolIndex].def;
-	proc->StatsPage1[5] = CurrentUnitPool[proc->UnitPoolIndex].res;
-	proc->StatsPage1[6] = CurrentUnitPool[proc->UnitPoolIndex].maxHP;
-	proc->StatsPage1[7] = CurrentUnitPool[proc->UnitPoolIndex].curHP;
-	proc->StatsPage1[8] = CurrentUnitPool[proc->UnitPoolIndex].conBonus;
-	proc->StatsPage1[9] = CurrentUnitPool[proc->UnitPoolIndex].movBonus;
-	proc->StatsPage1[10] = CurrentUnitPool[proc->UnitPoolIndex].statusIndex;
-	proc->StatsPage1[11] = CurrentUnitPool[proc->UnitPoolIndex].statusDuration;
-	proc->StatsPage1[12] = CurrentUnitPool[proc->UnitPoolIndex].pCharacterData->number;
+void SetupDebugUnitEditorPage1(UnitEditorProc *proc) {
+	proc->StatsPage1[0]  = proc->pUnit->pow;
+	proc->StatsPage1[1]  = proc->pUnit->skl;
+	proc->StatsPage1[2]  = proc->pUnit->spd;
+	proc->StatsPage1[3]  = proc->pUnit->lck;
+	proc->StatsPage1[4]  = proc->pUnit->def;
+	proc->StatsPage1[5]  = proc->pUnit->res;
+	proc->StatsPage1[6]  = proc->pUnit->maxHP;
+	proc->StatsPage1[7]  = proc->pUnit->curHP;
+	proc->StatsPage1[8]  = proc->pUnit->conBonus;
+	proc->StatsPage1[9]  = proc->pUnit->movBonus;
+	proc->StatsPage1[10] = proc->pUnit->statusIndex;
+	proc->StatsPage1[11] = proc->pUnit->statusDuration;
+	proc->StatsPage1[12] = proc->pUnit->pCharacterData->number;
 }
 
-void UpdateDebugUnitEditorPage1(UnitEditorProc *proc, struct Unit* CurrentUnitPool) {
+void UpdateDebugUnitEditorPage1(UnitEditorProc* proc) {
 	//Check for R
-	if ((gKeyStatus.pressedKeys & R_BUTTON)) {
-		if (CurrentUnitPool[proc->UnitPoolIndex + 1].pCharacterData != 0) {
-			proc->UnitPoolIndex++;
-			SetupDebugUnitEditorPage1(proc, CurrentUnitPool);
-		}
+	if ((gKeyStatus.repeatedKeys & R_BUTTON)) {
+		u8 index = proc->pUnit->index;
+
+		do {
+			proc->pUnit = GetUnit(++index);
+		} while (!proc->pUnit || !(proc->pUnit->pCharacterData));
+
+		SetupDebugUnitEditorPage1(proc);
 	}
 	
 	//Check for L
-	if ((gKeyStatus.pressedKeys & L_BUTTON)) {
-		if (CurrentUnitPool[proc->UnitPoolIndex - 1].pCharacterData  != 0) {
-			proc->UnitPoolIndex--;
-			SetupDebugUnitEditorPage1(proc, CurrentUnitPool);
-		}
-	}	
+	if ((gKeyStatus.repeatedKeys & L_BUTTON)) {
+		u8 index = proc->pUnit->index;
+
+		do {
+			proc->pUnit = GetUnit(--index);
+		} while (!proc->pUnit || !(proc->pUnit->pCharacterData));
+
+		SetupDebugUnitEditorPage1(proc);
+	}
 	
 	//Check for down
-	if ((gKeyStatus.pressedKeys & DPAD_DOWN)) {
+	if ((gKeyStatus.repeatedKeys & DPAD_DOWN)) {
 		if (proc->CursorIndex < UnitEditor_PAGE1ENTRIES) {
 			proc->CursorIndex++;
 
@@ -183,7 +162,7 @@ void UpdateDebugUnitEditorPage1(UnitEditorProc *proc, struct Unit* CurrentUnitPo
 	}	
 	
 	//Check for up
-	if ((gKeyStatus.pressedKeys & DPAD_UP)) {
+	if ((gKeyStatus.repeatedKeys & DPAD_UP)) {
 		if (proc->CursorIndex != 0) {
 			proc->CursorIndex--;
 
@@ -195,48 +174,48 @@ void UpdateDebugUnitEditorPage1(UnitEditorProc *proc, struct Unit* CurrentUnitPo
 			ClearMenuItemHighlight(1,0,2,(CursorLocationTable[0].y / 8), 23);
 			DrawMenuItemHighlight(1,0,2,(CursorLocationTable[proc->CursorIndex].y / 8), 23);
 		}
-	}	
-	
+	}
+
 	//Check for right
-	if ((gKeyStatus.pressedKeys & DPAD_RIGHT)) {
+	if ((gKeyStatus.repeatedKeys & DPAD_RIGHT)) {
 		proc->StatsPage1[proc->CursorIndex]++;
-	}	
-	
+	}
+
 	//Check for left
-	if ((gKeyStatus.pressedKeys & DPAD_LEFT) != 0) {
+	if ((gKeyStatus.repeatedKeys & DPAD_LEFT) != 0) {
 		proc->StatsPage1[proc->CursorIndex]--;
-	}	
+	}
 
 	//Check for a
 	if ((gKeyStatus.pressedKeys & A_BUTTON) != 0) {
-		CurrentUnitPool[proc->UnitPoolIndex].pow = proc->StatsPage1[0];
-		CurrentUnitPool[proc->UnitPoolIndex].skl = proc->StatsPage1[1];
-		CurrentUnitPool[proc->UnitPoolIndex].spd = proc->StatsPage1[2];
-		CurrentUnitPool[proc->UnitPoolIndex].lck = proc->StatsPage1[3];
-		CurrentUnitPool[proc->UnitPoolIndex].def = proc->StatsPage1[4];
-		CurrentUnitPool[proc->UnitPoolIndex].res = proc->StatsPage1[5];
-		CurrentUnitPool[proc->UnitPoolIndex].maxHP = proc->StatsPage1[6];
-		CurrentUnitPool[proc->UnitPoolIndex].curHP = proc->StatsPage1[7];
-		CurrentUnitPool[proc->UnitPoolIndex].conBonus = proc->StatsPage1[8];
-		CurrentUnitPool[proc->UnitPoolIndex].movBonus = proc->StatsPage1[9];
-		CurrentUnitPool[proc->UnitPoolIndex].statusIndex = proc->StatsPage1[10];
-		CurrentUnitPool[proc->UnitPoolIndex].statusDuration = proc->StatsPage1[11];
-		CurrentUnitPool[proc->UnitPoolIndex].pClassData = GetClassData(proc->StatsPage1[12]);
+		proc->pUnit->pow = proc->StatsPage1[0];
+		proc->pUnit->skl = proc->StatsPage1[1];
+		proc->pUnit->spd = proc->StatsPage1[2];
+		proc->pUnit->lck = proc->StatsPage1[3];
+		proc->pUnit->def = proc->StatsPage1[4];
+		proc->pUnit->res = proc->StatsPage1[5];
+		proc->pUnit->maxHP = proc->StatsPage1[6];
+		proc->pUnit->curHP = proc->StatsPage1[7];
+		proc->pUnit->conBonus = proc->StatsPage1[8];
+		proc->pUnit->movBonus = proc->StatsPage1[9];
+		proc->pUnit->statusIndex = proc->StatsPage1[10];
+		proc->pUnit->statusDuration = proc->StatsPage1[11];
+		proc->pUnit->pClassData = GetClassData(proc->StatsPage1[12]);
 	}
 
 	//Get the unit index/name and print it
 	char UnitName[0x20];
+	GetStringFromIndexInBuffer(proc->pUnit->pCharacterData->nameTextId, UnitName);
 
-	GetStringFromIndexInBuffer(CurrentUnitPool[proc->UnitPoolIndex].pCharacterData->nameTextId, UnitName);
-	PrintDebugNumberDec(10, 25, proc->UnitPoolIndex, 3);
+	PrintDebugNumberHex(10, 25, proc->pUnit->index, 2);
 	PrintDebugStringAsOBJ(48, 25, UnitName);
 	
 	//Get the class name and prints it
 	char ClassName[0x20];
 
-	GetStringFromIndexInBuffer(CurrentUnitPool[proc->UnitPoolIndex].pClassData->nameTextId, ClassName);
+	GetStringFromIndexInBuffer(proc->pUnit->pClassData->nameTextId, ClassName);
 	PrintDebugStringAsOBJ(48, 128, ClassName);
-	
+
 	//Prints the stats
 	PrintDebugNumberDec(10, 40, proc->StatsPage1[0], 3);
 	PrintDebugNumberDec(10, 48, proc->StatsPage1[1], 3);
@@ -320,33 +299,39 @@ void PrintConstantsPage2() {
 	DBG_BG_Print(BG_LOCATED_TILE(gBg0MapBuffer, 6, 9), "Item 5:");
 }
 
-void SetupDebugUnitEditorPage2(UnitEditorProc* proc, struct Unit* CurrentUnitPool) {
-	proc->StatsPage2[0] = CurrentUnitPool[proc->UnitPoolIndex].items[0] & 0xFF;
-	proc->StatsPage2[1] = CurrentUnitPool[proc->UnitPoolIndex].items[1] & 0xFF;
-	proc->StatsPage2[2] = CurrentUnitPool[proc->UnitPoolIndex].items[2] & 0xFF;
-	proc->StatsPage2[3] = CurrentUnitPool[proc->UnitPoolIndex].items[3] & 0xFF;
-	proc->StatsPage2[4] = CurrentUnitPool[proc->UnitPoolIndex].items[4] & 0xFF;
+void SetupDebugUnitEditorPage2(UnitEditorProc* proc) {
+	proc->StatsPage2[0] = proc->pUnit->items[0] & 0xFF;
+	proc->StatsPage2[1] = proc->pUnit->items[1] & 0xFF;
+	proc->StatsPage2[2] = proc->pUnit->items[2] & 0xFF;
+	proc->StatsPage2[3] = proc->pUnit->items[3] & 0xFF;
+	proc->StatsPage2[4] = proc->pUnit->items[4] & 0xFF;
 }
 
-void UpdateDebugUnitEditorPage2(UnitEditorProc* proc, struct Unit* CurrentUnitPool) {
+void UpdateDebugUnitEditorPage2(UnitEditorProc* proc) {
 	//Check for R
-	if ((gKeyStatus.pressedKeys & R_BUTTON)) {
-		if (CurrentUnitPool[proc->UnitPoolIndex + 1].pCharacterData  != 0) {
-			proc->UnitPoolIndex++;
-			SetupDebugUnitEditorPage2(proc, CurrentUnitPool);
-		}
+	if ((gKeyStatus.repeatedKeys & R_BUTTON)) {
+		u8 index = proc->pUnit->index;
+
+		do {
+			proc->pUnit = GetUnit(++index);
+		} while (!proc->pUnit || !(proc->pUnit->pCharacterData));
+
+		SetupDebugUnitEditorPage2(proc);
 	}
-	
+
 	//Check for L
-	if ((gKeyStatus.pressedKeys & L_BUTTON)) {
-		if (CurrentUnitPool[proc->UnitPoolIndex - 1].pCharacterData  != 0) {
-			proc->UnitPoolIndex--;
-			SetupDebugUnitEditorPage2(proc, CurrentUnitPool);
-		}
-	}	
-	
+	if ((gKeyStatus.repeatedKeys & L_BUTTON)) {
+		u8 index = proc->pUnit->index;
+
+		do {
+			proc->pUnit = GetUnit(--index);
+		} while (!proc->pUnit || !(proc->pUnit->pCharacterData));
+
+		SetupDebugUnitEditorPage2(proc);
+	}
+
 	//Check for down
-	if ((gKeyStatus.pressedKeys & DPAD_DOWN)) {
+	if ((gKeyStatus.repeatedKeys & DPAD_DOWN)) {
 		if (proc->CursorIndex < UnitEditor_PAGE2ENTRIES) {
 			proc->CursorIndex++;
 
@@ -376,10 +361,10 @@ void UpdateDebugUnitEditorPage2(UnitEditorProc* proc, struct Unit* CurrentUnitPo
 				26
 			);
 		}
-	}	
-	
+	}
+
 	//Check for up
-	if ((gKeyStatus.pressedKeys & DPAD_UP)) {
+	if ((gKeyStatus.repeatedKeys & DPAD_UP)) {
 		if (proc->CursorIndex != 0) {
 			proc->CursorIndex--;
 			ClearMenuItemHighlight(1,0,((CursorLocationTable[proc->CursorIndex + 1].x + 6) / 8),(CursorLocationTable[proc->CursorIndex + 1].y / 8), 26);
@@ -393,47 +378,47 @@ void UpdateDebugUnitEditorPage2(UnitEditorProc* proc, struct Unit* CurrentUnitPo
 	}	
 	
 	//Check for right
-	if ((gKeyStatus.pressedKeys & DPAD_RIGHT) != 0) {
+	if ((gKeyStatus.repeatedKeys & DPAD_RIGHT) != 0) {
 		proc->StatsPage2[proc->CursorIndex]++;
 	}	
 	
 	//Check for left
-	if ((gKeyStatus.pressedKeys & DPAD_LEFT) != 0) {
+	if ((gKeyStatus.repeatedKeys & DPAD_LEFT) != 0) {
 		proc->StatsPage2[proc->CursorIndex]--;
 	}	
 
 	//Check for a
 	if ((gKeyStatus.pressedKeys & A_BUTTON) != 0) {
-		CurrentUnitPool[proc->UnitPoolIndex].items[0] = proc->StatsPage2[0];
-		CurrentUnitPool[proc->UnitPoolIndex].items[1] = proc->StatsPage2[1];
-		CurrentUnitPool[proc->UnitPoolIndex].items[2] = proc->StatsPage2[2];
-		CurrentUnitPool[proc->UnitPoolIndex].items[3] = proc->StatsPage2[3];
-		CurrentUnitPool[proc->UnitPoolIndex].items[4] = proc->StatsPage2[4];
+		proc->pUnit->items[0] = proc->StatsPage2[0];
+		proc->pUnit->items[1] = proc->StatsPage2[1];
+		proc->pUnit->items[2] = proc->StatsPage2[2];
+		proc->pUnit->items[3] = proc->StatsPage2[3];
+		proc->pUnit->items[4] = proc->StatsPage2[4];
 	}	
 	
 	//Get the unit index/name and print it
 	char UnitName[0x20];
 
-	GetStringFromIndexInBuffer(CurrentUnitPool[proc->UnitPoolIndex].pCharacterData->nameTextId, UnitName);
-	PrintDebugNumberDec(10, 25, proc->UnitPoolIndex, 3);
+	GetStringFromIndexInBuffer(proc->pUnit->pCharacterData->nameTextId, UnitName);
+	PrintDebugNumberHex(10, 25, proc->pUnit->index, 2);
 	PrintDebugStringAsOBJ(48, 25, UnitName);
 	
 	//Get Items names
 	char ItemName[0x20];
 
-	GetStringFromIndexInBuffer(GetItemData(CurrentUnitPool[proc->UnitPoolIndex].items[0] & 0xFF)->nameTextId, ItemName);
+	GetStringFromIndexInBuffer(GetItemData(GetItemIndex(proc->pUnit->items[0]))->nameTextId, ItemName);
 	PrintDebugStringAsOBJ(104, 40, ItemName);
 	
-	GetStringFromIndexInBuffer(GetItemData(CurrentUnitPool[proc->UnitPoolIndex].items[1] & 0xFF)->nameTextId, ItemName);
+	GetStringFromIndexInBuffer(GetItemData(GetItemIndex(proc->pUnit->items[1]))->nameTextId, ItemName);
 	PrintDebugStringAsOBJ(104, 48, ItemName);
 	
-	GetStringFromIndexInBuffer(GetItemData(CurrentUnitPool[proc->UnitPoolIndex].items[2] & 0xFF)->nameTextId, ItemName);
+	GetStringFromIndexInBuffer(GetItemData(GetItemIndex(proc->pUnit->items[2]))->nameTextId, ItemName);
 	PrintDebugStringAsOBJ(104, 56, ItemName);
 	
-	GetStringFromIndexInBuffer(GetItemData(CurrentUnitPool[proc->UnitPoolIndex].items[3] & 0xFF)->nameTextId, ItemName);
+	GetStringFromIndexInBuffer(GetItemData(GetItemIndex(proc->pUnit->items[3]))->nameTextId, ItemName);
 	PrintDebugStringAsOBJ(104, 64, ItemName);
 	
-	GetStringFromIndexInBuffer(GetItemData(CurrentUnitPool[proc->UnitPoolIndex].items[4] & 0xFF)->nameTextId, ItemName);
+	GetStringFromIndexInBuffer(GetItemData(GetItemIndex(proc->pUnit->items[4]))->nameTextId, ItemName);
 	PrintDebugStringAsOBJ(104, 72, ItemName);
 
 	//Prints the stats
