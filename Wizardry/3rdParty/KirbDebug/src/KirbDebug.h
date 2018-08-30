@@ -3,11 +3,12 @@
 
 #include "gbafe.h"
 
-#define UnitEditor_PAGE1ENTRIES 12
-#define UnitEditor_PAGE2ENTRIES 4
+enum { UnitEditor_PAGE1ENTRIES = 12 };
+enum { UnitEditor_PAGE2ENTRIES = 4 };
 
 typedef struct {
-	Proc Header;
+	PROC_HEADER;
+
 	u8 UnitPoolIndex;
 	u8 CursorIndex;
 	u8 StatsPage1[UnitEditor_PAGE1ENTRIES+1];
@@ -22,21 +23,21 @@ typedef struct {
 	u32 y;
 } LocationTable;
 
-const _ProcCode Debug6C[];
-const LocationTable CursorLocationTable[];
-const u16 ButtonCombo[];
+extern const struct ProcInstruction Debug6C[];
+extern const LocationTable CursorLocationTable[];
+extern const u16 ButtonCombo[];
 
-u8 EndEffect();
+u8 KribDebugMenuEffect();
 u8 WaitUpdate();
-void DebugScreenSetup(UnitEditorProc *CurrentProc);
-void DebugScreenLoop(UnitEditorProc *CurrentProc);
-void GenerateBGTsa(u16 *MapOffset, u32 NumberOfTiles, u8 PaletteId);
-void SetupDebugUnitEditorPage1(UnitEditorProc *CurrentProc, UnitStruct *CurrentUnitPool);
-void UpdateDebugUnitEditorPage1(UnitEditorProc *CurrentProc, UnitStruct *CurrentUnitPool);
-void CheckKonamiCode(UnitEditorProc *CurrentProc);
+void DebugScreenSetup(UnitEditorProc* CurrentProc);
+void DebugScreenLoop(UnitEditorProc* CurrentProc);
+void GenerateBGTsa(u16* MapOffset, u32 NumberOfTiles, u8 PaletteId);
+void SetupDebugUnitEditorPage1(UnitEditorProc* CurrentProc, struct Unit* CurrentUnitPool);
+void UpdateDebugUnitEditorPage1(UnitEditorProc* CurrentProc, struct Unit* CurrentUnitPool);
+void CheckKonamiCode(UnitEditorProc* CurrentProc);
 void PrintConstantsPage1();
 void PrintConstantsPage2();
-void SetupDebugUnitEditorPage2(UnitEditorProc *CurrentProc, UnitStruct *CurrentUnitPool);
-void UpdateDebugUnitEditorPage2(UnitEditorProc *CurrentProc, UnitStruct *CurrentUnitPool);
+void SetupDebugUnitEditorPage2(UnitEditorProc* CurrentProc, struct Unit* CurrentUnitPool);
+void UpdateDebugUnitEditorPage2(UnitEditorProc* CurrentProc, struct Unit* CurrentUnitPool);
 
 #endif // KIRB_DEBUG_H

@@ -3,4 +3,9 @@
 
 #include "src/KirbDebug.lyn.event"
 
+// Replace Guide
+PUSH; ORG $59CEC8
+	POIN KribDebugMenuEffect
+POP
+
 #endif // HAX_KIRB_DEBUG
