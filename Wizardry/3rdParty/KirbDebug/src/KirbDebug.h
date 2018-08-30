@@ -28,7 +28,7 @@ extern const LocationTable CursorLocationTable[];
 extern const u16 ButtonCombo[];
 
 u8 KribDebugMenuEffect();
-u8 WaitUpdate();
+
 void DebugScreenSetup(UnitEditorProc* CurrentProc);
 void DebugScreenLoop(UnitEditorProc* CurrentProc);
 void GenerateBGTsa(u16* MapOffset, u32 NumberOfTiles, u8 PaletteId);

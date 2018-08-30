@@ -19,13 +19,34 @@ void EndBG3Slider(void) __attribute__((long_call));
 extern u8 gGfx_ChapterIntroBackground[];
 extern u16 gPal_ChapterIntroBackground[];
 
+enum { KD_PAGE_COUNT = 2 };
+
+struct KDPageDefinition {
+	void (*onInit) (UnitEditorProc*);
+	void (*onEnd) (UnitEditorProc*);
+	void (*onSubjectChange) (UnitEditorProc*);
+	void (*onIdle) (UnitEditorProc*);
+};
+
+static struct KDPageDefinition sKD_PageDefinitions[] = {
+	{
+		// page 1
+
+		.onInit          = PrintConstantsPage1,
+		.onSubjectChange = SetupDebugUnitEditorPage1,
+		.onIdle          = UpdateDebugUnitEditorPage1,
+	}, {
+		// page 2
+
+		.onInit          = PrintConstantsPage2,
+		.onSubjectChange = SetupDebugUnitEditorPage2,
+		.onIdle          = UpdateDebugUnitEditorPage2,
+	}
+};
+
 u8 KribDebugMenuEffect() {
 	StartProc(Debug6C, ROOT_PROC_3);
 	return ME_END | ME_PLAY_BEEP | ME_CLEAR_GFX;
-}
-
-u8 WaitUpdate() {
-	return FALSE;
 }
 
 void DebugScreenSetup(UnitEditorProc* proc) {
@@ -57,16 +78,17 @@ void DebugScreenSetup(UnitEditorProc* proc) {
 	DBG_BG_Print(BG_LOCATED_TILE(gBg0MapBuffer, 0, 1), "Kirb's debug-o-matic");
 	DBG_BG_Print(BG_LOCATED_TILE(gBg0MapBuffer, 0, 2), "Press Select to switch pages.");
 
-	//Prints stats
-	PrintConstantsPage1();
-
 	//Setup the unit editor™
 	proc->PageIndex = 0;
 	proc->CursorIndex = 0;
 
 	proc->pUnit = GetUnit(1); // Start with the first unit
 
-	SetupDebugUnitEditorPage1(proc);
+	if (sKD_PageDefinitions[proc->PageIndex].onInit)
+		sKD_PageDefinitions[proc->PageIndex].onInit(proc);
+
+	if (sKD_PageDefinitions[proc->PageIndex].onSubjectChange)
+		sKD_PageDefinitions[proc->PageIndex].onSubjectChange(proc);
 }
 
 void DebugScreenLoop(UnitEditorProc* proc) {
@@ -74,37 +96,70 @@ void DebugScreenLoop(UnitEditorProc* proc) {
 		BreakProcLoop((struct Proc*)(proc));
 		PlaySfx(0x6B); 
 	}
-	
-	if ((gKeyStatus.pressedKeys & START_BUTTON)) {
-		proc->pUnit = GetUnit(1); // Reset unit
 
-		SetupDebugUnitEditorPage1(proc);
-		SetupDebugUnitEditorPage2(proc);
+	// Check for R (next unit)
+	if ((gKeyStatus.repeatedKeys & R_BUTTON)) {
+		u8 index = proc->pUnit->index; // u8 to guarantee 0-255 range with proper under/overflow behavior
+
+		// Find next valid unit index
+		do {
+			proc->pUnit = GetUnit(++index);
+		} while (!proc->pUnit || !(proc->pUnit->pCharacterData));
+
+		// Call page subject change if set
+		if (sKD_PageDefinitions[proc->PageIndex].onSubjectChange)
+			sKD_PageDefinitions[proc->PageIndex].onSubjectChange(proc);
 	}
 
+	// Check for L (prev unit)
+	if ((gKeyStatus.repeatedKeys & L_BUTTON)) {
+		u8 index = proc->pUnit->index; // u8 to guarantee 0-255 range with proper under/overflow behavior
+
+		// Find previous valid unit index
+		do {
+			proc->pUnit = GetUnit(--index);
+		} while (!proc->pUnit || !(proc->pUnit->pCharacterData));
+
+		// Call page subject change if set
+		if (sKD_PageDefinitions[proc->PageIndex].onSubjectChange)
+			sKD_PageDefinitions[proc->PageIndex].onSubjectChange(proc);
+	}
+
+	// Check for Start (reset unit)
+	if ((gKeyStatus.pressedKeys & START_BUTTON))
+		proc->pUnit = GetUnit(1);
+
+	// Check for Select (page switch)
 	if ((gKeyStatus.pressedKeys & SELECT_BUTTON)) {
-		if (proc->PageIndex == 0) {
-			proc->CursorIndex = 0;
-			proc->PageIndex   = 1;
+		// Call page on end if set
+		if (sKD_PageDefinitions[proc->PageIndex].onEnd)
+			sKD_PageDefinitions[proc->PageIndex].onEnd(proc);
 
-			SetupDebugUnitEditorPage2(proc);
-			PrintConstantsPage2();
-		} else {
-			proc->CursorIndex = 0;
-			proc->PageIndex   = 0;
+		// Reset field cursor
+		proc->CursorIndex = 0;
 
-			SetupDebugUnitEditorPage1(proc);
-			PrintConstantsPage1();
-		}
-	} else {
-		if (proc->PageIndex == 0) {
-			UpdateDebugUnitEditorPage1(proc);
-		} else {
-			UpdateDebugUnitEditorPage2(proc);
-		}
+		// Increment page index
+		proc->PageIndex++;
 
-		CheckKonamiCode(proc);
+		// Go back to 0 if overflow
+		if (proc->PageIndex >= KD_PAGE_COUNT)
+			proc->PageIndex = 0;
+
+		// Call page init if set
+		if (sKD_PageDefinitions[proc->PageIndex].onInit)
+			sKD_PageDefinitions[proc->PageIndex].onInit(proc);
+
+		// Call page subject change if set
+		if (sKD_PageDefinitions[proc->PageIndex].onSubjectChange)
+			sKD_PageDefinitions[proc->PageIndex].onSubjectChange(proc);
 	}
+
+	// Call page idle if set
+	if (sKD_PageDefinitions[proc->PageIndex].onIdle)
+		sKD_PageDefinitions[proc->PageIndex].onIdle(proc);
+
+	// TODO: do something with this
+	CheckKonamiCode(proc);
 }
 
 void SetupDebugUnitEditorPage1(UnitEditorProc *proc) {
@@ -124,28 +179,6 @@ void SetupDebugUnitEditorPage1(UnitEditorProc *proc) {
 }
 
 void UpdateDebugUnitEditorPage1(UnitEditorProc* proc) {
-	//Check for R
-	if ((gKeyStatus.repeatedKeys & R_BUTTON)) {
-		u8 index = proc->pUnit->index;
-
-		do {
-			proc->pUnit = GetUnit(++index);
-		} while (!proc->pUnit || !(proc->pUnit->pCharacterData));
-
-		SetupDebugUnitEditorPage1(proc);
-	}
-	
-	//Check for L
-	if ((gKeyStatus.repeatedKeys & L_BUTTON)) {
-		u8 index = proc->pUnit->index;
-
-		do {
-			proc->pUnit = GetUnit(--index);
-		} while (!proc->pUnit || !(proc->pUnit->pCharacterData));
-
-		SetupDebugUnitEditorPage1(proc);
-	}
-	
 	//Check for down
 	if ((gKeyStatus.repeatedKeys & DPAD_DOWN)) {
 		if (proc->CursorIndex < UnitEditor_PAGE1ENTRIES) {
@@ -308,28 +341,6 @@ void SetupDebugUnitEditorPage2(UnitEditorProc* proc) {
 }
 
 void UpdateDebugUnitEditorPage2(UnitEditorProc* proc) {
-	//Check for R
-	if ((gKeyStatus.repeatedKeys & R_BUTTON)) {
-		u8 index = proc->pUnit->index;
-
-		do {
-			proc->pUnit = GetUnit(++index);
-		} while (!proc->pUnit || !(proc->pUnit->pCharacterData));
-
-		SetupDebugUnitEditorPage2(proc);
-	}
-
-	//Check for L
-	if ((gKeyStatus.repeatedKeys & L_BUTTON)) {
-		u8 index = proc->pUnit->index;
-
-		do {
-			proc->pUnit = GetUnit(--index);
-		} while (!proc->pUnit || !(proc->pUnit->pCharacterData));
-
-		SetupDebugUnitEditorPage2(proc);
-	}
-
 	//Check for down
 	if ((gKeyStatus.repeatedKeys & DPAD_DOWN)) {
 		if (proc->CursorIndex < UnitEditor_PAGE2ENTRIES) {
@@ -367,11 +378,13 @@ void UpdateDebugUnitEditorPage2(UnitEditorProc* proc) {
 	if ((gKeyStatus.repeatedKeys & DPAD_UP)) {
 		if (proc->CursorIndex != 0) {
 			proc->CursorIndex--;
+
 			ClearMenuItemHighlight(1,0,((CursorLocationTable[proc->CursorIndex + 1].x + 6) / 8),(CursorLocationTable[proc->CursorIndex + 1].y / 8), 26);
 			DrawMenuItemHighlight(1,0,((CursorLocationTable[proc->CursorIndex].x + 6) / 8),(CursorLocationTable[proc->CursorIndex].y / 8), 26);
 		}
 		else {
 			proc->CursorIndex = UnitEditor_PAGE2ENTRIES;
+
 			ClearMenuItemHighlight(1,0,((CursorLocationTable[0].x + 6) / 8),(CursorLocationTable[0].y / 8), 26);
 			DrawMenuItemHighlight(1,0,((CursorLocationTable[proc->CursorIndex].x + 6) / 8),(CursorLocationTable[proc->CursorIndex].y / 8), 26);
 		}
@@ -437,30 +450,21 @@ const ProcInstruction Debug6C[] = {
 
 	PROC_CALL_ROUTINE(LockGameLogic),
 
-	PROC_CALL_ROUTINE_ARG(StartFadeInBlack, 0x10),
+	PROC_CALL_ROUTINE_ARG(StartFadeInBlack, 0x40),
 	PROC_YIELD,
 
 	PROC_CALL_ROUTINE(BlockGameGraphicsLogic),
 
-//	PROC_CALL_ROUTINE(ClearOAM),
-//	PROC_WHILE_ROUTINE(ClearPalette),
-
 	PROC_CALL_ROUTINE(DebugScreenSetup),
 	PROC_NEW_CHILD(gProc_BG3HSlide),
 
-	PROC_CALL_ROUTINE_ARG(NewFadeOutBlack, 0x10),
+	PROC_CALL_ROUTINE_ARG(NewFadeOutBlack, 0x40),
 	PROC_YIELD,
 
 	//Main Logic
 	PROC_LOOP_ROUTINE(DebugScreenLoop),
 
-	//After Getting Out Of Main Updater
-
-//	PROC_CALL_ROUTINE_2(FixBG3Cam), //Replacing the BG3 Offset where it needs to be
-//	PROC_CALL_ROUTINE(LoadMapSprites),
-//	PROC_CALL_ROUTINE(LoadMap),
-
-	PROC_CALL_ROUTINE_ARG(StartFadeInBlack, 0x10),
+	PROC_CALL_ROUTINE_ARG(StartFadeInBlack, 0x40),
 	PROC_YIELD,
 
 	PROC_CALL_ROUTINE(EndBG3Slider),
@@ -468,7 +472,7 @@ const ProcInstruction Debug6C[] = {
 	PROC_CALL_ROUTINE(ReloadGameCoreGraphics),
 	PROC_CALL_ROUTINE(UnblockGameGraphicsLogic),
 
-	PROC_CALL_ROUTINE_ARG(NewFadeOutBlack, 0x10),
+	PROC_CALL_ROUTINE_ARG(NewFadeOutBlack, 0x40),
 	PROC_YIELD,
 
 	PROC_CALL_ROUTINE(UnlockGameLogic),
