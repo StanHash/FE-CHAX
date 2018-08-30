@@ -253,8 +253,8 @@ char* GetUnitStatusString(const struct Unit*); //! FE8U = 0x8019415
 
 struct Unit* GetUnit(u8 index); //! FE8U = 0x8019431
 
-const struct ClassData GetClassData(u8); //! FE8U = 0x8019445
-const struct CharacterData GetCharacterData(u8); //! FE8U = 0x8019465
+const struct ClassData* GetClassData(u8); //! FE8U = 0x8019445
+const struct CharacterData* GetCharacterData(u8); //! FE8U = 0x8019465
 
 void RemoveUnitItem(struct Unit*, int slot); //! FE8U = 0x8019485
 

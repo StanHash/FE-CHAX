@@ -18,10 +18,14 @@ extern const short gCosLookup[]; //! FE8U = (0x080D759C)
 
 extern const ProcCode gProc_GoBackToUnitMenu[];
 extern const ProcCode gProc_PlayerPhase[];
+extern const ProcCode gProc_BG3HSlide[];
+
+extern const u16 gPal_MiscUIGraphics[];
 
 #pragma long_calls
 
 char* GetStringFromIndex(int index); //! FE8U = 0x800A241
+char* GetStringFromIndexInBuffer(int index, char* buffer); //! FE8U = 0x800A281
 
 void SetCursorMapPosition(int x, int y); //! FE8U = 0x8015BBD
 

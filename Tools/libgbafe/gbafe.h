@@ -38,6 +38,7 @@ extern "C" {
 #include "gbafe/animinterpreter.h"
 #include "gbafe/ai.h"
 #include "gbafe/sound.h"
+#include "gbafe/debugprint.h"
 #include "gbafe/other.h"
 
 #ifdef __cplusplus
