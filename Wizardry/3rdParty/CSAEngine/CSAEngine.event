@@ -1,0 +1,30 @@
+#ifndef HAX_CSA_ENGINE
+#define HAX_CSA_ENGINE
+
+// Original CSA engine hack by Hextator
+// Enhanced and fixed by circleseverywhere
+// Ported to CHAX by me
+
+#define SetCSATable(index, framedata, RTLFG, LTRFG, RTLBG, LTRBG) "PUSH; ORG CSATable+(index*20); POIN framedata RTLFG LTRFG RTLBG LTRBG; POP"
+#define SetCustomSpellDim(index) "PUSH; ORG SpellTable+(index*4); POIN CSAStartDim; POP"
+#define SetCustomSpellNoDim(index) "PUSH; ORG SpellTable+(index*4); POIN CSAStartNoDim; POP"
+
+// uglier aliases for compat
+#define setCSATable(index, framedata, RTLFG, LTRFG, RTLBG, LTRBG) "PUSH; ORG CSATable+(index*20); POIN framedata RTLFG LTRFG RTLBG LTRBG; POP"
+#define setCustomSpell_dim(index) "PUSH; ORG SpellTable+(index*4); POIN CSAStartDim; POP"
+#define setCustomSpell_nodim(index) "PUSH; ORG SpellTable+(index*4); POIN CSAStartNoDim; POP"
+
+SpellTable = $5D4E60
+
+ALIGN 4
+CSATable:
+	// #incbin BlankCSATable.dmp
+	ORG (CSATable + 0xFF * 20)
+
+#include "src/CSALyn.lyn.event"
+
+// Backwards Compatibility
+CSAEngine_Dim   = CSAStartDim - 1
+CSAEngine_NoDim = CSAStartNoDim - 1
+
+#endif // HAX_CSA_ENGINE

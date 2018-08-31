@@ -1,0 +1,16 @@
+0203FF34 is multiple things:
+	+ 00 is some "dummy" frame data
+	+ 10 is also some "dummy" frame data
+	+ 2C is an AIS
+	+ 74 is also an AIS
+0203FFFC is "FRAME_DATA_STREAM_PTR"
+
+If those AIS are getting linked into the array no wonder CSAs breaks with things that re-sort it
+(like, say, for example: front dodges)
+
+CSA table entry:
+	+ 00 is frame data
+	+ 04 is right-to-left foreground
+	+ 08 is left-to-right foreground
+	+ 0C is right-to-left background
+	+ 10 is left-to-right background
