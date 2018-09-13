@@ -714,24 +714,21 @@ SKIP_CHAIN_2:
 
 	strh r0, [r1]    @Set fill value
 	mov r0, r1    @Set source address
-	mov r2, #0x1    @Set fill bit
-	lsl r2, r2, #0x13 @
+	mov r2, #0x1  @ Set fill bit
+	lsl r2, #0x13 @
 	add r2, #0x80   @Set word count
-	lsl r2, r2, #0x5  @Finish shifting
+	lsl r2, #0x5  @Finish shifting
+	@ r2 = 0x1001000
 	swi #0x0B     @CpuSet
 
 	b INVALID_BG_SHEET_1
 
 VALID_BG_SHEET_1:
-	push {r3}
-
 	mov r1, #0x20
 	lsl r1, #8 @ r1 = 0x2000
 
 	ldr r3, =SomeImageStoringRoutine_SpellAnim2
 	bl  BXR3
-
-	pop {r3}
 
 INVALID_BG_SHEET_1:
 	ldr r3, [r7]
@@ -805,14 +802,14 @@ NEGATIVE_DELAY:
 TERMINATE_ANIMATION:
 	mov  r2, #0x0
 	ldr  r1, =FRAME_DATA_STREAM
-	sub  r1, #0x9C   @
+	sub  r1, #0x9C   @ first AIS
 	strb r2, [r1]    @
 
 	add  r1, #0x48   @
 	strb r2, [r1]    @ Dummy AISs are disabled
 
 	@ clear both the tsa and the buffer. this is important for missed animations
-	ldr  r0, =0x020234A8 @ FIXME
+	ldr  r0, =gBg1MapBuffer
 	mov  r1, #0x0    @
 	strh r1, [r0]    @
 
