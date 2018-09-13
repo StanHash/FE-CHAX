@@ -286,9 +286,9 @@ POP
 // Done: Redo the Berserk AI in the same way the regular AI was redone
 // Done: Autocursor takes the first unit *that hasn't moved yet*
 // Fixed: Autocursor Off is broken
+// Done: Restore the additional AI behaviors (escaping/lockpicking)
 
 // FixMe: some AI2 seem broken
-// Todo: Restore the additional AI behaviors (escaping/lockpicking)
 // Todo: Not display predictions sometimes (during cutscenes/menus/etc?)
 // Todo: Change phase switch screen effect to show something like "TURN xyz" instead of "PLAYER PHASE"
 // Todo: Test
