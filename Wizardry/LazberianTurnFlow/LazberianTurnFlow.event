@@ -4,6 +4,13 @@
 #include "Extensions/Hack Installation.txt"
 #include "Extensions/ProcDefinitions.txt"
 
+#ifndef SetSymbolDefined
+	#define SetSymbolDefined
+
+	#define SetSymbol(aName, aValue) "PUSH; ORG (aValue); aName:; POP"
+//	#define SetSymbol(aName, aValue) "aName = (aValue)"
+#endif // SetSymbolDefined
+
 PUSH
 
 	// End player phase after an action was taken
@@ -112,19 +119,19 @@ PUSH
 
 	{
 
-	chapter_intro       = 0
-	chapter_start       = 1
-	fast_chapter_intro  = 2
-	phase_switch        = 3
-	resume_phase_idle   = 4
-	phase_start_control = 5
-	resume_action       = 6
-	resume_berserk      = 7
-	resume_phase_start  = 8
-	turn_start          = 9 // was phase_start before
-	resume_arena        = 10
-	chapter_start_end   = 11
-	berserk_phase       = 12
+	SetSymbol(chapter_intro,       0)
+	SetSymbol(chapter_start,       1)
+	SetSymbol(fast_chapter_intro,  2)
+	SetSymbol(phase_switch,        3)
+	SetSymbol(resume_phase_idle,   4)
+	SetSymbol(phase_start_control, 5)
+	SetSymbol(resume_action,       6)
+	SetSymbol(resume_berserk,      7)
+	SetSymbol(resume_phase_start,  8)
+	SetSymbol(turn_start,          9) // was phase_start before
+	SetSymbol(resume_arena,        10)
+	SetSymbol(chapter_start_end,   11)
+	SetSymbol(berserk_phase,       12)
 
 		PROC_SET_NAME($0D79C4) // "BMAPMAIN"
 		PROC_SET_MARK(2)
