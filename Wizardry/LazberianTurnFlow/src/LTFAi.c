@@ -13,7 +13,9 @@ static void LTFAi_CallDecide(struct Proc*, AiDecitionMakerFunc decisionMaker);
 const CpOrderFunc LTFAi_NewCpOrderFuncList[] = {
 	LTFAi_CpOrderInit,
 	LTFAi_CpOrderTryDoAi1,
+	LTFAi_CpOrderTryDoHealEscape,
 	LTFAi_CpOrderTryDoAi2,
+	LTFAi_CpOrderTryDoSpecialItems,
 	LTFAi_CpOrderEndTurns,
 	BreakProcLoop, // LTFAi_CpOrderEnd,
 };
@@ -88,6 +90,14 @@ static void LTFAi_CpOrderTryDoAi1(struct Proc* cpOrderProc) {
 
 static void LTFAi_CpOrderTryDoAi2(struct Proc* cpOrderProc) {
 	LTFAi_CallDecide(cpOrderProc, AiDecisionMaker_AiScript2);
+}
+
+static void LTFAi_CpOrderTryDoHealEscape(struct Proc* cpOrderProc) {
+	LTFAi_CallDecide(cpOrderProc, AiDecisionMaker_HealEscape);
+}
+
+static void LTFAi_CpOrderTryDoSpecialItems(struct Proc* cpOrderProc) {
+	LTFAi_CallDecide(cpOrderProc, AiDecisionMaker_SpecialItems);
 }
 
 static void LTFAi_CpOrderEndTurns(struct Proc* cpOrderProc) {
