@@ -47,7 +47,7 @@ static void LTFDisplay_OnInit(struct LTFPredictionDisplayProc* proc) {
 }
 
 static void LTFDisplay_OnLoop(struct LTFPredictionDisplayProc* proc) {
-	if (!proc->doDisplay)
+	if (!proc->doDisplay || gChapterData.subtitleHelpOption)
 		return;
 
 	if (proc->xOff > 0)
