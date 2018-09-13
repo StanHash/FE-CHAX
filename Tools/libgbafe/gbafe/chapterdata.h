@@ -37,7 +37,8 @@ struct ChapterState {
 
 	u32 unk41_1:1;
 	u32 muteSfxOption:1;
-	u32 unk41_3:6;
+	u32 unk41_3:5;
+	u32 subtitleHelpOption:1;
 
 	u32 unk42_1:1;
 	u32 unk42_2:1;

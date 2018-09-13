@@ -11,7 +11,7 @@ struct AnimationInterpreter {
 	/* 02 */ s16 xPosition;
 	/* 04 */ s16 yPosition;
 	/* 06 */ u16 delayTimer;
-	/* 08 */ u16 _unk08;
+	/* 08 */ u16 oam2base;
 	/* 0A */ u16 drawLayerPriority;
 	/* 0C */ u16 state2;
 	/* 0E */ u16 nextRoundId;
@@ -40,8 +40,8 @@ extern u8 gBattleCharacterIndices[2]; //! FE8U = 0x203E190
 #pragma long_calls
 
 int GetAISSubjectId(const struct AnimationInterpreter*); //! FE8U = 0x805A16D
-int IsBatteRoundTypeAMiss(int); //! FE8U = 0x805A185
- int GetBattleAnimRoundType(int index); //! FE8U = 0x8058A0D
+int IsBatteRoundTypeAMiss(u16); //! FE8U = 0x805A185
+int GetBattleAnimRoundType(int index); //! FE8U = 0x8058A0D
 
 void StartEkrNamewinAppear(int, int, int);
 
