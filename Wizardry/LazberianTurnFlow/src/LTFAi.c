@@ -4,6 +4,8 @@ static void LTFAi_CpOrderInit(struct Proc*);
 static void LTFAi_BskOrderInit(struct Proc*);
 static void LTFAi_CpOrderTryDoAi1(struct Proc*);
 static void LTFAi_CpOrderTryDoAi2(struct Proc*);
+static void LTFAi_CpOrderTryDoHealEscape(struct Proc*);
+static void LTFAi_CpOrderTryDoSpecialItems(struct Proc*);
 static void LTFAi_CpOrderEndTurns(struct Proc*);
 
 static void LTFAi_EndTurnDicider(void);
