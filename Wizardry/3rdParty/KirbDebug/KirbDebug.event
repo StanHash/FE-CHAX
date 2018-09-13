@@ -6,6 +6,8 @@
 
 #include "src/KirbDebug.lyn.event"
 
+#include "src/KDStatPage.lyn.event"
+
 // Replace Guide
 PUSH; ORG $59CEC8
 	POIN KribDebugMenuEffect

@@ -4,18 +4,30 @@
 #include "gbafe.h"
 
 enum { UnitEditor_PAGE1ENTRIES = 12 };
-enum { UnitEditor_PAGE2ENTRIES = 4 };
+enum { UnitEditor_PAGE2ENTRIES = 5 };
+
+enum { // General Config
+	// (inner) frame size (aka the area where pages should draw in)
+	KD_PAGE_FRAME_X      = 1,
+	KD_PAGE_FRAME_Y      = 3,
+	KD_PAGE_FRAME_WIDTH  = 28,
+	KD_PAGE_FRAME_HEIGHT = 16,
+
+	// frame "style" (0-3)
+	KD_PAGE_FRAME_STYLE = 0,
+};
 
 typedef struct {
 	PROC_HEADER;
 
-	struct Unit* pUnit;
-
 	u8 CursorIndex;
-	u8 StatsPage1[UnitEditor_PAGE1ENTRIES+1];
+	u8 StatsPage1[UnitEditor_PAGE1ENTRIES];
+	u8 StatsPage2[UnitEditor_PAGE2ENTRIES];
 	u8 KonamiCodeCounter;
 	u8 PageIndex;
-	u8 StatsPage2[UnitEditor_PAGE2ENTRIES+1];
+
+	struct Unit* pUnit;
+	struct Proc* pPageProc;
 } UnitEditorProc;
 
 typedef struct {
@@ -23,11 +35,25 @@ typedef struct {
 	u32 y;
 } LocationTable;
 
+struct KDPageDefinition {
+	struct Proc* (*start) (UnitEditorProc*); // starts the page proc
+
+	void (*onLoadUnit) (struct Proc*, UnitEditorProc*, struct Unit*); // notifies page proc of unit switch in
+	void (*onSaveUnit) (struct Proc*, UnitEditorProc*, struct Unit*); // notifies page proc of unit switch out
+};
+
+extern const struct KDPageDefinition gKDStatPageDefinition;
+
 extern const struct ProcInstruction Debug6C[];
 extern const LocationTable CursorLocationTable[];
 extern const u16 ButtonCombo[];
 
-u8 KribDebugMenuEffect();
+u8 KribDebugMenuEffect(void);
+
+void KDSwitchPage(UnitEditorProc*, unsigned id);
+void KDSwitchUnit(UnitEditorProc*, struct Unit* unit);
+void KDClearPage(UnitEditorProc*);
+void KDClearHeader(UnitEditorProc*);
 
 void DebugScreenSetup(UnitEditorProc* CurrentProc);
 void DebugScreenLoop(UnitEditorProc* CurrentProc);

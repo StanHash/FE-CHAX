@@ -21,6 +21,7 @@ extern u16 gPal_ChapterIntroBackground[];
 
 enum { KD_PAGE_COUNT = 2 };
 
+/*
 struct KDPageDefinition {
 	void (*onInit) (UnitEditorProc*);
 	void (*onEnd) (UnitEditorProc*);
@@ -42,9 +43,15 @@ static struct KDPageDefinition sKD_PageDefinitions[] = {
 		.onSubjectChange = SetupDebugUnitEditorPage2,
 		.onIdle          = UpdateDebugUnitEditorPage2,
 	}
+}; //*/
+
+static const struct KDPageDefinition* sKDPageDefinitions[] = {
+	&gKDStatPageDefinition,
+
+	NULL
 };
 
-u8 KribDebugMenuEffect() {
+u8 KribDebugMenuEffect(void) {
 	StartProc(Debug6C, ROOT_PROC_3);
 	return ME_END | ME_PLAY_BEEP | ME_CLEAR_GFX;
 }
@@ -56,8 +63,10 @@ void DebugScreenSetup(UnitEditorProc* proc) {
 		PALOBJ_FONT = 14,
 	};
 
-	//Make it so the bg buffers update
 	LoadBgConfig(NULL);
+
+	FillBgMap(gBg0MapBuffer, 0);
+	FillBgMap(gBg1MapBuffer, 0);
 
 	//Load the background graphics and palette and tsa(generate it)
 	Decompress(gGfx_ChapterIntroBackground, (void*)(VRAM + 0x8000));
@@ -67,99 +76,157 @@ void DebugScreenSetup(UnitEditorProc* proc) {
 
 	CopyToPaletteBuffer(gPal_MiscUIGraphics, 16 * 0x20, 0x20);
 
-	//Load both debug fone(obj one will be used later on)
 	SetupDebugFontForBG(2, 0);
 	SetupDebugFontForOBJ(-1, PALOBJ_FONT);
 	Font_InitDefault();
 
-	// Text_InitClear(0, 0); // wtf why
-
-	//Print a welcome message
-	DBG_BG_Print(BG_LOCATED_TILE(gBg0MapBuffer, 0, 1), "Kirb's debug-o-matic");
-	DBG_BG_Print(BG_LOCATED_TILE(gBg0MapBuffer, 0, 2), "Press Select to switch pages.");
-
 	//Setup the unit editor™
-	proc->PageIndex = 0;
-	proc->CursorIndex = 0;
+	proc->pUnit     = NULL;
+	proc->pPageProc = NULL;
 
-	proc->pUnit = GetUnit(1); // Start with the first unit
-
-	if (sKD_PageDefinitions[proc->PageIndex].onInit)
-		sKD_PageDefinitions[proc->PageIndex].onInit(proc);
-
-	if (sKD_PageDefinitions[proc->PageIndex].onSubjectChange)
-		sKD_PageDefinitions[proc->PageIndex].onSubjectChange(proc);
+	KDSwitchUnit(proc, GetUnit(1));
+	KDSwitchPage(proc, 0);
 }
 
 void DebugScreenLoop(UnitEditorProc* proc) {
 	if ((gKeyStatus.pressedKeys & B_BUTTON) && proc->KonamiCodeCounter != 10) {
+		// let page save unit
+		if (proc->pPageProc && sKDPageDefinitions[proc->PageIndex]->onSaveUnit)
+			sKDPageDefinitions[proc->PageIndex]->onSaveUnit(proc->pPageProc, proc, proc->pUnit);
+
 		BreakProcLoop((struct Proc*)(proc));
 		PlaySfx(0x6B); 
 	}
 
 	// Check for R (next unit)
-	if ((gKeyStatus.repeatedKeys & R_BUTTON)) {
-		u8 index = proc->pUnit->index; // u8 to guarantee 0-255 range with proper under/overflow behavior
+	if (gKeyStatus.repeatedKeys & R_BUTTON) {
+		if (gKeyStatus.heldKeys & L_BUTTON)
+			KDSwitchUnit(proc, GetUnit(1));
+		else {
+			u8 index = proc->pUnit->index; // u8 to guarantee 0-255 range with proper under/overflow behavior
+			struct Unit* unit = NULL;
 
-		// Find next valid unit index
-		do {
-			proc->pUnit = GetUnit(++index);
-		} while (!proc->pUnit || !(proc->pUnit->pCharacterData));
+			// Find previous valid unit index
+			do {
+				unit = GetUnit(++index);
+			} while (!unit || !(unit->pCharacterData));
 
-		// Call page subject change if set
-		if (sKD_PageDefinitions[proc->PageIndex].onSubjectChange)
-			sKD_PageDefinitions[proc->PageIndex].onSubjectChange(proc);
+			KDSwitchUnit(proc, unit);
+		}
 	}
 
 	// Check for L (prev unit)
-	if ((gKeyStatus.repeatedKeys & L_BUTTON)) {
-		u8 index = proc->pUnit->index; // u8 to guarantee 0-255 range with proper under/overflow behavior
+	if (gKeyStatus.repeatedKeys & L_BUTTON) {
+		if (gKeyStatus.heldKeys & R_BUTTON)
+			KDSwitchUnit(proc, GetUnit(1));
+		else {
+			u8 index = proc->pUnit->index; // u8 to guarantee 0-255 range with proper under/overflow behavior
+			struct Unit* unit = NULL;
 
-		// Find previous valid unit index
-		do {
-			proc->pUnit = GetUnit(--index);
-		} while (!proc->pUnit || !(proc->pUnit->pCharacterData));
+			// Find previous valid unit index
+			do {
+				unit = GetUnit(--index);
+			} while (!unit || !(unit->pCharacterData));
 
-		// Call page subject change if set
-		if (sKD_PageDefinitions[proc->PageIndex].onSubjectChange)
-			sKD_PageDefinitions[proc->PageIndex].onSubjectChange(proc);
+			KDSwitchUnit(proc, unit);
+		}
 	}
 
 	// Check for Start (reset unit)
-	if ((gKeyStatus.pressedKeys & START_BUTTON))
-		proc->pUnit = GetUnit(1);
-
-	// Check for Select (page switch)
-	if ((gKeyStatus.pressedKeys & SELECT_BUTTON)) {
-		// Call page on end if set
-		if (sKD_PageDefinitions[proc->PageIndex].onEnd)
-			sKD_PageDefinitions[proc->PageIndex].onEnd(proc);
-
-		// Reset field cursor
-		proc->CursorIndex = 0;
-
-		// Increment page index
-		proc->PageIndex++;
-
-		// Go back to 0 if overflow
-		if (proc->PageIndex >= KD_PAGE_COUNT)
-			proc->PageIndex = 0;
-
-		// Call page init if set
-		if (sKD_PageDefinitions[proc->PageIndex].onInit)
-			sKD_PageDefinitions[proc->PageIndex].onInit(proc);
-
-		// Call page subject change if set
-		if (sKD_PageDefinitions[proc->PageIndex].onSubjectChange)
-			sKD_PageDefinitions[proc->PageIndex].onSubjectChange(proc);
+	if ((gKeyStatus.pressedKeys & START_BUTTON)) {
+		// let page load unit
+		if (proc->pPageProc && sKDPageDefinitions[proc->PageIndex]->onLoadUnit)
+			sKDPageDefinitions[proc->PageIndex]->onLoadUnit(proc->pPageProc, proc, proc->pUnit);
 	}
 
-	// Call page idle if set
-	if (sKD_PageDefinitions[proc->PageIndex].onIdle)
-		sKD_PageDefinitions[proc->PageIndex].onIdle(proc);
+	// Check for Select (page switch)
+	if ((gKeyStatus.pressedKeys & SELECT_BUTTON))
+		KDSwitchPage(proc, proc->PageIndex + 1);
+
+	PrintDebugNumberHex(
+		8 * (KD_PAGE_FRAME_X + 0),
+		8 * (KD_PAGE_FRAME_Y - 1),
+		proc->pUnit->index, 2
+	);
 
 	// TODO: do something with this
 	CheckKonamiCode(proc);
+}
+
+void KDSwitchPage(UnitEditorProc* proc, unsigned id) {
+	unsigned count;
+
+	// Compute page count
+	for (count = 0; sKDPageDefinitions[count]; ++count);
+
+	if (id >= count)
+		id = 0; // Prevent invalid page (any page > count rolls back to page 0)
+
+	if (proc->pPageProc) {
+		// let current page save unit
+		if (sKDPageDefinitions[proc->PageIndex]->onSaveUnit)
+			sKDPageDefinitions[proc->PageIndex]->onSaveUnit(proc->pPageProc, proc, proc->pUnit);
+
+		// end page
+		EndProc(proc->pPageProc);
+	}
+
+	// clear page/frame gfx
+	KDClearPage(proc);
+
+	// setup new page
+	proc->PageIndex = id;
+	proc->pPageProc = sKDPageDefinitions[id]->start(proc);
+
+	// let new page load unit
+	if (sKDPageDefinitions[proc->PageIndex]->onLoadUnit)
+		sKDPageDefinitions[proc->PageIndex]->onLoadUnit(proc->pPageProc, proc, proc->pUnit);
+}
+
+void KDSwitchUnit(UnitEditorProc* proc, struct Unit* unit) {
+	// let page save unit
+	if (proc->pPageProc && sKDPageDefinitions[proc->PageIndex]->onSaveUnit)
+		sKDPageDefinitions[proc->PageIndex]->onSaveUnit(proc->pPageProc, proc, proc->pUnit);
+
+	proc->pUnit = unit;
+
+	// let page load unit
+	if (proc->pPageProc && sKDPageDefinitions[proc->PageIndex]->onLoadUnit)
+		sKDPageDefinitions[proc->PageIndex]->onLoadUnit(proc->pPageProc, proc, proc->pUnit);
+
+	KDClearHeader(proc);
+}
+
+void KDClearHeader(UnitEditorProc* proc) {
+	Font_InitDefault();
+
+	// clear unit name line
+	for (unsigned i = 0; i < 30; ++i)
+		*BG_LOCATED_TILE(gBg0MapBuffer, i, KD_PAGE_FRAME_Y - 1) = 0;
+
+	DBG_BG_Print(
+		BG_LOCATED_TILE(gBg0MapBuffer, (KD_PAGE_FRAME_X + 3), (KD_PAGE_FRAME_Y - 1)),
+		GetStringFromIndex(proc->pUnit->pCharacterData->nameTextId)
+	);
+
+	DrawTextInline(NULL, BG_LOCATED_TILE(gBg0MapBuffer, 0, 0), 0, 0, 8, " By Kirb");
+	DrawTextInline(NULL, BG_LOCATED_TILE(gBg0MapBuffer, 8, 0), 3, 0, 21, "L/R: units  Select: pages  Start: reload");
+
+	EnableBgSyncByMask(0b0001);
+}
+
+void KDClearPage(UnitEditorProc* proc) {
+	LoadNewUIPal(-1);
+
+	MakeUIWindowTileMap_BG0BG1(
+		KD_PAGE_FRAME_X - 1,
+		KD_PAGE_FRAME_Y - 1,
+		KD_PAGE_FRAME_WIDTH + 2,
+		KD_PAGE_FRAME_HEIGHT + 2,
+		3
+	);
+
+	EnableBgSyncByMask(0b0011);
 }
 
 void SetupDebugUnitEditorPage1(UnitEditorProc *proc) {
