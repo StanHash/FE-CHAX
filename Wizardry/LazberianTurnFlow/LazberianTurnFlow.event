@@ -16,8 +16,9 @@ PUSH
 
 	// Display prediction icons on the side of the screen
 	// (replaces the mist thing background effect that breaks hpbars anyway)
-	ORG $59D93C
-//		POIN LTF_DisplayPhasePredictions
+	// This is obsolete and has been redone in a better way
+	// ORG $59D93C
+	//	POIN LTF_DisplayPhasePredictions
 
 	// Update map sprite palettes when R button press changes state
 	// (Hopefully allows the player to be less confused as to what color is what unit)
@@ -89,6 +90,19 @@ PUSH
 	ORG $039774
 		POIN gProc_LTFAiNewBskOrder
 
+	// Disable prediction display when disabling game gfx
+	ORG $030198
+		jumpToHack(LTFHook_InDisableBattleMapGfx)
+
+	// Restore prediction display when restoring game gfx
+	ORG $0301D0
+		jumpToHack(LTFHook_InRestoreBattleMapGfx)
+
+	// Disable prediction display when starting anims-on battle
+	// (Otherwise it will kind of do weird stuff)
+	ORG $5B9AD4
+		PROC_JUMP(LTFBattleStartingProcHook)
+
 POP
 
 PUSH
@@ -153,6 +167,8 @@ PUSH
 		PROC_CALL_ROUTINE($0154F5) // MapMain_Suspend
 
 	PROC_LABEL(phase_start_control)
+		PROC_CALL_ROUTINE(LTF_EnablePredictionDisplay)
+
 		PROC_NEW_CHILD_BLOCKING($59AE00) // gProc_ResetCursorPosition
 		PROC_LOOP_ROUTINE($015451) // MapMain_StartPhaseController
 
@@ -214,6 +230,10 @@ PUSH
 
 		PROC_END
 
+	LTFBattleStartingProcHook:
+		PROC_CALL_ROUTINE(LTF_DisablePredictionDisplay)
+		PROC_JUMP($5B9ADC)
+
 	ASSERT ($59A438 - CURRENTOFFSET)
 POP
 
@@ -224,6 +244,8 @@ POP
 #include "src/LTFEndPlayerPhase.lyn.event"
 #include "src/LTFAutocursor.lyn.event"
 #include "src/LTFAi.lyn.event"
+
+#include "src/LTFHooks.lyn.event"
 
 // BIG-STUFF-TO-DO-AND-TO-FIX-LIST-THING:
 
@@ -249,7 +271,7 @@ POP
 
 // FixMe: some AI2 seem broken
 // Todo: Restore the additional AI behaviors (escaping/lockpicking)
-// Todo: Not display the things sometimes (during cutscenes/menus/stuff?)
+// Todo: Not display predictions sometimes (during cutscenes/menus/etc?)
 // Todo: Change phase switch screen effect to show something like "TURN xyz" instead of "PLAYER PHASE"
 // Todo: Test
 

@@ -12,10 +12,11 @@ static unsigned LTFDisplay_GetPhaseObjPalette(unsigned phase);
 struct LTFPredictionDisplayProc {
 	PROC_HEADER;
 
-	u8 prediction[LTF_PHASE_PREDICTION_MAX_COUNT];
+	u8 prediction[LTF_DISPLAY_MAX_COUNT];
 	unsigned predictionCount;
 
 	unsigned doDisplay;
+	unsigned xOff;
 };
 
 static const struct ProcInstruction sProc_LTFPhasePredictionDisplay[] = {
@@ -42,15 +43,19 @@ static const struct ProcInstruction sProc_LTFPhasePredictionDisplayLock[] = {
 static void LTFDisplay_OnInit(struct LTFPredictionDisplayProc* proc) {
 	proc->predictionCount = 0;
 	proc->doDisplay = FALSE;
+	proc->xOff = LTF_DISPLAY_XOFF;
 }
 
 static void LTFDisplay_OnLoop(struct LTFPredictionDisplayProc* proc) {
 	if (!proc->doDisplay)
 		return;
 
+	if (proc->xOff > 0)
+		proc->xOff--;
+
 	for (unsigned i = 0; i < proc->predictionCount; ++i) {
 		PushToHiOAM(
-			240 - 10, 55 + (i * 10),
+			240 - ((LTF_DISPLAY_XOFF - proc->xOff) * LTF_DISPLAY_XOFF_STEP), 55 + (i * 10),
 			&gOAM_8x8Obj, 3 + (LTFDisplay_GetPhaseObjPalette(proc->prediction[i]) << 12)
 		);
 	}
@@ -93,7 +98,7 @@ void LTF_UpdatePredictionDisplay(void) {
 
 		unsigned i = 0;
 
-		for (; i < LTF_PHASE_PREDICTION_MAX_COUNT; ++i) {
+		for (; i < LTF_DISPLAY_MAX_COUNT; ++i) {
 			if ((ableCounts[0] == 0) && (ableCounts[1] == 0) && (ableCounts[2] == 0) && (ableCounts[3] == 0))
 				break;
 
@@ -106,6 +111,26 @@ void LTF_UpdatePredictionDisplay(void) {
 		proc->predictionCount = i;
 	}
 }
+
+void LTF_EnablePredictionDisplay(void) {
+	struct LTFPredictionDisplayProc* proc = (struct LTFPredictionDisplayProc*) FindProc(sProc_LTFPhasePredictionDisplay);
+
+	if (proc) {
+		proc->doDisplay = TRUE;
+		LTF_UpdatePredictionDisplay();
+	}
+}
+
+void LTF_DisablePredictionDisplay(void) {
+	struct LTFPredictionDisplayProc* proc = (struct LTFPredictionDisplayProc*) FindProc(sProc_LTFPhasePredictionDisplay);
+
+	if (proc) {
+		proc->doDisplay = FALSE;
+		proc->xOff = LTF_DISPLAY_XOFF;
+	}
+}
+
+/*
 
 void LTF_DisplayPhasePredictions(struct Proc* maptaskProc) {
 	static const u8 phaseToPalIdLookup[4] = { 0xC, 0xE, 0xD, 0xF };
@@ -138,3 +163,5 @@ void LTF_DisplayPhasePredictions(struct Proc* maptaskProc) {
 		);
 	}
 }
+
+// */
