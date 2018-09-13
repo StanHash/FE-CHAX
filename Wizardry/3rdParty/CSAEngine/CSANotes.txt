@@ -1,6 +1,7 @@
 0203FF34 is multiple things:
 	+ 00 is some "dummy" frame data
 	+ 10 is also some "dummy" frame data
+	+ 20 is some "dummy" oam data
 	+ 2C is an AIS
 	+ 74 is also an AIS
 0203FFFC is "FRAME_DATA_STREAM_PTR"
