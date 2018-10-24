@@ -4,7 +4,7 @@
 include Tools.mak
 
 # Setting C/ASM include directories up
-INCLUDE_DIRS := Tools/libgbafe
+INCLUDE_DIRS := Tools/CLib/include
 INCFLAGS     := $(foreach dir, $(INCLUDE_DIRS), -I "$(dir)")
 
 # setting up compilation flags
@@ -20,7 +20,7 @@ $(shell mkdir -p $(CACHE_DIR) > /dev/null)
 DEPSDIR := $(CACHE_DIR)
 
 # lyn options
-LYNLIB := Tools/libgbafe/fe8u.o
+LYNLIB := Tools/CLib/reference/FE8U-20180806.o
 
 # Finding all possible source files
 CFILES   := $(shell find -type f -name '*.c')
@@ -81,6 +81,11 @@ clean:
 	@rm -rf Writans/.TextEntries Writans/Text.event Writans/TextDefinitions.event
 	@echo all clean!
 
+msg:
+	@$(MAKE) -C Wizardry/ModularGetters
+
+.PHONY: msg
+
 # -------------------
 # ACTUAL TARGET RULES
 
@@ -91,7 +96,7 @@ $(ROM_TARGET): $(EVENT_MAIN) $(EVENT_MAIN_DEP) $(ROM_SOURCE)
 
 $(EVENT_MAIN_DEP):
 	@echo Refreshing dependencies.
-	@$(EA) A FE8 -output $(ROM_TARGET) -input $(EVENT_MAIN) -quiet -MM -MG -MT $(EVENT_MAIN_DEP) -MF $(EVENT_MAIN_DEP)
+	@$(EA) A FE8 -output $(ROM_TARGET) -input $(EVENT_MAIN) -MM -MG -MT $(EVENT_MAIN_DEP) -MF $(EVENT_MAIN_DEP)
 	@sed -i s/\\\\/\\//g $(EVENT_MAIN_DEP)
 
 # -------------------

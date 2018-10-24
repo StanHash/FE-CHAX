@@ -1,3 +1,9 @@
 [submodule "Tools/py/NMM2CSV"]
 	path = Tools/py/NMM2CSV
 	url = https://github.com/FireEmblemUniverse/NMM2CSV
+[submodule "Wizardry/ModularGetters"]
+	path = Wizardry/ModularGetters
+	url = https://github.com/StanHash/FE8ModularStatGetters.git
+[submodule "Tools/CLib"]
+	path = Tools/CLib
+	url = https://github.com/StanHash/FE-CLib

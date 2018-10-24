@@ -48,7 +48,7 @@ static void LTFAi_CpOrderInit(struct Proc* cpOrderProc) {
 		return;
 	}
 
-	SortAiUnitQueue(count);
+//	SortAiUnitQueue(count);
 
 	gAiData.aiUnits[count] = 0; // terminator
 

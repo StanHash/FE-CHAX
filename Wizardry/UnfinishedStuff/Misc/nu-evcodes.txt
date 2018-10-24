@@ -11,11 +11,11 @@ rX   -> sX
 # code 2
 [0220] EVBIT_F    -> EVBIT_F Bit
 [0228] EVBIT_T    -> EVBIT_T Bit
-[0221] ENUF       -> TRIGGER_F Id
-[0229] ENUT       -> TRIGGER_T Id
+[0221] ENUF       -> EID_F Id
+[0229] ENUT       -> EID_T Id
 
-[0221] ENUF_SLOT2 -> (remove)
-[0229] ENUT_SLOT2 -> (remove)
+[0221] ENUF_SLOT2 -> EID_S2_F (or remove)
+[0229] ENUT_SLOT2 -> EID_S2_T (or remove)
 
 # code 3
 [0320] CHECK_EVBIT   -> GET_EVBIT Bit
@@ -203,3 +203,16 @@ rX   -> sX
 [2A22] MNC2 -> GAME_GOTO_CHAPTER_NOWM Id
 [2A23] MNC3 -> GAME_GOTO_CHAPTER_NOSAVE Id
 [2A24] MNC4 -> GAME_GOTO_END (?)
+
+# code 2B
+[2B20] -> idk (messes with loading unit count)
+[2B21] -> idk (messes with event engine field at +4E)
+[2B22] -> idk (messes with loading unit parameter)
+
+# code 2C
+[2C40] LOAD1 -> LOAD_UNITS idk man
+[2C41] LOAD2
+[2C42] LOAD3
+[2C43] LOAD4
+
+# code 2D
