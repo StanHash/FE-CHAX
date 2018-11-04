@@ -1,0 +1,304 @@
+#ifndef FE6_CHAPTER1
+#define FE6_CHAPTER1
+
+#include "EAstdlib.event"
+
+EventPointerTable(0x07, ThisChapter)
+
+ALIGN 4
+ThisChapter:
+	POIN NoEventList       // turn events
+	POIN NoEventList       // talk events
+	POIN NoEventList       // tile events
+	POIN NoEventList       // post-action events
+	POIN NoEventList       // select events
+	POIN NoEventList       // pre-move events
+	POIN NoEventList       // post-move events
+
+	POIN NoTutorialList
+	POIN NoTraps NoTraps
+	POIN unPlayerGroup1 unPlayerGroup1
+	WORD 0 0 0 0 0 0
+	POIN scBeginning scEnding
+
+// Utility definitions (typically those would be in another, common file)
+
+#define scStartPrepScreen      $591FD8 // args: -
+
+#define scNoSkipFadeOut        $591F40 // args: -
+#define scNoSkipFadeIn         $591F64 // args: -
+
+#define scLoadReinforcements   $9EE274 // args: s2 = pointer to UNITs
+
+#define scConvoClearBackground $9EE2E8 // args: -
+#define scConvoShowBackground  $9EE2E8 // args: s2 = background id
+#define scConvoShowTextWithBg  $9EE310 // args: s2 = background id, s3 = text id
+
+// Common empty events (typically those would be in another, common file)
+
+ALIGN 4
+NoTraps:
+	ENDTRAP
+
+ALIGN 4
+NoEventList:
+	END_MAIN
+
+ALIGN 4
+NoTutorialList:
+	WORD 0
+
+// Chapter definitions
+
+#define CharRoy Eirika
+#define CharMarcus Seth
+#define CharAllen Kyle
+#define CharLance Forde
+#define CharWolt Neimi
+#define CharBors Gilliam
+
+#define CharCh61Boss ONeill
+#define CharCh61Gen1 0x80
+#define CharCh61Gen2 0x81
+#define CharCh61TuBd 0x82
+
+// Chapter event lists
+
+// Chapter scenes
+
+ALIGN 4
+scBeginning:
+	// Fade out of dark
+	CALL scNoSkipFadeOut
+
+	// Load initial enemy group
+	LOAD1 1 unEnemyTopGroup
+	ENUN
+
+	// Cursor on boss
+	CUMO CharCh61Boss
+	STAL 60
+	CURE
+
+	// Here is just text, we'll ignore that for now
+	/*
+
+	// Fade in dark, hide map
+	FADI 16
+	HIDEMAP
+
+	// Show bg
+	BACG 0x7
+
+	// Fade out of dark, show map (?)
+	FADU 16
+	SHOWMAP
+
+	// Text
+	TEX1 0x1
+	REMA
+
+	*/
+
+	// Camera on [7, 9] (around the middle of the map, for the tuto bandit thing)
+	CAM1 [7, 9]
+
+	// Load tuto bandit
+	LOAD1 1 unEnemyTutorialBandit
+	ENUN
+
+	// Cursor on that bandit
+	CUMO [7, 7]
+	STAL 60
+	CURE
+
+	// Same bg into text stuff as before. FE6 is weird
+	/*
+
+	FADI 16
+	HIDEMAP
+	BACG 0x7
+	FADU 16
+	SHOWMAP
+	TEX1 0x2
+	REMA
+
+	*/
+
+	// Move bandit on village
+	MOVE 0 CharCh61TuBd [4, 9]
+	ENUN
+
+	// Map change + sound!
+
+	SOUN $0AB
+	SVAL rB $00080004 // [4, 8]
+	TILECHANGE (-1)
+
+	// Cursor on castle
+	CUMO [5, 4]
+	STAL 60
+	CURE
+
+	// Bg into text again
+	/*
+
+	FADI 16
+	HIDEMAP
+	BACG 0x5
+	FADU 16
+	SHOWMAP
+	TEX1 0x3
+	MORETEXT 0x4
+	REMA
+
+	*/
+
+	// ??? sure
+	// ENUN
+
+	// Camera on the middle of the map
+	STAL 16
+	CAM1 [8, 12]
+
+	STAL 16
+
+	// Load other enemies
+	LOAD1 1 unEnemyMiddleGroup
+
+	// Camera bottom
+	CAM1 [8, 17]
+
+	// Load last enemies
+	LOAD1 1 unEnemyBottomGroup
+
+	ENUN
+
+	STAL 16
+
+	// Load the good guys!
+	LOAD1 1 unPlayerGroup1
+	ENUN
+
+	LOAD1 1 unPlayerGroup2
+	ENUN
+
+	LOAD1 1 unLanceGroup
+	ENUN
+
+	// Text
+	/*
+
+	FADI 16
+	HIDEMAP
+	BACG 0x7
+	FADU 16
+	SHOWMAP
+	TEX1 0x6
+	REMA
+
+	*/
+
+	// Move Lance to its final starting position
+	MOVE 0 CharLance [4, 18]
+	ENUN
+
+	// Some ASMCs idk
+	// ASMC 0x6BFCD 0x6BAF1
+
+	NoFade
+	ENDA
+
+ALIGN 4
+scEnding:
+	NoFade
+	ENDA
+
+// Chapter units
+
+ALIGN 4
+unPlayerGroup1: // Roy & Marcus
+	UNIT CharRoy    0 0       Level(1, Ally, False) [1, 20] 0 0 1 redaRoy    [Rapier, Vulnerary]      NoAI
+	UNIT CharMarcus 0 CharRoy Level(1, Ally, False) [2, 20] 0 0 1 redaMarcus [IronSword, SilverLance] NoAI
+
+	UNIT // End
+
+unPlayerGroup2: // Allen, Bors & Wolt
+	UNIT CharAllen 0 CharRoy Level(1, Ally, False) [0, 20] 0 0 1 redaAllen [IronSword, IronLance] NoAI
+	UNIT CharBors  0 CharRoy Level(1, Ally, False) [1, 20] 0 0 1 redaBors  [IronLance, Vulnerary] NoAI
+	UNIT CharWolt  0 CharRoy Level(1, Ally, False) [2, 20] 0 0 1 redaWolt  [IronBow, Vulnerary]   NoAI
+
+	UNIT // End
+
+unLanceGroup: // Lance, from the castle
+	UNIT CharLance 0 CharRoy Level(1, Ally, False) [10, 9] 0 0 1 redaLance [IronSword, Javelin, Vulnerary] NoAI
+
+	UNIT // End
+
+ALIGN 4
+unEnemyTopGroup: // Top/Initial enemy group
+	UNIT CharCh61Gen2 Archer  CharCh61Boss Level(1, Enemy, True) [1,  0]  0 0 1 redaEnTop1    [IronBow]  ChaseOnceApproachedAI
+	UNIT CharCh61Boss Fighter 0            Level(5, Enemy, True) [5,  0]  0 0 1 redaEnTopBoss [SteelAxe] NeverMoveAI
+	UNIT CharCh61Gen1 Fighter CharCh61Boss Level(1, Enemy, True) [2,  6]  0 0 1 redaEnTop2    [IronAxe]  ChaseOnceApproachedAI
+	UNIT CharCh61Gen1 Fighter CharCh61Boss Level(1, Enemy, True) [3,  10] 0 0 1 redaEnTop3    [IronAxe]  AttackInRangeAI
+	UNIT CharCh61Gen1 Fighter CharCh61Boss Level(1, Enemy, True) [12, 10] 0 0 1 redaEnTop4    [IronAxe]  AttackInRangeAI
+
+	UNIT // End
+
+ALIGN 4
+unEnemyMiddleGroup: // Middle enemy group
+	UNIT CharCh61Gen1 Fighter CharCh61Boss Level(1, Enemy, True) [8, 4] 0 0 1 redaEnMid1 [IronAxe] AttackInRangeAI
+	UNIT CharCh61Gen1 Fighter CharCh61Boss Level(1, Enemy, True) [9, 4] 0 0 1 redaEnMid2 [IronAxe] AttackInRangeAI
+	UNIT CharCh61Gen1 Fighter CharCh61Boss Level(1, Enemy, True) [7, 2] 0 0 1 redaEnMid3 [IronAxe] AttackInRangeAI
+	UNIT CharCh61Gen2 Archer  CharCh61Boss Level(1, Enemy, True) [7, 3] 0 0 1 redaEnMid4 [IronBow] PursueWithoutHeedAI
+
+	UNIT // End
+
+ALIGN 4
+unEnemyBottomGroup: // Bottom enemy group
+	UNIT CharCh61Gen1 Fighter CharCh61Boss Level(1, Enemy, True) [12, 7] 0 0 1 redaEnBot1 [IronAxe] PursueWithoutHeedAI
+	UNIT CharCh61Gen1 Fighter CharCh61Boss Level(1, Enemy, True) [12, 8] 0 0 1 redaEnBot2 [IronAxe] PursueWithoutHeedAI
+	UNIT CharCh61Gen1 Fighter CharCh61Boss Level(1, Enemy, True) [3,  8] 0 0 1 redaEnBot3 [IronAxe] PursueWithoutHeedAI
+	UNIT CharCh61Gen1 Fighter CharCh61Boss Level(1, Enemy, True) [4,  8] 0 0 1 redaEnBot4 [IronAxe] PursueWithoutHeedAI
+
+	UNIT // End
+
+ALIGN 4
+unEnemyTutorialBandit: // Tutorial bandit looting the village in cutscene
+	UNIT CharCh61TuBd Brigand CharCh61Boss Level(1, Enemy, True) [7, 4] 0 0 1 redaEnTuBd [IronAxe] [AttackInRange, BrigandMove]
+
+	UNIT
+
+// REDAs (I miss pools)
+
+ALIGN 4
+
+redaRoy:    REDA [2, 18] 0 0 0 0
+redaMarcus: REDA [1, 17] 0 0 0 0
+redaAllen:  REDA [3, 17] 0 0 0 0
+redaBors:   REDA [3, 19] 0 0 0 0
+redaWolt:   REDA [2, 16] 0 0 0 0
+redaLance:  REDA [2, 17] 0 0 0 0
+
+ALIGN 4
+
+redaEnTopBoss: REDA [5, 6] 0 0 0 0
+
+redaEnTop1: REDA [1, 2] 0 0 0 0
+redaEnTop2: REDA [1, 3] 0 0 0 0
+redaEnTop3: REDA [4, 5] 0 0 0 0
+redaEnTop4: REDA [6, 5] 0 0 0 0
+
+redaEnMid1: REDA [8,  9]  0 0 0 0
+redaEnMid2: REDA [9,  9]  0 0 0 0
+redaEnMid3: REDA [11, 7]  0 0 0 0
+redaEnMid4: REDA [10, 10] 0 0 0 0
+
+redaEnBot1: REDA [7,  15] 0 0 0 0
+redaEnBot2: REDA [8,  14] 0 0 0 0
+redaEnBot3: REDA [12, 13] 0 0 0 0
+redaEnBot4: REDA [8,  18] 0 0 0 0
+
+redaEnTuBd: REDA [7,  7]  0 0 0 0
+
+#endif // FE6_CHAPTER1
