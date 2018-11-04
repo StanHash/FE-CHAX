@@ -7,10 +7,10 @@ EventPointerTable(0x07, ThisChapter)
 
 ALIGN 4
 ThisChapter:
-	POIN NoEventList       // turn events
+	POIN TurnEventList     // turn events
 	POIN NoEventList       // talk events
-	POIN NoEventList       // tile events
-	POIN NoEventList       // post-action events
+	POIN TileEventList     // tile events
+	POIN ActionEventList   // post-action events
 	POIN NoEventList       // select events
 	POIN NoEventList       // pre-move events
 	POIN NoEventList       // post-move events
@@ -50,19 +50,47 @@ NoTutorialList:
 
 // Chapter definitions
 
-#define CharRoy Eirika
+#define CharRoy    Eirika
 #define CharMarcus Seth
-#define CharAllen Kyle
-#define CharLance Forde
-#define CharWolt Neimi
-#define CharBors Gilliam
+#define CharAllen  Kyle
+#define CharLance  Forde
+#define CharWolt   Neimi
+#define CharBors   Gilliam
 
 #define CharCh61Boss ONeill
 #define CharCh61Gen1 0x80
 #define CharCh61Gen2 0x81
 #define CharCh61TuBd 0x82
 
+#define eidVillage 10
+
 // Chapter event lists
+
+ALIGN 4
+TurnEventList:
+	TURN 0 scBossGetsOnGate [1, 0] 8
+
+	END_MAIN
+
+ALIGN 4
+TileEventList:
+	Village(eidVillage, scVillage, 12, 19)
+
+	// There was events for the village destroyed in the tutorial
+	// I could add it here too but there's no real point? It's dead
+
+	// Since I'm not porting any text I'm not putting in House events
+	// But know that there were house events in the original chapter
+
+	Seize(5, 4)
+
+	END_MAIN
+
+ALIGN 4
+ActionEventList:
+	CauseGameOverIfLordDies
+
+	END_MAIN
 
 // Chapter scenes
 
@@ -157,8 +185,9 @@ scBeginning:
 	// ??? sure
 	// ENUN
 
-	// Camera on the middle of the map
 	STAL 16
+
+	// Camera on the middle of the map
 	CAM1 [8, 12]
 
 	STAL 16
@@ -210,7 +239,72 @@ scBeginning:
 	ENDA
 
 ALIGN 4
+scBossGetsOnGate:
+	// MUSC 0x2 // idk music
+
+	// Cam on castle
+	CAM1 [5, 3]
+
+	// Move boss on castle
+	MOVE 0 CharCh61Boss [5, 4]
+	ENUN
+
+	// tex
+	/*
+
+	STAL 16
+	TEX1 0x8
+	REMA
+
+	*/
+
+	NoFade
+	ENDA
+
+scVillage:
+	/*
+	MUSI
+	FADI 16
+	HIDEMAP
+	BACG 0x1
+	FADU 16
+	SHOWMAP
+	TEX1 0xA
+	REMA
+	MUNO
+	*/
+
+	// Give 5000 moneys
+
+	SMOV r3 5000
+	GIVEITEMTOMAIN 0x0
+
+	NoFade
+	ENDA
+
+ALIGN 4
 scEnding:
+	// All the dialogue we don't care about
+	/*
+	MUSC 0x27
+	FADI 16
+	HIDEMAP
+	BACG 0x5
+	FADU 16
+	SHOWMAP
+	TEX1 0x11
+	GOTO_IFAF 0x0 0x6C1A5
+	MORETEXT 0x12
+	LABEL 0x0
+	MORETEXT 0x13
+	_0xA
+	REMA
+	*/
+
+	// Move to next chapter
+	STAL 64
+	MNC2 1
+
 	NoFade
 	ENDA
 
