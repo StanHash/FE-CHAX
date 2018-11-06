@@ -19,7 +19,7 @@ rX   -> sX
 
 # code 3
 [0320] CHECK_EVBIT   -> GET_EVBIT Bit
-[0321] CHECK_EVENTID -> GET_TRIGGER Id
+[0321] CHECK_EVENTID -> GET_EID   Id
 
 # code 4
 [0420] CHECK_RANDOM -> GET_RANDOM Max
@@ -55,7 +55,7 @@ rX   -> sX
 
 # code A
 [0A40] CALL         -> CALL Label
-[0A40] TUTORIALCALL -> CALL_S1
+[0A40] TUTORIALCALL -> CALL_S2
 
 # code B
 ????

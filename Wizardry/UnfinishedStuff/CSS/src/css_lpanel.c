@@ -98,7 +98,7 @@ static int css_lpanel_moveup(CSSLPanelProc* proc) {
 
 static void css_lpanel_show_face(CSSLPanelProc* proc) {
 	if (!proc->faceDisplayed)
-		NewFace(0, GetUnitPortraitId(gActiveUnit), 0x38, 0x38, 2);
+		StartFace(0, GetUnitPortraitId(gActiveUnit), 0x38, 0x38, 2);
 	
 	proc->faceDisplayed = 1;
 }

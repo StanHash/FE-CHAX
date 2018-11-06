@@ -2,8 +2,8 @@
 
 extern int SkillTester(Unit*, int) __attribute__((long_call));
 
-extern int AreUnitsAllied(int, int) __attribute__((long_call));
-extern int IsSameAllegience(int, int) __attribute__((long_call)); // forgive the typo
+extern int AreAllegiancesAllied(int, int) __attribute__((long_call));
+extern int AreAllegiancesEqual(int, int) __attribute__((long_call)); // forgive the typo
 
 extern uint8_t gAuraUnitListOut[];
 
@@ -53,7 +53,7 @@ long long AuraSkillCheck(Unit* unit, int skill, int param, int maxRange) {
 }
 
 int AuraSkillTest(Unit* unit, Unit* other, int skill, int param) {
-	const int(*pAllegianceChecker)(int, int) = ((param & 1) ? AreUnitsAllied : IsSameAllegience);
+	const int(*pAllegianceChecker)(int, int) = ((param & 1) ? AreAllegiancesAllied : AreAllegiancesEqual);
 	
 	if (param == 4)
 		return SkillTester(other, skill);

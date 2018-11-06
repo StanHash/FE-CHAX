@@ -1,9 +1,9 @@
 #include "gbafe.h"
 
 int AreUnitsSameAllegiance(const struct Unit* self, const struct Unit* other) {
-	extern int IsSameAllegience(int, int) __attribute__((long_call));
+	extern int AreAllegiancesEqual(int, int) __attribute__((long_call));
 
-	return IsSameAllegience(self->index, other->index);
+	return AreAllegiancesEqual(self->index, other->index);
 }
 
 int AreNeitherUnitPhantomClass(const struct Unit* self, const struct Unit* other) {

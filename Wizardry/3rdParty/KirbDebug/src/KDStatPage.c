@@ -110,7 +110,7 @@ static void KDStatPageOnLoop(struct Proc* p) {
 	if (proc->classId) {
 		char buf[0x20];
 
-		GetStringFromIndexInBuffer(GetClassData(proc->classId)->nameTextId, buf);
+		String_GetFromIndexExt(GetClassData(proc->classId)->nameTextId, buf);
 		PrintDebugStringAsOBJ(48, 128, buf);
 	}
 

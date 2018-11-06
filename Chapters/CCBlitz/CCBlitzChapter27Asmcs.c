@@ -322,7 +322,7 @@ void SendActiveUnitAwayASMC(Proc* proc) {
 	if ((pp = FindProc(gProc_PlayerPhase))) {
 		GotoProcLabel(pp, 0);
 
-		EndAllMoveUnits();
+		MU_EndAll();
 
 		struct UnitFlyAnimProc* np = (struct UnitFlyAnimProc*)StartBlockingProc(sProc_UnitFlyAnim, proc);
 

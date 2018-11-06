@@ -8,6 +8,8 @@
 	ERROR _file_ is for FE8
 #endif
 
+#include "Extensions/Hack Installation.txt"
+
 {
 
 PUSH

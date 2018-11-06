@@ -11,7 +11,7 @@
 @ MOVS    R1, #UnitStruct.index
 @ LDRSB   R1, [R4,R1]
 
-@ BL      IsSameAllegience
+@ BL      AreAllegiancesEqual
 
 @ LSLS    R0, R0, #0x18
 

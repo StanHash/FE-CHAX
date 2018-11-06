@@ -37,7 +37,7 @@ static const ProcCode gVESProcScr[] = {
 	PROC_SET_NAME(VES_PREFIX":Main"),
 	PROC_SET_DESTRUCTOR(VESCleanup),
 
-	PROC_CALL_ROUTINE(BlockGameGraphicsLogic),
+	PROC_CALL_ROUTINE(LockGameGraphicsLogic),
 	PROC_YIELD,
 
 	PROC_CALL_ROUTINE(VESSetupHBlank),
@@ -45,7 +45,7 @@ static const ProcCode gVESProcScr[] = {
 	PROC_CALL_ROUTINE(VESProcDrawBase),
 	PROC_BLOCK,
 
-	PROC_CALL_ROUTINE(UnblockGameGraphicsLogic),
+	PROC_CALL_ROUTINE(UnlockGameGraphicsLogic),
 	PROC_END
 };
 

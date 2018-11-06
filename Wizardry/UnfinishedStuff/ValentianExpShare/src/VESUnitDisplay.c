@@ -23,7 +23,7 @@ PROC_LABEL(2), // End
 void VESUnitDisplayDrawBase(struct VESUnitDisplayProc* proc) {
 	uint16_t* baseTile = gBg1MapBuffer + 4 + 0x20 * (4 + proc->lineId);
 
-	Text_AppendString(&proc->text, GetStringFromIndex(proc->pUnit->pCharacterData->nameTextId));
+	Text_AppendString(&proc->text, String_GetFromIndex(proc->pUnit->pCharacterData->nameTextId));
 	Text_Draw(&proc->text, baseTile + 3);
 }
 

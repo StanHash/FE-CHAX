@@ -3,7 +3,7 @@
 static void LTFMapSprite_UpdateAllMapSpritePalettes(void);
 
 // NOTE: REPLACES VANILLA FUNCTION
-unsigned GetUnitSpritePaletteIndexWrapper(const struct Unit* unit) {
+unsigned GetUnitBattleMapSpritePaletteIndex(const struct Unit* unit) {
 	if (unit->state & 0x8000000)
 		return 0xB; // Link Arena palette
 
@@ -26,7 +26,7 @@ void LTFMapSprite_UpdateAllMapSpritePalettes(void) {
 		struct SMSHandle* handle = unit->pMapSpriteHandle;
 
 		handle->oam2Base &= ~(0xF000);
-		handle->oam2Base |= GetUnitSpritePaletteIndexWrapper(unit) << 12;
+		handle->oam2Base |= GetUnitBattleMapSpritePaletteIndex(unit) << 12;
 	}
 }
 

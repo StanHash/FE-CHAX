@@ -25,9 +25,9 @@ UnitMoveAnimProc* NewUnitMoveAnim(MoveUnitState* moveunit, Vector2 from, Vector2
 	
 	// making linked MOVEUNIT
 	// MoveUnitProc* moveunit = NewMoveUnitForMapUnit(unit);
-	// SetMoveUnitDirection(moveunit, facing);
+	// MU_SetFacing(moveunit, facing);
 	
-	SetMoveUnitDisplayPosition(moveunit, from.x, from.y);
+	MU_SetDisplayPosition(moveunit, from.x, from.y);
 	
 	// writing fields to the proc struct
 	moveAnimProc->pMoveUnit = moveunit;
@@ -53,7 +53,7 @@ void UnitMoveAnim_OnLoop(UnitMoveAnimProc* proc) {
 		
 		// if (!localTime) { // localTime == 0
 			// int facing = pFacingTable[((proc->timer++) / 4) % 4];
-			// SetMoveUnitDirection(proc->pMoveUnit, facing);
+			// MU_SetFacing(proc->pMoveUnit, facing);
 		// }
 	// }
 }

@@ -8,7 +8,7 @@ const ProcCode proc_css[] = {
 	PROC_SET_NAME(CSS_PREFIX":Core"),
 
 	// Clearing game graphics
-	PROC_CALL_ROUTINE(BlockGameGraphicsLogic),
+	PROC_CALL_ROUTINE(LockGameGraphicsLogic),
 	PROC_CALL_ROUTINE(css_disable_game_gfx),
 	
 	// 2 frames because this might get executed twice on first frame
@@ -25,7 +25,7 @@ const ProcCode proc_css[] = {
 	PROC_CALL_ROUTINE(css_disable_gfx),
 
 	// Restoring game graphics
-	PROC_CALL_ROUTINE(UnblockGameGraphicsLogic),
+	PROC_CALL_ROUTINE(UnlockGameGraphicsLogic),
 
 	PROC_END
 };

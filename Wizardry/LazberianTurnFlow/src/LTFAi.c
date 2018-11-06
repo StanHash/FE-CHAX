@@ -107,7 +107,7 @@ static void LTFAi_CpOrderEndTurns(struct Proc* cpOrderProc) {
 }
 
 static void LTFAi_EndTurnDicider(void) {
-	SetAiActionParameters(
+	AiSetDecision(
 		gActiveUnit->xPos, gActiveUnit->yPos,
 		AI_DECISION_NONE,
 		gActiveUnitId, 0, 0, 0

@@ -35,19 +35,19 @@ BXR3:
 
 @ PC_Array:
 @ .long 0x0805A16C + 1 @ 0  : GetAISSubjectId
-@ .long 0x08055160 + 1 @ 1  : SetSomethingSpellFxToTrue
-@ .long 0x08055178 + 1 @ 2  : ClearBG1Position
+@ .long 0x08055160 + 1 @ 1  : SpellFx_Begin
+@ .long 0x08055178 + 1 @ 2  : SpellFx_ClearBG1Position
 @ .long 0x08002C7C + 1 @ 3  : StartProc
 @ .long 0x0805A310 + 1 @ 4  : GetAISCurrentRoundType
 @ .long 0x0805A184 + 1 @ 5  : IsBatteRoundTypeAMiss
-@ .long 0x08054FA8 + 1 @ 6  : NewEfxSpellCast
-@ .long 0x0805A2B4 + 1 @ 7  : GetCoreAIStruct
+@ .long 0x08054FA8 + 1 @ 6  : StartEfxSpellCast
+@ .long 0x0805A2B4 + 1 @ 7  : GetOpponentFrontAIS
 @ .long 0x08055278 + 1 @ 8  : StartBattleAnimHitEffectsDefault
 @ .long 0x08055424 + 1 @ 9  : <not in fe8u.s>
 @ .long 0x08072450 + 1 @ 10 : <not in fe8u.s>
 @ .long 0x080533D0 + 1 @ 11 : MoveBattleCameraOnto
 @ .long 0x080729A4 + 1 @ 12 : <not in fe8u.s> <sound stuff>
-@ .long 0x0805516C + 1 @ 13 : SetSomethingSpellFxToFalse
+@ .long 0x0805516C + 1 @ 13 : SpellFx_Finish
 @ .long 0x08055000 + 1 @ 14 : <not in fe8u.s> <efxSpellCast related>
 @ .long 0x08002E94 + 1 @ 15 : BreakProcLoop
 
@@ -73,10 +73,10 @@ CSAStart_CommonEntry:
 
 	mov r0, r5 @ arg r0 = ...?
 
-	ldr r3, =SetSomethingSpellFxToTrue
+	ldr r3, =SpellFx_Begin
 	bl  BXR3
 
-	ldr r3, =ClearBG1Position
+	ldr r3, =SpellFx_ClearBG1Position
 	bl  BXR3
 
 	ldr r0, =CSAProc @ arg r0 = Proc Script
@@ -198,7 +198,7 @@ L_T_R:
 	@ if dim, then start efxSpellCast
 	@ which does palette stuff idk
 
-	ldr r3, =NewEfxSpellCast
+	ldr r3, =StartEfxSpellCast
 	bl  BXR3
 
 CSAStart_end:
@@ -262,7 +262,7 @@ CSALoop:
 
 	mov r0, r6 @ arg r0 = AIS
 
-	ldr r3, =GetCoreAIStruct
+	ldr r3, =GetOpponentFrontAIS
 	bl  BXR3
 
 	mov r5, r0 @ Puts returned pointer to target unit's AIS into r5
@@ -619,7 +619,7 @@ VALID_OAM_SHEET:
 	mov r1, #0x80
 	lsl r1, #5 @r1 = 0x00001000
 
-	ldr r3, =SomeImageStoringRoutine_SpellAnim
+	ldr r3, =SpellFx_RegisterObjGfx
 	bl  BXR3
 
 INVALID_OAM_SHEET:
@@ -727,7 +727,7 @@ VALID_BG_SHEET_1:
 	mov r1, #0x20
 	lsl r1, #8 @ r1 = 0x2000
 
-	ldr r3, =SomeImageStoringRoutine_SpellAnim2
+	ldr r3, =SpellFx_RegisterBgGfx
 	bl  BXR3
 
 INVALID_BG_SHEET_1:
@@ -841,7 +841,7 @@ TERMINATE_ANIMATION:
 	mov  r1, #0x84
 	str  r0, [r0, r1] @ OAM of high AIS dummy is terminated
 
-	ldr r3, =SetSomethingSpellFxToFalse
+	ldr r3, =SpellFx_Finish
 	bl  BXR3
 
 	ldr r3, =(0x08055000 + 1) @ FIXME

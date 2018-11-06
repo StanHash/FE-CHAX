@@ -77,11 +77,11 @@ static const ProcInstruction sProc_RewarpAnim[] = {
 void StartRewarpEffect(Unit* unit, int xTarget, int yTarget) {
 	struct RCAProc* proc = (struct RCAProc*) StartProc(sProc_RewarpAnim, ROOT_PROC_3);
 
-	EndAllMoveUnits();
+	MU_EndAll();
 	HideUnitSMS(unit);
 
 	proc->pUnit     = unit;
-	proc->pMoveUnit = StartMoveUnitForUnit(unit);
+	proc->pMoveUnit = MU_Create(unit);
 
 	proc->xTarget = xTarget;
 	proc->yTarget = yTarget;
@@ -97,7 +97,7 @@ int RCAInitCamera(struct RCAProc* proc) {
 }
 
 void RCAInitAnim(struct RCAProc* proc) {
-	BeginMoveUnitActionAnimation(proc->pMoveUnit);
+	MU_StartActionAnim(proc->pMoveUnit);
 }
 
 void RCARing(struct RCAProc* proc) {
@@ -126,11 +126,11 @@ void RCAStarsBegin(struct RCAProc* proc) {
 }
 
 void RCAHide(struct RCAProc* proc) {
-	HideMoveUnit(proc->pMoveUnit);
+	MU_Hide(proc->pMoveUnit);
 }
 
 void RCAMove(struct RCAProc* proc) {
-	SetMoveUnitDisplayPosition(
+	MU_SetDisplayPosition(
 		proc->pMoveUnit,
 
 		16 * (proc->pUnit->xPos = proc->xTarget),
@@ -155,7 +155,7 @@ void RCAStarsEnd(struct RCAProc* proc) {
 }
 
 void RCAShow(struct RCAProc* proc) {
-	ShowMoveUnit(proc->pMoveUnit);
+	MU_Show(proc->pMoveUnit);
 	((void(*)(MoveUnitProc*))(0x8079858+1))(proc->pMoveUnit);
 }
 

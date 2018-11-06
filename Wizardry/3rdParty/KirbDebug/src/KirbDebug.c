@@ -9,8 +9,8 @@ static const void(*ClearMenuItemHighlight)() = (void(*)(int bgIndex, int, int x,
 void MakeUIWindowTileMap_BG0BG1(int x, int y, int width, int height, int style) __attribute__((long_call));
 void LoadNewUIPal(int palIndex) __attribute__((long_call));
 
-void StartFadeInBlack(int speed, struct Proc* parent) __attribute__((long_call)); //! FE8U = 0x8013D09
-void NewFadeOutBlack(int speed, struct Proc* parent) __attribute__((long_call)); //! FE8U = 0x8013D21
+void StartBlockingFadeInBlack(int speed, struct Proc* parent) __attribute__((long_call)); //! FE8U = 0x8013D09
+void StartBlockingFadeOutBlack(int speed, struct Proc* parent) __attribute__((long_call)); //! FE8U = 0x8013D21
 
 void ReloadGameCoreGraphics(void) __attribute__((long_call));
 
@@ -206,7 +206,7 @@ void KDClearHeader(UnitEditorProc* proc) {
 
 	DBG_BG_Print(
 		BG_LOCATED_TILE(gBg0MapBuffer, (KD_PAGE_FRAME_X + 3), (KD_PAGE_FRAME_Y - 1)),
-		GetStringFromIndex(proc->pUnit->pCharacterData->nameTextId)
+		String_GetFromIndex(proc->pUnit->pCharacterData->nameTextId)
 	);
 
 	DrawTextInline(NULL, BG_LOCATED_TILE(gBg0MapBuffer, 0, 0), 0, 0, 8, " By Kirb");
@@ -305,7 +305,7 @@ void UpdateDebugUnitEditorPage1(UnitEditorProc* proc) {
 
 	//Get the unit index/name and print it
 	char UnitName[0x20];
-	GetStringFromIndexInBuffer(proc->pUnit->pCharacterData->nameTextId, UnitName);
+	String_GetFromIndexExt(proc->pUnit->pCharacterData->nameTextId, UnitName);
 
 	PrintDebugNumberHex(10, 25, proc->pUnit->index, 2);
 	PrintDebugStringAsOBJ(48, 25, UnitName);
@@ -313,7 +313,7 @@ void UpdateDebugUnitEditorPage1(UnitEditorProc* proc) {
 	//Get the class name and prints it
 	char ClassName[0x20];
 
-	GetStringFromIndexInBuffer(proc->pUnit->pClassData->nameTextId, ClassName);
+	String_GetFromIndexExt(proc->pUnit->pClassData->nameTextId, ClassName);
 	PrintDebugStringAsOBJ(48, 128, ClassName);
 
 	//Prints the stats
@@ -479,26 +479,26 @@ void UpdateDebugUnitEditorPage2(UnitEditorProc* proc) {
 	//Get the unit index/name and print it
 	char UnitName[0x20];
 
-	GetStringFromIndexInBuffer(proc->pUnit->pCharacterData->nameTextId, UnitName);
+	String_GetFromIndexExt(proc->pUnit->pCharacterData->nameTextId, UnitName);
 	PrintDebugNumberHex(10, 25, proc->pUnit->index, 2);
 	PrintDebugStringAsOBJ(48, 25, UnitName);
 	
 	//Get Items names
 	char ItemName[0x20];
 
-	GetStringFromIndexInBuffer(GetItemData(GetItemIndex(proc->pUnit->items[0]))->nameTextId, ItemName);
+	String_GetFromIndexExt(GetItemData(GetItemIndex(proc->pUnit->items[0]))->nameTextId, ItemName);
 	PrintDebugStringAsOBJ(104, 40, ItemName);
 	
-	GetStringFromIndexInBuffer(GetItemData(GetItemIndex(proc->pUnit->items[1]))->nameTextId, ItemName);
+	String_GetFromIndexExt(GetItemData(GetItemIndex(proc->pUnit->items[1]))->nameTextId, ItemName);
 	PrintDebugStringAsOBJ(104, 48, ItemName);
 	
-	GetStringFromIndexInBuffer(GetItemData(GetItemIndex(proc->pUnit->items[2]))->nameTextId, ItemName);
+	String_GetFromIndexExt(GetItemData(GetItemIndex(proc->pUnit->items[2]))->nameTextId, ItemName);
 	PrintDebugStringAsOBJ(104, 56, ItemName);
 	
-	GetStringFromIndexInBuffer(GetItemData(GetItemIndex(proc->pUnit->items[3]))->nameTextId, ItemName);
+	String_GetFromIndexExt(GetItemData(GetItemIndex(proc->pUnit->items[3]))->nameTextId, ItemName);
 	PrintDebugStringAsOBJ(104, 64, ItemName);
 	
-	GetStringFromIndexInBuffer(GetItemData(GetItemIndex(proc->pUnit->items[4]))->nameTextId, ItemName);
+	String_GetFromIndexExt(GetItemData(GetItemIndex(proc->pUnit->items[4]))->nameTextId, ItemName);
 	PrintDebugStringAsOBJ(104, 72, ItemName);
 
 	//Prints the stats
@@ -517,29 +517,29 @@ const ProcInstruction Debug6C[] = {
 
 	PROC_CALL_ROUTINE(LockGameLogic),
 
-	PROC_CALL_ROUTINE_ARG(StartFadeInBlack, 0x40),
+	PROC_CALL_ROUTINE_ARG(StartBlockingFadeInBlack, 0x40),
 	PROC_YIELD,
 
-	PROC_CALL_ROUTINE(BlockGameGraphicsLogic),
+	PROC_CALL_ROUTINE(LockGameGraphicsLogic),
 
 	PROC_CALL_ROUTINE(DebugScreenSetup),
 	PROC_NEW_CHILD(gProc_BG3HSlide),
 
-	PROC_CALL_ROUTINE_ARG(NewFadeOutBlack, 0x40),
+	PROC_CALL_ROUTINE_ARG(StartBlockingFadeOutBlack, 0x40),
 	PROC_YIELD,
 
 	//Main Logic
 	PROC_LOOP_ROUTINE(DebugScreenLoop),
 
-	PROC_CALL_ROUTINE_ARG(StartFadeInBlack, 0x40),
+	PROC_CALL_ROUTINE_ARG(StartBlockingFadeInBlack, 0x40),
 	PROC_YIELD,
 
 	PROC_CALL_ROUTINE(EndBG3Slider),
 
 	PROC_CALL_ROUTINE(ReloadGameCoreGraphics),
-	PROC_CALL_ROUTINE(UnblockGameGraphicsLogic),
+	PROC_CALL_ROUTINE(UnlockGameGraphicsLogic),
 
-	PROC_CALL_ROUTINE_ARG(NewFadeOutBlack, 0x40),
+	PROC_CALL_ROUTINE_ARG(StartBlockingFadeOutBlack, 0x40),
 	PROC_YIELD,
 
 	PROC_CALL_ROUTINE(UnlockGameLogic),

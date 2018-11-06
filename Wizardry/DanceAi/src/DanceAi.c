@@ -59,7 +59,7 @@ void DanceAiTryDecide(int(*isUnitEnemy)(struct Unit*)) {
 	}
 
 	if (targetIndex >= 0) {
-		SetAiActionParameters(
+		AiSetDecision(
 			xMovement, yMovement,
 			AI_DECISION_DANCE,
 			targetIndex, 0, 0, 0

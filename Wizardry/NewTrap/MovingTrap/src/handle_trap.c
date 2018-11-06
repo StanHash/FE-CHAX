@@ -31,7 +31,7 @@ static const ProcCode ProcCode_TrapHandler[] = {
 	PROC_SET_NAME("Stan:MovingTrapHandler"),
 	PROC_YIELD,
 	
-	PROC_WHILE_ROUTINE(DoesMovingMoveUnitExist),
+	PROC_WHILE_ROUTINE(MU_IsAnyActive),
 	
 PROC_LABEL(0),
 	PROC_CALL_ROUTINE(TrapHandlerCheck),
@@ -82,7 +82,7 @@ Vector2 GetPushPosition(Unit* unit, int direction, int moveAmount) {
 
 void HandleTrap(ProcState* proc, Unit* unit, int idk) {
 	RefreshEntityMaps();
-	EndAllMoveUnits();
+	MU_EndAll();
 	
 	TrapHandlerProc* newProc = (TrapHandlerProc*) StartBlockingProc(ProcCode_TrapHandler, proc);
 	
