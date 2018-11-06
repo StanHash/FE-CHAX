@@ -1,0 +1,38 @@
+#ifndef HAX_CUSTOM_GAME_SPEED
+#define HAX_CUSTOM_GAME_SPEED
+
+// Change default game speed option values
+// hack by StanH_
+
+// Options
+// Copy-paste the following block into your custom definitions file or somewhere
+// And edit to your heart's content!
+
+#ifndef CustomGameSpeedConfig
+	#define CustomGameSpeedConfig
+
+	#define GameSpeedNormalValue       5
+	#define GameSpeedNormalCheckSlow   True
+	#define GameSpeedNormalCheckAPress False
+
+	#define GameSpeedFastValue         6
+	#define GameSpeedFastCheckSlow     False
+	#define GameSpeedFastCheckAPress   True
+#endif // CustomGameSpeedConfig
+
+{
+
+#ifndef LynJumpDefined
+	#define LynJumpDefined
+	#define LynJump(aTarget) "WORD $46C04778 $E59FC000 $E12FFF1C; POIN aTarget; PROTECT CURRENTOFFSET-16 CURRENTOFFSET"
+#endif // LynJumpDefined
+
+PUSH; ORG $794E8
+	LynJump(CustomGameSpeedHook)
+POP
+
+#include "Src/CustomGameSpeed.lyn.event"
+
+}
+
+#endif // HAX_CUSTOM_GAME_SPEED

@@ -1,0 +1,73 @@
+#ifndef HAX_PER_CHAPTER_QUOTES
+#define HAX_PER_CHAPTER_QUOTES
+
+// Per chapter Battle/Death quote lists (in addition to the pre-existing global one)
+// hack by StanH_
+
+#ifndef SetSymbolDefined
+	// SetSymbol macro as an alternative to "Name = Value" (for backwards/ColorzCore compatibility)
+
+	#define SetSymbolDefined
+	#define SetSymbol(__aName, __aValue) "PUSH; ORG (__aValue); __aName:; POP"
+#endif // SetSymbolDefined
+
+#ifndef LynJumpDefined
+	#define LynJumpDefined
+	#define LynJump(aTarget) "WORD $46C04778 $E59FC000 $E12FFF1C; POIN aTarget; PROTECT CURRENTOFFSET-16 CURRENTOFFSET"
+#endif // LynJumpDefined
+
+#include "Src/PerChapterBattleQuotes.lyn.event"
+
+// Using pointers from within the original source, so that this is compatible with repointed tables
+SetSymbol(gpMainBattleQuoteTable, $0846AC)
+SetSymbol(gpMainDeathQuoteTable,  $08472C)
+
+PUSH
+	ORG $08464C
+		LynJump(NuggetBattleQuoteEntry)
+
+	ORG $0846E4
+		LynJump(NuggetDeathQuoteEntry)
+POP
+
+// MACROS
+
+#ifndef PCBQMacrosDefined
+	#define PCBQMacrosDefined
+
+	// Battle quote entry macros
+	#define BattleQuote(aChar, aTextId) "SHORT (aChar) 0 0xFF 0 (aTextId) 0 0 0"
+	#define BattleQuote(aCharA, aCharB, aTextId) "SHORT (aCharA) (aCharB) 0xFF 0 (aTextId) 0 0 0"
+	#define BattleQuoteScene(aChar, apScene) "SHORT (aChar) 0 0xFF 0 0 0; POIN (apScene)"
+	#define BattleQuoteScene(aCharA, aCharB, apScene) "SHORT (aCharA) (aCharB) 0xFF 0 0 0; POIN (apScene)"
+	#define BattleQuoteChap(aChar, aChapterId, aTextId) "SHORT (aChar) 0 (aChapterId) 0 (aTextId) 0 0 0"
+	#define BattleQuoteChap(aCharA, aCharB, aChapterId, aTextId) "SHORT (aCharA) (aCharB) (aChapterId) 0 (aTextId) 0 0 0"
+	#define BattleQuoteChapScene(aChar, aChapterId, apScene) "SHORT (aChar) 0 (aChapterId) 0 0 0; POIN (apScene)"
+	#define BattleQuoteChapScene(aCharA, aCharB, aChapterId, apScene) "SHORT (aCharA) (aCharB) (aChapterId) 0 0 0; POIN (apScene)"
+	#define BattleQuoteEid(aChar, aEid, aTextId) "SHORT (aChar) 0 0xFF (aEid) (aTextId) 0 0 0"
+	#define BattleQuoteEid(aCharA, aCharB, aEid, aTextId) "SHORT (aCharA) (aCharB) 0xFF (aEid) (aTextId) 0 0 0"
+	#define BattleQuoteEidScene(aChar, aEid, apScene) "SHORT (aChar) 0 0xFF (aEid) 0 0; POIN (apScene)"
+	#define BattleQuoteEidScene(aCharA, aCharB, aEid, apScene) "SHORT (aCharA) (aCharB) 0xFF (aEid) 0 0; POIN (apScene)"
+	#define BattleQuoteEidChap(aChar, aEid, aChapterId, aTextId) "SHORT (aChar) 0 (aChapterId) (aEid) (aTextId) 0 0 0"
+	#define BattleQuoteEidChap(aCharA, aCharB, aEid, aChapterId, aTextId) "SHORT (aCharA) (aCharB) (aChapterId) (aEid) (aTextId) 0 0 0"
+	#define BattleQuoteEidChapScene(aChar, aEid, aChapterId, apScene) "SHORT (aChar) 0 (aChapterId) (aEid) 0 0; POIN (apScene)"
+	#define BattleQuoteEidChapScene(aCharA, aCharB, aEid, aChapterId, apScene) "SHORT (aCharA) (aCharB) (aChapterId) (aEid) 0 0; POIN (apScene)"
+	#define BattleQuoteEnd "SHORT 0xFFFF 0 0 0 0 0 0 0"
+
+	// Death quote entry macros
+	#define DeathQuote(aChar, aTextId) "SHORT (aChar) 0xFFFF 0 (aTextId) 0 0"
+	#define DeathQuoteScene(aChar, apScene) "SHORT (aChar) 0xFFFF 0 0; POIN (apScene)"
+	#define DeathQuoteChap(aChar, aChapterId, aTextId) "SHORT (aChar); BYTE 0xFF (aChapterId); SHORT 0 (aTextId) 0 0"
+	#define DeathQuoteChapScene(aChar, aChapterId, apScene) "SHORT (aChar); BYTE 0xFF (aChapterId); SHORT 0 0; POIN (apScene)"
+	#define DeathQuoteEid(aChar, aEid, aTextId) "SHORT (aChar) 0xFFFF (aEid) (aTextId) 0 0"
+	#define DeathQuoteEidScene(aChar, aEid, apScene) "SHORT (aChar) 0xFFFF (aEid) 0; POIN apScene"
+	#define DeathQuoteEidChap(aChar, aEid, aChapterId, aTextId) "SHORT (aChar); BYTE 0xFF (aChapterId); SHORT (aEid) (aTextId) 0 0"
+	#define DeathQuoteEidChapScene(aChar, aEid, aChapterId, apScene) "SHORT (aChar); BYTE 0xFF (aChapterId); SHORT (aEid) 0; POIN (apScene)"
+	#define DeathQuoteEnd "SHORT 0xFFFF 0 0 0 0 0"
+
+	// Chapter Quote List Setters
+	#define SetChapterBattleQuoteList(aChapterId, apBattleQuoteList) "PUSH; ORG gChapterBattleQuoteTables+4*(aChapterId); POIN apBattleQuoteList; POP"
+	#define SetChapterDeathQuoteList(aChapterId, apBattleQuoteList) "PUSH; ORG gChapterDeathQuoteTables+4*(aChapterId); POIN apBattleQuoteList; POP"
+#endif // PCBQMacrosDefined
+
+#endif // HAX_PER_CHAPTER_QUOTES
