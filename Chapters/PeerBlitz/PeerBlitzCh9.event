@@ -3,18 +3,10 @@
 
 #include "EAstdlib.event"
 
-/*
-
-PUSH; ORG $9ECD4C
-	// temp because we need to have the boss(es) have a death quote that sets eid 2
-	// like every boss, but here we need it for that chapter
-	SHORT chrBossCommon; BYTE 0xFF 0xFF; SHORT 2; SHORT 0; WORD 0
-	SHORT 0xFFFF
-POP
-
-*/
-
 EventPointerTable(0x7, ThisChapter)
+
+SetChapterDeathQuoteList(0, DeathQuoteList)
+EscapePointPointerTable(0, EscapePointList)
 
 // ============================
 // = EVENT HELPERS START HERE =
@@ -107,6 +99,16 @@ ThisChapter:
 	POIN scBeginning scEnding
 
 ALIGN 4
+DeathQuoteList:
+	DeathQuoteEidSilent(chrBossCommon, 2) // defeat boss eid
+	DeathQuoteEnd
+
+ALIGN 4
+EscapePointList:
+	EscapePoint(11, 16, NoMove)
+	EscapePointEnd
+
+ALIGN 4
 TurnEventList:
 	TURN eidSecondBoatComing scShowSecondBoat [0, 0xFF] 0
 	TURN eidThirdBoatComing  scShowThirdBoat  [0, 0xFF] 0
@@ -145,6 +147,9 @@ TutorialList:
 
 ALIGN 4
 TrapList:
+	BLST [13, 14] 0x35
+	ENDTRAP
+
 TrapList2:
 	ENDTRAP
 
@@ -156,15 +161,15 @@ shpSecret:
 ALIGN 4
 unPlayerList:
 	UNIT Eirika EirikaMasterLord 0 Level(20, Ally, True) [13, 12] 0 0 0 0 [Sieglinde, Runesword, MemberCard] NoAI
-	UNIT Moulder Bishop Eirika Level(20, Ally, True) [12, 12] 0 0 0 0 [Latona, Aura, Mend] NoAI
+	UNIT Moulder Bishop Eirika Level(20, Ally, True) [12, 12] 0 0 0 0 [Latona, Aura, TorchStaff, Berserk] NoAI
 	UNIT Innes Sniper Eirika Level(20, Ally, True) [13, 13] 0 0 0 0 [Nidhogg] NoAI
-	UNIT LArachel MageKnight_F Eirika Level(20, Ally, True) [12, 14] 0 0 0 0 [Excalibur, Heal, Vulnerary] NoAI
+	UNIT LArachel MageKnight_F Eirika Level(20, Ally, True) [12, 14] 0 0 0 0 [Excalibur, Heal, Berserk, TorchStaff] NoAI
 	UNIT Gilliam General Eirika Level(20, Ally, True) [11, 14] 0 0 0 0 [Garm, Javelin] NoAI
 	UNIT Seth Paladin Eirika Level(20, Ally, True) [11, 13] 0 0 0 0 [Audhulma, SilverLance, Elixir] NoAI
-	UNIT Lute Sage_F Eirika Level(20, Ally, True) [13, 15] 0 0 0 0 [Ivaldi, Thunder, Warp] NoAI
+	UNIT Lute Sage_F Eirika Level(20, Ally, True) [13, 15] 0 0 0 0 [Ivaldi, Thunder, Warp, Berserk] NoAI
 	UNIT Tana WyvernKnight_F Eirika Level(20, Ally, True) [14, 14] 0 0 0 0 [Vidofnir, Spear, Elixir] NoAI
-	UNIT Ewan Summoner Eirika Level(20, Ally, True) [12, 10] 0 0 0 0 [Gleipnir, Flux, Nosferatu, Nosferatu] NoAI
-	UNIT Marisa Swordmaster_F Eirika Level(20, Ally, True) [13, 11] 0 0 0 0 [BraveSword, Shamshir] NoAI
+	UNIT Ewan Summoner Eirika Level(20, Ally, True) [12, 10] 0 0 0 0 [Gleipnir, Flux, Nosferatu, Physic] NoAI
+	UNIT Marisa Swordmaster_F Eirika Level(20, Ally, True) [13, 11] 0 0 0 0 [BraveSword, Shamshir, PoisonSword] NoAI
 
 	UNIT // end
 
@@ -181,14 +186,14 @@ unEnemyFirstBoatInitialList:
 	UNIT chrGnrcMonk Monk 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(5, 11) [Lightning] NoAI
 #endif // CH9_TONE_DOWN_A_BIT
 
-	UNIT chrGnrcMonk Thief 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(4, 15) [IronSword, Lockpick] NoAI
+	UNIT chrGnrcMonk Thief 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(4, 15) [PoisonSword, Lockpick] NoAI
 
 	UNIT chrGnrcMonk Cleric 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(2, 11) [Mend] NoAI
-	UNIT chrGnrcMonk Thief 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(3, 11) [SteelSword, Lockpick] NoAI
+	UNIT chrGnrcMonk Thief 0 Level((lvlGnrcBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(3, 11) [PoisonSword, Lockpick] NoAI
 
 	// 2 bosses
-	UNIT chrBossCommon Bishop 0 Level((lvlBossBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(3, 9) [Lightning] NoAI
-	UNIT chrBossCommon Bishop 0 Level((lvlBossBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(4, 15) [Lightning] NoAI
+	UNIT chrBossCommon Dancer 0 Level((lvlBossBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(3, 9) [Vulnerary] NoAI
+	UNIT chrBossCommon Dancer 0 Level((lvlBossBase + 0), Enemy, True) [3, 14] 0 0 1 InlReda(4, 15) [Elixir] NoAI
 
 	UNIT // end
 
@@ -431,6 +436,9 @@ scBeginning:
 	LOAD1 0 unPlayerList
 	ENUN
 
+	// VCWF 3
+	// WEA1 5
+
 	// kill count = 0
 	COUNTER_SET cntBossKillCount 0
 
@@ -447,6 +455,8 @@ scBeginning:
 	CALL scNoSkipFadeOut
 	CALL scShowFirstBoat
 	CALL scPrepScreen
+
+	CALL scNoSkipFadeOut
 
 	ENDA
 

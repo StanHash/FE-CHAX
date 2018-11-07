@@ -13,7 +13,7 @@
 
 #ifndef LynJumpDefined
 	#define LynJumpDefined
-	#define LynJump(aTarget) "WORD $46C04778 $E59FC000 $E12FFF1C; POIN aTarget; PROTECT CURRENTOFFSET-16 CURRENTOFFSET"
+	#define LynJump(aTarget) "WORD $46C04778 $E59FC000 $E12FFF1C; POIN aTarget; "
 #endif // LynJumpDefined
 
 #include "Src/PerChapterBattleQuotes.lyn.event"
@@ -40,29 +40,41 @@ POP
 	#define BattleQuote(aCharA, aCharB, aTextId) "SHORT (aCharA) (aCharB) 0xFF 0 (aTextId) 0 0 0"
 	#define BattleQuoteScene(aChar, apScene) "SHORT (aChar) 0 0xFF 0 0 0; POIN (apScene)"
 	#define BattleQuoteScene(aCharA, aCharB, apScene) "SHORT (aCharA) (aCharB) 0xFF 0 0 0; POIN (apScene)"
+	#define BattleQuoteSilent(aChar) "SHORT (aChar) 0 0xFF 0 0 0 0 0"
+	#define BattleQuoteSilent(aCharA, aCharB) "SHORT (aCharA) (aCharB) 0xFF 0 0 0 0 0"
 	#define BattleQuoteChap(aChar, aChapterId, aTextId) "SHORT (aChar) 0 (aChapterId) 0 (aTextId) 0 0 0"
 	#define BattleQuoteChap(aCharA, aCharB, aChapterId, aTextId) "SHORT (aCharA) (aCharB) (aChapterId) 0 (aTextId) 0 0 0"
 	#define BattleQuoteChapScene(aChar, aChapterId, apScene) "SHORT (aChar) 0 (aChapterId) 0 0 0; POIN (apScene)"
 	#define BattleQuoteChapScene(aCharA, aCharB, aChapterId, apScene) "SHORT (aCharA) (aCharB) (aChapterId) 0 0 0; POIN (apScene)"
+	#define BattleQuoteChapSilent(aChar, aChapterId) "SHORT (aChar) 0 (aChapterId) 0 0 0 0 0"
+	#define BattleQuoteChapSilent(aCharA, aCharB, aChapterId) "SHORT (aCharA) (aCharB) (aChapterId) 0 0 0 0 0"
 	#define BattleQuoteEid(aChar, aEid, aTextId) "SHORT (aChar) 0 0xFF (aEid) (aTextId) 0 0 0"
 	#define BattleQuoteEid(aCharA, aCharB, aEid, aTextId) "SHORT (aCharA) (aCharB) 0xFF (aEid) (aTextId) 0 0 0"
 	#define BattleQuoteEidScene(aChar, aEid, apScene) "SHORT (aChar) 0 0xFF (aEid) 0 0; POIN (apScene)"
 	#define BattleQuoteEidScene(aCharA, aCharB, aEid, apScene) "SHORT (aCharA) (aCharB) 0xFF (aEid) 0 0; POIN (apScene)"
+	#define BattleQuoteEidSilent(aChar, aEid) "SHORT (aChar) 0 0xFF (aEid) 0 0 0 0"
+	#define BattleQuoteEidSilent(aCharA, aCharB, aEid) "SHORT (aCharA) (aCharB) 0xFF (aEid) 0 0 0 0"
 	#define BattleQuoteEidChap(aChar, aEid, aChapterId, aTextId) "SHORT (aChar) 0 (aChapterId) (aEid) (aTextId) 0 0 0"
 	#define BattleQuoteEidChap(aCharA, aCharB, aEid, aChapterId, aTextId) "SHORT (aCharA) (aCharB) (aChapterId) (aEid) (aTextId) 0 0 0"
 	#define BattleQuoteEidChapScene(aChar, aEid, aChapterId, apScene) "SHORT (aChar) 0 (aChapterId) (aEid) 0 0; POIN (apScene)"
 	#define BattleQuoteEidChapScene(aCharA, aCharB, aEid, aChapterId, apScene) "SHORT (aCharA) (aCharB) (aChapterId) (aEid) 0 0; POIN (apScene)"
+	#define BattleQuoteEidChapSilent(aChar, aEid, aChapterId) "SHORT (aChar) 0 (aChapterId) (aEid) 0 0 0 0"
+	#define BattleQuoteEidChapSilent(aCharA, aCharB, aEid, aChapterId) "SHORT (aCharA) (aCharB) (aChapterId) (aEid) 0 0 0 0"
 	#define BattleQuoteEnd "SHORT 0xFFFF 0 0 0 0 0 0 0"
 
 	// Death quote entry macros
 	#define DeathQuote(aChar, aTextId) "SHORT (aChar) 0xFFFF 0 (aTextId) 0 0"
 	#define DeathQuoteScene(aChar, apScene) "SHORT (aChar) 0xFFFF 0 0; POIN (apScene)"
+	#define DeathQuoteSilent(aChar) "SHORT (aChar) 0xFFFF 0 0 0 0"
 	#define DeathQuoteChap(aChar, aChapterId, aTextId) "SHORT (aChar); BYTE 0xFF (aChapterId); SHORT 0 (aTextId) 0 0"
 	#define DeathQuoteChapScene(aChar, aChapterId, apScene) "SHORT (aChar); BYTE 0xFF (aChapterId); SHORT 0 0; POIN (apScene)"
+	#define DeathQuoteChapSilent(aChar, aChapterId) "SHORT (aChar); BYTE 0xFF (aChapterId); SHORT 0 0 0 0"
 	#define DeathQuoteEid(aChar, aEid, aTextId) "SHORT (aChar) 0xFFFF (aEid) (aTextId) 0 0"
 	#define DeathQuoteEidScene(aChar, aEid, apScene) "SHORT (aChar) 0xFFFF (aEid) 0; POIN apScene"
+	#define DeathQuoteEidSilent(aChar, aEid) "SHORT (aChar) 0xFFFF (aEid) 0 0 0"
 	#define DeathQuoteEidChap(aChar, aEid, aChapterId, aTextId) "SHORT (aChar); BYTE 0xFF (aChapterId); SHORT (aEid) (aTextId) 0 0"
 	#define DeathQuoteEidChapScene(aChar, aEid, aChapterId, apScene) "SHORT (aChar); BYTE 0xFF (aChapterId); SHORT (aEid) 0; POIN (apScene)"
+	#define DeathQuoteEidChapSilent(aChar, aEid, aChapterId) "SHORT (aChar); BYTE 0xFF (aChapterId); SHORT (aEid) 0 0 0"
 	#define DeathQuoteEnd "SHORT 0xFFFF 0 0 0 0 0"
 
 	// Chapter Quote List Setters
