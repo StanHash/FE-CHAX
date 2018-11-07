@@ -23,26 +23,16 @@ const struct SaveChunkDecl* MS_FindSuspendSaveChunk(unsigned chunkId) {
 	return NULL;
 }
 
-void MS_CopyGameSave(int sourceSlot, int targetSlot) {
-	void* const source = GetSaveSourceAddress(sourceSlot);
-	void* const target = GetSaveTargetAddress(targetSlot);
-
-	unsigned size = gSaveBlockTypeSizeLookup[SAVE_TYPE_GAME];
-
-	gpReadSramFast(source, gGenericBuffer, size);
-	WriteAndVerifySramFast(gGenericBuffer, target, size);
-
-	struct SaveBlockMetadata sbm;
-
-	sbm.magic1 = SBM_MAGIC1_GAME;
-	sbm.type   = SAVE_TYPE_GAME;
-
-	SaveMetadata_Save(&sbm, targetSlot);
-}
-
 void MS_LoadChapterStateFromGameSave(unsigned slot, struct ChapterState* target) {
 	void* const source = GetSaveSourceAddress(slot);
 	const struct SaveChunkDecl* const chunk = MS_FindGameSaveChunk(gMS_ChapterStateChunkId);
+
+	gpReadSramFast(source + chunk->offset, target, chunk->size);
+}
+
+void MS_LoadChapterStateFromSuspendSave(unsigned slot, struct ChapterState* target) {
+	void* const source = GetSaveSourceAddress(slot);
+	const struct SaveChunkDecl* const chunk = MS_FindSuspendSaveChunk(gMS_ChapterStateChunkId);
 
 	gpReadSramFast(source + chunk->offset, target, chunk->size);
 }
@@ -73,6 +63,23 @@ int MS_CheckEid8AFromGameSave(unsigned slot) {
 	// TODO: fix this mess
 	gpReadSramFast(source + chunk->offset, gGenericBuffer, chunk->size);
 	return ((u8(*)(unsigned eid, void* buf))(0x08083D34+1))(0x8A, gGenericBuffer);
+}
+
+void MS_CopyGameSave(int sourceSlot, int targetSlot) {
+	void* const source = GetSaveSourceAddress(sourceSlot);
+	void* const target = GetSaveTargetAddress(targetSlot);
+
+	unsigned size = gSaveBlockTypeSizeLookup[SAVE_TYPE_GAME];
+
+	gpReadSramFast(source, gGenericBuffer, size);
+	WriteAndVerifySramFast(gGenericBuffer, target, size);
+
+	struct SaveBlockMetadata sbm;
+
+	sbm.magic1 = SBM_MAGIC1_GAME;
+	sbm.type   = SAVE_TYPE_GAME;
+
+	SaveMetadata_Save(&sbm, targetSlot);
 }
 
 void MS_SaveGame(unsigned slot) {

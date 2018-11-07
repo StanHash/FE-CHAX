@@ -51,9 +51,13 @@ PUSH
 	ORG $0A5C14
 		LynJump(MS_LoadSuspend)
 
-	// Replace LoadSavedChapterData
+	// Replace LoadSavedChapterState
 	ORG $0A522C
 		LynJump(MS_LoadChapterStateFromGameSave)
+
+	// Replace LoadSuspendedChapterState
+	ORG $0A5DFC
+		LynJump(MS_LoadChapterStateFromSuspendSave)
 
 	// Replace LoadSavedBonusClaimFlags
 	ORG $0A524C
@@ -68,10 +72,26 @@ PUSH
 	ORG $0A8964
 		SHORT $E036
 
+	// Make BWL save look for the BWL chunk
 	ORG $0A460E
 		SHORT $46C0 // nop for alignment
 		LynJump(MS_BWLSaveHook)
 
+	// In SaveNewGame
+	ORG $0A4E84
+		WORD $46C046C0 // nop nop; don't get target save address
+	ORG $0A4F34
+		WORD $46C046C0 // nop nop; don't save chapter state just yet
+	ORG $0A4F40
+		WORD $46C046C0 // nop nop; don't save bonus content claim flags just yet
+	ORG $0A4F44
+		SHORT $E022 // b later; don't save units just yet
+	ORG $0A412C
+		SHORT $E024 // b later; don't save bwl and chapter wins just yet
+	ORG $0A4F92
+		SHORT $E01B // b later; don't save other stuff just yet
+	ORG $0A4FCE
+		BL($0A5010) // now you can save the game! And do it by calling the save function
 POP
 
 #endif // EXPANDED_MODULAR_SAVE_INTERNALS
