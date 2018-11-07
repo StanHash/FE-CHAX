@@ -68,7 +68,7 @@ void MSu_LoadMenuRelated(void* source, unsigned size) {
 	UnpackMenuRelatedSaveStruct(buf);
 }
 
-void MSu_SaveIdk(void* target, unsigned size) {
+void MSu_SaveDungeonState(void* target, unsigned size) {
 	static const void(*PackIdk)(void*) = (void(*)(void*))(0x8037E08+1);
 
 	u8 buf[0xC];
@@ -77,7 +77,7 @@ void MSu_SaveIdk(void* target, unsigned size) {
 	WriteAndVerifySramFast(buf, target, size);
 }
 
-void MSu_LoadIdk(void* source, unsigned size) {
+void MSu_LoadDungeonState(void* source, unsigned size) {
 	static const void(*UnpackIdk)(void*) = (void(*)(void*))(0x8037E30+1);
 
 	u8 buf[0xC];

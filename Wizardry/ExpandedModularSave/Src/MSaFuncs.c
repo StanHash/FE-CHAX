@@ -53,10 +53,10 @@ void MSa_LoadWMStuff(void* source, unsigned size) {
 	LoadWMStuff(source, &gSomeWMEventRelatedStruct);
 }
 
-void MSa_SaveIdk(void* target, unsigned size) {
+void MSa_SaveDungeonState(void* target, unsigned size) {
 	WriteAndVerifySramFast((void*)(0x30017AC), target, size);
 }
 
-void MSa_LoadIdk(void* source, unsigned size) {
+void MSa_LoadDungeonState(void* source, unsigned size) {
 	gpReadSramFast(source, (void*)(0x30017AC), size);
 }
