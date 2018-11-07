@@ -33,8 +33,6 @@ void MSa_SaveUnits(void* target, unsigned size) {
 }
 
 void MSa_LoadUnits(void* source, unsigned size) {
-	ClearUnits();
-
 	for (unsigned i = 0; i < 51; ++i)
 		LoadSavedUnit(source + (0x24*i), GetUnit(i+1));
 }

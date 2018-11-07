@@ -22,8 +22,6 @@ void MSu_SavePlayerUnits(void* target, unsigned size) {
 }
 
 void MSu_LoadPlayerUnits(void* source, unsigned size) {
-	ClearUnits();
-
 	for (unsigned i = 0; i < 51; ++i)
 		UnpackUnitStructFromSuspend(source + 0x34*i, GetUnit(i+1));
 }
