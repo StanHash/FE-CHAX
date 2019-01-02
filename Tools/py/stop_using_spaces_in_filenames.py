@@ -240,7 +240,7 @@ def rename_from_ea_preproc_recursive(path, renamer):
 		except OSError:
 			print("Failed to process included file: {}".format(fullNewPath), file = sys.stderr)
 
-		base, ext = path_splitext_full(fullNewPath)
+		base, ext = path_splitext_full(fullOldPath)
 
 		for ext1, ext2 in EXT_PATTERN_MAP:
 			if ext1 == ext:
@@ -260,7 +260,7 @@ def rename_from_ea_preproc_recursive(path, renamer):
 		except OSError:
 			print("Failed to process included file: {}".format(fullNewPath), file = sys.stderr)
 
-		base, ext = path_splitext_full(fullNewPath)
+		base, ext = path_splitext_full(fullOldPath)
 
 		for ext1, ext2 in EXT_PATTERN_MAP:
 			if ext1 == ext:
