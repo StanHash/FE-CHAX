@@ -2,17 +2,28 @@
 #define WIZARDRY
 
 #include "_FE8EssentialFixes.event"
-#include "_FE8ProcNameFix.event"
 
-#define TextScrollSpeed 4
+#define TextScrollSpeed 2
 #include "TextScrollSpeed.event"
 
 #include "CUnitAction/UnitAction.event"
 #include "CIconDisplay/IconDisplay.event"
 
-#include "CFreeSelect/FreeSelect.event"
-#include "CRewarp/Rewarp.event"
+// #include "CFreeSelect/FreeSelect.event"
+// #include "CRewarp/Rewarp.event"
+
+#include "DanceAi/DanceAi.event"
+
 #include "CLolStats/LolStats.event"
+#include "LazberianTurnFlow/LazberianTurnFlow.event"
+
+#include "3rdParty/HpBars/HpBars.event"
+// #include "3rdParty/KirbDebug/KirbDebug.event"
+#include "3rdParty/CSAEngine/CSAEngine.event"
+
+#include "CustomGameSpeed/CustomGameSpeed.event"
+#include "PerChapterBattleQuotes/PerChapterBattleQuotes.event"
+#include "ExpandedModularSave/ExModularSave.event"
 
 #include "UnitMenu.event"
 
@@ -52,7 +63,7 @@ TradeCheckList:
 
 */
 
-#include "CBattleCalc/CBattleCalc.event"
-#include "TradeCheck/TradeCheck.event"
+// #include "CBattleCalc/CBattleCalc.event"
+// #include "TradeCheck/TradeCheck.event"
 
 #endif // WIZARDRY

@@ -5,12 +5,9 @@
 
 #define MAX_SIMULTANEOUS_ICONS 0x20
 
-// Not replaced
-unsigned GetIconGfxTileIndex(unsigned slot) __attribute__((long_call));
-
 // Core functions
-unsigned GetIconTileIndex(unsigned icon);
-void LoadIconObjectGraphics(int icon, unsigned tile);
+u16 GetIconTileIndex(int icon);
+void LoadIconObjectGraphics(int icon, int tile);
 void ClearIcons(void);
 void ClearIcon(unsigned icon);
 

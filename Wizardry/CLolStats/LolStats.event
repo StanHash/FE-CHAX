@@ -17,4 +17,6 @@ POP
 
 }
 
+// TODO: investigate further the crazy side effects this has on enemy autolevelling
+
 #endif // HAX_LOLSTATS

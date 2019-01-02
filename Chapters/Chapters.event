@@ -3,11 +3,16 @@
 
 // Putting each chapter in their own symbol scope
 // That way, label names can be reused between chapters
-// (Which would be useful if I had more than one)
+// (Which would be useful if I had more than one at a time)
 
 {
 #include "PeerBlitz/PeerBlitzCh9.event"
 #include "PeerBlitz/PeerBlitzCh9Map.event"
+}
+
+{
+// #include "FE6Ch1/FE6Chapter1.event"
+// #include "FE6Ch1/FE6Chapter1Map.event"
 }
 
 {

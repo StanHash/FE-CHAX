@@ -9,7 +9,7 @@ INCFLAGS     := $(foreach dir, $(INCLUDE_DIRS), -I "$(dir)")
 
 # setting up compilation flags
 ARCH    := -mcpu=arm7tdmi -mthumb -mthumb-interwork
-CFLAGS  := $(ARCH) $(INCFLAGS) -Wall -Os -mtune=arm7tdmi -fomit-frame-pointer -ffast-math -ffreestanding
+CFLAGS  := $(ARCH) $(INCFLAGS) -Wall -Os -mtune=arm7tdmi -fomit-frame-pointer -ffast-math -ffreestanding -mlong-calls
 ASFLAGS := $(ARCH) $(INCFLAGS)
 
 # setting up cache dir
@@ -20,7 +20,7 @@ $(shell mkdir -p $(CACHE_DIR) > /dev/null)
 DEPSDIR := $(CACHE_DIR)
 
 # lyn options
-LYNLIB := Tools/CLib/reference/FE8U-20181105.o
+LYNREF := Tools/CLib/reference/FE8U-20181105.o
 
 # Finding all possible source files
 CFILES   := $(shell find -type f -name '*.c')
@@ -136,9 +136,9 @@ Writans/Text.event Writans/TextDefinitions.event: $(WRITANS_ALL_TEXT)
 	@$(OBJCOPY) -S $< -O binary $@
 
 # OBJ to EVENT rule
-%.lyn.event: %.o $(LYNLIB)
+%.lyn.event: %.o $(LYNREF)
 	$(PREPROCESS_MESSAGE)
-	@$(LYN) $< $(LYNLIB) > $@
+	@$(LYN) $< $(LYNREF) > $@
 
 # PNG to 4bpp rule
 %.4bpp: %.png

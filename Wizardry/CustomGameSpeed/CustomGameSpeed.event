@@ -24,7 +24,7 @@
 
 #ifndef LynJumpDefined
 	#define LynJumpDefined
-	#define LynJump(aTarget) "WORD $46C04778 $E59FC000 $E12FFF1C; POIN aTarget; PROTECT CURRENTOFFSET-16 CURRENTOFFSET"
+	#define LynJump(aTarget) "WORD $46C04778 $E59FC000 $E12FFF1C; POIN aTarget"
 #endif // LynJumpDefined
 
 PUSH; ORG $794E8

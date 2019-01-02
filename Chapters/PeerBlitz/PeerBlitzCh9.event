@@ -5,7 +5,7 @@
 
 EventPointerTable(0x7, ThisChapter)
 
-SetChapterDeathQuoteList(0, DeathQuoteList)
+SetChapterDeathQuoteList(0, DeathQuoteList) // NOTE: Requires PerChapterBattleQuotes
 EscapePointPointerTable(0, EscapePointList)
 
 // ============================

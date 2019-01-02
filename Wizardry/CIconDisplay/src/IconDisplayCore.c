@@ -5,7 +5,7 @@ extern u16* const IDRIconUsageLookup;
 static unsigned GetIconUsedSlot(unsigned icon);
 static unsigned GetIconNewSlot(unsigned icon);
 
-unsigned GetIconTileIndex(unsigned icon) {
+u16 GetIconTileIndex(int icon) {
 	unsigned slot, tile;
 
 	// Check if icon is already loaded
@@ -29,7 +29,7 @@ unsigned GetIconTileIndex(unsigned icon) {
 	return tile;
 }
 
-void LoadIconObjectGraphics(int icon, unsigned tile) {
+void LoadIconObjectGraphics(int icon, int tile) {
 	void* target = OBJ_VRAM0 + (tile * 0x20);
 
 	if (icon >= 0) {

@@ -1,0 +1,35 @@
+#ifndef HAX_SUMMON_STAFF
+#define HAX_SUMMON_STAFF
+
+#ifndef _FE8_
+	ERROR "CSummonStaff is for FE8 only"
+#endif // _FE8_
+
+#ifndef HAX_FREESELECT
+	ERROR "please include CFreeSelect before CSummonStaff"
+#endif // HAX_FREESELECT
+
+#ifndef SummonStaffItemId
+	#define SummonStaffItemId Physic
+#endif
+
+#include "Src/SummonStaff.lyn.event"
+#include "Src/SummonStaffHooks.lyn.event"
+
+// TODO: ifdef item effect rework
+
+PUSH
+
+	ORG ($0288B0 + 4*((SummonStaffItemId)-0x4B))
+		POIN SumStaffUsability
+
+	ORG ($028E8C + 4*((SummonStaffItemId)-0x4B))
+		POIN SumStaffEffect
+
+	ORG $01DA66
+		// Fix Graphical glitchiness
+		BYTE 0x13
+
+POP
+
+#endif // HAX_SUMMON_STAFF

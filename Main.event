@@ -27,6 +27,11 @@ ORG FreeSpace
 	ALIGN 4
 	#include "Spritans/Portraits.event"
 
+	/*
+	ALIGN 4
+	#include "Spritans/Spells.event"
+	*/
+
 	ALIGN 4
 	#include "Songs/Songs.event"
 

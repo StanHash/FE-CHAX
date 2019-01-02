@@ -1,0 +1,29 @@
+
+
+#include "src/UnlockHack.lyn.event"
+
+PUSH
+
+	ORG $0262F8
+		// This is to add chests to the target list along with doors
+		POIN TryAddPosToUnlockList
+
+	ORG $9A3EA4
+		// This extends the proc to also wait for the event engine to stop existing
+		PROC_JUMP(UnlockEffectProcExtension)
+
+	ORG $9A4C84
+		// Replace 140 tick sleep by a wait for the effect proc to die
+		PROC_WHILE_EXISTS($9A3E6C)
+
+POP
+
+#include "Extensions/ProcDefinitions.txt"
+
+ALIGN 4
+UnlockEffectProcExtension:
+	PROC_CALL_ROUTINE(UnlockSaveBattleUnitInTarget)
+	PROC_CALL_ROUTINE(UnlockTrueEffect) // This opens both doors and chests!
+	PROC_WHILE_ROUTINE($00D198+1) // MapEventEngineExists
+	PROC_CALL_ROUTINE(UnlockRestoreBattleUnit)
+	PROC_JUMP($9A3EAC) // go back!

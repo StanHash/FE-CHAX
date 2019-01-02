@@ -6,6 +6,18 @@ PUSH
 ORG $7E2B4
 BYTE 0x8
 
+/*
+  Somewhere in the ProcStart routine (fix name field not being cleared) -Stan
+
+  str  r1, [r5, #0x10]
+  mov  r0, #0x26
+  strb r1, [r5, r0]
+  add  r0, #2
+  strb r1, [r5, r0]
+*/
+ORG $002C9E
+	SHORT $6129 $2026 $5429 $3002 $5429
+
 //Set Default Options
   ORG $30d8a  //animations type 2
   SHORT $3306
@@ -13,22 +25,22 @@ BYTE 0x8
   SHORT $22d0
 
 //Allow Visit from any tile
-  PUSH
-  ORG $23072
-  SHORT $e00d
-  POP
+  //PUSH
+  //ORG $23072
+  //SHORT $e00d
+  //POP
 
 //Break HP Cap for Players/NPCs (credit Solum)
-  ORG $181ee
-  SHORT $1c11
-  ORG $2bf4c
-  BYTE $7f
+  //ORG $181ee
+  //SHORT $1c11
+  //ORG $2bf4c
+  //BYTE $7f
 
 //skip hand axe wait for return
-  ORG $514e
-  SHORT 0
-  ORG $58c90
-  POIN $596cc
+  //ORG $514e
+  //SHORT 0
+  //ORG $58c90
+  //POIN $596cc
 
 //allow Wyvern Knights to triangle attack
   ORG $2b168
@@ -57,16 +69,16 @@ BYTE 0x8
   SHORT 0
 
 //Skip Intro cutscene
-  ORG $C6714
-  SHORT 0
+  //ORG $C6714
+  //SHORT 0
 
 //Skip New Game text
-  ORG $C4928
-  SHORT 0
+  //ORG $C4928
+  //SHORT 0
 
 //Silence New Game music
-  ORG $C4A0C
-  BYTE 0
+  //ORG $C4A0C
+  //BYTE 0
 
 //Autocursor Fix (credit Vennobennu)
   ORG $3325a
@@ -79,14 +91,14 @@ BYTE 0x8
   // BYTE $a0
 
 //Unlock Sound Room songs
-  ORG $aede0
-  BYTE $FF
+  //ORG $aede0
+  //BYTE $FF
 
 //CG Fade glitch
-  ORG $EBCA
-  BYTE 8
-  ORG $EDE0
-  SHORT $1c0a
+  //ORG $EBCA
+  //BYTE 8
+  //ORG $EDE0
+  //SHORT $1c0a
 
 //Enemy Control Glitch Fix (Credits to Brendor)
   ORG 0x377A0

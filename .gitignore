@@ -2,6 +2,7 @@
 *.gba
 *.sav
 *.ss*
+*.sym
 *.sym.event
 FE8U-*.png
 HACK-*.png
