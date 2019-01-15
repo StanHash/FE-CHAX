@@ -6,4 +6,5 @@ Florina[X]
 This is a placeholder[X]
 
 #include "TextRewarp.txt"
+#include "TextMimic.txt"
 #include "PeerBlitzCh9Text.txt"

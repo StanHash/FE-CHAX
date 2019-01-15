@@ -63,6 +63,11 @@ UnitMenuCommands:
 	UM_Steal
 	UM_Summon
 	UM_Summon_DK
+
+#ifdef HAX_MIMIC
+	UnitMenuCommand(textMimicCommandName, textMimicCommandDesc, NormalText, MimicCmdUsability, MimicCmdEffect)
+#endif // MAX_MIMIC
+
 	UM_Pick
 	UM_Talk
 	UM_Support

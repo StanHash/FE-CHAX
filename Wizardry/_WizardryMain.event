@@ -25,6 +25,8 @@
 #include "PerChapterBattleQuotes/PerChapterBattleQuotes.event"
 #include "ExpandedModularSave/ExModularSave.event"
 
+#include "Mimic/Mimic.event"
+
 #include "UnitMenu.event"
 
 /*
@@ -51,19 +53,22 @@ BattleStatCalcList:
 
 #define BattleStatCalcListDeclared
 
+// */
+
 TradeCheckList:
 	POIN AreUnitsSameAllegiance
 	POIN AreNeitherUnitPhantomClass
 
-	// Extra things
+#ifdef HAX_MIMIC
+	POIN AreNeitherUnitMimics
+#endif // HAX_MIMIC
 
 	WORD 0 // end
 
 #define TradeCheckListDeclared
 
-*/
-
 // #include "CBattleCalc/CBattleCalc.event"
-// #include "TradeCheck/TradeCheck.event"
+
+#include "TradeCheck/TradeCheck.event"
 
 #endif // WIZARDRY
