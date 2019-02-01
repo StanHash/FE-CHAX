@@ -1,8 +1,8 @@
-#include "css_core.h"
+#include "CSS.h"
 
-void css_disable_game_gfx(CSSCoreProc* proc);
-void css_load_gfx(CSSCoreProc* proc);
-void css_disable_gfx(CSSCoreProc* proc);
+void css_disable_game_gfx(struct CSSCoreProc* proc);
+void css_load_gfx(struct CSSCoreProc* proc);
+void css_disable_gfx(struct CSSCoreProc* proc);
 
 const ProcCode proc_css[] = {
 	PROC_SET_NAME(CSS_PREFIX":Core"),
@@ -48,7 +48,7 @@ static const uint16_t css_bg_config[] = {
 	0x0000
 };
 
-void css_disable_game_gfx(CSSCoreProc* proc) {
+void css_disable_game_gfx(struct CSSCoreProc* proc) {
 	// disabling every layer
 	gLCDIOBuffer.dispControl.bg0_on = 0;
 	gLCDIOBuffer.dispControl.bg1_on = 0;
@@ -57,9 +57,9 @@ void css_disable_game_gfx(CSSCoreProc* proc) {
 	gLCDIOBuffer.dispControl.obj_on = 0;
 
 	// resetting color effects?
-	SetColorEffectParameters(3, 0, 0, 0x10);
+	SetColorEffectsParameters(3, 0, 0, 0x10);
 
-	SetColorEffectFirstTarget(0, 0, 0, 0, 0);
+	SetColorEffectsFirstTarget(0, 0, 0, 0, 0);
 	SetColorEffectBackdropFirstTarget(1);
 	SetColorEffectBackdropSecondTarget(0);
 
@@ -68,7 +68,7 @@ void css_disable_game_gfx(CSSCoreProc* proc) {
 	EnablePaletteSync();
 }
 
-void css_load_gfx(CSSCoreProc* proc) {
+void css_load_gfx(struct CSSCoreProc* proc) {
 	LoadBgConfig(css_bg_config);
 
 	Font_InitDefault();
@@ -91,6 +91,6 @@ void css_load_gfx(CSSCoreProc* proc) {
 	gLCDIOBuffer.dispControl.obj_on = 1;
 }
 
-void css_disable_gfx(CSSCoreProc* proc) {
+void css_disable_gfx(struct CSSCoreProc* proc) {
 	css_lpanel_end(proc->pLPanel);
 }

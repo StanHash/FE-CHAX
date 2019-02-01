@@ -13,30 +13,27 @@ ALIGN 4
 
 // Code
 
-#include "src/css_common.lyn.event"
-#include "src/css_core.lyn.event"
-#include "src/css_lpanel.lyn.event"
-#include "src/css_objtext.lyn.event"
-#include "src/css_mugframe_small.lyn.event"
-
-ALIGN 4
+#include "Src/CSSCommon.lyn.event"
+#include "Src/CSSCore.lyn.event"
+#include "Src/CSSLeftPanel.lyn.event"
+#include "Src/CSSObjText.lyn.event"
+#include "Src/CSSMugFrameSmall.lyn.event"
 
 // Resources
 
+ALIGN 4
 css_stattext_pal:
-	#incbin "res/stattext_dummy.gbapal"
-	ALIGN 4
+	#incbin "Res/StatTextDummy.gbapal"
 
 	// Debug palette
-	// #incbin "res/debug_pal.dmp"
+	// #incbin "Res/DebugPal.dmp"
 
+ALIGN 4
 css_mugframe_small_gfx:
-	#incbin "res/mugframe_small.4bpp.lz"
-	ALIGN 4
+	#incbin "Res/MugFrameSmall.4bpp.lz"
 
 ALIGN 4
 css_mugframe_small_pal:
-	#incbin "res/mugframe_small.gbapal"
-	ALIGN 4
+	#incbin "Res/MugFrameSmall.gbapal"
 
 #endif // HAX_CSS

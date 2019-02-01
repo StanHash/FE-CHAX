@@ -1,4 +1,4 @@
-#include "css_objtext.h"
+#include "CSS.h"
 
 enum StatTextPaletteIndices {
 	STPAL_NONE = 0, // transparent
@@ -23,7 +23,7 @@ enum StatTextDrawFlags {
 	STDRAW_ALTBUF = (1 << 1)
 };
 
-static void css_stattext_on_update(CSSStatTextProc*);
+static void css_stattext_on_update(struct CSSStatTextProc*);
 
 static const ProcCode css_stattext_proc[] = {
 	PROC_SET_NAME(CSS_PREFIX":StatText"),
@@ -179,16 +179,16 @@ static void css_stats_draw(int targetObjTile, const char* statName, int statValu
 }
 
 static void css_stats_display(int sourceObjTile, int xPosition, int yPosition) {
-	static const ObjData obj = {
-		2, { {
+	static const struct ObjData obj = {
+		2, {
 			0x0000, // Square
 			0x4000, // 16x16p
-			0x0000
-		}, {
+			0x0000,
+
 			0x4000, // Horizontal
 			0x8010, // 32x16p
 			0x0002
-		} }
+		}
 	};
 
 	HiObjInsert(0,
@@ -199,7 +199,7 @@ static void css_stats_display(int sourceObjTile, int xPosition, int yPosition) {
 	);
 }
 
-void css_stattext_on_update(CSSStatTextProc* proc) {
+void css_stattext_on_update(struct CSSStatTextProc* proc) {
 	for (unsigned i = 0; i < 8; ++i) {
 		if (proc->statDrawFlags[i] & STDRAW_HIDDEN) {
 			proc->statDrawFlags[i] &= ~STDRAW_ALTBUF;
@@ -215,10 +215,10 @@ void css_stattext_on_update(CSSStatTextProc* proc) {
 
 }
 
-CSSStatTextProc* css_stattext_start(Vector2 origin) {
-	CSSStatTextProc* result;
+struct CSSStatTextProc* css_stattext_start(Vector2 origin) {
+	struct CSSStatTextProc* result;
 
-	result = (CSSStatTextProc*) Proc_Create(css_stattext_proc, ROOT_PROC_3);
+	result = (struct CSSStatTextProc*) Proc_Create(css_stattext_proc, ROOT_PROC_3);
 
 	if (!result)
 		return NULL;
@@ -232,11 +232,11 @@ CSSStatTextProc* css_stattext_start(Vector2 origin) {
 	return result;
 }
 
-void css_stattext_end(CSSStatTextProc* proc) {
+void css_stattext_end(struct CSSStatTextProc* proc) {
 	Proc_Delete((Proc*)(proc));
 }
 
-void css_stattext_show(CSSStatTextProc* proc, int id, const char* name, int value, int maxValue) {
+void css_stattext_show(struct CSSStatTextProc* proc, int id, const char* name, int value, int maxValue) {
 	if (!(proc->statDrawFlags[id] & STDRAW_HIDDEN))
 		proc->statDrawFlags[id] ^= STDRAW_ALTBUF;
 
@@ -244,6 +244,6 @@ void css_stattext_show(CSSStatTextProc* proc, int id, const char* name, int valu
 	proc->statDrawFlags[id] &= ~STDRAW_HIDDEN;
 }
 
-void css_stattext_hide(CSSStatTextProc* proc, int id) {
+void css_stattext_hide(struct CSSStatTextProc* proc, int id) {
 	proc->statDrawFlags[id] |= STDRAW_HIDDEN;
 }

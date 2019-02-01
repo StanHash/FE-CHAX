@@ -1,14 +1,13 @@
-#include "css_lpanel.h"
-#include "css_mugframe_small.h"
+#include "CSS.h"
 
-static void css_lpanel_init(CSSLPanelProc*);
-static void css_lpanel_idle(CSSLPanelProc*);
-static void css_lpanel_on_end(CSSLPanelProc*);
+static void css_lpanel_init(struct CSSLeftPanelProc*);
+static void css_lpanel_idle(struct CSSLeftPanelProc*);
+static void css_lpanel_on_end(struct CSSLeftPanelProc*);
 
-static int  css_lpanel_moveup(CSSLPanelProc*);
+static int  css_lpanel_moveup(struct CSSLeftPanelProc*);
 
-static void css_lpanel_show_face(CSSLPanelProc*);
-static void css_lpanel_hide_face(CSSLPanelProc*);
+static void css_lpanel_show_face(struct CSSLeftPanelProc*);
+static void css_lpanel_hide_face(struct CSSLeftPanelProc*);
 
 const ProcCode proc_css_lpanel[] = {
 	PROC_SET_NAME(CSS_PREFIX":LPanel"),
@@ -39,7 +38,7 @@ static const uint16_t sCssLPanelTextObjLookup[] = {
 	0x18E, 0x1CE
 }; //*/
 
-static void css_lpanel_init(CSSLPanelProc* proc) {
+static void css_lpanel_init(struct CSSLeftPanelProc* proc) {
 	Vector2 stOrigin = {
 		proc->origin.x + 4,
 		proc->origin.y + 160 - 70
@@ -70,10 +69,10 @@ static void css_lpanel_init(CSSLPanelProc* proc) {
 	CopyToPaletteBuffer(css_stattext_pal, CSS_PAL_OBJ_STATTEXT * 0x20, 0x20);
 }
 
-static void css_lpanel_idle(CSSLPanelProc* proc) {
+static void css_lpanel_idle(struct CSSLeftPanelProc* proc) {
 	if (gKeyStatus.pressedKeys & A_BUTTON)
 		css_lpanel_set_face_displayed(proc, !css_lpanel_is_face_displayed(proc));
-	
+
 	/*
 	for (int i = 0; i < 8; ++i)
 		css_stattext_display(
@@ -84,51 +83,49 @@ static void css_lpanel_idle(CSSLPanelProc* proc) {
 		); //*/
 }
 
-static void css_lpanel_on_end(CSSLPanelProc* proc) {
+static void css_lpanel_on_end(struct CSSLeftPanelProc* proc) {
 	css_lpanel_hide_face(proc);
 
 	css_stattext_end(proc->pStatText);
 }
 
-static int css_lpanel_moveup(CSSLPanelProc* proc) {
-	
-	
+static int css_lpanel_moveup(struct CSSLeftPanelProc* proc) {
 	return 1;
 }
 
-static void css_lpanel_show_face(CSSLPanelProc* proc) {
+static void css_lpanel_show_face(struct CSSLeftPanelProc* proc) {
 	if (!proc->faceDisplayed)
 		StartFace(0, GetUnitPortraitId(gActiveUnit), 0x38, 0x38, 2);
-	
+
 	proc->faceDisplayed = 1;
 }
 
-static void css_lpanel_hide_face(CSSLPanelProc* proc) {
+static void css_lpanel_hide_face(struct CSSLeftPanelProc* proc) {
 	if (proc->faceDisplayed)
 		EndFaceById(0);
 	
 	proc->faceDisplayed = 0;
 }
 
-CSSLPanelProc* css_lpanel_start(Vector2 origin, Proc* parent) {
-	CSSLPanelProc* result;
+struct CSSLeftPanelProc* css_lpanel_start(Vector2 origin, Proc* parent) {
+	struct CSSLeftPanelProc* result;
 
-	result = (CSSLPanelProc*) StartProc(proc_css_lpanel, parent);
-	
+	result = (struct CSSLeftPanelProc*) StartProc(proc_css_lpanel, parent);
+
 	result->origin = origin;
 
 	return result;
 }
 
-void css_lpanel_end(CSSLPanelProc* proc) {
+void css_lpanel_end(struct CSSLeftPanelProc* proc) {
 	EndProc((Proc*)(proc));
 }
 
-int css_lpanel_is_face_displayed(CSSLPanelProc* proc) {
+int css_lpanel_is_face_displayed(struct CSSLeftPanelProc* proc) {
 	return proc->faceDisplayed;
 }
 
-void css_lpanel_set_face_displayed(CSSLPanelProc* proc, int display) {
+void css_lpanel_set_face_displayed(struct CSSLeftPanelProc* proc, int display) {
 	if (display)
 		css_lpanel_show_face(proc);
 	else

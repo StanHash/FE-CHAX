@@ -1,6 +1,6 @@
-#include "css_mugframe_small.h"
+#include "CSS.h"
 
-static void css_mugframe_small_on_update(CSSMugFrameSmallProc*);
+static void css_mugframe_small_on_update(struct CSSMugFrameSmallProc*);
 
 static const ProcCode sProc_CSSMugFrameSmall[] = {
 	PROC_SET_NAME(CSS_PREFIX":MugFrameSmall"),
@@ -8,10 +8,10 @@ static const ProcCode sProc_CSSMugFrameSmall[] = {
 	PROC_END
 };
 
-CSSMugFrameSmallProc* css_mugframe_small_start(uint16_t* pBgOut, uint16_t rootTileIndex) {
-	CSSMugFrameSmallProc* proc;
+struct CSSMugFrameSmallProc* css_mugframe_small_start(uint16_t* pBgOut, uint16_t rootTileIndex) {
+	struct CSSMugFrameSmallProc* proc;
 
-	proc = (CSSMugFrameSmallProc*) Proc_Create(sProc_CSSMugFrameSmall, ROOT_PROC_3);
+	proc = (struct CSSMugFrameSmallProc*) Proc_Create(sProc_CSSMugFrameSmall, ROOT_PROC_3);
 
 	proc->rootTileIndex = rootTileIndex;
 	proc->pBgOutput = pBgOut;
@@ -21,15 +21,15 @@ CSSMugFrameSmallProc* css_mugframe_small_start(uint16_t* pBgOut, uint16_t rootTi
 	return proc;
 }
 
-void css_mugframe_small_end(CSSMugFrameSmallProc* proc) {
+void css_mugframe_small_end(struct CSSMugFrameSmallProc* proc) {
 	Proc_Delete((Proc*)(proc));
 }
 
-void css_mugframe_small_on_update(CSSMugFrameSmallProc* proc) {
+void css_mugframe_small_on_update(struct CSSMugFrameSmallProc* proc) {
 	// nothing (yet?)
 }
 
-void css_mugframe_small_redraw(CSSMugFrameSmallProc* proc) {
+void css_mugframe_small_redraw(struct CSSMugFrameSmallProc* proc) {
 	// void DrawMiniMug(int index, uint16_t* targetBg, int tileIndex, int bgIndex, int flipped);
 	static const void(*DrawMiniMug)(int, uint16_t*, int, int, int) = (void (*)(int, uint16_t*, int, int, int))(0x08005989);
 
@@ -44,8 +44,8 @@ void css_mugframe_small_redraw(CSSMugFrameSmallProc* proc) {
 	SetFont(NULL);
 
 	// TODO: draw actual information
-	DrawTextInline(NULL, BG_LOCATED_TILE(proc->pBgOutput, 6, 1), 0, 0, 0x10, "Name");
-	DrawTextInline(NULL, BG_LOCATED_TILE(proc->pBgOutput, 6, 3), 0, 0, 0x10, "Class");
+	DrawTextInline(NULL, BG_LOCATED_TILE(proc->pBgOutput, 6, 1), 0, 0, 0x10, String_GetFromIndex(gActiveUnit->pCharacterData->nameTextId));
+	DrawTextInline(NULL, BG_LOCATED_TILE(proc->pBgOutput, 6, 3), 0, 0, 0x10, String_GetFromIndex(gActiveUnit->pClassData->nameTextId));
 
 	DrawTextInline(NULL, BG_LOCATED_TILE(proc->pBgOutput, 1, 5), 0, 0, 6, "HP42/42");
 	DrawTextInline(NULL, BG_LOCATED_TILE(proc->pBgOutput, 7, 5), 0, 0, 6, "L01 E99");
