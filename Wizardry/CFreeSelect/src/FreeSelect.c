@@ -38,7 +38,7 @@ struct FSProc* StartFreeSelection(const struct FSDefinition* pDefinition) {
 void FSOnInit(struct FSProc* proc) {
 	proc->pCursorAp = AP_Create(gAP_SelectCursorThing, 0);
 
-	proc->pCursorAp->OAMBase = 0;
+	proc->pCursorAp->tileBase = 0;
 
 	AP_SwitchAnimation(proc->pCursorAp, 0);
 

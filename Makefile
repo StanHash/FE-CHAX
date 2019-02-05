@@ -9,7 +9,7 @@ INCFLAGS     := $(foreach dir, $(INCLUDE_DIRS), -I "$(dir)")
 
 # setting up compilation flags
 ARCH    := -mcpu=arm7tdmi -mthumb -mthumb-interwork
-CFLAGS  := $(ARCH) $(INCFLAGS) -Wall -Os -mtune=arm7tdmi -fomit-frame-pointer -ffast-math -ffreestanding -mlong-calls
+CFLAGS  := $(ARCH) $(INCFLAGS) -Wall -Werror -Os -mtune=arm7tdmi -fomit-frame-pointer -ffast-math -ffreestanding -mlong-calls
 ASFLAGS := $(ARCH) $(INCFLAGS)
 
 # setting up cache dir

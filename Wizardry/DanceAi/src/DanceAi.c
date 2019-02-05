@@ -71,7 +71,7 @@ int DanceAiDoAction(struct Proc* cpPerformProc) {
 	gActiveUnit->xPos = gAiData.decision.xMovement;
 	gActiveUnit->yPos = gAiData.decision.yMovement;
 
-	gActionData.actionIndex = UNIT_ACTION_DANCE;
+	gActionData.unitActionType = UNIT_ACTION_DANCE;
 	gActionData.targetIndex = gAiData.decision.unitTargetIndex;
 
 	// Do the dancing action

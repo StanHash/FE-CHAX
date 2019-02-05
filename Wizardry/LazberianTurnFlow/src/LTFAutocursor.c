@@ -7,7 +7,7 @@ static struct Unit* LTF_GetAutocursorUnit(unsigned phase) {
 		if (!unit || !unit->pCharacterData)
 			continue;
 
-		if (unit->statusIndex == STATUS_BERSERK)
+		if (unit->statusIndex == UNIT_STATUS_BERSERK)
 			continue;
 
 		if (LTF_IsUnitReadyToMove(unit))

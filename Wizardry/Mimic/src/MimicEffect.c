@@ -33,7 +33,7 @@ static void MECreateSummonUnit(struct MimicEffectProc* proc) {
 	const struct Unit* subject = GetUnit(gActionData.subjectIndex);
 	const struct Unit* toMimic = GetUnit(gActionData.targetIndex);
 
-	struct EventUnit eUnit = {
+	struct UnitDefinition eUnit = {
 		.charIndex       = MimicCharacterId,
 		.classIndex      = toMimic->pClassData->number,
 		.leaderCharIndex = subject->pCharacterData->number, // unnecessary/useless but whatever
@@ -45,9 +45,6 @@ static void MECreateSummonUnit(struct MimicEffectProc* proc) {
 		.xPosition       = gActionData.xOther,
 		.yPosition       = gActionData.yOther,
 
-		.extraData       = 0,
-		._u06            = 0,
-
 		.redaCount       = 0,
 		.redas           = NULL,
 
@@ -55,11 +52,6 @@ static void MECreateSummonUnit(struct MimicEffectProc* proc) {
 		.items[1] = 0,
 		.items[2] = 0,
 		.items[3] = 0,
-
-		.ai[0]    = 0,
-		.ai[1]    = 0,
-		.ai[2]    = 0,
-		.ai[3]    = 0,
 	};
 
 	proc->pSummonedUnit = LoadUnit(&eUnit);

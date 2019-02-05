@@ -9,8 +9,11 @@
 #include "src/KDStatPage.lyn.event"
 
 // Replace Guide
-PUSH; ORG $59CEC8
-	POIN KribDebugMenuEffect
+PUSH; ORG $59CEC0
+	POIN GetOne+1 0 KribDebugMenuEffect
 POP
+
+GetOne:
+	SHORT $2001 $4770
 
 #endif // HAX_KIRB_DEBUG

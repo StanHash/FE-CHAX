@@ -42,7 +42,7 @@ int RCOnSelect(struct FSProc* proc, int x, int y) {
 	gActionData.xOther = x;
 	gActionData.yOther = y;
 
-	gActionData.actionIndex = RewarpActionId;
+	gActionData.unitActionType = RewarpActionId;
 
 	EnsureCameraOntoPosition(
 		(Proc*)(proc),

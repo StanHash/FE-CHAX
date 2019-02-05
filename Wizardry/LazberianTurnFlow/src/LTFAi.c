@@ -67,7 +67,7 @@ static void LTFAi_BskOrderInit(struct Proc* bskOrderProc) {
 		if (unit->state & (US_DEAD | US_NOT_DEPLOYED | US_RESCUED | US_UNDER_A_ROOF | 0x00010000 | US_UNSELECTABLE))
 			continue;
 	
-		if (unit->statusIndex != STATUS_BERSERK)
+		if (unit->statusIndex != UNIT_STATUS_BERSERK)
 			continue;
 
 		gAiData.aiUnits[count++] = unit->index;

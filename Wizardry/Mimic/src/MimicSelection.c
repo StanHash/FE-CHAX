@@ -173,7 +173,7 @@ static int MimicPSOnSelect(struct TargetSelectionProc* proc, struct TargetEntry*
 	gActionData.xOther = entry->x;
 	gActionData.yOther = entry->y;
 
-	gActionData.actionIndex = MimicCommandActionId;
+	gActionData.unitActionType = MimicCommandActionId;
 
 	return TSE_PLAY_BEEP | TSE_DISABLE;
 }

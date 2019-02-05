@@ -23,7 +23,7 @@ int ApplyUnitAction(Proc* proc) {
 
 #ifndef NO_NIGHTMARE_HARDCODED_CHECK
 
-	if (gActionData.actionIndex == UNIT_ACTION_COMBAT) {
+	if (gActionData.unitActionType == UNIT_ACTION_COMBAT) {
 		if (GetItemIndex(gActiveUnit->items[gActionData.itemSlotIndex]) == 0xA6) {
 			ActionStaffDoorChestUseItem(proc);
 			return 0;
@@ -32,7 +32,7 @@ int ApplyUnitAction(Proc* proc) {
 
 #endif // NO_NIGHTMARE_HARDCODED_CHECK
 
-	ActionFunc func = UnitActionCallTable[gActionData.actionIndex];
+	ActionFunc func = UnitActionCallTable[gActionData.unitActionType];
 
 	if (func) {
 		if (RequiresProcYield(func)) {

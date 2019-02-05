@@ -17,7 +17,7 @@ unsigned LTF_IsUnitReadyToMove(const struct Unit* unit) {
 	if (unit->state & sDisabledOrMovedUnitStateMask)
 		return FALSE;
 
-	if (unit->statusIndex == STATUS_SLEEP)
+	if (unit->statusIndex == UNIT_STATUS_SLEEP)
 		return FALSE;
 
 	return TRUE;
@@ -30,7 +30,7 @@ unsigned LTF_IsUnitAbleToMove(const struct Unit* unit) {
 	if (unit->state & sDisabledUnitStateMask)
 		return FALSE;
 
-	if (unit->statusIndex == STATUS_SLEEP)
+	if (unit->statusIndex == UNIT_STATUS_SLEEP)
 		return FALSE;
 
 	return TRUE;
@@ -43,7 +43,7 @@ unsigned LTF_GetPhaseEffectiveUnitCount(unsigned phase) {
 		const Unit* unit = GetUnit(index);
 
 		if (unit && unit->pCharacterData)
-			if (unit->statusIndex != STATUS_BERSERK)
+			if (unit->statusIndex != UNIT_STATUS_BERSERK)
 				if (LTF_IsUnitAbleToMove(unit))
 					result++;
 	}
@@ -62,7 +62,7 @@ unsigned LTF_GetBerserkEffectiveUnitCount(void) {
 		const Unit* unit = GetUnit(index);
 
 		if (unit && unit->pCharacterData)
-			if (unit->statusIndex == STATUS_BERSERK)
+			if (unit->statusIndex == UNIT_STATUS_BERSERK)
 				if (LTF_IsUnitAbleToMove(unit))
 					result++;
 	}
@@ -77,7 +77,7 @@ unsigned LTF_GetBerserkAbleUnitCount(void) {
 		const Unit* unit = GetUnit(index);
 
 		if (unit && unit->pCharacterData)
-			if (unit->statusIndex == STATUS_BERSERK)
+			if (unit->statusIndex == UNIT_STATUS_BERSERK)
 				if (LTF_IsUnitReadyToMove(unit))
 					result++;
 	}

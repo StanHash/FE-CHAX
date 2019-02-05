@@ -242,7 +242,7 @@ void SetupDebugUnitEditorPage1(UnitEditorProc *proc) {
 	proc->StatsPage1[9]  = proc->pUnit->movBonus;
 	proc->StatsPage1[10] = proc->pUnit->statusIndex;
 	proc->StatsPage1[11] = proc->pUnit->statusDuration;
-	proc->StatsPage1[12] = proc->pUnit->pClassData->number;
+	// TODO: proc->StatsPage1[12] = proc->pUnit->pClassData->number;
 }
 
 void UpdateDebugUnitEditorPage1(UnitEditorProc* proc) {
@@ -300,7 +300,7 @@ void UpdateDebugUnitEditorPage1(UnitEditorProc* proc) {
 		proc->pUnit->movBonus = proc->StatsPage1[9];
 		proc->pUnit->statusIndex = proc->StatsPage1[10];
 		proc->pUnit->statusDuration = proc->StatsPage1[11];
-		proc->pUnit->pClassData = GetClassData(proc->StatsPage1[12]);
+		// TODO: proc->pUnit->pClassData = GetClassData(proc->StatsPage1[12]);
 	}
 
 	//Get the unit index/name and print it
@@ -329,7 +329,7 @@ void UpdateDebugUnitEditorPage1(UnitEditorProc* proc) {
 	PrintDebugNumberDec(10, 112, proc->StatsPage1[9], 3);
 	PrintDebugNumberDec(10, 120, proc->StatsPage1[10], 3);
 	PrintDebugNumberDec(112, 120, proc->StatsPage1[11], 2);
-	PrintDebugNumberHex(10, 128, proc->StatsPage1[12], 3);
+	// TODO: PrintDebugNumberHex(10, 128, proc->StatsPage1[12], 3);
 
 	DisplayHandCursor(
 		CursorLocationTable[proc->CursorIndex].x,
