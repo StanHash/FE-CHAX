@@ -1,6 +1,8 @@
 #include "CSS.h"
 
-enum StatTextPaletteIndices {
+enum {
+	// Color indices within the Stat Text/Bar palette
+
 	STPAL_NONE = 0, // transparent
 
 	STPAL_STATTEXT1 = 1,
@@ -15,33 +17,37 @@ enum StatTextPaletteIndices {
 	STPAL_BARVALUE2 = 8,
 
 	STPAL_BARBACKG1 = 9,
-	STPAL_BARBACKG2 = 10
+	STPAL_BARBACKG2 = 10,
 };
 
-enum StatTextDrawFlags {
+enum {
+	// Attributes for stat text label entries
+
 	STDRAW_HIDDEN = (1 << 0),
-	STDRAW_ALTBUF = (1 << 1)
+	STDRAW_ALTBUF = (1 << 1), // unused as of now
 };
 
 static void css_stattext_on_update(struct CSSStatTextProc*);
 
 static const ProcCode css_stattext_proc[] = {
 	PROC_SET_NAME(CSS_PREFIX":StatText"),
+
 	PROC_LOOP_ROUTINE(css_stattext_on_update),
+
 	PROC_END
 };
 
 static const unsigned sStatTextTileWidth = 6; // 48 pixels
 
-static const uint16_t sStatTextObjTileLookup[] = {
-	0x180, 0x1C0,
-	0x186, 0x1C6,
-	0x18C, 0x1CC,
-	0x192, 0x1D2,
-	0x198, 0x1D8
+static const u16 sStatTextObjTileLookup[] = {
+	CSS_TILE_OBJ_STATTEXT + 0x00, CSS_TILE_OBJ_STATTEXT + 0x40 + 0x00,
+	CSS_TILE_OBJ_STATTEXT + 0x06, CSS_TILE_OBJ_STATTEXT + 0x40 + 0x06,
+	CSS_TILE_OBJ_STATTEXT + 0x0C, CSS_TILE_OBJ_STATTEXT + 0x40 + 0x0C,
+	CSS_TILE_OBJ_STATTEXT + 0x12, CSS_TILE_OBJ_STATTEXT + 0x40 + 0x12,
+	CSS_TILE_OBJ_STATTEXT + 0x18, CSS_TILE_OBJ_STATTEXT + 0x40 + 0x18,
 };
 
-static const Vector2 sStatTextPositionLookup[] = {
+static const struct Vector2 sStatTextPositionLookup[] = {
 	{ 0,  0  },
 	{ 56, 0  },
 	{ 0,  12 },
@@ -54,9 +60,15 @@ static const Vector2 sStatTextPositionLookup[] = {
 
 // TODO: move the obj font stuff elsewhere
 
-#define THM_LLSL ((uint64_t(*)(uint64_t, unsigned))(0x80D188D))
+static void css_stats_draw_glyph(struct TextHandle* text, const struct FontGlyphData* glyph) {
+	/*
+	 * This is a custom text glyph drawing function
+	 * It draws a glyph assuming 2D (default obj) tile mapping
+	 * It also properly accounts for any graphics already there
+	 * Both of those functionnalities exist within vanilla glyph drawers
+	 * But not simultaneously, so I needed to write a new one here.
+	 */
 
-static void css_stats_draw_glyph(TextHandle* text, const FontGlyphData* glyph) {
 	uint32_t* const target = gpCurrentFont->getDrawTarget(text);
 
 	const uint16_t* const colorLookup = Get2bppTo4bppLookup(text->colotId);
@@ -64,19 +76,23 @@ static void css_stats_draw_glyph(TextHandle* text, const FontGlyphData* glyph) {
 
 	const unsigned x2bppOffset = (text->xCursor % 8) * 2;
 
-	#define MASK32(aLine) (maskLookup[(aLine) & 0xFF] | (maskLookup[((aLine)>>8) & 0xFF]<<16))
+	#define MASK32(aLine)  (maskLookup[(aLine)  & 0xFF] | (maskLookup[((aLine)>>8)  & 0xFF]<<16))
 	#define COLOR32(aLine) (colorLookup[(aLine) & 0xFF] | (colorLookup[((aLine)>>8) & 0xFF]<<16))
 
+	// Draw first tile line
+
 	for (unsigned i = 0; i < 8; ++i) {
-		uint64_t line = THM_LLSL(glyph->lines2bpp[i], x2bppOffset);
+		u64 line = (u64) glyph->lines2bpp[i] << x2bppOffset;
 
 		target[i + 0x000] = (target[i + 0x000] & MASK32(line))     | COLOR32(line);
 		target[i + 0x008] = (target[i + 0x008] & MASK32(line>>16)) | COLOR32(line>>16);
 		target[i + 0x010] = (target[i + 0x010] & MASK32(line>>32)) | COLOR32(line>>32);
 	}
 
+	// Draw second tile line
+
 	for (unsigned i = 0; i < 8; ++i) {
-		uint64_t line = THM_LLSL(glyph->lines2bpp[i+8], x2bppOffset);
+		u64 line = (u64) glyph->lines2bpp[i+8] << x2bppOffset;
 
 		target[i + 0x100] = (target[i + 0x100] & MASK32(line))     | COLOR32(line);
 		target[i + 0x108] = (target[i + 0x108] & MASK32(line>>16)) | COLOR32(line>>16);
@@ -91,29 +107,21 @@ static void css_stats_draw_glyph(TextHandle* text, const FontGlyphData* glyph) {
 
 #undef THM_LLSL
 
-static void css_stats_text_init(TextHandle* text, int xCursor, int colorIndex) {
+static void css_stats_text_init(struct TextHandle* text, int xCursor, int colorIndex) {
 	text->tileIndexOffset = 0;
 	text->xCursor = xCursor;
 	text->colotId = colorIndex;
 	text->tileWidth = sStatTextTileWidth;
 	text->useDoubleBuffer = FALSE;
 	text->currentBufferId = 0;
-	text->_u07 = 0;
+	text->unk07 = 0;
 }
 
-static char* css_stats_num2str(char* out, int number) {
-	out[0] = '0' + Div(number, 10);
-	out[1] = '0' + Mod(number, 10);
-	out[2] = 0;
-
-	return (out[0] == '0') ? out+1 : out;
-}
-
-static void css_stats_draw_bar_2D(uint16_t* target, unsigned statValue, unsigned statCap) {
+static void css_stats_draw_bar_2D(u16* target, unsigned statValue, unsigned statCap) {
 	static const unsigned statMax   = 30; // Should be enough
-	static const unsigned startLine = 5;  // lines 5-6 of the tile are drawn used
+	static const unsigned startLine = 5;  // lines 5-6 of the tile are drawn to
 
-	// TODO: redo
+	// TODO: redo but better
 
 	if (statCap > statMax)
 		statCap = statMax;
@@ -126,7 +134,7 @@ static void css_stats_draw_bar_2D(uint16_t* target, unsigned statValue, unsigned
 
 	for (unsigned col = 0; col < sStatTextTileWidth*2; ++col) {
 		for (unsigned line = 0; line < 2; ++line) {
-			uint16_t gfx = 0;
+			u16 gfx = 0;
 
 			for (unsigned j = 0; j < 4; ++j) {
 				unsigned px = col*4 + j;
@@ -145,10 +153,8 @@ static void css_stats_draw_bar_2D(uint16_t* target, unsigned statValue, unsigned
 }
 
 static void css_stats_draw_text_2D(void* target, const char* statName, unsigned statValue) {
-	static const void(*Font_InitForObj)(FontData*, void*, int) = (void(*)(FontData*, void*, int))(0x800459D);
-
-	FontData   font;
-	TextHandle text;
+	struct FontData   font;
+	struct TextHandle text;
 
 	Font_InitForObj(&font, target, 0);
 
@@ -159,7 +165,7 @@ static void css_stats_draw_text_2D(void* target, const char* statName, unsigned 
 	Text_AppendString(&text, statName);
 
 	char buf[0x10];
-	char* const str = css_stats_num2str(buf, statValue);
+	char* const str = css_num2str(buf, statValue);
 
 	css_stats_text_init(&text, sStatTextTileWidth*8 - 1 - GetStringTextWidth(str), 0);
 	Text_AppendString(&text, str);
@@ -195,7 +201,7 @@ static void css_stats_display(int sourceObjTile, int xPosition, int yPosition) {
 		xPosition,
 		yPosition,
 		&obj,
-		sourceObjTile | ((CSS_PAL_OBJ_STATTEXT&0xF)<<0xC)
+		sourceObjTile | ((CSS_PAL_OBJ_STATTEXT & 0xF)<<0xC)
 	);
 }
 
@@ -212,7 +218,6 @@ void css_stattext_on_update(struct CSSStatTextProc* proc) {
 			proc->origin.y + sStatTextPositionLookup[i].y
 		);
 	}
-
 }
 
 struct CSSStatTextProc* css_stattext_start(Vector2 origin) {

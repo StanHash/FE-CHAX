@@ -34,7 +34,7 @@ void css_mugframe_small_redraw(struct CSSMugFrameSmallProc* proc) {
 	static const void(*DrawMiniMug)(int, uint16_t*, int, int, int) = (void (*)(int, uint16_t*, int, int, int))(0x08005989);
 
 	DrawMiniMug(
-		GetUnitMiniPortraitId(gActiveUnit), // TODO: gStatScreenUnit
+		GetUnitMiniPortraitId(gpStatScreenUnit), // TODO: gStatScreenUnit
 		BG_LOCATED_TILE(proc->pBgOutput, 1, 1),
 		proc->rootTileIndex,
 		CSS_PAL_BG_MUG,
@@ -44,9 +44,8 @@ void css_mugframe_small_redraw(struct CSSMugFrameSmallProc* proc) {
 	SetFont(NULL);
 
 	// TODO: draw actual information
-	DrawTextInline(NULL, BG_LOCATED_TILE(proc->pBgOutput, 6, 1), 0, 0, 0x10, String_GetFromIndex(gActiveUnit->pCharacterData->nameTextId));
-	DrawTextInline(NULL, BG_LOCATED_TILE(proc->pBgOutput, 6, 3), 0, 0, 0x10, String_GetFromIndex(gActiveUnit->pClassData->nameTextId));
+	DrawTextInline(NULL, BG_LOCATED_TILE(proc->pBgOutput, 6, 1), 0, 0, 0x10, String_GetFromIndex(gpStatScreenUnit->pCharacterData->nameTextId));
+	DrawTextInline(NULL, BG_LOCATED_TILE(proc->pBgOutput, 6, 3), 0, 0, 0x10, String_GetFromIndex(gpStatScreenUnit->pClassData->nameTextId));
 
-	DrawTextInline(NULL, BG_LOCATED_TILE(proc->pBgOutput, 1, 5), 0, 0, 6, "HP42/42");
-	DrawTextInline(NULL, BG_LOCATED_TILE(proc->pBgOutput, 7, 5), 0, 0, 6, "L01 E99");
+	css_display_hp_exp_line(BG_LOCATED_TILE(proc->pBgOutput, 1, 5));
 }

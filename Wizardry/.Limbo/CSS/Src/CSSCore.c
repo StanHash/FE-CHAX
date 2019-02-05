@@ -77,12 +77,6 @@ void css_load_gfx(struct CSSCoreProc* proc) {
 
 	proc->pLPanel = css_lpanel_start(zeroVec, (Proc*)(proc));
 
-	Decompress(css_mugframe_small_gfx, (void*)(VRAM + 0x20));
-
-	for (int ix = 0; ix < 14; ++ix)
-		for (int iy = 0; iy < 8; ++iy)
-			*BG_LOCATED_TILE(gBg1MapBuffer, ix, iy) = 14*iy + ix + 1;
-
 	// enable every layer
 	gLCDIOBuffer.dispControl.bg0_on = 1;
 	gLCDIOBuffer.dispControl.bg1_on = 1;

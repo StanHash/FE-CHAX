@@ -16,28 +16,44 @@ enum {
 	CSS_PAL_OBJ_MUG      = 0x11,
 };
 
-extern const ProcCode proc_css[];
-extern const ProcCode proc_css_lpanel[];
+enum {
+	CSS_TILE_OBJ_STATTEXT = 0x180,
+};
+
+extern const struct ProcInstruction proc_css[];
+extern const struct ProcInstruction proc_css_lpanel[];
+
+// TODO: maybe move to fe-clib?
+extern struct Unit* gpStatScreenUnit;
 
 // Resources definition
 
-extern const uint16_t css_stattext_pal[];
+extern const u16 css_stattext_pal[];
 
-extern const uint8_t  css_mugframe_small_gfx[];
-extern const uint16_t css_mugframe_small_pal[];
+extern const u8  css_lpbg_face_img[];
+extern const u16 css_lpbg_face_pal[];
+
+// CSSCommon
+
+char* css_num2str(char* out, int number);
+void css_text_append_number(struct TextHandle* text, int number);
+void css_text_append_number_2digit(struct TextHandle* text, int number);
+void css_display_hp_exp_line(u16* bgOut);
 
 // CSSObjText
 
 struct CSSStatTextProc {
 	PROC_HEADER;
 
-	uint8_t statDrawFlags[8];
-	Vector2 origin;
+	/* 29 */ u8 statDrawFlags[8];
+	/* 31 */ /* pad */
+	/* 34 */ struct Vector2 origin;
+	/* 38 */ /* end */
 
-//	uint8_t statValues[0x10];
+	// u8 statValues[0x10];
 
-//	uint8_t paletteIndex;
-//	const uint16_t* pObjTileLookup;
+	// u8 paletteIndex;
+	// const u8* pObjTileLookup;
 };
 
 struct CSSStatTextProc* css_stattext_start(Vector2 origin);

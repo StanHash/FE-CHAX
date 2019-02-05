@@ -29,11 +29,21 @@ css_stattext_pal:
 	// #incbin "Res/DebugPal.dmp"
 
 ALIGN 4
+css_lpbg_face_img:
+	#incbin "Res/LeftPanelBgFace.4bpp.lz"
+
+ALIGN 4
+css_lpbg_face_pal:
+	#incbin "Res/LeftPanelBgFace.gbapal"
+
+/*
+ALIGN 4
 css_mugframe_small_gfx:
 	#incbin "Res/MugFrameSmall.4bpp.lz"
 
 ALIGN 4
 css_mugframe_small_pal:
 	#incbin "Res/MugFrameSmall.gbapal"
+*/
 
 #endif // HAX_CSS
