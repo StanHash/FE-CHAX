@@ -39,8 +39,7 @@ static int BattleQuoteCheck(const struct BattleQuoteEntry* entry, u16 chrA, u16 
 	if (entry->chapterId != 0xFF) {
 		if ((entry->chapterId == 0xFE) && !IsCurrentBattleTriangleAttack())
 			return FALSE;
-
-		if (entry->chapterId != gChapterData.chapterIndex)
+		else if (entry->chapterId != gChapterData.chapterIndex)
 			return FALSE;
 	}
 
