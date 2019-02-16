@@ -1,0 +1,49 @@
+#ifndef HAX_COUNTER_LOAD_FIX
+#define HAX_COUNTER_LOAD_FIX
+
+// Fix COUNTER_SET to be able to load value from S2
+// Allows for example SVAL s2 10; COUNTER_SET 2 (-1)
+
+// hack by StanH_
+
+#include "Extensions/Hack Installation.txt"
+
+{
+
+PUSH; ORG $00DC38
+	jumpToHack(CounterLoadFromS2)
+POP
+
+ALIGN 4
+CounterLoadFromS2:
+	WORD $16030428 $4B02D501 $4C02689B $47104A02 $30004B8 $3000568 $800DC79
+
+/* SOURCE:
+
+.thumb
+
+return_location = 0x0800DC78+1
+
+	@ Replaced stuff
+	lsl r0, r5, #0x10
+	asr r3, r0, #0x18
+
+	@ branch if N flag not set (non negative)
+	bpl end
+
+	ldr r3, =gEventSlot
+	ldr r3, [r3, #8]
+
+	@ EPILOGUE
+
+end:
+	ldr r4, =gEventCounter
+
+	ldr r2, =return_location
+	bx  r2
+
+*/
+
+}
+
+#endif // HAX_COUNTER_LOAD_FIX
