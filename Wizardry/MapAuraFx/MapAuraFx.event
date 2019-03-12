@@ -1,0 +1,6 @@
+#ifndef HAX_MAP_AURA_FX
+#define HAX_MAP_AURA_FX
+
+#include "Src/MapAuraFx.lyn.event"
+
+#endif // HAX_MAP_AURA_FX
