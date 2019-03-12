@@ -91,15 +91,17 @@ static void InitSpecialEffects(void)
 	gLCDIOBuffer.winControl.wout_obj_on = TRUE;
 	gLCDIOBuffer.winControl.wout_blend_on = FALSE;
 
-	gLCDIOBuffer.winControl.objw_bg0_on = FALSE;
-	gLCDIOBuffer.winControl.objw_bg1_on = FALSE;
+	gLCDIOBuffer.winControl.objw_bg0_on = TRUE;
+	gLCDIOBuffer.winControl.objw_bg1_on = TRUE;
 	gLCDIOBuffer.winControl.objw_bg2_on = TRUE;
-	gLCDIOBuffer.winControl.objw_bg3_on = FALSE;
+	gLCDIOBuffer.winControl.objw_bg3_on = TRUE;
 	gLCDIOBuffer.winControl.objw_obj_on = TRUE;
 	gLCDIOBuffer.winControl.objw_blend_on = TRUE;
 
-	SetColorEffectsFirstTarget (FALSE, FALSE, FALSE, FALSE, FALSE);
-	SetColorEffectsSecondTarget(FALSE, FALSE, TRUE,  FALSE, FALSE);
+	gLCDIOBuffer.bgControl[2].priority = 1;
+
+	SetColorEffectsFirstTarget (FALSE, FALSE, TRUE,  FALSE, FALSE);
+	SetColorEffectsSecondTarget(FALSE, FALSE, FALSE, FALSE, TRUE);
 }
 
 static void MapAuraFx_OnInit(struct MapAuraFxProc* proc)
@@ -118,7 +120,7 @@ static void MapAuraFx_OnInit(struct MapAuraFxProc* proc)
 static void MapAuraFx_OnLoop(struct MapAuraFxProc* proc)
 {
 	SetBgPosition(2, 0, (proc->vSpeed * GetGameClock() / 32) % 32);
-	SetColorEffectsParameters(1, 16, proc->blend, 0);
+	SetColorEffectsParameters(1, proc->blend, 16, 0);
 }
 
 static void MapAuraFx_OnEnd(struct MapAuraFxProc* proc)
@@ -149,10 +151,10 @@ static void MapAuraFx_Unit_OnLoop(struct MapAuraFxUnitProc* proc)
 	// Display semi-transparent map sprite + obj window map sprite
 
 	SMS_DisplayWindowBlended(
-		4,
+		11,
 		proc->pUnit->xPos * 16 - gGameState.cameraRealPos.x,
 		proc->pUnit->yPos * 16 - gGameState.cameraRealPos.y,
-		(proc->pUnit->pMapSpriteHandle->oam2Base &~ 0x3FF) | (1 << 10), // priority 1
+		(proc->pUnit->pMapSpriteHandle->oam2Base &~ 0x3FF) | (2 << 10), // priority 2
 		proc->pUnit
 	);
 }
