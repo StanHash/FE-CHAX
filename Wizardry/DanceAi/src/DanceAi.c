@@ -16,8 +16,8 @@ void DanceAiTryDecide(int(*isUnitEnemy)(struct Unit*)) {
 	int xMovement   = -1;
 	int yMovement   = -1;
 
-	for (int iy = 0; iy < gMapSize.height; ++iy) {
-		for (int ix = 0; ix < gMapSize.width; ++ix) {
+	for (int iy = 0; iy < gMapSize.y; ++iy) {
+		for (int ix = 0; ix < gMapSize.x; ++ix) {
 			if (gMapMovement[iy][ix] > 120)
 				continue; // Can't move there
 
@@ -45,7 +45,7 @@ void DanceAiTryDecide(int(*isUnitEnemy)(struct Unit*)) {
 			if (weight < currentTargetWieght)
 				continue; // This unit is less interesting to dance for than the previous one
 
-			struct Vector2 position;
+			struct Vec2 position;
 
 			if (!GetAiSafestAccessibleAdjacentPosition(ix, iy, &position))
 				continue; // Can't move close enough!!

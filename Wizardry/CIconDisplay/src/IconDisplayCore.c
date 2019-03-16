@@ -30,7 +30,7 @@ u16 GetIconTileIndex(int icon) {
 }
 
 void LoadIconObjectGraphics(int icon, int tile) {
-	void* target = OBJ_VRAM0 + (tile * 0x20);
+	void* target = VRAM_OBJ + (tile * 0x20);
 
 	if (icon >= 0) {
 		const void* source = GetIconGfx(icon);

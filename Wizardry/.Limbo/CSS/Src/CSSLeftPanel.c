@@ -89,19 +89,19 @@ static void css_lpanel_init(struct CSSLeftPanelProc* proc) {
 	{
 		// Drawing the character name text
 
-		const char* const nameString = String_GetFromIndex(gpStatScreenUnit->pCharacterData->nameTextId);
+		const char* const nameString = GetStringFromIndex(gpStatScreenUnit->pCharacterData->nameTextId);
 
 		struct TextHandle text;
 		Text_InitClear(&text, 9);
 
-		Text_SetXCursor(&text, GetStringTextCenteredPos(72, nameString));
-		Text_AppendString(&text, nameString);
+		Text_SetXCursor(&text, Text_GetStringTextCenteredPos(72, nameString));
+		Text_DrawString(&text, nameString);
 
-		Text_Draw(&text, BG_LOCATED_TILE(bgOut, 3, 1));
+		Text_Display(&text, BG_LOCATED_TILE(bgOut, 3, 1));
 	}
 
 	// drawing the class name text
-	DrawTextInline(NULL, BG_LOCATED_TILE(bgOut, 4, 12), 0, 0, 7, String_GetFromIndex(gpStatScreenUnit->pClassData->nameTextId));
+	DrawTextInline(NULL, BG_LOCATED_TILE(bgOut, 4, 12), 0, 0, 7, GetStringFromIndex(gpStatScreenUnit->pClassData->nameTextId));
 
 	struct MUProc* mu = MU_CreateForUI(gpStatScreenUnit);
 	MU_SetDisplayPosition(mu, 16, 108);
@@ -112,7 +112,7 @@ static void css_lpanel_init(struct CSSLeftPanelProc* proc) {
 
 	/*
 
-	struct Vector2 stOrigin = {
+	struct Vec2 stOrigin = {
 		proc->origin.x + 4,
 		proc->origin.y + 160 - 54
 	};
@@ -142,7 +142,7 @@ static void css_lpanel_init(struct CSSLeftPanelProc* proc) {
 }
 
 static void css_lpanel_idle(struct CSSLeftPanelProc* proc) {
-	if (gKeyStatus.pressedKeys & A_BUTTON)
+	if (gKeyState.pressedKeys & KEY_BUTTON_A)
 		css_lpanel_set_face_displayed(proc, !css_lpanel_is_face_displayed(proc));
 
 	/*
@@ -179,10 +179,10 @@ static void css_lpanel_hide_face(struct CSSLeftPanelProc* proc) {
 	proc->faceDisplayed = 0;
 }
 
-struct CSSLeftPanelProc* css_lpanel_start(Vector2 origin, Proc* parent) {
+struct CSSLeftPanelProc* css_lpanel_start(struct Vec2 origin, Proc* parent) {
 	struct CSSLeftPanelProc* result;
 
-	result = (struct CSSLeftPanelProc*) StartProc(proc_css_lpanel, parent);
+	result = (struct CSSLeftPanelProc*) ProcStart(proc_css_lpanel, parent);
 
 	result->origin = origin;
 

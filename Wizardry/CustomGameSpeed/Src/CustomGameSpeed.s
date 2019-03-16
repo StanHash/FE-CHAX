@@ -6,7 +6,7 @@
 GetClassData = (0x08019444+1)
 
 gChapterData = 0x0202BCF0
-gKeyStatus   = 0x02024CC0
+gKeyState   = 0x02024CC0
 
 @ Config struct definitions
 Config.value       = 0
@@ -50,7 +50,7 @@ CustomGameSpeedHook:
 	cmp r0, #0
 	beq CGS.skipCheckAPress
 
-	ldr  r0, =gKeyStatus
+	ldr  r0, =gKeyState
 	ldrh r0, [r0, #4] @ Pressed Keys
 
 	mov r1, #1 @ A Button

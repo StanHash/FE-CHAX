@@ -47,7 +47,7 @@ static const u16 sStatTextObjTileLookup[] = {
 	CSS_TILE_OBJ_STATTEXT + 0x18, CSS_TILE_OBJ_STATTEXT + 0x40 + 0x18,
 };
 
-static const struct Vector2 sStatTextPositionLookup[] = {
+static const struct Vec2 sStatTextPositionLookup[] = {
 	{ 0,  0  },
 	{ 56, 0  },
 	{ 0,  12 },
@@ -158,19 +158,19 @@ static void css_stats_draw_text_2D(void* target, const char* statName, unsigned 
 
 	Font_InitForObj(&font, target, 0);
 
-	Font_SetGlyphSet(0);
+	Text_SetFontStandardGlyphSet(0);
 	font.drawGlyph = css_stats_draw_glyph;
 
 	css_stats_text_init(&text, 0, 1);
-	Text_AppendString(&text, statName);
+	Text_DrawString(&text, statName);
 
 	char buf[0x10];
 	char* const str = css_num2str(buf, statValue);
 
-	css_stats_text_init(&text, sStatTextTileWidth*8 - 1 - GetStringTextWidth(str), 0);
-	Text_AppendString(&text, str);
+	css_stats_text_init(&text, sStatTextTileWidth*8 - 1 - Text_GetStringTextWidth(str), 0);
+	Text_DrawString(&text, str);
 
-	SetFont(NULL);
+	Text_SetFont(NULL);
 }
 
 static void css_stats_draw(int targetObjTile, const char* statName, int statValue, int statMax) {
@@ -197,7 +197,7 @@ static void css_stats_display(int sourceObjTile, int xPosition, int yPosition) {
 		}
 	};
 
-	HiObjInsert(0,
+	ObjInsert(0,
 		xPosition,
 		yPosition,
 		&obj,
@@ -220,7 +220,7 @@ void css_stattext_on_update(struct CSSStatTextProc* proc) {
 	}
 }
 
-struct CSSStatTextProc* css_stattext_start(Vector2 origin) {
+struct CSSStatTextProc* css_stattext_start(struct Vec2 origin) {
 	struct CSSStatTextProc* result;
 
 	result = (struct CSSStatTextProc*) Proc_Create(css_stattext_proc, ROOT_PROC_3);

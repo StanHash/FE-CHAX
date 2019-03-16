@@ -22,7 +22,7 @@ struct DeathQuoteEntry {
 	/* +08 */ const u16* pScene;
 };
 
-int IsCurrentBattleTriangleAttack(void) __attribute__((long_call)); //! FE8U = 0x802CE89
+int BattleIsTriangleAttack(void) __attribute__((long_call)); //! FE8U = 0x802CE89
 int CheckEventId(u16 id) __attribute__((long_call));
 
 // }
@@ -37,7 +37,7 @@ static int BattleQuoteCheck(const struct BattleQuoteEntry* entry, u16 chrA, u16 
 	// Check chapter id
 
 	if (entry->chapterId != 0xFF) {
-		if ((entry->chapterId == 0xFE) && !IsCurrentBattleTriangleAttack())
+		if ((entry->chapterId == 0xFE) && !BattleIsTriangleAttack())
 			return FALSE;
 		else if (entry->chapterId != gChapterData.chapterIndex)
 			return FALSE;

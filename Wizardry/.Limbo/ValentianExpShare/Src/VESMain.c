@@ -50,24 +50,25 @@ static const ProcCode gVESProcScr[] = {
 };
 
 static void VESOnHBlank(void) {
-	if (!(REG_VCOUNT % 16))
+	if (!(VCOUNT % 16))
 		return;
 
 	unsigned win0h = gLCDIOBuffer.win0h;
 
 	win0h = (win0h &~ 0xFF) | (0 & 0xFF);
 
-	REG_WIN0H = win0h;
+	// TODO: fix
+	// REG_WIN0H = win0h;
 }
 
 void VESSetupHBlank(struct VESProc* proc) {
 	gLCDIOBuffer.win0h = 0xFF00;
 	gLCDIOBuffer.win0v = 0xFF20;
 
-	gLCDIOBuffer.winControl.wout_bg0_on = FALSE;
-	gLCDIOBuffer.winControl.wout_obj_on = FALSE;
+	gLCDIOBuffer.winControl.wout_enableBg0 = FALSE;
+	gLCDIOBuffer.winControl.wout_enableObj = FALSE;
 
-	gLCDIOBuffer.dispControl.win0_on = TRUE;
+	gLCDIOBuffer.dispControl.enableWin0 = TRUE;
 
 	SetPrimaryHBlankCallback(VESOnHBlank);
 }
@@ -89,5 +90,5 @@ void VESCleanup(struct VESProc* proc) {
 }
 
 void VESCallFromEvents(Proc* evProc) {
-	StartBlockingProc(gVESProcScr, evProc);
+	ProcStartBlocking(gVESProcScr, evProc);
 }

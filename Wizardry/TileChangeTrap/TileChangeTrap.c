@@ -63,14 +63,14 @@ void ChangeSingleTileExt(int x, int y, int tileID, int display, Proc* parent) {
 	
 	if (tileID != oldTile) {
 		if (display)
-			InitMapChangeGraphics();
+			RenderBmMapOnBg2();
 		
 		SET_TRAP_CHANGE_TILE(trap, tileID);
 		ApplySingleTileChange(TRAP_CHANGE_X(trap), TRAP_CHANGE_Y(trap), GET_TRAP_CHANGE_TILE(trap));
 		
-		RefreshTerrainMap();
+		RefreshTerrainBmMap();
 		UpdateUnitsUnderRoof();
-		DrawTileGraphics();
+		RenderBmMap();
 		
 		if (display) {
 			if (parent)

@@ -9,15 +9,15 @@ const ProcInstruction ProcCode_UnitMoveAnim[] = {
 	PROC_END                                      // End
 };
 
-UnitMoveAnimProc* NewUnitMoveAnim(MoveUnitState* moveunit, Vector2 from, Vector2 to, Proc* parent) {
+UnitMoveAnimProc* NewUnitMoveAnim(MoveUnitState* moveunit, struct Vec2 from, struct Vec2 to, Proc* parent) {
 	UnitMoveAnimProc* moveAnimProc = 0;
 
 	// making 6C
 	if (parent) {
-		moveAnimProc = (UnitMoveAnimProc*) StartBlockingProc(ProcCode_UnitMoveAnim, parent);
+		moveAnimProc = (UnitMoveAnimProc*) ProcStartBlocking(ProcCode_UnitMoveAnim, parent);
 		moveAnimProc->locks = 0;
 	} else {
-		moveAnimProc = (UnitMoveAnimProc*) StartProc(ProcCode_UnitMoveAnim, ROOT_PROC_3);
+		moveAnimProc = (UnitMoveAnimProc*) ProcStart(ProcCode_UnitMoveAnim, ROOT_PROC_3);
 		
 		moveAnimProc->locks = 1;
 		LockGameLogic();

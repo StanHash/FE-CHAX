@@ -25,7 +25,7 @@ LTFHook_InDisableBattleMapGfx:
 
 	mov r0, #1 @ arg r0 = Mark
 
-	ldr r3, =HaltEachProcMarked
+	ldr r3, =ProcHaltEachMarked
 	bl  BXR3
 
 	ldr r3, =LTF_DisablePredictionDisplay
@@ -42,12 +42,12 @@ LTFHook_InRestoreBattleMapGfx:
 
 	mov r0, #1
 
-	ldr r3, =ResumeEachProcMarked
+	ldr r3, =ProcResumeEachMarked
 	bl  BXR3
 
 	ldr r0, =gProc_VBlankHandler
 
-	ldr r3, =FindProc
+	ldr r3, =ProcFind
 	bl  BXR3
 
 	cmp r0, #0

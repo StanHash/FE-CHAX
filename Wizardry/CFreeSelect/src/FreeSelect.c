@@ -25,7 +25,7 @@ const ProcCode gProc_FreeSelect[] = {
 };
 
 struct FSProc* StartFreeSelection(const struct FSDefinition* pDefinition) {
-	struct FSProc* result = (struct FSProc*)(StartProc(gProc_FreeSelect, ROOT_PROC_3));
+	struct FSProc* result = (struct FSProc*)(ProcStart(gProc_FreeSelect, ROOT_PROC_3));
 
 	result->pDefinition = pDefinition;
 	result->pCursorAp   = NULL;
@@ -40,7 +40,7 @@ void FSOnInit(struct FSProc* proc) {
 
 	proc->pCursorAp->tileBase = 0;
 
-	AP_SwitchAnimation(proc->pCursorAp, 0);
+	AP_SetAnimation(proc->pCursorAp, 0);
 
 	if (proc->pDefinition->onInit)
 		proc->pDefinition->onInit(proc, 0, 0);
@@ -55,11 +55,11 @@ void FSOnEnd(struct FSProc* proc) {
 
 void FSOnLoop(struct FSProc* proc) {
 	// FIXME and do gBMState
-	static const Vector2* const pCursorMapPosition     = (const Vector2*) (0x0202BCB0 + 0x14);
-	static const Vector2* const pCameraDisplayPosition = (const Vector2*) (0x0202BCB0 + 0x0C);
-	static const Vector2* const pCursorDisplayPosition = (const Vector2*) (0x0202BCB0 + 0x20);
+	static const struct Vec2* const pCursorMapPosition     = (const struct Vec2*) (0x0202BCB0 + 0x14);
+	static const struct Vec2* const pCameraDisplayPosition = (const struct Vec2*) (0x0202BCB0 + 0x0C);
+	static const struct Vec2* const pCursorDisplayPosition = (const struct Vec2*) (0x0202BCB0 + 0x20);
 
-	Vector2U prevPosition, currentPosition;
+	struct Vec2u prevPosition, currentPosition;
 
 	prevPosition.x = pCursorMapPosition->x;
 	prevPosition.y = pCursorMapPosition->y;
@@ -69,15 +69,15 @@ void FSOnLoop(struct FSProc* proc) {
 	currentPosition.x = pCursorMapPosition->x;
 	currentPosition.y = pCursorMapPosition->y;
 
-	if (gKeyStatus.pressedKeys & A_BUTTON) {
+	if (gKeyState.pressedKeys & KEY_BUTTON_A) {
 		if (proc->pDefinition->onAPress)
 			if (FSHandleResult(proc, proc->pDefinition->onAPress(proc, currentPosition.x, currentPosition.y)))
 				return;
-	} else if (gKeyStatus.pressedKeys & B_BUTTON) {
+	} else if (gKeyState.pressedKeys & KEY_BUTTON_B) {
 		if (proc->pDefinition->onBPress)
 			if (FSHandleResult(proc, proc->pDefinition->onBPress(proc, currentPosition.x, currentPosition.y)))
 				return;
-	} else if (gKeyStatus.pressedKeys & R_BUTTON) {
+	} else if (gKeyState.pressedKeys & KEY_BUTTON_R) {
 		if (proc->pDefinition->onRPress)
 			if (FSHandleResult(proc, proc->pDefinition->onRPress(proc, currentPosition.x, currentPosition.y)))
 				return;
@@ -106,10 +106,10 @@ int FSHandleResult(struct FSProc* proc, int result) {
 		PlaySfx(0x6C);
 
 	if (result & FS_GFX_VALID)
-		AP_SwitchAnimation(proc->pCursorAp, 0);
+		AP_SetAnimation(proc->pCursorAp, 0);
 
 	if (result & FS_GFX_INVALID)
-		AP_SwitchAnimation(proc->pCursorAp, 1);
+		AP_SetAnimation(proc->pCursorAp, 1);
 
 	if (result & FS_END) {
 		BreakProcLoop((Proc*)(proc));

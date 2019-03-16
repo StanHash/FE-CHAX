@@ -71,9 +71,9 @@ void css_disable_game_gfx(struct CSSCoreProc* proc) {
 void css_load_gfx(struct CSSCoreProc* proc) {
 	LoadBgConfig(css_bg_config);
 
-	Font_InitDefault();
+	Text_InitFont();
 
-	const Vector2 zeroVec = { 0, 0 };
+	const struct Vec2 zeroVec = { 0, 0 };
 
 	proc->pLPanel = css_lpanel_start(zeroVec, (Proc*)(proc));
 

@@ -47,7 +47,7 @@ struct CSSStatTextProc {
 
 	/* 29 */ u8 statDrawFlags[8];
 	/* 31 */ /* pad */
-	/* 34 */ struct Vector2 origin;
+	/* 34 */ struct Vec2 origin;
 	/* 38 */ /* end */
 
 	// u8 statValues[0x10];
@@ -56,7 +56,7 @@ struct CSSStatTextProc {
 	// const u8* pObjTileLookup;
 };
 
-struct CSSStatTextProc* css_stattext_start(Vector2 origin);
+struct CSSStatTextProc* css_stattext_start(struct Vec2 origin);
 void                    css_stattext_end(struct CSSStatTextProc*);
 
 void css_stattext_show(struct CSSStatTextProc*, int id, const char* name, int value, int maxValue);
@@ -83,10 +83,10 @@ struct CSSLeftPanelProc {
 
 	struct CSSStatTextProc* pStatText;
 
-	Vector2 origin;
+	struct Vec2 origin;
 };
 
-struct CSSLeftPanelProc* css_lpanel_start(Vector2 origin, Proc*);
+struct CSSLeftPanelProc* css_lpanel_start(struct Vec2 origin, Proc*);
 void                     css_lpanel_end(struct CSSLeftPanelProc*);
 
 int  css_lpanel_is_face_displayed(struct CSSLeftPanelProc*);

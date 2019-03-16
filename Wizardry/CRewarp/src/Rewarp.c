@@ -35,7 +35,7 @@ int RCAction(Proc* proc) {
 }
 
 int RCOnSelect(struct FSProc* proc, int x, int y) {
-	Font_ResetAllocation();
+	Text_ResetTileAllocation();
 	HideMoveRangeGraphics();
 	EndBottomHelpText();
 
@@ -55,7 +55,7 @@ int RCOnSelect(struct FSProc* proc, int x, int y) {
 }
 
 int RCOnCancel(struct FSProc* proc, int x, int y) {
-	Font_ResetAllocation();
+	Text_ResetTileAllocation();
 	HideMoveRangeGraphics();
 	EndBottomHelpText();
 
@@ -64,7 +64,7 @@ int RCOnCancel(struct FSProc* proc, int x, int y) {
 		gActiveUnit->yPos
 	);
 
-	StartProc(gProc_GoBackToUnitMenu, ROOT_PROC_3);
+	ProcStart(gProc_GoBackToUnitMenu, ROOT_PROC_3);
 
 	return FS_END | FS_SND_BOOP;
 }

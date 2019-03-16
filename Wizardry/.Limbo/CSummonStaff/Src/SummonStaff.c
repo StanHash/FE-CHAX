@@ -13,14 +13,14 @@ void SumStartPosSelection(void) {
 }
 
 static int SumOnSelect(struct FSProc* proc, int x, int y) {
-	Font_ResetAllocation();
+	Text_ResetTileAllocation();
 	HideMoveRangeGraphics();
 	EndBottomHelpText();
 
 	gActionData.xOther = x;
 	gActionData.yOther = y;
 
-	gActionData.actionIndex = UNIT_ACTION_SUMMON;
+	gActionData.unitActionType = UNIT_ACTION_SUMMON;
 
 	EnsureCameraOntoPosition(
 		(Proc*)(proc),
@@ -33,7 +33,7 @@ static int SumOnSelect(struct FSProc* proc, int x, int y) {
 }
 
 static int SumOnCancel(struct FSProc* proc, int x, int y) {
-	Font_ResetAllocation();
+	Text_ResetTileAllocation();
 	HideMoveRangeGraphics();
 	EndBottomHelpText();
 
@@ -42,7 +42,7 @@ static int SumOnCancel(struct FSProc* proc, int x, int y) {
 		gActiveUnit->yPos
 	);
 
-	StartProc(gProc_GoBackToUnitMenu, ROOT_PROC_3);
+	ProcStart(gProc_GoBackToUnitMenu, ROOT_PROC_3);
 
 	return FS_END | FS_SND_BOOP;
 }

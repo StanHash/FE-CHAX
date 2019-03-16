@@ -51,7 +51,7 @@ static const struct ProcInstruction sProc_IncorrectBlitzInputMessage[] = {
 };
 
 static void IBIHBlankPalEffect(void) {
-	unsigned line = REG_VCOUNT;
+	unsigned line = VCOUNT;
 
 	if (line < 4 || line > (4 + 32))
 		return;
@@ -107,10 +107,10 @@ static void IBIDrawBox(struct Proc* proc) {
 
 	// Init font
 	struct FontData font; {
-		Font_InitForUI(&font, (void*)(VRAM + 0x20 * (boxGfxTileBase + 9)), (boxGfxTileBase + 9), boxGfxPalId);
-		SetFont(&font);
+		Text_InitFontExt(&font, (void*)(VRAM + 0x20 * (boxGfxTileBase + 9)), (boxGfxTileBase + 9), boxGfxPalId);
+		Text_SetFont(&font);
 
-		Font_SetGlyphSet(FONT_GLYPH_DIALOGUE);
+		Text_SetFontStandardGlyphSet(FONT_GLYPH_DIALOGUE);
 		Font_SetDraw1DTileNoClear();
 	}
 
@@ -151,8 +151,8 @@ static void IBIDrawBox(struct Proc* proc) {
 	CpuFill16(0xFFFF, font.getDrawTarget(&text), text.tileWidth*2*0x20);
 
 	// Draw text
-	Text_AppendString(&text, "Incorrect Blitz Input!");
-	Text_Draw(&text, BG_LOCATED_TILE(gBg1MapBuffer, 1, 1));
+	Text_DrawString(&text, "Incorrect Blitz Input!");
+	Text_Display(&text, BG_LOCATED_TILE(gBg1MapBuffer, 1, 1));
 
 	// Sync bg 1
 	EnableBgSyncByMask(0b10);
@@ -166,7 +166,7 @@ static void IBIStartCountDown(struct IBIProc* proc) {
 }
 
 static void IBIWaitCountDown(struct IBIProc* proc) {
-	if (gKeyStatus.heldKeys & A_BUTTON)
+	if (gKeyState.heldKeys & KEY_BUTTON_A)
 		BreakProcLoop((Proc*)(proc));
 
 	else if ((--proc->countDown) <= 0)
@@ -205,5 +205,5 @@ void IBICheck(struct AnimationInterpreter* ais) {
 		return; // Not a Blitz man
 
 	if (IsBatteRoundTypeAMiss(GetBattleAnimRoundType((ais->nextRoundId - 1)*2 + (subject ^ 1))))
-		StartProc(sProc_IncorrectBlitzInputMessage, ROOT_PROC_3);
+		ProcStart(sProc_IncorrectBlitzInputMessage, ROOT_PROC_3);
 }

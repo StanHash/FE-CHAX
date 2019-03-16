@@ -22,7 +22,7 @@ static const struct ProcInstruction sProc_MimicEffect[] = {
 };
 
 int MimicAction(struct Proc* parent) {
-	struct MimicEffectProc* proc = (struct MimicEffectProc*) StartBlockingProc(sProc_MimicEffect, parent);
+	struct MimicEffectProc* proc = (struct MimicEffectProc*) ProcStartBlocking(sProc_MimicEffect, parent);
 
 	proc->pSummonedUnit = NULL;
 

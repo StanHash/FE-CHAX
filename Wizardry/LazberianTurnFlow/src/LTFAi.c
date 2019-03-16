@@ -123,6 +123,6 @@ static void LTFAi_CallDecide(struct Proc* cpOrderProc, AiDecitionMakerFunc decis
 	gAiData.aiUnitIt = gAiData.aiUnits;
 	gpAiDecisionMaker = decisionMaker;
 
-	StartBlockingProc(gProc_CpDecide, cpOrderProc);
+	ProcStartBlocking(gProc_CpDecide, cpOrderProc);
 }
 

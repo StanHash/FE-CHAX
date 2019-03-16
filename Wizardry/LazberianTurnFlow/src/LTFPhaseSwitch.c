@@ -39,7 +39,7 @@ int LTF_MapMainPhaseSwitch(struct Proc* mapMainProc) {
 		LTF_ResetUnitsStateForTurnSwitch();
 		SMS_UpdateFromGameData();
 
-		GotoProcLabel(mapMainProc, 9); // goto turn start
+		ProcGoto(mapMainProc, 9); // goto turn start
 
 		if (RunPhaseSwitchEvents())
 			return 0; // Events are running, proc yield
@@ -52,7 +52,7 @@ int LTF_MapMainPhaseSwitch(struct Proc* mapMainProc) {
 	unsigned nextPhase = LTF_PredictNextPhase(ableCounts, maxCounts);
 
 	if (nextPhase == 3)
-		GotoProcLabel(mapMainProc, 12); // goto berserk phase (new label! see LazberianTurnFlow.event)
+		ProcGoto(mapMainProc, 12); // goto berserk phase (new label! see LazberianTurnFlow.event)
 	else
 		gChapterData.currentPhase = nextPhase << 6;
 

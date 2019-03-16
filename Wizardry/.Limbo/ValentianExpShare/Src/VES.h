@@ -6,7 +6,7 @@
 #pragma long_calls
 
 void  MakeUIWindowTileMap_BG0BG1(int x, int y, int width, int height, int style);
-char* String_GetFromIndex(short index);
+char* GetStringFromIndex(short index);
 
 #pragma long_calls_off
 

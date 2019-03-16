@@ -41,11 +41,11 @@ void css_mugframe_small_redraw(struct CSSMugFrameSmallProc* proc) {
 		FALSE
 	);
 
-	SetFont(NULL);
+	Text_SetFont(NULL);
 
 	// TODO: draw actual information
-	DrawTextInline(NULL, BG_LOCATED_TILE(proc->pBgOutput, 6, 1), 0, 0, 0x10, String_GetFromIndex(gpStatScreenUnit->pCharacterData->nameTextId));
-	DrawTextInline(NULL, BG_LOCATED_TILE(proc->pBgOutput, 6, 3), 0, 0, 0x10, String_GetFromIndex(gpStatScreenUnit->pClassData->nameTextId));
+	DrawTextInline(NULL, BG_LOCATED_TILE(proc->pBgOutput, 6, 1), 0, 0, 0x10, GetStringFromIndex(gpStatScreenUnit->pCharacterData->nameTextId));
+	DrawTextInline(NULL, BG_LOCATED_TILE(proc->pBgOutput, 6, 3), 0, 0, 0x10, GetStringFromIndex(gpStatScreenUnit->pClassData->nameTextId));
 
 	css_display_hp_exp_line(BG_LOCATED_TILE(proc->pBgOutput, 1, 5));
 }

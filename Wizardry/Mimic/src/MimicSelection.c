@@ -44,7 +44,7 @@ static int CouldUnitBeOnPosition(const struct Unit* unit, int x, int y) {
 	if (x < 0 || y < 0)
 		return 0; // position out of bounds
 
-	if (x >= gMapSize.width || y >= gMapSize.height)
+	if (x >= gMapSize.x || y >= gMapSize.y)
 		return 0; // position out of bounds
 
 	if (gMapUnit[y][x])
@@ -61,7 +61,7 @@ void MimicSetupTargets(const struct Unit* unit) {
 
 	InitTargets(unit->xPos, unit->yPos);
 
-	ClearMapWith(gMapRange, 0);
+	BmMapFill(gMapRange, 0);
 
 	MapAddInRange(unit->xPos, unit->yPos, 5, +1);
 	gMapRange[unit->yPos][unit->xPos] = 0;
@@ -69,7 +69,7 @@ void MimicSetupTargets(const struct Unit* unit) {
 	ForEachUnitInRange(MimicTryAddToTargetList);
 }
 
-static const Vector2 sDirectionOffsetLookup[] = {
+static const struct Vec2 sDirectionOffsetLookup[] = {
 	{ -1,  0 }, // Left
 	{ +1,  0 }, // Right
 	{  0, -1 }, // Up
@@ -80,7 +80,7 @@ void MimicSetupPositionTargets(const struct Unit* unit, const struct Unit* targe
 	gUnitSubject = unit;
 
 	InitTargets(unit->xPos, unit->yPos);
-	ClearMapWith(gMapRange, 0);
+	BmMapFill(gMapRange, 0);
 
 	for (unsigned dir = 0; dir < 4; ++dir) {
 		int x = unit->xPos + sDirectionOffsetLookup[dir].x;
@@ -120,11 +120,11 @@ void MimicStartTargetSelection(void) {
 }
 
 static void MimicUSOnInit(struct TargetSelectionProc* proc) {
-	ClearMapWith(gMapMovement, -1);
+	BmMapFill(gMapMovement, -1);
 	DisplayMoveRangeGraphics(MLV_RANGE_RED);
 
 	if (MimicUnitSelectHelpTextId)
-		StartBottomHelpText((Proc*)(proc), String_GetFromIndex(MimicUnitSelectHelpTextId));
+		StartBottomHelpText((Proc*)(proc), GetStringFromIndex(MimicUnitSelectHelpTextId));
 }
 
 static int MimicUSOnSelect(struct TargetSelectionProc* proc, struct TargetEntry* entry) {
@@ -140,7 +140,7 @@ static int MimicUSOnSelect(struct TargetSelectionProc* proc, struct TargetEntry*
 
 static int MimicUSOnCancel(struct TargetSelectionProc* proc, struct TargetEntry* entry) {
 	EndTargetSelection(proc);
-	StartProc(gProc_GoBackToUnitMenu, ROOT_PROC_3);
+	ProcStart(gProc_GoBackToUnitMenu, ROOT_PROC_3);
 
 	return TSE_PLAY_BOOP | TSE_DISABLE;
 }
@@ -148,9 +148,9 @@ static int MimicUSOnCancel(struct TargetSelectionProc* proc, struct TargetEntry*
 static void MimicUSOnEnd(struct TargetSelectionProc* proc) {
 	EndBottomHelpText();
 
-	Font_ResetAllocation();
+	Text_ResetTileAllocation();
 
-	ClearMapWith(gMapRange, 0);
+	BmMapFill(gMapRange, 0);
 	HideMoveRangeGraphics();
 
 	FillBgMap(gBg2MapBuffer, 0);
@@ -160,11 +160,11 @@ static void MimicUSOnEnd(struct TargetSelectionProc* proc) {
 }
 
 static void MimicPSOnInit(struct TargetSelectionProc* proc) {
-	ClearMapWith(gMapMovement, -1);
+	BmMapFill(gMapMovement, -1);
 	DisplayMoveRangeGraphics(MLV_RANGE_GREEN);
 
 	if (MimicUnitSelectHelpTextId)
-		StartBottomHelpText((Proc*)(proc), String_GetFromIndex(MimicPositionSelectHelpTextId));
+		StartBottomHelpText((Proc*)(proc), GetStringFromIndex(MimicPositionSelectHelpTextId));
 }
 
 static int MimicPSOnSelect(struct TargetSelectionProc* proc, struct TargetEntry* entry) {
@@ -181,7 +181,7 @@ static int MimicPSOnSelect(struct TargetSelectionProc* proc, struct TargetEntry*
 static int MimicPSOnCancel(struct TargetSelectionProc* proc, struct TargetEntry* entry) {
 	EndTargetSelection(proc);
 
-	StartProc(gProc_GoBackToUnitMenu, ROOT_PROC_3);
+	ProcStart(gProc_GoBackToUnitMenu, ROOT_PROC_3);
 
 	return TSE_PLAY_BOOP | TSE_DISABLE;
 }

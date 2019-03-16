@@ -1,7 +1,7 @@
 #include "Rewarp.h"
 
 // FIXME
-static const Vector2* const pCameraDisplayPosition = (const Vector2*) (0x0202BCB0 + 0x0C);
+static const struct Vec2* const pCameraDisplayPosition = (const struct Vec2*) (0x0202BCB0 + 0x0C);
 
 void StartUnitWarpRing(Unit* unit, int x, int y) __attribute__((long_call));
 
@@ -75,7 +75,7 @@ static const ProcInstruction sProc_RewarpAnim[] = {
 };
 
 void StartRewarpEffect(Unit* unit, int xTarget, int yTarget) {
-	struct RCAProc* proc = (struct RCAProc*) StartProc(sProc_RewarpAnim, ROOT_PROC_3);
+	struct RCAProc* proc = (struct RCAProc*) ProcStart(sProc_RewarpAnim, ROOT_PROC_3);
 
 	MU_EndAll();
 	HideUnitSMS(unit);

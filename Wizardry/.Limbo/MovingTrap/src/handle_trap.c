@@ -11,7 +11,7 @@ struct _TrapHandlerProc {
 void HandleTrap(Proc* proc, Unit* unit, int idk);
 void TrapHandlerCheck(TrapHandlerProc* proc);
 
-static const Vector2 DirectionStepTable[] = {
+static const struct Vec2 DirectionStepTable[] = {
 	{ -1,  0 }, // left
 	{ +1,  0 }, // right
 	{  0, +1 }, // down
@@ -46,7 +46,7 @@ int CanUnitBeOnPosition(Unit* unit, int x, int y) {
 	if (x < 0 || y < 0)
 		return 0; // position out of bounds
 	
-	if (x >= gMapSize.width || y >= gMapSize.height)
+	if (x >= gMapSize.x || y >= gMapSize.y)
 		return 0; // position out of bounds
 	
 	if (gMapUnit[y][x])
@@ -58,13 +58,13 @@ int CanUnitBeOnPosition(Unit* unit, int x, int y) {
 	return CanUnitCrossTerrain(unit, gMapTerrain[y][x]);
 }
 
-Vector2 GetPushPosition(Unit* unit, int direction, int moveAmount) {
-	Vector2 result = {
+struct Vec2 GetPushPosition(Unit* unit, int direction, int moveAmount) {
+	struct Vec2 result = {
 		unit->xPos,
 		unit->yPos
 	};
 	
-	const Vector2 step = DirectionStepTable[direction];
+	const struct Vec2 step = DirectionStepTable[direction];
 	
 	while (CanUnitBeOnPosition(unit, (result.x + step.x), (result.y + step.y))) {
 		result.x += step.x;
@@ -81,10 +81,10 @@ Vector2 GetPushPosition(Unit* unit, int direction, int moveAmount) {
 }
 
 void HandleTrap(ProcState* proc, Unit* unit, int idk) {
-	RefreshEntityMaps();
+	RefreshEntityBmMaps();
 	MU_EndAll();
 	
-	TrapHandlerProc* newProc = (TrapHandlerProc*) StartBlockingProc(ProcCode_TrapHandler, proc);
+	TrapHandlerProc* newProc = (TrapHandlerProc*) ProcStartBlocking(ProcCode_TrapHandler, proc);
 	
 	newProc->pUnit = unit;
 	newProc->idk   = idk;
@@ -96,10 +96,10 @@ void TrapHandlerCheck(TrapHandlerProc* proc) {
 	if (trap) {
 		// NewUnitMoveAnim(proc->pUnit, OppositeDirectionTable[trap->data[0]], (Proc*) proc);
 		
-		Vector2 pos = GetPushPosition(proc->pUnit, trap->data[0], 0);
+		struct Vec2 pos = GetPushPosition(proc->pUnit, trap->data[0], 0);
 		
 		if (pos.x == proc->pUnit->xPos && pos.y == proc->pUnit->yPos) {
-			GotoProcLabel((Proc*) proc, 1);
+			ProcGoto((Proc*) proc, 1);
 		} else {
 			// FIXME: write definitions for the whole AI pre-action struct thingy
 			
@@ -110,5 +110,5 @@ void TrapHandlerCheck(TrapHandlerProc* proc) {
 			(*pAIY) = proc->pUnit->yPos = gActionData.yMove = pos.y;
 		}
 	} else
-		GotoProcLabel((Proc*) proc, 1);
+		ProcGoto((Proc*) proc, 1);
 }

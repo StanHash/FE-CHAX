@@ -7,7 +7,7 @@ unsigned GetUnitBattleMapSpritePaletteIndex(const struct Unit* unit) {
 	if (unit->state & 0x8000000)
 		return 0xB; // Link Arena palette
 
-	if (!(gKeyStatus.heldKeys & R_BUTTON) && (unit->state & US_UNSELECTABLE))
+	if (!(gKeyState.heldKeys & KEY_BUTTON_R) && (unit->state & US_UNSELECTABLE))
 		return 0xF;
 
 	return GetUnitMapSpritePaletteIndex(unit);
@@ -31,7 +31,7 @@ void LTFMapSprite_UpdateAllMapSpritePalettes(void) {
 }
 
 void LTFMapSprite_UpdateAll(void) {
-	if ((gKeyStatus.heldKeys ^ gKeyStatus.prevKeys) & (R_BUTTON))
+	if ((gKeyState.heldKeys ^ gKeyState.prevKeys) & (KEY_BUTTON_R))
 		LTFMapSprite_UpdateAllMapSpritePalettes();
 
 	SMS_DisplayAllFromInfoStructs();

@@ -22,12 +22,12 @@ List:
 
 #include "gbafe.h"
 
-extern int FindClosestBestPosition(Unit* unit, int x, int y, Vector2U* out) __attribute__((long_call));
+extern int FindUnitClosestValidPosition(Unit* unit, int x, int y, struct Vec2u* out) __attribute__((long_call));
 
 extern int gEventSlot[];
 
 // FIXME
-static const Vector2* const pCameraDisplayPosition = (const Vector2*) (0x0202BCB0 + 0x0C);
+static const struct Vec2* const pCameraDisplayPosition = (const struct Vec2*) (0x0202BCB0 + 0x0C);
 static const void(*DrawUnitSMS)(int, int, int, Unit*) = (void(*)(int, int, int, Unit*))(0x8027B60+1);
 
 extern int gChapter27FogLevel;
@@ -38,7 +38,7 @@ static int CanUnitBeOnPosition(Unit* unit, int x, int y) {
 	if (x < 0 || y < 0)
 		return 0; // position out of bounds
 
-	if (x >= gMapSize.width || y >= gMapSize.height)
+	if (x >= gMapSize.x || y >= gMapSize.y)
 		return 0; // position out of bounds
 
 	if (gMapUnit[y][x])
@@ -70,7 +70,7 @@ static void ApplyListedMapChanges(const short* list) {
 				continue;
 
 			RemoveMapChange(mapChangeId);
-			RevertMapChangesById(mapChangeId);
+			RevertMapChange(mapChangeId);
 		}
 	}
 }
@@ -78,14 +78,14 @@ static void ApplyListedMapChanges(const short* list) {
 void MapChangeListASMC(Proc* proc) {
 	// pointer to list in slot 2
 
-	InitMapChangeGraphics(); // copy bg3 to bg2 (for fade)
+	RenderBmMapOnBg2(); // copy bg3 to bg2 (for fade)
 
 	ApplyListedMapChanges((const short*)(gEventSlot[2]));
 
-	RefreshTerrainMap();
+	RefreshTerrainBmMap();
 	UpdateUnitsUnderRoof();
 
-	DrawTileGraphics(); // update bg3
+	RenderBmMap(); // update bg3
 	StartBlockingBMXFADE(1, proc); // fade from bg2 to bg3
 }
 
@@ -103,7 +103,7 @@ void TorchStaffAnimASMC(Proc* proc) {
 		/* 34 */ int yPos;
 	};
 
-	struct TorchAnimProc* newProc = (struct TorchAnimProc*)(StartBlockingProc(procCode, proc));
+	struct TorchAnimProc* newProc = (struct TorchAnimProc*)(ProcStartBlocking(procCode, proc));
 
 	newProc->xPos = ((gEventSlot[0xB] & 0xFFFF) * 16) - pCameraDisplayPosition->x;
 	newProc->yPos = ((gEventSlot[0xB] >> 16) * 16)    - pCameraDisplayPosition->y;
@@ -118,13 +118,13 @@ void TorchSetASMC(Proc* proc) {
 	// Trap id 0x0A is for Torchlight
 	AddTrap(x, y, 0x0A, 8);
 
-	InitMapChangeGraphics(); // copy bg3 to bg2 (for fade)
+	RenderBmMapOnBg2(); // copy bg3 to bg2 (for fade)
 
-	RefreshEntityMaps();
+	RefreshEntityBmMaps();
 	SMS_UpdateFromGameData();
 
-	RefreshTerrainMap();
-	DrawTileGraphics();
+	RefreshTerrainBmMap();
+	RenderBmMap();
 
 	StartBlockingBMXFADE(1, proc); // fade from bg2 to bg3
 }
@@ -142,9 +142,9 @@ void GetBestCoordsForUnitAtASMC(Proc* proc) {
 
 	Unit* unit = GetUnit(gMapUnit[yUnit][xUnit]);
 
-	Vector2U position;
+	struct Vec2u position;
 
-	if (!FindClosestBestPosition(unit, xTarget, yTarget, &position)) {
+	if (!FindUnitClosestValidPosition(unit, xTarget, yTarget, &position)) {
 		gEventSlot[0xC] = gEventSlot[0xB];
 		return;
 	}
@@ -157,14 +157,14 @@ void FogHackBeginASMC(Proc* proc) {
 	// Such as properly functioning REDAs
 
 	gChapterData.visionRange = 0;
-	RefreshEntityMaps();
+	RefreshEntityBmMaps();
 }
 
 void FogHackEndASMC(Proc* proc) {
 	// Restoring state to what it should be
 
 	gChapterData.visionRange = gChapter27FogLevel;
-	RefreshEntityMaps();
+	RefreshEntityBmMaps();
 }
 
 void LoadIndexedWordAMSC(Proc* proc) {
@@ -215,7 +215,7 @@ void GetBestCoordsForDRAGONASMC(Proc* proc) {
 
 	unsigned index;
 
-	ClearMapWith(gMapMovement2, 0);
+	BmMapFill(gMapMovement2, 0);
 
 	// Step 1: for each ally: inc in range
 	for (index = 0; index < 0x40; ++index) {
@@ -256,11 +256,11 @@ void GetBestCoordsForDRAGONASMC(Proc* proc) {
 
 	unsigned ix, iy;
 
-	for (iy = 1; iy < gMapSize.height; ++iy) {
+	for (iy = 1; iy < gMapSize.y; ++iy) {
 		// iy starts at 1 because we don't want to spawn the dragon on the top row
 		// (because then Denis would spawn out of bounds)
 
-		for (ix = 0; ix < gMapSize.width; ++ix) {
+		for (ix = 0; ix < gMapSize.x; ++ix) {
 			unsigned weight = gMapMovement2[iy][ix];
 
 			if (weight < bestWeight)
@@ -319,12 +319,12 @@ void SendActiveUnitAwayASMC(Proc* proc) {
 
 	Proc* pp;
 
-	if ((pp = FindProc(gProc_PlayerPhase))) {
-		GotoProcLabel(pp, 0);
+	if ((pp = ProcFind(gProc_PlayerPhase))) {
+		ProcGoto(pp, 0);
 
 		MU_EndAll();
 
-		struct UnitFlyAnimProc* np = (struct UnitFlyAnimProc*)StartBlockingProc(sProc_UnitFlyAnim, proc);
+		struct UnitFlyAnimProc* np = (struct UnitFlyAnimProc*)ProcStartBlocking(sProc_UnitFlyAnim, proc);
 
 		np->unit   = gActiveUnit;
 
@@ -370,9 +370,9 @@ static struct UnitSlideAnimProc* StartUnitSlideAnim(Unit* unit, int xTarget, int
 	struct UnitSlideAnimProc* result;
 
 	if (parent)
-		result = (struct UnitSlideAnimProc*) StartBlockingProc(sProc_UnitSlideAnim, parent);
+		result = (struct UnitSlideAnimProc*) ProcStartBlocking(sProc_UnitSlideAnim, parent);
 	else
-		result = (struct UnitSlideAnimProc*) StartProc(sProc_UnitSlideAnim, ROOT_PROC_3);
+		result = (struct UnitSlideAnimProc*) ProcStart(sProc_UnitSlideAnim, ROOT_PROC_3);
 
 	result->unit    = unit;
 
@@ -409,11 +409,11 @@ void USAOnLoop(struct UnitSlideAnimProc* proc) {
 void USAOnEnd(struct UnitSlideAnimProc* proc) {
 	ShowUnitSMS(proc->unit);
 
-	RefreshEntityMaps();
+	RefreshEntityBmMaps();
 	SMS_UpdateFromGameData();
 
-	RefreshTerrainMap();
-	DrawTileGraphics();
+	RefreshTerrainBmMap();
+	RenderBmMap();
 }
 
 struct UnitSlideEffectProc {
@@ -435,7 +435,7 @@ static const ProcCode sProc_UnitSlideEffect[] = {
 };
 
 void SlideAllUnitsASMC(Proc* proc) {
-	StartBlockingProc(sProc_UnitSlideEffect, proc);
+	ProcStartBlocking(sProc_UnitSlideEffect, proc);
 }
 
 void USEOnInit(struct UnitSlideEffectProc* proc) {
@@ -475,7 +475,7 @@ static const u8 sFallbackDirectionMapLookup[] = {
 };
 // */
 
-static const Vector2 sDirectionOffsetLookup[] = {
+static const struct Vec2 sDirectionOffsetLookup[] = {
 	{  0,  0 }, // DIR_NONE
 
 	{ -1,  0 }, // DIR_LEFT
@@ -491,8 +491,8 @@ void USEOnLoop(struct UnitSlideEffectProc* proc) {
 		Unit* unit = GetUnit(proc->unitIndex);
 
 		if (unit && unit->pCharacterData && !(unit->state & (US_RESCUED | US_NOT_DEPLOYED | US_DEAD | 0x00010000))) {
-			int xGrid = Div(unit->xPos * DIR_MAP_WIDTH,  gMapSize.width);
-			int yGrid = Div(unit->yPos * DIR_MAP_HEIGHT, gMapSize.height);
+			int xGrid = Div(unit->xPos * DIR_MAP_WIDTH,  gMapSize.x);
+			int yGrid = Div(unit->yPos * DIR_MAP_HEIGHT, gMapSize.y);
 
 			int direction = sMainDirectionMapLookup[xGrid + DIR_MAP_WIDTH * yGrid];
 

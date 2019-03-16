@@ -1,7 +1,7 @@
 #ifndef HAX_COUNTER_LOAD_FIX
 #define HAX_COUNTER_LOAD_FIX
 
-// Fix COUNTER_SET to be able to load value from S2
+// Fix COUNTER_SET to be able to load value from s2
 // Allows for example SVAL s2 10; COUNTER_SET 2 (-1)
 
 // hack by StanH_
@@ -20,9 +20,9 @@ CounterLoadFromS2:
 
 /* SOURCE:
 
-.thumb
+	.thumb
 
-return_location = 0x0800DC78+1
+	return_location = 0x0800DC78+1
 
 	@ Replaced stuff
 	lsl r0, r5, #0x10

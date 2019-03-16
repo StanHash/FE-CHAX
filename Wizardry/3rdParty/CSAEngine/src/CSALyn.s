@@ -37,7 +37,7 @@ BXR3:
 @ .long 0x0805A16C + 1 @ 0  : GetAISSubjectId
 @ .long 0x08055160 + 1 @ 1  : SpellFx_Begin
 @ .long 0x08055178 + 1 @ 2  : SpellFx_ClearBG1Position
-@ .long 0x08002C7C + 1 @ 3  : StartProc
+@ .long 0x08002C7C + 1 @ 3  : ProcStart
 @ .long 0x0805A310 + 1 @ 4  : GetAISCurrentRoundType
 @ .long 0x0805A184 + 1 @ 5  : IsBatteRoundTypeAMiss
 @ .long 0x08054FA8 + 1 @ 6  : StartEfxSpellCast
@@ -82,7 +82,7 @@ CSAStart_CommonEntry:
 	ldr r0, =CSAProc @ arg r0 = Proc Script
 	mov r1, #3       @ arg r1 = Parent (Root Tree #3)
 
-	ldr r3, =StartProc
+	ldr r3, =ProcStart
 	bl  BXR3
 
 	mov r4, r0

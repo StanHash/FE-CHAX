@@ -29,7 +29,7 @@ const struct KDPageDefinition gKDStatPageDefinition = {
 };
 
 struct StatPageFieldDefinition {
-	struct Vector2U position;
+	struct Vec2u position;
 	const char* label;
 };
 
@@ -49,7 +49,7 @@ const struct StatPageFieldDefinition sKDStatPageFields[] = {
 };
 
 static struct Proc* KDStartStatPage(UnitEditorProc* parent) {
-	struct StatPageProc* proc = (struct StatPageProc*) StartProc(sProc_KDStatPage, (struct Proc*) parent);
+	struct StatPageProc* proc = (struct StatPageProc*) ProcStart(sProc_KDStatPage, (struct Proc*) parent);
 
 	for (unsigned i = 0; i < UnitEditor_PAGE1ENTRIES; ++i)
 		proc->stats[i] = 0;
@@ -58,7 +58,7 @@ static struct Proc* KDStartStatPage(UnitEditorProc* parent) {
 	proc->cursor = 0;
 
 	for (unsigned i = 0; i < UnitEditor_PAGE1ENTRIES; ++i)
-		DBG_BG_Print(
+		DebugBgPrint(
 			BG_LOCATED_TILE(gBg0MapBuffer, sKDStatPageFields[i].position.x + 4, sKDStatPageFields[i].position.y),
 			sKDStatPageFields[i].label
 		);
@@ -111,19 +111,19 @@ static void KDStatPageOnLoop(struct Proc* p) {
 		char buf[0x20];
 
 		String_GetFromIndexExt(GetClassData(proc->classId)->nameTextId, buf);
-		PrintDebugStringAsOBJ(48, 128, buf);
+		DebugObjPrint(48, 128, buf);
 	}
 
 	//Prints the stats
 	for (unsigned i = 0; i < UnitEditor_PAGE1ENTRIES; ++i) {
-		PrintDebugNumberDec(
+		DebugObjPrintNumber(
 			8 * sKDStatPageFields[i].position.x,
 			8 * sKDStatPageFields[i].position.y,
 			proc->stats[i], 3
 		);
 	}
 
-	PrintDebugNumberHex(16, 128, proc->classId, 3);
+	DebugObjPrintNumberHex(16, 128, proc->classId, 3);
 
 	//*
 

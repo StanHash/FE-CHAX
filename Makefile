@@ -20,7 +20,7 @@ $(shell mkdir -p $(CACHE_DIR) > /dev/null)
 DEPSDIR := $(CACHE_DIR)
 
 # lyn options
-LYNREF := Tools/CLib/reference/FE8U-20181105.o
+LYNREF := Tools/CLib/reference/FE8U-20190316.o
 
 # Finding all possible source files
 CFILES   := $(shell find -type f -name '*.c')

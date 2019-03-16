@@ -23,8 +23,8 @@ PROC_LABEL(2), // End
 void VESUnitDisplayDrawBase(struct VESUnitDisplayProc* proc) {
 	uint16_t* baseTile = gBg1MapBuffer + 4 + 0x20 * (4 + proc->lineId);
 
-	Text_AppendString(&proc->text, String_GetFromIndex(proc->pUnit->pCharacterData->nameTextId));
-	Text_Draw(&proc->text, baseTile + 3);
+	Text_DrawString(&proc->text, GetStringFromIndex(proc->pUnit->pCharacterData->nameTextId));
+	Text_Display(&proc->text, baseTile + 3);
 }
 
 void VESUnitDisplayLoop(struct VESUnitDisplayProc* proc) {
@@ -34,7 +34,7 @@ void VESUnitDisplayLoop(struct VESUnitDisplayProc* proc) {
 }
 
 struct VESUnitDisplayProc* VESStartUnitDisplay(struct VESProc* proc, unsigned lineId, const Unit* unit) {
-	struct VESUnitDisplayProc* newProc = (struct VESUnitDisplayProc*)(StartProc(sVESUnitDisplayProcScr, (Proc*)(proc)));
+	struct VESUnitDisplayProc* newProc = (struct VESUnitDisplayProc*)(ProcStart(sVESUnitDisplayProcScr, (Proc*)(proc)));
 
 	newProc->lineId   = lineId;
 

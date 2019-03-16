@@ -6,8 +6,8 @@ int IsThereClosedChestAt(u8 x, u8 y) __attribute__((long_call));
 static const void(*a)(u8 x, u8 y) = (void(*)(u8, u8))(0x808320C+1);
 static const void(*b)(u8 x, u8 y) = (void(*)(u8, u8))(0x80831C8+1);
 
-extern struct BattleUnit gActiveBattleUnit;
-extern struct BattleUnit gTargetBattleUnit;
+extern struct BattleUnit gBattleActor;
+extern struct BattleUnit gBattleTarget;
 
 void TryAddPosToUnlockList(u8 x, u8 y) {
 	if (IsThereClosedChestAt(x, y))
@@ -22,7 +22,7 @@ void UnlockSaveBattleUnitInTarget(struct Proc* proc) {
 	// That way, we will be able to restore it later
 	// since the item box in the send to convoy menu re-initializes the subject
 
-	memcpy(&gActiveBattleUnit, &gTargetBattleUnit, sizeof(struct BattleUnit));
+	memcpy(&gBattleActor, &gBattleTarget, sizeof(struct BattleUnit));
 }
 
 void UnlockTrueEffect(struct Proc* proc) {
@@ -35,13 +35,13 @@ void UnlockTrueEffect(struct Proc* proc) {
 void UnlockRestoreBattleUnit(struct Proc* proc) {
 	// Restore subject from target
 
-	memcpy(&gTargetBattleUnit, &gActiveBattleUnit, sizeof(struct BattleUnit));
+	memcpy(&gBattleTarget, &gBattleActor, sizeof(struct BattleUnit));
 
 	// Update items in subject battle unit from the "real" unit
 	// the "real" unit is where the event wrote items to
 
-	struct Unit* realUnit = GetUnit(gActiveBattleUnit.unit.index);
+	struct Unit* realUnit = GetUnit(gBattleActor.unit.index);
 
 	for (unsigned i = 0; i < 5; ++i)
-		gActiveBattleUnit.unit.items[i] = realUnit->items[i];
+		gBattleActor.unit.items[i] = realUnit->items[i];
 }
