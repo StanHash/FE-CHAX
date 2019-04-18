@@ -365,10 +365,10 @@ scBeginning: {
 
 	CALL scResetKillCount
 
-#ifdef __DEBUG__
+#ifdef DEBUG
 	// Extra Help Debug Team
 	LOAD1 0 unPlayerList
-#endif // __DEBUG__
+#endif // DEBUG
 
 	LOAD1 0 unEnemyInitialMonsterGroup1
 	LOAD1 0 unEnemyInitialMonsterGroup2
@@ -594,7 +594,7 @@ scOnEnemyDeath: {
 	// This is an increment instruction, not an addition
 	COUNTER_ADD cntKillCountTurn 0
 
-#ifdef __DEBUG__
+#ifdef DEBUG
 	// Give the amount of enemies killed as money
 	// Easy way to keep track of the number
 
@@ -603,7 +603,7 @@ scOnEnemyDeath: {
 
 	// Gib Mone
 	GIVEITEMTOMAIN 0
-#endif // __DEBUG__
+#endif // DEBUG
 
 	NoFade
 	ENDA

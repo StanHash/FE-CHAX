@@ -1,7 +1,8 @@
 #ifndef MAIN
 #define MAIN
 
-#define __DEBUG__
+#define DEBUG
+#define CHAX
 
 #include "Extensions/Hack Installation.txt"
 #include "EAstdlib.event"
