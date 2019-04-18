@@ -48,10 +48,15 @@ static void LTFDisplay_OnInit(struct LTFPredictionDisplayProc* proc)
 	proc->xOff = LTF_DISPLAY_XOFF;
 }
 
+s8 CheckEventId(int id);
+
 static void LTFDisplay_OnLoop(struct LTFPredictionDisplayProc* proc)
 {
-	if (!proc->doDisplay || gChapterData.subtitleHelpOption)
+	if (!proc->doDisplay || gChapterData.subtitleHelpOption || CheckEventId(0x84))
+	{
+		proc->xOff = LTF_DISPLAY_XOFF;
 		return;
+	}
 
 	if (proc->xOff > 0)
 		proc->xOff--;
@@ -140,7 +145,6 @@ void LTF_DisablePredictionDisplay(void)
 	if (proc)
 	{
 		proc->doDisplay = FALSE;
-		proc->xOff = LTF_DISPLAY_XOFF;
 	}
 }
 

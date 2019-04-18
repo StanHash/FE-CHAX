@@ -87,18 +87,22 @@ static void LTFAi_BskOrderInit(struct Proc* bskOrderProc) {
 }
 
 static void LTFAi_CpOrderTryDoAi1(struct Proc* cpOrderProc) {
+	gAiData.cpDecideNext = 1;
 	LTFAi_CallDecide(cpOrderProc, AiDecisionMaker_AiScript1);
 }
 
 static void LTFAi_CpOrderTryDoAi2(struct Proc* cpOrderProc) {
+	gAiData.cpDecideNext = 2;
 	LTFAi_CallDecide(cpOrderProc, AiDecisionMaker_AiScript2);
 }
 
 static void LTFAi_CpOrderTryDoHealEscape(struct Proc* cpOrderProc) {
+	gAiData.cpDecideNext = 0;
 	LTFAi_CallDecide(cpOrderProc, AiDecisionMaker_HealEscape);
 }
 
 static void LTFAi_CpOrderTryDoSpecialItems(struct Proc* cpOrderProc) {
+	gAiData.cpDecideNext = 3;
 	LTFAi_CallDecide(cpOrderProc, AiDecisionMaker_SpecialItems);
 }
 

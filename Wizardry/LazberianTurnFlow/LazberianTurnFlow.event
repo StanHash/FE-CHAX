@@ -1,11 +1,6 @@
 #ifndef HAX_LTF
 #define HAX_LTF
 
-// Look at $8039BA8 for those to know whether LTF is installed and which version
-// (If already using EA, use #ifdef HAX_LTF instead)
-#define LTF_MAGIC_NUMBER   $0046544C // "LTF\0"
-#define LTF_VERSION_NUMBER $00000100 // $MMMMmmpp ([M]ajor/[m]inor/[p]atch)
-
 #include "Extensions/Hack Installation.txt"
 #include "Extensions/ProcDefinitions.txt"
 
@@ -85,9 +80,13 @@ PUSH
 	ORG $5A7FF4
 		PROC_END
 
+	// Do not reset decide index (should fix loot ai and other things)
+	ORG $039B0C
+		SHORT $46C0
+
 	// Allow for hard "end turn" AI actions
 	ORG $039BA4
-		SHORT 0xE018
+		SHORT $E018
 
 	// Change state when building the AI unit list
 	ORG $039A48
@@ -248,22 +247,15 @@ PUSH
 	ASSERT ($59A438 - CURRENTOFFSET)
 POP
 
-#include "src/LTFCore.lyn.event"
-#include "src/LTFPhaseSwitch.lyn.event"
-#include "src/LTFDisplay.lyn.event"
-#include "src/LTFMapSprite.lyn.event"
-#include "src/LTFEndPlayerPhase.lyn.event"
-#include "src/LTFAutocursor.lyn.event"
-#include "src/LTFAi.lyn.event"
+#include "Src/LTFCore.lyn.event"
+#include "Src/LTFPhaseSwitch.lyn.event"
+#include "Src/LTFDisplay.lyn.event"
+#include "Src/LTFMapSprite.lyn.event"
+#include "Src/LTFEndPlayerPhase.lyn.event"
+#include "Src/LTFAutocursor.lyn.event"
+#include "Src/LTFAi.lyn.event"
 
-#include "src/LTFHooks.lyn.event"
-
-PUSH; ORG $039BA8
-	// This is room left from "Allow for hard "end turn" AI actions"
-
-	WORD LTF_MAGIC_NUMBER
-	WORD LTF_VERSION_NUMBER
-POP
+#include "Src/LTFHooks.lyn.event"
 
 // BIG-STUFF-TO-DO-AND-TO-FIX-LIST-THING:
 
@@ -287,14 +279,13 @@ POP
 // Done: Autocursor takes the first unit *that hasn't moved yet*
 // Fixed: Autocursor Off is broken
 // Done: Restore the additional AI behaviors (escaping/lockpicking)
+// Fixed: some AI2 seem broken
+// Done: Not display predictions sometimes (during cutscenes/menus/etc?)
 
-// FixMe: some AI2 seem broken
-// Todo: Not display predictions sometimes (during cutscenes/menus/etc?)
 // Todo: Change phase switch screen effect to show something like "TURN xyz" instead of "PLAYER PHASE"
 // Todo: Test
 
 // KNOWN ISSUES:
-//   Vanilla Ch2 AI broke (non moving brigands unless in range)
 //   AI can take its time to make a decision
 
 #endif // HAX_LTF
