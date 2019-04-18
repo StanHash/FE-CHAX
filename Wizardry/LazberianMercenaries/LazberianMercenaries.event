@@ -1,0 +1,93 @@
+#ifndef HAX_LM
+#define HAX_LM
+
+// Definitions
+
+#ifndef US_LM_HIRED
+// Unit State Flag defintion
+#define US_LM_HIRED     0x40000000
+#endif // US_LM_HIRED
+
+#ifndef CA_LM_MERCENARY
+// Unit Class/Char Attribute flag deftinion
+#define CA_LM_MERCENARY 0x40000000
+#endif // CA_LM_MERCENARY
+
+// Graphics
+
+ALIGN 4
+gPal_LmCoinBit:
+	#incbin "Data/CoinBit.gbapal"
+
+ALIGN 4
+gImg_LmCoinBit:
+	#incbin "Data/CoinBit.4bpp"
+
+// ========================
+// = INTERNALS START HERE =
+// ========================
+
+// (it means avoid touching unless you know what you're doing)
+
+#ifndef LynJumpDefined
+	#define LynJumpDefined
+	#define LynJump(aTarget) "WORD $46C04778 $E59FC000 $E12FFF1C; POIN aTarget; "
+#endif // LynJumpDefined
+
+#include "Src/LM.lyn.event"
+#include "Src/LMHooks.lyn.event"
+
+ALIGN 4
+PUSH; ORG CURRENTOFFSET+1; GetUnitDeployCost:; POP
+	#incbin "Src/GetUnitDeployCost.dmp"
+
+ALIGN 4
+gUsHiredFlag:
+	WORD US_LM_HIRED
+
+ALIGN 4
+gCaMercenary:
+	WORD CA_LM_MERCENARY
+
+{
+
+ALIGN 4
+gProcHook_PrepScreen:
+	PROC_SET_DESTRUCTOR(LM_OnPrepScreenEnd)
+	PROC_SLEEP(0x10)
+	PROC_JUMP($59DBCC)
+
+PUSH
+
+	ORG $09ACB8 // select unit in prep screen hook
+		LynJump(LMHook0809ACB8)
+
+	ORG $59DBC4
+		PROC_JUMP(gProcHook_PrepScreen)
+
+	// ORG $09A5F0 // display unit name in prep screen hook
+	//	LynJump(LMHook0809A5F0)
+
+	ORG $09A874 // load coin graphics
+		LynJump(LMHook0809A874)
+
+	ORG $09A68C // display for hire icon in prep screen hook
+		LynJump(LMHook0809A68C)
+
+	ORG $0957D8 // overwrite automatic deployment to only deploy force deployed units
+		LynJump(LMHook080957D8)
+
+	ORG $0854E0 // do not clear hired status here (otherwise you could hire a unit, save, reload and it clean the hired status)
+		WORD (0x671E00C | US_LM_HIRED)
+
+	// ORG $09AAF0
+	//	LynJump(LMReplace_809AAF0)
+
+	// ORG $09A85A // may not need that
+	//	BYTE 16 // more room for more text
+
+POP
+
+}
+
+#endif // HAX_LM

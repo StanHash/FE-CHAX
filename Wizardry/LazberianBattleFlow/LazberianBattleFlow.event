@@ -1,0 +1,16 @@
+#ifndef HAX_LBF
+#define HAX_LBF
+
+#include "Src/LBF.lyn.event"
+
+ALIGN 4
+gPlusItemAttribute:
+	WORD WA_LBF_PLUS
+
+PUSH
+	// I'm too lazy to manage displaying x2/x4 in preview differently so I'll just disable all of that
+	ORG $036F4C
+		SHORT $4770 // bx lr
+POP
+
+#endif // HAX_LBF

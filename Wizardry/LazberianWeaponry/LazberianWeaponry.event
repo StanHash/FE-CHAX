@@ -1,0 +1,53 @@
+#ifndef HAX_LW
+#define HAX_LW
+
+#ifndef HAX_ICONDISPLAY
+	ERROR Lazberian Weaponry requires CIconDisplay
+#endif // HAX_ICONDISPLAY
+
+#ifndef LynJumpDefined
+	#define LynJumpDefined
+	#define LynJump(aTarget) "WORD $46C04778 $E59FC000 $E12FFF1C; POIN aTarget; "
+#endif // LynJumpDefined
+
+#include "Src/LW.lyn.event"
+#include "Src/LWHooks.lyn.event"
+
+PUSH
+
+	ORG $09AAA8
+		LynJump(LWHook0809AAA8)
+
+	ORG $09A050
+		LynJump(LWHook0809A050)
+
+	ORG $09B7E4
+		LynJump(LWHook0809B7E4)
+
+	ORG $09D3DC
+		LynJump(LWHook0809D3DC)
+
+	ORG $034D00
+		LynJump(LWHook08034D00)
+
+	ORG $034DFC
+		LynJump(LWHook08034DFC)
+
+	ORG $034F1C
+		LynJump(LWHook08034F1C)
+
+	ORG $09D50C
+		LynJump(LWHook0809D50C)
+
+POP
+
+gLwIconSheet:
+	WORD LW_ICON_SHEET
+
+ALIGN 4
+gImg_DurabilityIcons:
+	#incbin "Data/DurabilityIcons.4bpp"
+
+InjectIconSheet(LW_ICON_SHEET, gImg_DurabilityIcons)
+
+#endif // HAX_LW
