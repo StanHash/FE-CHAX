@@ -1,0 +1,22 @@
+#ifndef HAX_NOBONUSLEVELS
+#define HAX_NOBONUSLEVELS
+
+// Removes mode-dependant bonus level logic
+// hack by Stan
+
+// This makes it so that all loaded units follow the same autolevel logic:
+// no difficulty-dependant bonuses. Promoted units all have +19 levels.
+
+PUSH
+
+	// replace UnitApplyBonusLevels with nothing
+	ORG $0180CC
+		SHORT $4770 // bx lr
+
+	// always 19 extra levels for promoted units
+	ORG $037B44
+		SHORT $2013 $4770 // mov r0, #19; bx lr
+
+POP
+
+#endif // HAX_NOBONUSLEVELS
