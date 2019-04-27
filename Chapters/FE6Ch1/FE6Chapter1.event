@@ -62,7 +62,7 @@ NoTutorialList:
 #define CharCh61Gen2 0x81
 #define CharCh61TuBd 0x82
 
-#define eidVillage 10
+#define flagCh61Village 10
 
 // Chapter event lists
 
@@ -74,7 +74,7 @@ TurnEventList:
 
 ALIGN 4
 TileEventList:
-	Village(eidVillage, scVillage, 12, 19)
+	Village(flagCh61Village, scVillage, 12, 19)
 
 	// There was events for the village destroyed in the tutorial
 	// I could add it here too but there's no real point? It's dead
