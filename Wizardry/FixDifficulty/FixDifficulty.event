@@ -1,0 +1,32 @@
+#ifndef HAX_FIXDIFFICULTY
+#define HAX_FIXDIFFICULTY
+
+// Skip difficulty select screen and use fixed difficulty instead
+// hack by Stan
+
+// Usage:
+// define DIFFICULTY as either 0 (easy), 1 (normal) or 2 (difficult) before including this file
+// If not defined, DIFFICULTY will default to 1 (normal).
+
+// For details, see also the original thread:
+// https://feuniverse.us/t/fe8-skip-the-difficulty-selection-defaulting-to-a-set-one/2927?u=stanh
+
+#ifndef DIFFICULTY
+	#define DIFFICULTY 1
+#endif // DIFFICULTY
+
+PUSH
+
+	// Replace called routine in savemenu proc
+	ORG 0xA20164
+		POIN FixDifficultyHook|1
+
+POP
+
+ALIGN 4
+FixDifficultyHook:
+	SHORT (0x2200 | DIFFICULTY) // Difficulty: 0 for easy, 1 for normal, 2 for hard
+	SHORT (0x2300 | 0)          // This may be starting mode?
+	WORD 0x5442212A 0x5443213D 0x46C04770
+
+#endif // HAX_FIXDIFFICULTY
