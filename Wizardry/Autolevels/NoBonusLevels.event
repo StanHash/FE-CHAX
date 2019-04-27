@@ -1,7 +1,7 @@
 #ifndef HAX_NOBONUSLEVELS
 #define HAX_NOBONUSLEVELS
 
-// Removes mode-dependant bonus level logic
+// Removes difficulty-dependant bonus level logic
 // hack by Stan
 
 // This makes it so that all loaded units follow the same autolevel logic:
