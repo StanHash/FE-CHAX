@@ -1,0 +1,19 @@
+#ifndef SONG_HELPERS
+#define SONG_HELPERS
+
+#ifndef SetSymbolDefined
+	// SetSymbol macro as an alternative to "Name = Value" (for backwards/ColorzCore compatibility)
+
+	#define SetSymbolDefined
+	#define SetSymbol(__aName, __aValue) "PUSH; ORG (__aValue); __aName:; POP"
+#endif // SetSymbolDefined
+
+SetSymbol(SongTable, 0x224470)
+
+#define SG_FIGHTBGM 0
+#define SG_MAPBGM   1
+#define SG_SFX      6
+
+#define SetSongEntry(aIndex, aSong, aGroup) "PUSH; ORG SongTable + 8*(aIndex); POIN (aSong); SHORT (aGroup) (aGroup); POP"
+
+#endif // SONG_HELPERS
