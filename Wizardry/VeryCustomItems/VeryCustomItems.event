@@ -1,0 +1,312 @@
+#ifndef HAX_VCI
+#define HAX_VCI
+
+#include "EAstdlib.event"
+#include "Extensions/Hack Installation.txt"
+
+ALIGN 4
+
+// TODO
+PUSH; ORG CURRENTOFFSET+1; VciIsNightmare: VciIsLockpick: POP
+SHORT $2000 $4770
+
+#include "Src/VciCore.lyn.event"
+#include "Src/VciVanilla.lyn.event"
+
+ALIGN 2
+gVciItemHealAmountList:
+	SHORT Heal       10
+	SHORT Physic     10
+	SHORT Fortify    10
+	SHORT Vulnerary  10
+	SHORT Vulnerary2 10
+	SHORT Mend       20
+	SHORT Recover    80
+	SHORT Elixir     80
+	SHORT 0 0
+
+#ifndef VciDefinitions
+	#define VciDefinitions
+
+	#define VciInject(aItemId, apVciInfo) "PUSH; ORG gVciInfoTable + 4*(aItemId); POIN (apVciInfo); POP"
+#endif // VciDefinitions
+
+// defining HookProtect(from, to) for debug builds
+// use at the end of a hook: from defines the start of the hook, to defines the end of the space allocated for the hook
+// this does two things: protects the hook from other hacks and ensures the hook doesn't overflow past its allocated area
+
+#ifndef HookProtectDefined
+  #define HookProtectDefined
+
+  #ifdef DEBUG
+    #ifdef __COLORZ_CORE__
+      #define HookProtect(aFrom, aTo) "PROTECT (aFrom) (aTo); ASSERT (aTo) - CURRENTOFFSET"
+    #else
+      // Stan!Core breaks PROTECT, and there's no proper way of reckognizing a Stan!Core from a legacy Core
+      #define HookProtect(aFrom, aTo) "ASSERT (aTo) - CURRENTOFFSET"
+    #endif
+  #else
+    #define HookProtect(aFrom, aTo) " "
+  #endif
+#endif // HookProtectDefined
+
+PUSH
+
+	// ==================================
+	// = core VCI function replacements =
+	// ==================================
+
+	ORG $0163F0 // GetItemHpBonus
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciGetEquipHpBonus
+		HookProtect($0163F0, $016420)
+
+	ORG $016420 // GetItemPowBonus
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciGetEquipPowBonus
+		HookProtect($016420, $016450)
+
+	ORG $016450 // GetItemSklBonus
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciGetEquipSklBonus
+		HookProtect($016450, $016480)
+
+	ORG $016480 // GetItemSpdBonus
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciGetEquipSpdBonus
+		HookProtect($016480, $0164B0)
+
+	ORG $0164B0 // GetItemDefBonus
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciGetEquipDefBonus
+		HookProtect($0164B0, $0164E0)
+
+	ORG $0164E0 // GetItemResBonus
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciGetEquipResBonus
+		HookProtect($0164E0, $016510)
+
+	ORG $016510 // GetItemLckBonus
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciGetEquipLckBonus
+		HookProtect($016510, $016540)
+
+	ORG $016540 // MakeNewItem ("interpreted" as CloneItem)
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciMakeNewItem
+		HookProtect($016540, $016574)
+
+	ORG $016574 // CanUnitUseWeapon
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciCanUnitUseWeapon
+		HookProtect($016574, $016750)
+
+	ORG $0167A4 // CanUnitUseStaff
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciCanUnitUseStaff
+		HookProtect($0167A4, $016800)
+
+	ORG $016848 // DrawItemMenuLine
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciDrawMenuLine
+		HookProtect($016848, $0168E0)
+
+	ORG $0168E0 // DrawItemMenuLineLong
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciDrawMenuLineLong
+		HookProtect($0168E0, $0169A8)
+
+	ORG $0169A8 // DrawItemMenuLineNoColor
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciDrawMenuLineNoColor
+		HookProtect($0169A8, $016A2C)
+
+	ORG $016A2C // DrawItemStatScreenLine
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciDrawStatScreenLine
+		HookProtect($016A2C, $016AEC)
+
+	ORG $016AEC // GetItemAfterUse
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciGetItemAfterUse
+		HookProtect($016AEC, $016B28)
+
+	ORG $016BEC // IsItemEffectiveAgainst
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciIsEffectiveAgainst
+		HookProtect($016BEC, $016C88)
+
+	ORG $016CC0 // GetItemDisplayRangeString
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciGetDisplayRangeString
+		HookProtect($016CC0, $016D5C)
+
+	ORG $016D94 // GetItemDisplayRankString
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciGetDisplayRankString
+		HookProtect($016D94, $016DF8)
+
+	ORG $016EE4 // IsItemDisplayUsable
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciIsDisplayUsable
+		HookProtect($016EE4, $016F7C)
+
+	ORG $016FB8 // GetUnitItemHealAmount
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciGetHealAmount
+		HookProtect($016FB8, $01702C)
+
+	ORG $017054 // IsItemStealable
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciIsStealable
+		HookProtect($017054, $017080)
+
+	ORG $017080 // IsItemHammernable
+		WORD $46C04778 $E59FC000 $E12FFF1C; POIN VciIsHammernable
+		HookProtect($017080, $0170D4)
+
+	ORG $0174EC // GetItemIndex
+		WORD $47184B00; POIN VciGetIndex
+		HookProtect($0174EC, $0174F4)
+
+	ORG $0174F4 // GetItemName
+		WORD $47184B00; POIN VciGetName
+		HookProtect($0174F4, $017518)
+
+	ORG $017518 // GetItemDescId
+		WORD $47184B00; POIN VciGetDescId
+		HookProtect($017518, $017530)
+
+	ORG $017530 // GetItemUseDescId
+		WORD $47184B00; POIN VciGetUseDescId
+		HookProtect($017530, $017548)
+
+	ORG $017548 // GetItemType
+		WORD $47184B00; POIN VciGetType
+		HookProtect($017548, $01756C)
+
+	ORG $01756C // GetItemAttributes
+		WORD $47184B00; POIN VciGetAttributes
+		HookProtect($01756C, $017584)
+
+	ORG $017584 // GetItemUses
+		WORD $47184B00; POIN VciGetUses
+		HookProtect($017584, $0175B0)
+
+	ORG $0175B0 // GetItemMaxUses
+		WORD $47184B00; POIN VciGetMaxUses
+		HookProtect($0175B0, $0175DC)
+
+	ORG $0175DC // GetItemMight
+		WORD $47184B00; POIN VciGetMight
+		HookProtect($0175DC, $0175F4)
+
+	ORG $0175F4 // GetItemHit
+		WORD $47184B00; POIN VciGetHit
+		HookProtect($0175F4, $01760C)
+
+	ORG $01760C // GetItemWeight
+		WORD $47184B00; POIN VciGetWeight
+		HookProtect($01760C, $017624)
+
+	ORG $017624 // GetItemCrit
+		WORD $47184B00; POIN VciGetCrit
+		HookProtect($017624, $01763C)
+
+	ORG $01763C // GetItemCost
+		WORD $47184B00; POIN VciGetCost
+		HookProtect($01763C, $01766C)
+
+	ORG $01766C // GetItemMinRange
+		WORD $47184B00; POIN VciGetMinRange
+		HookProtect($01766C, $017684)
+
+	ORG $017684 // GetItemMaxRange
+		WORD $47184B00; POIN VciGetMaxRange
+		HookProtect($017684, $0176A0)
+
+	ORG $0176A0 // GetItemEncodedRange
+		WORD $47184B00; POIN VciGetEncodedRange
+		HookProtect($0176A0, $0176B8)
+
+	ORG $0176B8 // GetItemRequiredExp
+		WORD $47184B00; POIN VciGetRequiredExp
+		HookProtect($0176B8, $0176D0)
+
+	ORG $0176D0 // GetItemEffectiveness
+		WORD $47184B00; POIN VciGetEffectiveness
+		HookProtect($0176D0, $0176E8)
+
+	ORG $0176E8 // GetItemStatBonuses
+		WORD $47184B00; POIN VciGetStatBonuses
+		HookProtect($0176E8, $017700)
+
+	ORG $017700 // GetItemIconId
+		WORD $47184B00; POIN VciGetIconId
+		HookProtect($017700, $017724)
+
+	ORG $017724 // GetItemWeaponEffect
+		WORD $47184B00; POIN VciGetWeaponEffect
+		HookProtect($017724, $01773C)
+
+	ORG $01773C // GetItemUseEffect
+		WORD $47184B00; POIN VciGetUseEffect
+		HookProtect($01773C, $017754)
+
+	ORG $017754 // GetItemCostPerUse
+		WORD $47184B00; POIN VciGetCostPerUse
+		HookProtect($017754, $01776C)
+
+	ORG $01776C // GetItemMaxCost
+		WORD $47184B00; POIN VciGetMaxCost
+		HookProtect($01776C, $017798)
+
+	ORG $017798 // GetItemAwardedExp
+		WORD $47184B00; POIN VciGetAwardedExp
+		HookProtect($017798, $0177B0)
+
+	// ===========================================================================
+	// = item functions "de-inlining" (replacing inlines by real function calls) =
+	// ===========================================================================
+
+	ORG $01675A // in CanUnitUseWeaponNow
+		// mov r0, r4; bl GetItemAttributes; mov r1, r0; b later
+		SHORT $1C20; BL($01756C); SHORT $1C01; B($01676A)
+		HookProtect($01675A, $01676A)
+
+	ORG $01680A // in CanUnitUseStaffNow (which is unused, but just in case)
+		// mov r0, r4; bl GetItemAttributes; b later
+		SHORT $1C20; BL($01756C); B($01681A)
+		HookProtect($01680A, $01681A)
+
+	ORG $016B8C // replace IsItemCoveringRange
+		WORD $6B570; SHORT $C; BL($01766C); SHORT $5 $30; BL($017684); SHORT $2; WORD $42A52000 $17D3DC03 $42A20FE0 $BC704158 $4708BC02
+		HookProtect($016B8C, $016BC0)
+
+	ORG $016ECA // in IsItemDanceRing
+		// bl GetItemIndex; mov r1, r0
+		BL($0174EC); SHORT $1C01
+		HookProtect($016ECA, $016ED0)
+
+	ORG $016F7C // in CanUnitUse_unused
+		// push {r2-r3}; mov r0, r1; bl GetItemAttributes; pop {r2-r3}; b later
+		SHORT $B40C $1C08; BL($01756C); SHORT $BC0C; B($016F92)
+		HookProtect($016F7C, $016F92)
+
+	ORG $01702C // replace GetUnitItemSlot
+		WORD $5B570 $2400000E $62002B $5A98331E; BL($0174EC); WORD $D00342B0 $2C053401 $3C06D1F4 $BC700020 $4708BC02
+		HookProtect($01702C, $017054)
+
+	ORG $0170D6 // in GetItemReachBits
+		// bl GetItemEncodedRange; b later
+		BL($0176A0); B($0170E6)
+		HookProtect($0170D6, $0170E6)
+
+	ORG $01723C // replace GetUnitItemUseReachBits; TODO: better maybe
+		WORD $5B5F7 $DA262900 $60003 $33282400 $361E9301 $2F008837 $39D012; SHORT $28; BL($028870); SHORT $2800; WORD $38D008; BL($017684); WORD $D1002800 $42843063 $4DA00 $36029B01 $D1E942B3 $D0182C02 $D0142C63 $D0002C01 $202400 $BC02BCFE $310C4708 $18410049 $3188CE; BL($028870); WORD $D0F21E04; SHORT $30; BL($017684); SHORT $1E04; WORD $2420D1E6 $2403E7EB; SHORT $E7E9
+		HookProtect($01723C, $0172F8)
+
+	ORG $0172F8 // replace GetUnitStaffReachBits; TODO: better maybe
+		WORD $B5F70003 $70006 $33282400 $361E9301 $2D008835 $29D013; SHORT $38; BL($0167A4); SHORT $2800; WORD $28D009 $F0004B0F $2800F81F $2063D013 $DA004284 $9B010004 $429E3602 $2003D1E8 $D0052C02 $2C63301D $3C01D002 $41604260 $BC02BCFE $284708; BL($017684); WORD $D0E62800 $46C0E7E6; POIN VciIsNightmare; WORD $46C04718
+		HookProtect($0172F8, $01737C)
+
+	ORG $017390 // in GetConvoyItemCostSum
+		// push {r3}; ldrh r0, [r3]; bl GetItemCost; pop {r3}; b later
+		SHORT $B408 $8818; BL($01763C); SHORT $BC08; B($0173B6)
+		HookProtect($017390, $0173B6)
+
+	ORG $017402 // in GetUnitItemCostSum
+		// mov r0, r3; bl GetItemCost; b later
+		SHORT $1C18; BL($01763C); B($01742A)
+		HookProtect($017402, $01742A)
+
+	ORG $017478 // replace SetItemUnsealedForCharacter
+		WORD $CB510; BL($017548); WORD $181B4B02 $BC10771C $4700BC01 $202BCF0
+		HookProtect($017478, $0174AC)
+
+	ORG $0174AC // replace IsItemUnsealedForUnit
+		WORD $4B510; SHORT $8; BL($017548); SHORT $4B05; WORD $18186822 $79137F00 $42431A18 $BC104158 $4708BC02 $202BCF0
+		HookProtect($0174AC, $0174EC)
+
+POP
+
+#endif // HAX_VCI
