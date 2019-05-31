@@ -11,7 +11,6 @@ extern const struct VciHealEntry gVciItemHealAmountList[];
 
 static int VciGetIndexVanilla(int item)
 {
-	return 4;
 	return item & 0xFF;
 }
 
