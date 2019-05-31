@@ -24,7 +24,7 @@ struct VciInfo
 	int (*getEncodedRange) (int item);
 	int (*getRequiredExp) (int item);
 	const u8* (*getEffectiveness) (int item);
-	const struct ItemStatBonuses* (*getStatBonuses) (int item);
+	const struct ItemStatBonuses* (*getEquipBonuses) (int item);
 	int (*getIconId) (int item);
 	int (*getWeaponEffect) (int item);
 	int (*getUseEffect) (int item);

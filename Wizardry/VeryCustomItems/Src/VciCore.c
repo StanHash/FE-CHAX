@@ -1,6 +1,9 @@
 
 #include "Vci.h"
 
+extern const u8 gVciNightmareId;
+extern const u8 gVciLockpickId;
+
 const struct VciInfo* const gVciInfoTable[0x100] = {};
 
 static inline
@@ -155,10 +158,10 @@ const u8* VciGetEffectiveness(int item)
 
 const struct ItemStatBonuses* VciGetStatBonuses(int item)
 {
-	if (VciGetInfo(item) && VciGetInfo(item)->getStatBonuses)
-		return VciGetInfo(item)->getStatBonuses(item);
+	if (VciGetInfo(item) && VciGetInfo(item)->getEquipBonuses)
+		return VciGetInfo(item)->getEquipBonuses(item);
 
-	return gVciDefaultInfo.getStatBonuses(item);
+	return gVciDefaultInfo.getEquipBonuses(item);
 }
 
 int VciGetIconId(int item)
@@ -383,4 +386,14 @@ s8 VciIsHammernable(int item)
 		return VciGetInfo(item)->isHammernable(item);
 
 	return gVciDefaultInfo.isHammernable(item);
+}
+
+int VciIsNightmare(int item)
+{
+	return VciGetIndex(item) == gVciNightmareId;
+}
+
+int VciIsLockpick(int item)
+{
+	return VciGetIndex(item) == gVciLockpickId;
 }
