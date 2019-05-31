@@ -1,5 +1,5 @@
-#ifndef HAX_VCI
-#define HAX_VCI
+#ifndef HAX_VCI_INCLUDED
+#define HAX_VCI_INCLUDED
 
 #include "EAstdlib.event"
 #include "Extensions/Hack Installation.txt"
@@ -40,42 +40,43 @@ gVciItemHealAmountList:
 	#define VciFuncGetHit              0x09
 	#define VciFuncGetWeight           0x0A
 	#define VciFuncGetCrit             0x0B
-	#define VciFuncGetMinRange         0x0C
-	#define VciFuncGetMaxRange         0x0D
-	#define VciFuncGetEncodedRange     0x0E
-	#define VciFuncGetRequiredExp      0x0F
-	#define VciFuncGetEffectiveness    0x10
-	#define VciFuncGetEquipBonuses     0x11
-	#define VciFuncGetIconId           0x12
-	#define VciFuncGetWeaponEffect     0x13
-	#define VciFuncGetUseEffect        0x14
-	#define VciFuncGetCostPerUse       0x15
-	#define VciFuncGetMaxCost          0x16
-	#define VciFuncGetAwardedExp       0x17
-	#define VciFuncClone               0x18
-	#define VciFuncCanUseWeapon        0x19
-	#define VciFuncCanUseStaff         0x1A
-	#define VciFuncGetAfterUse         0x1B
-	#define VciFuncIsEffectiveAgainst  0x1C
-	#define VciFuncGetRangeString      0x1D
-	#define VciFuncGetRankString       0x1E
-	#define VciFuncIsDisplayUsable     0x1F
-	#define VciFuncGetHealAmount       0x20
-	#define VciFuncIsStealable         0x21
-	#define VciFuncIsHammernable       0x22
-	#define VciFuncDrawMenuItem        0x23
-	#define VciFuncDrawMenuItemLong    0x24
-	#define VciFuncDrawMenuItemNoColor 0x25
-	#define VciFuncDrawStatScreenItem  0x26
-	#define VciFuncGetEquipHpBonus     0x27
-	#define VciFuncGetEquipPowBonus    0x28
-	#define VciFuncGetEquipSklBonus    0x29
-	#define VciFuncGetEquipSpdBonus    0x2A
-	#define VciFuncGetEquipDefBonus    0x2B
-	#define VciFuncGetEquipResBonus    0x2C
-	#define VciFuncGetEquipLckBonus    0x2D
+	#define VciFuncGetCost             0x0C
+	#define VciFuncGetMinRange         0x0D
+	#define VciFuncGetMaxRange         0x0E
+	#define VciFuncGetEncodedRange     0x0F
+	#define VciFuncGetRequiredExp      0x10
+	#define VciFuncGetEffectiveness    0x11
+	#define VciFuncGetEquipBonuses     0x12
+	#define VciFuncGetIconId           0x13
+	#define VciFuncGetWeaponEffect     0x14
+	#define VciFuncGetUseEffect        0x15
+	#define VciFuncGetCostPerUse       0x16
+	#define VciFuncGetMaxCost          0x17
+	#define VciFuncGetAwardedExp       0x18
+	#define VciFuncClone               0x19
+	#define VciFuncCanUseWeapon        0x1A
+	#define VciFuncCanUseStaff         0x1B
+	#define VciFuncGetAfterUse         0x1C
+	#define VciFuncIsEffectiveAgainst  0x1D
+	#define VciFuncGetRangeString      0x1E
+	#define VciFuncGetRankString       0x1F
+	#define VciFuncIsDisplayUsable     0x20
+	#define VciFuncGetHealAmount       0x21
+	#define VciFuncIsStealable         0x22
+	#define VciFuncIsHammernable       0x23
+	#define VciFuncDrawMenuItem        0x24
+	#define VciFuncDrawMenuItemLong    0x25
+	#define VciFuncDrawMenuItemNoColor 0x26
+	#define VciFuncDrawStatScreenItem  0x27
+	#define VciFuncGetEquipHpBonus     0x28
+	#define VciFuncGetEquipPowBonus    0x29
+	#define VciFuncGetEquipSklBonus    0x2A
+	#define VciFuncGetEquipSpdBonus    0x2B
+	#define VciFuncGetEquipDefBonus    0x2C
+	#define VciFuncGetEquipResBonus    0x2D
+	#define VciFuncGetEquipLckBonus    0x2E
 
-	#define VciBlankInfo "WORD 0 0 0 0 /* 4 */ 0 0 0 0 /* 8 */ 0 0 0 0 /* C */ 0 0 0 0 /* 10 */ 0 0 0 0 /* 14 */ 0 0 0 0 /* 18 */ 0 0 0 0 /* 1C */ 0 0 0 0 /* 20 */ 0 0 0 0 /* 24 */ 0 0 0 0 /* 28 */ 0 0 0 0 /* 2C */ 0 0"
+	#define VciBlankInfo "WORD 0 0 0 0 /* 4 */ 0 0 0 0 /* 8 */ 0 0 0 0 /* C */ 0 0 0 0 /* 10 */ 0 0 0 0 /* 14 */ 0 0 0 0 /* 18 */ 0 0 0 0 /* 1C */ 0 0 0 0 /* 20 */ 0 0 0 0 /* 24 */ 0 0 0 0 /* 28 */ 0 0 0 0 /* 2C */ 0 0 0"
 
 	#define VciInjectFunc(apVciInfo, aFuncId, apFunc) "PUSH; ORG (apVciInfo) + 4*(aFuncId); POIN (apFunc); POP"
 	#define VciInjectDefaultFunc(aFuncId, apFunc) "VciInjectFunc(gVciDefaultInfo, aFuncId, apFunc)"
@@ -361,4 +362,4 @@ PUSH
 
 POP
 
-#endif // HAX_VCI
+#endif // HAX_VCI_INCLUDED
