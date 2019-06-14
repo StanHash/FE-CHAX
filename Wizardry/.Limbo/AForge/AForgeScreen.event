@@ -1,0 +1,6 @@
+#ifndef HAX_AFORGE_SCREEN_INCLUDED
+#define HAX_AFORGE_SCREEN_INCLUDED
+
+#include "Src/AfScreen.lyn.event"
+
+#endif // HAX_AFORGE_SCREEN_INCLUDED

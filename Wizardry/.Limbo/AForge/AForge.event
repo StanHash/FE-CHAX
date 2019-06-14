@@ -1,0 +1,69 @@
+#ifndef HAX_AFORGE_INCLUDED
+#define HAX_AFORGE_INCLUDED
+
+#ifndef HAX_VCI_INCLUDED
+	ERROR "A Forge requires VCI to be included."
+#endif // HAX_VCI_INCLUDED
+
+#define AF_ITEM      SlimSword
+#define AF_DATA_ADDR 0x203F800
+
+#include "Src/AfCore.lyn.event"
+
+#include "Src/AfHooks.lyn.event"
+
+gAfItemId:
+	BYTE AF_ITEM
+
+ALIGN 4
+gpAfErr:
+	// Af error flags pointer
+	WORD AF_DATA_ADDR
+
+ALIGN 4
+gpAfData:
+	// Forge & Ref data pointer
+	WORD AF_DATA_ADDR + 4
+
+ALIGN 4
+gAfItemInfo:
+	VciBlankInfo
+
+	VciInjectFunc(gAfItemInfo, VciFuncGetIndex,    AfGetItemIndex)
+	VciInjectFunc(gAfItemInfo, VciFuncGetName,     AfGetItemName)
+	VciInjectFunc(gAfItemInfo, VciFuncGetUses,     AfGetItemUses)
+	VciInjectFunc(gAfItemInfo, VciFuncGetMight,    AfGetItemMight)
+	VciInjectFunc(gAfItemInfo, VciFuncGetHit,      AfGetItemHit)
+	VciInjectFunc(gAfItemInfo, VciFuncGetCrit,     AfGetItemCrit)
+	VciInjectFunc(gAfItemInfo, VciFuncGetAfterUse, AfGetItemAfterUse)
+
+	VciInjectInfo(AF_ITEM, gAfItemInfo)
+
+#ifndef HookProtectDefined
+  #define HookProtectDefined
+
+  #ifdef DEBUG
+    #ifdef __COLORZ_CORE__
+      #define HookProtect(aFrom, aTo) "PROTECT (aFrom) (aTo); ASSERT (aTo) - CURRENTOFFSET"
+    #else
+      // Stan!Core breaks PROTECT, and there's no proper way of reckognizing a Stan!Core from a legacy Core
+      #define HookProtect(aFrom, aTo) "ASSERT (aTo) - CURRENTOFFSET"
+    #endif
+  #else
+    #define HookProtect(aFrom, aTo) " "
+  #endif
+#endif // HookProtectDefined
+
+PUSH
+
+	// Calling AfGc at relevant points (avoid ref overflows caused by repeated calls to GetItemAfterUse)
+
+	ORG $02A1F6 // At the end of BattleGenerateSimulationInternal
+		SHORT $46C0; WORD $47184B00; POIN AfHook_BGSI_Gc
+		HookProtect($02A1F6, $02A204)
+
+POP
+
+#include "AForgeScreen.event"
+
+#endif // HAX_AFORGE_INCLUDED
