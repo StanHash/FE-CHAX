@@ -1,0 +1,13 @@
+
+ALIGN 4
+ASMC_SetMoveBonus:
+	WORD $4B05B500 $68804805 $F805F000 $68D24A03 $5442211D $4718BC08 $801829D $30004B8
+
+/* example usage:
+
+	// set a 2 move malus to Eirika
+	SVAL r2 Eirika
+	SVAL r3 (-2)
+	ASMC ASMC_SetMoveBonus|1
+
+*/
