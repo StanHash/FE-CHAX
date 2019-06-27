@@ -1,0 +1,11 @@
+
+// Frees a whole 6(7) saved bytes + 1 suspended byte inside every unit structs
+// (Hopefully)
+
+PUSH
+
+	ORG $0281C8
+		// mov r0, #0 ; bx lr
+		SHORT $2000 $4770
+
+POP
