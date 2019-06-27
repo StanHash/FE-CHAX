@@ -1,0 +1,142 @@
+#ifndef BRIEFBWL_INCLUDED
+#define BRIEFBWL_INCLUDED
+
+// Removes unnecesary fields from BWL data, making free space that can be used by hacks
+// hack by Stan
+
+// NOTE: incompatible with circles' Skill System
+
+// The freed area starts at byte 5 of a unit's BWL data, and span the entire rest of it (making 11 free bytes)
+
+#include "Src/BriefBwl.lyn.event"
+
+// defining HookProtect(from, to) for debug builds
+// use at the end of a hook: from defines the start of the hook, to defines the end of the space allocated for the hook
+// this does two things: protects the hook from other hacks and ensures the hook doesn't overflow past its allocated area
+
+#ifndef HookProtectDefined
+  #define HookProtectDefined
+
+  #ifdef DEBUG
+    #ifdef __COLORZ_CORE__
+      #define HookProtect(aFrom, aTo) "PROTECT (aFrom) (aTo); ASSERT (aTo) - CURRENTOFFSET"
+    #else
+      // Stan!Core breaks PROTECT, and there's no proper way of reckognizing a Stan!Core from a legacy Core
+      #define HookProtect(aFrom, aTo) "ASSERT (aTo) - CURRENTOFFSET"
+    #endif
+  #else
+    #define HookProtect(aFrom, aTo) " "
+  #endif
+#endif // HookProtectDefined
+
+PUSH
+
+	ORG $0A44F6 // BWL_AddBattle: Load correct bits
+		// ldr r1, [r2] ; lsl r1, #2 ; lsr r1, #20
+		SHORT $6811 $0089 $0D09
+
+	ORG $0A4504 // BWL_AddBattle: Save correct bits
+		// ldr r3, =(0xFFF << 18) ; lsl r0, #18 ; ldr r1, [r2] ; bic r1, r3 ; orr r1, r0 ; str r1, [r2]
+		SHORT $4B09 $0480 $6811 $4399 $4301 $6011 $46C0 $46C0
+
+	ORG $0A452C // BWL_AddBattle: Replace literal
+		WORD (0xFFF << 18)
+
+	ORG $0A4556 // BWL_AddWin: Load correct bits
+		// ldr r1, [r3] ; lsl r1, #14 ; lsr r1, #22
+		SHORT $6819 $0389 $0D89 $46C0 $46C0 $46C0
+
+	ORG $0A456A // BWL_AddWin: Save correct bits
+		// <mov r2, #(0x3FF << 8)> ; lsl r0, #8 ; ldr r1, [r3] ; bic r1, r2 ; orr r1, r0 ; str r1, [r3]
+		SHORT $2201 $0292 $3A01 $0212 $0200 $6819 $4391 $4301 $6019
+
+	ORG $0A4684 // Replace BWL_SetDeathStats
+		WORD $47184B00; POIN BBwl_SetDeathStats
+		HookProtect($0A4684, $0A474C)
+
+	ORG $0A474C // Dummy BWL_IncrementMoveValue
+		SHORT $4770 // bx lr
+
+	ORG $0A478C // Dummy BWL_IncrementStatScreenViews
+		SHORT $4770 // bx lr
+
+	ORG $0A47CC // Dummy BWL_IncrementDeployCount
+		SHORT $4770 // bx lr
+
+	ORG $0A481C // Dummy BWL_AddTilesMoved
+		SHORT $4770 // bx lr
+
+	ORG $0A487C // Dummy BWL_AddExpGained
+		SHORT $4770 // bx lr
+
+	ORG $0A4904 // Replace BWL_GetTotalBattles
+		WORD $47184B00; POIN BBwl_GetTotalBattles
+		HookProtect($0A4904, $0A4928)
+
+	ORG $0A4928 // Replace BWL_GetTotalWins
+		WORD $47184B00; POIN BBwl_GetTotalWins
+		HookProtect($0A4928, $0A4958)
+
+	ORG $0A4958 // Replace BWL_GetTotalLosses
+		WORD $47184B00; POIN BBwl_GetTotalLosses
+		HookProtect($0A4958, $0A4978)
+
+	ORG $0A4978 // Dummy BWL_GetTotalLevelsGained
+		SHORT $2000 $4770 // mov r0, #0 ; bx lr
+		HookProtect($0A4978, $0A49A4)
+
+	ORG $0A49A4 // Dummy BWL_GetTotalExpGained (TODO: restore functionality, it's actually used sometimes)
+		SHORT $2000 $4770 // mov r0, #0 ; bx lr
+		HookProtect($0A49A4, $0A49C8)
+
+	ORG $0A49C8 // Dummy BWL_GetExpGained
+		SHORT $2000 $4770 // mov r0, #0 ; bx lr
+		HookProtect($0A49C8, $0A49FC)
+
+	ORG $0A49FC // Replace BWL_GetFavoritismValue
+		WORD $47184B00; POIN BBwl_GetFavor
+		HookProtect($0A49FC, $0A4A34)
+
+	ORG $0A4A34 // Dummy BWL_AddFavoritismValue
+		SHORT $4770 // bx lr
+		HookProtect($0A4A34, $0A4AA4)
+
+	ORG $087046 // DrawStatScreenBwl : get battles
+		// ldr r0, [r6] ; lsl r0, #2 ; lsr r0, #20
+		SHORT $6830 $0080 $0D00
+
+	ORG $087054 // DrawStatScreenBwl : get battles again
+		// ldr r2, [r6] ; lsl r2, #2 ; lsr r2, #20
+		SHORT $6832 $0092 $0D12
+
+	ORG $087060 // DrawStatScreenBwl : get wins
+		// ldr r0, [r6] ; lsl r0, #14 ; lsr r0, #22
+		SHORT $6830 $0380 $0D80 $46C0 $46C0 $46C0
+
+	ORG $087078 // DrawStatScreenBwl : get wins again
+		// ldr r2, [r6] ; lsl r2, #14 ; lsr r2, #22
+		SHORT $6832 $0392 $0D92 $46C0 $46C0
+
+	ORG $0B62AA // GetChapterDeathCount: Load correct bits
+		SHORT $7901 // ldrb r1, [r0, #4]
+
+	ORG $0B678E
+		SHORT $7901 // ldrb r1, [r0, #4]
+
+	ORG $0B6794
+		SHORT $6800 $0F80 // ldr r0, [r0] ; lsr r0, #30
+
+	ORG $0B6CD8
+		// ldr r0, [r3] ; lsl r0, #2 ; lsr r0, #20
+		SHORT $6818 $0080 $0D00
+
+	ORG $0B6CEE
+		// ldr r0, [r3] ; lsl r0, #14 ; lsr r0, #22
+		SHORT $6818 $0380 $0D80 $46C0 $46C0 $46C0
+
+	ORG $086FE6
+		SHORT $46C0
+
+POP
+
+#endif // BRIEFBWL_INCLUDED
