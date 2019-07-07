@@ -32,6 +32,12 @@ int SignedTruncate(int value, unsigned bits)
 	return (value << shift) >> shift;
 }
 
+int AfCanForgeItem(int item)
+{
+	unsigned type = GetItemType(item);
+	return type < 8;
+}
+
 int AfMakeForgedItem(int baseItem)
 {
 	// Find slot for forge

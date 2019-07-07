@@ -58,6 +58,7 @@ struct AfDataGlobal
 // functions
 
 // Forged item functions
+int AfCanForgeItem(int item);
 int AfMakeForgedItem(int baseItem);
 void AfSetMightBonus(int item, int mightLevel);
 void AfSetHitBonus(int item, int hitLevel);
