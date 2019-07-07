@@ -1,0 +1,102 @@
+#ifndef FERRYAI_INCLUDED
+#define FERRYAI_INCLUDED
+
+// Ferrying Ai
+// hack by Stan
+
+// HOW IT WORKS:
+// A unit with "Ferry Ai1" will seek (allied) units that are rescuing some other unit, and take that unit from them
+// Once the ferry unit is rescuing a unit, they will seek the closest unobstructed "drop point" and try to drop their rescued unit there
+// "drop points" are definied dynamically at runtime (it's stored in trap data). The following functions are provided to the user for that purpose:
+
+/*
+ * void FerryAddDropTile(int x, int y) :: registers drop tile at given coordinates
+ * ASMC_AddFerryDropTile :: for use with ASMC: adds drop tile at coordinates in sB
+ * ASMC_AddFerryDropTiles :: for use with ASMC: adds drop tiles given list of short pairs at address in s2 (list is terminated when x < 0)
+ */
+
+#ifndef FERRY_TAKE_PERFORM
+  #define FERRY_TAKE_PERFORM 14
+#endif // FERRY_TAKE_PERFORM
+
+#ifndef FERRY_DROP_PERFORM
+  #define FERRY_DROP_PERFORM 15
+#endif
+
+#ifndef FERRY_TRAP_ID
+  #define FERRY_TRAP_ID 0xEF
+#endif // FERRY_TRAP_ID
+
+#ifndef FERRY_AI1
+  #define FERRY_AI1 10
+#endif // FERRY_AI1
+
+#ifndef HipsterAiScrDefinitions
+	#define HipsterAiScrDefinitions
+
+	// "Extensions/AI Assembly.txt" is broken in latest EA package
+
+	#define InjectAi1(aId, aScr) "PUSH; ORG 0x5A9184+(4*(aId)); POIN (aScr); POP"
+	#define InjectAi2(aId, aScr) "PUSH; ORG 0x5A9138+(4*(aId)); POIN (aScr); POP"
+
+	#define AiResultAddr 0x0203AA8A
+
+	#define AiGotoIfHI(aLabel, aLAddr, aRValue) "BYTE 0x00 0 0xFF (aLabel); WORD (aRValue) (aLAddr) 0"
+	#define AiGotoIfHS(aLabel, aLAddr, aRValue) "BYTE 0x00 1 0xFF (aLabel); WORD (aRValue) (aLAddr) 0"
+	#define AiGotoIfEQ(aLabel, aLAddr, aRValue) "BYTE 0x00 2 0xFF (aLabel); WORD (aRValue) (aLAddr) 0"
+	#define AiGotoIfLS(aLabel, aLAddr, aRValue) "BYTE 0x00 3 0xFF (aLabel); WORD (aRValue) (aLAddr) 0"
+	#define AiGotoIfLO(aLabel, aLAddr, aRValue) "BYTE 0x00 4 0xFF (aLabel); WORD (aRValue) (aLAddr) 0"
+	#define AiGotoIfNE(aLabel, aLAddr, aRValue) "BYTE 0x00 5 0xFF (aLabel); WORD (aRValue) (aLAddr) 0"
+	#define AiGotoIfHI(aLabel, aRValue)         "BYTE 0x00 0 0xFF (aLabel); WORD (aRValue) (AiResultAddr) 0"
+	#define AiGotoIfHS(aLabel, aRValue)         "BYTE 0x00 1 0xFF (aLabel); WORD (aRValue) (AiResultAddr) 0"
+	#define AiGotoIfEQ(aLabel, aRValue)         "BYTE 0x00 2 0xFF (aLabel); WORD (aRValue) (AiResultAddr) 0"
+	#define AiGotoIfLS(aLabel, aRValue)         "BYTE 0x00 3 0xFF (aLabel); WORD (aRValue) (AiResultAddr) 0"
+	#define AiGotoIfLO(aLabel, aRValue)         "BYTE 0x00 4 0xFF (aLabel); WORD (aRValue) (AiResultAddr) 0"
+	#define AiGotoIfNE(aLabel, aRValue)         "BYTE 0x00 5 0xFF (aLabel); WORD (aRValue) (AiResultAddr) 0"
+
+	#define AiFunc(aFuncAddr, aParamAddr)  "BYTE 0x01 0 0xFF 0; WORD 0; POIN (aFuncAddr) (aParamAddr)"
+	#define AiFunc(aFuncAddr)              "BYTE 0x01 0 0xFF 0; WORD 0; POIN (aFuncAddr); WORD 0"
+	#define AiChangeAi(aNewAi1, aNewAi2)   "BYTE 0x02 (aNewAi1) (aNewAi2) 0; WORD 0 0 0"
+	#define AiGoto(aLabel)                 "BYTE 0x03 0 0xFF (aLabel); WORD 0 0 0"
+	#define AiMoveTowardsPoint(aX, aY)     "BYTE 0x0C (aX) 0xFF (aY); WORD 0 0 0"
+	#define AiLabel(aId)                   "BYTE 0x1C 0 0xFF (aId); WORD 0 0 0"
+
+	#define AiRestart "AiGoto(0)"
+
+#endif // HipsterAiScrDefinitions
+
+#include "AiPerformExtension.event"
+
+gFerryTakePerformId: BYTE FERRY_TAKE_PERFORM
+gFerryDropPerformId: BYTE FERRY_DROP_PERFORM
+
+gFerryDataTrapId: BYTE FERRY_TRAP_ID
+
+gFerryAi1: BYTE FERRY_AI1
+
+#include "Src/FerryAi.lyn.event"
+
+InjectAiPerformer(FERRY_TAKE_PERFORM, FerryPerformTake)
+InjectAiPerformer(FERRY_DROP_PERFORM, FerryPerformDrop)
+
+ALIGN 4
+FerryAiScr:
+{
+	AiFunc(FerryCheckIsRescuing)
+	AiGotoIfEQ(1, 0)
+	AiGotoIfEQ(2, 1)
+	AiRestart
+
+AiLabel(1)
+	AiFunc(FerryTryTakeInRangeOrMove)
+	AiRestart
+
+AiLabel(2)
+	AiFunc(FerryTryDropInRangeOrMove)
+	AiRestart
+
+}
+
+InjectAi1(FERRY_AI1, FerryAiScr)
+
+#endif // FERRYAI_INCLUDED
