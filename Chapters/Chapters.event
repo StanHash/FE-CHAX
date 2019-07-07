@@ -6,8 +6,8 @@
 // (Which would be useful if I had more than one at a time)
 
 {
-#include "PeerBlitz/PeerBlitzCh9.event"
-#include "PeerBlitz/PeerBlitzCh9Map.event"
+// #include "PeerBlitz/PeerBlitzCh9.event"
+// #include "PeerBlitz/PeerBlitzCh9Map.event"
 }
 
 {
@@ -18,6 +18,11 @@
 {
 // #include "CCBlitz/CCBlitzChapter27.event"
 // #include "CCBlitz/CCBlitzChapter27Map.event"
+}
+
+{
+#include "CommBlitz/CommBlitzCh10.event"
+#include "Demo/DemoMap.event" /* temporary test map */
 }
 
 {

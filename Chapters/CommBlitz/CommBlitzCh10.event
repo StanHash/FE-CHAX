@@ -1,0 +1,238 @@
+#ifndef STAN_CH10_INCLUDED
+#define STAN_CH10_INCLUDED
+
+#include "EAstdlib.event"
+
+#include "CommBlitzCh10Asmcs.lyn.event"
+
+#ifndef SetSymbolDefined
+  #define SetSymbolDefined
+  #define SetSymbol(aName, aValue) "PUSH; ORG (aValue); aName:; POP"
+#endif // SetSymbolDefined
+
+#ifndef ROM
+  #define ROM 0x08000000
+#endif // ROM
+
+SetSymbol(scPrepScreen,         $591FD8) // no args
+SetSymbol(scNoSkipFadeOut,      $591F40) // no args
+SetSymbol(scLoadReinforcements, $9EE274) // args: s2 = pointer to UNITs
+
+/* ================== */
+/* = CHAPTER CONFIG = */
+/* ================== */
+
+#define AssetCh10Data 0x07
+
+#define CharCh10Gen   0x80
+
+#define CharCh10FleetA "(Bone+0)"
+#define CharCh10FleetB "(Bone+1)"
+#define CharCh10FleetC "(Bone+2)"
+
+SetSymbol(cntRescueCycler, 0)
+
+gRescuingChars: BYTE CharCh10FleetA CharCh10FleetB CharCh10FleetC 0
+
+/* ================ */
+/* = CHAPTER DATA = */
+/* ================ */
+
+EventPointerTable(AssetCh10Data, ThisChapter)
+
+ALIGN 4
+ThisChapter:
+	POIN TurnEventList
+	POIN CharacterEventList
+	POIN LocationEventList
+	POIN ActionEventList
+	POIN BlankEventList BlankEventList BlankEventList
+	POIN TutorialList
+	POIN TrapList TrapList2
+	POIN unPlayerList unPlayerList
+	WORD 0 0 0 0 0 0 /* lol skirmishes */
+	POIN scBeginning scEnding
+
+ALIGN 4
+TurnEventList:
+	END_MAIN
+
+ALIGN 4
+CharacterEventList:
+	END_MAIN
+
+ALIGN 4
+LocationEventList:
+	END_MAIN
+
+ALIGN 4
+ActionEventList:
+	CauseGameOverIfLordDies
+	AFEV 3 scEnding 2
+
+	// ASME 0 scRefreshRescued ASME_CheckRescues
+	SHORT $E 0; POIN scRefreshRescued ASME_CheckRescues
+
+	END_MAIN
+
+ALIGN 4
+BlankEventList:
+	END_MAIN
+
+ALIGN 4
+TutorialList:
+	WORD 0
+
+ALIGN 4
+TrapList:
+TrapList2:
+	ENDTRAP
+
+/* ================= */
+/* = CHAPTER UNITS = */
+/* ================= */
+
+ALIGN 4
+unPlayerList:
+	UNIT Eirika   PegasusKnight 0 Level(15, Ally, True) [7, 6] 0 0 0 0 [IronLance, ElysianWhip, Vulnerary] [0]
+	UNIT LArachel Troubadour    0 Level(15, Ally, True) [8, 8] 0 0 0 0 [Heal, Mend, Warp]                  [0]
+	UNIT Neimi    Ranger_F      0 Level(1,  Ally, True) [7, 9] 0 0 0 0 [IronBow, SteelBow, IronSword]      [0]
+
+	UNIT /* end */
+
+ALIGN 4
+unEnemyList:
+	UNIT CharCh10Gen    PegasusKnight 0 Level(1, Enemy, False) [14, 3] 0 0 0 0 [0]        [FERRY_AI1, 3]
+
+	UNIT CharCh10FleetA Fleet         0 Level(1, Enemy, False) [19, 6] 0 0 0 0 [SteelBow] [0, 3]
+	UNIT CharCh10FleetB Fleet         0 Level(1, Enemy, False) [18, 7] 0 0 0 0 [SteelBow] [0, 3]
+	UNIT CharCh10FleetC Fleet         0 Level(1, Enemy, False) [19, 8] 0 0 0 0 [SteelBow] [0, 3]
+
+	UNIT /* end */
+
+ALIGN 4
+unRescueList:
+	/* this unit list works a bit differently, as units in this list will be loaded one at a time */
+	/* no end UNIT is necessary (as, again, only one UNIT is taken into account at one) */
+
+	/* NOTE: this group cannot hold more than 16 units */
+	/* (this is because event counters can only hold 16 values) */
+
+	UNIT CharCh10Gen Soldier   0 Level(1, Enemy, False) [0, 0] 0 0 0 0 [IronLance] [0, 3]
+	UNIT CharCh10Gen Mercenary 0 Level(1, Enemy, False) [0, 0] 0 0 0 0 [IronSword] [0, 3]
+
+	SetSymbol(RescueUnitCount, (CURRENTOFFSET-unRescueList)/0x14)
+
+/* ================= */
+/* = HELPER SCENES = */
+/* ================= */
+
+ALIGN 4
+scInitRescueCycle: {
+	COUNTER_SET cntRescueCycler 0
+
+	NoFade
+	ENDA
+}
+
+ALIGN 4
+scLoadRescue: {
+	/* args: s2 = char id */
+
+	SetSymbol(end,   0)
+	SetSymbol(reset, 1)
+
+	COUNTER_CHECK cntRescueCycler
+
+	// r3 = counter * sizeof(UNIT)
+	SVAL r3 0x14 /* sizeof(UNIT) = 0x14 */
+	SMUL slotsParam(r3, r3, rC)
+
+	// r1 = unRescueList + counter*sizeof(UNIT)
+	SVAL r1 (ROM + unRescueList)
+	SADD slotsParam(r1, r1, r3)
+
+	ASMC ASMC_LoadRescued
+
+	BEQ end rC r0
+
+	COUNTER_CHECK cntRescueCycler
+	SVAL r1 (RescueUnitCount-1) // maximum value of counter
+
+	BEQ reset rC r1
+
+	// Increment Counter (as we sucessfully loaded a new rescued unit)
+	// EA Raw is broken, there's only one argument and it's the counted id
+	COUNTER_ADD cntRescueCycler 0
+
+	GOTO end
+
+LABEL reset
+	// Reset counter (as we reached the maximum value)
+	COUNTER_SET cntRescueCycler 0
+
+LABEL end
+	NoFade
+	ENDA
+}
+
+/* ================== */
+/* = CHAPTER SCENES = */
+/* ================== */
+
+ALIGN 4
+scBeginning: {
+	CALL scNoSkipFadeOut
+
+	EVBIT_T 9 /* CMON */
+
+	// Load units
+
+	LOAD1 0 unEnemyList
+	LOAD1 0 unPlayerList
+	ENUN
+
+	EVBIT_F 9 /* CMOF */
+
+	// Add drop tiles
+
+	SVAL 2 (ROM + DropTiles)
+	ASMC ASMC_AddFerryDropTiles
+
+	// Init chapter logic
+
+	CALL scInitRescueCycle
+
+	// Load rescued units
+
+	CALL scRefreshRescued
+
+	ENDA
+}
+
+ALIGN 4
+DropTiles:
+	SHORT 7 6
+	SHORT (-1) (-1)
+
+ALIGN 4
+scRefreshRescued: {
+	SVAL r2 CharCh10FleetA
+	CALL scLoadRescue
+
+	SVAL r2 CharCh10FleetB
+	CALL scLoadRescue
+
+	SVAL r2 CharCh10FleetC
+	CALL scLoadRescue
+
+	NoFade
+	ENDA
+}
+
+ALIGN 4
+scEnding: {
+	ENDA
+}
+
+#endif // STAN_CH10_INCLUDED
