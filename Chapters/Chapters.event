@@ -22,7 +22,7 @@
 
 {
 #include "CommBlitz/CommBlitzCh10.event"
-#include "Demo/DemoMap.event" /* temporary test map */
+#include "CommBlitz/CommBlitzCh10Map.event"
 }
 
 {
