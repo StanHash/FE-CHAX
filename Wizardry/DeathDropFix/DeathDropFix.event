@@ -1,0 +1,17 @@
+#ifndef DEATHDROPFIX_INCLUDED
+#define DEATHDROPFIX_INCLUDED
+
+// makes enemy rescued units not drop (and die) when their holder dies on terrain they can't cross
+// hack by Stan
+
+#include "Src/DropFix.lyn.event"
+#include "Src/DropHook.lyn.event"
+
+PUSH
+
+	ORG $032690
+		WORD $47184B00; POIN DropHook
+
+POP
+
+#endif // DEATHDROPFIX_INCLUDED
