@@ -186,8 +186,8 @@ CpPerformFunc FerryPerformDrop(struct Proc* proc)
 	gActionData.unitActionType = UNIT_ACTION_DROP;
 
 	gActionData.targetIndex = gAiData.decision.unitTargetIndex;
-	gActionData.xOther = gAiData.decision.xOther;
-	gActionData.yOther = gAiData.decision.yOther;
+	gActionData.xOther = gAiData.decision.paramB;
+	gActionData.yOther = gAiData.decision.paramC;
 
 	ApplyUnitAction(proc);
 
