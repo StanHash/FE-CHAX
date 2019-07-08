@@ -91,7 +91,7 @@ void FerryCheckDropTile(void* user, int x, int y)
 		return;
 	}
 
-	if (RECT_DISTANCE(pos->x, pos->y, gActiveUnit->xPos, gActiveUnit->yPos) < RECT_DISTANCE(x, y, gActiveUnit->xPos, gActiveUnit->yPos))
+	if (RECT_DISTANCE(pos->x, pos->y, gActiveUnit->xPos, gActiveUnit->yPos) > RECT_DISTANCE(x, y, gActiveUnit->xPos, gActiveUnit->yPos))
 	{
 		pos->x = x;
 		pos->y = y;
@@ -109,7 +109,7 @@ int FerryGetClosestDropTile(struct Vec2* result)
 
 	FerryForEachDropTile(FerryCheckDropTile, &tmp);
 
-	if ((tmp.x > 0) && (tmp.y > 0))
+	if ((tmp.x >= 0) && (tmp.y >= 0))
 	{
 		*result = tmp;
 		return TRUE;
