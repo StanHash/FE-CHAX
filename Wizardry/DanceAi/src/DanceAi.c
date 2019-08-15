@@ -1,10 +1,12 @@
 #include "gbafe.h"
 
-static int DanceAiGetUnitDanceWeight(struct Unit* unit) {
+static int DanceAiGetUnitDanceWeight(struct Unit* unit)
+{
 	return unit->pow + unit->skl + unit->spd + unit->def + unit->res + unit->lck + unit->curHP;
 }
 
-void DanceAiTryDecide(int(*isUnitEnemy)(struct Unit*)) {
+void DanceAiTryDecide(int(*isUnitEnemy)(struct Unit*))
+{
 	if (!(UNIT_ATTRIBUTES(gActiveUnit) & (CA_DANCE | CA_PLAY)))
 		return;
 
@@ -16,8 +18,10 @@ void DanceAiTryDecide(int(*isUnitEnemy)(struct Unit*)) {
 	int xMovement   = -1;
 	int yMovement   = -1;
 
-	for (int iy = 0; iy < gMapSize.y; ++iy) {
-		for (int ix = 0; ix < gMapSize.x; ++ix) {
+	for (int iy = 0; iy < gMapSize.y; ++iy)
+	{
+		for (int ix = 0; ix < gMapSize.x; ++ix)
+		{
 			if (gMapMovement[iy][ix] > 120)
 				continue; // Can't move there
 
@@ -58,7 +62,8 @@ void DanceAiTryDecide(int(*isUnitEnemy)(struct Unit*)) {
 		}
 	}
 
-	if (targetIndex >= 0) {
+	if (targetIndex >= 0)
+	{
 		AiSetDecision(
 			xMovement, yMovement,
 			AI_DECISION_DANCE,
@@ -67,7 +72,8 @@ void DanceAiTryDecide(int(*isUnitEnemy)(struct Unit*)) {
 	}
 }
 
-int DanceAiDoAction(struct Proc* cpPerformProc) {
+int DanceAiDoAction(struct Proc* proc)
+{
 	gActiveUnit->xPos = gAiData.decision.xMovement;
 	gActiveUnit->yPos = gAiData.decision.yMovement;
 
@@ -75,7 +81,7 @@ int DanceAiDoAction(struct Proc* cpPerformProc) {
 	gActionData.targetIndex = gAiData.decision.unitTargetIndex;
 
 	// Do the dancing action
-	ApplyUnitAction(cpPerformProc);
+	ApplyUnitAction(proc);
 
 	// Finding last index in the ai unit queue
 	unsigned lastIndex = 0;

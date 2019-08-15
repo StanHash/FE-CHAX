@@ -11,7 +11,7 @@ Oh no! pirates![A][NL]
 [OpenLeft][ClearFace]
 [OpenMidRight][ClearFace]
 [CloseSpeechSlow]
-[LoadOverworldFaces]
+[Events]
 
 [OpenMidRight][LoadFace][0x02][0x01]
 Wait...[A] Monks?[A][NL]

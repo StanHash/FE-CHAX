@@ -1,3 +1,8 @@
+#ifndef RS_INCLUDED
+#define RS_INCLUDED
+
+// Removes supports in a stupid hardcoded way
+// hack by Stan
 
 // Frees a whole 6(7) saved bytes + 1 suspended byte inside every unit structs
 // (Hopefully)
@@ -9,3 +14,5 @@ PUSH
 		SHORT $2000 $4770
 
 POP
+
+#endif // RS_INCLUDED
