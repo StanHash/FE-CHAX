@@ -9,8 +9,14 @@
 
 {
 
-PUSH; ORG 0x2B9A0
-	jumpToHack(GetStatIncrease)
+PUSH
+
+	ORG 0x2B9A0
+		jumpToHack(NuggetStatIncrease)
+
+	ORG 0x02B9C4
+		jumpToHack(NuggetAutoleveledStatIncrease)
+
 POP
 
 #include "src/LolStats.lyn.event"
