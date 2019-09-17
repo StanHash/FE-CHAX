@@ -1,10 +1,12 @@
 #include "LTF.h"
 
-static struct Unit* LTF_GetAutocursorUnit(unsigned phase) {	
-	for (unsigned index = (phase + 1); index < (phase + 0x40); ++index) {
+static struct Unit* LTF_GetAutocursorUnit(unsigned phase)
+{
+	for (unsigned index = (phase + 1); index < (phase + 0x40); ++index)
+	{
 		struct Unit* unit = GetUnit(index);
 
-		if (!unit || !unit->pCharacterData)
+		if (!UNIT_IS_VALID(unit))
 			continue;
 
 		if (unit->statusIndex == UNIT_STATUS_BERSERK)
@@ -17,24 +19,31 @@ static struct Unit* LTF_GetAutocursorUnit(unsigned phase) {
 	return NULL;
 }
 
-void LTF_InitCursorMemory(void) {
+void LTF_InitCursorMemory(void)
+{
 	struct Unit* unit = LTF_GetAutocursorUnit(UA_BLUE);
 
-	if (unit) {
+	if (unit)
+	{
 		gChapterData.xCursorSaved = unit->xPos;
 		gChapterData.yCursorSaved = unit->yPos;
-	} else {
+	}
+	else
+	{
 		gChapterData.xCursorSaved = gMapSize.x  / 2;
 		gChapterData.yCursorSaved = gMapSize.y / 2;
 	}
 }
 
 // NOTE: REPLACES VANILLA FUNCTION
-void GetPlayerStartCursorPosition(int* xOut, int* yOut) {
-	if (!gChapterData.autocursorOption) { // autocursorOption == 1 => autocursor OFF
+void GetPlayerStartCursorPosition(int* xOut, int* yOut)
+{
+	if (!gChapterData.autocursorOption) // autocursorOption == 1 => autocursor OFF
+	{
 		struct Unit* unit = LTF_GetAutocursorUnit(gChapterData.currentPhase);
 
-		if (unit) {
+		if (unit)
+		{
 			*xOut = unit->xPos;
 			*yOut = unit->yPos;
 

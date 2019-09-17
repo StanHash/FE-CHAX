@@ -72,6 +72,10 @@ PUSH
 	ORG $0154D2
 		SHORT $46C0 // nop
 
+	// Do not get camera coords for start of enemy phase
+	ORG $01DE88
+		SHORT $4770 // bx lr
+
 	// Only one unit per AI phase (very hacky version)
 	// ORG $039A2C
 	//	SHORT $2001 // mov r0, #1
@@ -161,6 +165,8 @@ PUSH
 		PROC_NEW_CHILD($59AE00) // gProc_ResetCursorPosition
 //		PROC_NEW_CHILD_BLOCKING($59AF80) // gProc_PhaseSwitchGfx
 
+		PROC_NEW_CHILD_BLOCKING(gProc_TurnSwitchFx)
+
 		PROC_WHILE_EXISTS($59A548) // gProc_CameraMovement
 
 		PROC_CALL_ROUTINE($018859) // MapMain_UpdateUnitStatus
@@ -245,6 +251,7 @@ PUSH
 		PROC_JUMP($5B9ADC)
 
 	ASSERT ($59A438 - CURRENTOFFSET)
+
 POP
 
 #include "Src/LTFCore.lyn.event"
@@ -254,8 +261,17 @@ POP
 #include "Src/LTFEndPlayerPhase.lyn.event"
 #include "Src/LTFAutocursor.lyn.event"
 #include "Src/LTFAi.lyn.event"
+#include "Src/LTFTurnSwitchFx.lyn.event"
 
 #include "Src/LTFHooks.lyn.event"
+
+ALIGN 4
+gLTFTurnSwitchSheetImg:
+	#incbin "Data/TurnSwitchSheet.4bpp.lz"
+
+ALIGN 4
+gLTFTurnSwitchSheetPal:
+	#incbin "Data/TurnSwitchSheet.gbapal"
 
 // BIG-STUFF-TO-DO-AND-TO-FIX-LIST-THING:
 
@@ -281,11 +297,13 @@ POP
 // Done: Restore the additional AI behaviors (escaping/lockpicking)
 // Fixed: some AI2 seem broken
 // Done: Not display predictions sometimes (during cutscenes/menus/etc?)
+// Done: Not move camera to enemy before each enemy move
+// Done: Change phase switch screen effect to show something like "TURN xyz" instead of "PLAYER PHASE"
 
-// Todo: Change phase switch screen effect to show something like "TURN xyz" instead of "PLAYER PHASE"
 // Todo: Test
 
 // KNOWN ISSUES:
 //   AI can take its time to make a decision
+//   Turn switch blend doesn't work on sprites, resulting in weirdities. (I don't know how to fix :/)
 
 #endif // HAX_LTF

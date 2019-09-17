@@ -3,7 +3,8 @@
 static void LTFMapSprite_UpdateAllMapSpritePalettes(void);
 
 // NOTE: REPLACES VANILLA FUNCTION
-unsigned GetUnitBattleMapSpritePaletteIndex(const struct Unit* unit) {
+unsigned GetUnitBattleMapSpritePaletteIndex(struct Unit* unit)
+{
 	if (unit->state & 0x8000000)
 		return 0xB; // Link Arena palette
 
@@ -13,8 +14,10 @@ unsigned GetUnitBattleMapSpritePaletteIndex(const struct Unit* unit) {
 	return GetUnitMapSpritePaletteIndex(unit);
 }
 
-void LTFMapSprite_UpdateAllMapSpritePalettes(void) {
-	for (unsigned index = 1; index < 0x100; ++index) {
+void LTFMapSprite_UpdateAllMapSpritePalettes(void)
+{
+	for (unsigned index = 1; index < 0x100; ++index)
+	{
 		struct Unit* unit = GetUnit(index);
 
 		if (!unit || !unit->pCharacterData)
@@ -30,7 +33,8 @@ void LTFMapSprite_UpdateAllMapSpritePalettes(void) {
 	}
 }
 
-void LTFMapSprite_UpdateAll(void) {
+void LTFMapSprite_UpdateAll(void)
+{
 	if ((gKeyState.heldKeys ^ gKeyState.prevKeys) & (KEY_BUTTON_R))
 		LTFMapSprite_UpdateAllMapSpritePalettes();
 

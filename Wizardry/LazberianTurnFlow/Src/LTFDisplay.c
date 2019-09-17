@@ -20,7 +20,8 @@ struct LTFPredictionDisplayProc
 	unsigned xOff;
 };
 
-static const struct ProcInstruction sProc_LTFPhasePredictionDisplay[] = {
+static const struct ProcInstruction sProc_LTFPhasePredictionDisplay[] =
+{
 	PROC_SET_NAME("Stan:LTF:PredictionDisplay"),
 
 	PROC_CALL_ROUTINE(LTFDisplay_OnInit),
@@ -31,7 +32,8 @@ static const struct ProcInstruction sProc_LTFPhasePredictionDisplay[] = {
 	PROC_END
 };
 
-static const struct ProcInstruction sProc_LTFPhasePredictionDisplayLock[] = {
+static const struct ProcInstruction sProc_LTFPhasePredictionDisplayLock[] =
+{
 	PROC_SET_NAME("Stan:LTF:PredictionDisplayLock"),
 	PROC_SET_DESTRUCTOR(LTFDisplayLock_OnEnd),
 
@@ -61,7 +63,8 @@ static void LTFDisplay_OnLoop(struct LTFPredictionDisplayProc* proc)
 	if (proc->xOff > 0)
 		proc->xOff--;
 
-	for (unsigned i = 0; i < proc->predictionCount; ++i) {
+	for (unsigned i = 0; i < proc->predictionCount; ++i)
+	{
 		PushToHiOAM(
 			240 - ((LTF_DISPLAY_XOFF - proc->xOff) * LTF_DISPLAY_XOFF_STEP), 55 + (i * 10),
 			&gObj_8x8, 3 + (LTFDisplay_GetPhaseObjPalette(proc->prediction[i]) << 12)

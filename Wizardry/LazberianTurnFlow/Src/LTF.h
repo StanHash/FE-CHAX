@@ -5,7 +5,8 @@
 
 // config
 
-enum {
+enum
+{
 	// maximum number of moves to predict
 	LTF_DISPLAY_MAX_COUNT = 5,
 

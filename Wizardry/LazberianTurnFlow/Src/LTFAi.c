@@ -12,7 +12,8 @@ static void LTFAi_EndTurnDicider(void);
 
 static void LTFAi_CallDecide(struct Proc*, AiDecitionMakerFunc decisionMaker);
 
-const CpOrderFunc LTFAi_NewCpOrderFuncList[] = {
+const CpOrderFunc LTFAi_NewCpOrderFuncList[] =
+{
 	LTFAi_CpOrderInit,
 	LTFAi_CpOrderTryDoAi1,
 	LTFAi_CpOrderTryDoHealEscape,
@@ -22,7 +23,8 @@ const CpOrderFunc LTFAi_NewCpOrderFuncList[] = {
 	BreakProcLoop, // LTFAi_CpOrderEnd,
 };
 
-const struct ProcInstruction gProc_LTFAiNewBskOrder[] = {
+const struct ProcInstruction gProc_LTFAiNewBskOrder[] =
+{
 	PROC_SET_NAME("Stan:LTF:NewBskOrder"),
 
 	PROC_CALL_ROUTINE(LTFAi_BskOrderInit),
@@ -39,26 +41,29 @@ const struct ProcInstruction gProc_LTFAiNewBskOrder[] = {
 	PROC_END
 };
 
-static void LTFAi_CpOrderInit(struct Proc* cpOrderProc) {
+static void LTFAi_CpOrderInit(struct Proc* cpOrderProc)
+{
 	int count = MakeAiUnitQueue();
 
-	if (!count) {
+	if (!count)
+	{
 		// This shouldn't happen tbbqh
 		BreakProcLoop(cpOrderProc);
 		return;
 	}
 
 //	SortAiUnitQueue(count);
-
 	gAiData.aiUnits[count] = 0; // terminator
 
 	ClearAiDecision();
 }
 
-static void LTFAi_BskOrderInit(struct Proc* bskOrderProc) {
+static void LTFAi_BskOrderInit(struct Proc* bskOrderProc)
+{
 	int count = 0;
 
-	for (unsigned index = 1; index < 0x100; ++index) {
+	for (unsigned index = 1; index < 0x100; ++index)
+	{
 		struct Unit* unit = GetUnit(index);
 
 		if (!unit || !unit->pCharacterData)
@@ -73,44 +78,50 @@ static void LTFAi_BskOrderInit(struct Proc* bskOrderProc) {
 		gAiData.aiUnits[count++] = unit->index;
 	}
 
-	if (!count) {
+	if (!count)
+	{
 		// This shouldn't happen tbbqh
 		BreakProcLoop(bskOrderProc);
 		return;
 	}
 
-	SortAiUnitQueue(count);
-
+//	SortAiUnitQueue(count);
 	gAiData.aiUnits[count] = 0; // terminator
 
 	ClearAiDecision();
 }
 
-static void LTFAi_CpOrderTryDoAi1(struct Proc* cpOrderProc) {
+static void LTFAi_CpOrderTryDoAi1(struct Proc* cpOrderProc)
+{
 	gAiData.cpDecideNext = 1;
 	LTFAi_CallDecide(cpOrderProc, AiDecisionMaker_AiScript1);
 }
 
-static void LTFAi_CpOrderTryDoAi2(struct Proc* cpOrderProc) {
+static void LTFAi_CpOrderTryDoAi2(struct Proc* cpOrderProc)
+{
 	gAiData.cpDecideNext = 2;
 	LTFAi_CallDecide(cpOrderProc, AiDecisionMaker_AiScript2);
 }
 
-static void LTFAi_CpOrderTryDoHealEscape(struct Proc* cpOrderProc) {
+static void LTFAi_CpOrderTryDoHealEscape(struct Proc* cpOrderProc)
+{
 	gAiData.cpDecideNext = 0;
 	LTFAi_CallDecide(cpOrderProc, AiDecisionMaker_HealEscape);
 }
 
-static void LTFAi_CpOrderTryDoSpecialItems(struct Proc* cpOrderProc) {
+static void LTFAi_CpOrderTryDoSpecialItems(struct Proc* cpOrderProc)
+{
 	gAiData.cpDecideNext = 3;
 	LTFAi_CallDecide(cpOrderProc, AiDecisionMaker_SpecialItems);
 }
 
-static void LTFAi_CpOrderEndTurns(struct Proc* cpOrderProc) {
+static void LTFAi_CpOrderEndTurns(struct Proc* cpOrderProc)
+{
 	LTFAi_CallDecide(cpOrderProc, LTFAi_EndTurnDicider);
 }
 
-static void LTFAi_EndTurnDicider(void) {
+static void LTFAi_EndTurnDicider(void)
+{
 	AiSetDecision(
 		gActiveUnit->xPos, gActiveUnit->yPos,
 		AI_DECISION_NONE,
@@ -118,8 +129,10 @@ static void LTFAi_EndTurnDicider(void) {
 	);
 }
 
-static void LTFAi_CallDecide(struct Proc* cpOrderProc, AiDecitionMakerFunc decisionMaker) {
-	if (gAiData.decision.decisionTaken) {
+static void LTFAi_CallDecide(struct Proc* cpOrderProc, AiDecitionMakerFunc decisionMaker)
+{
+	if (gAiData.decision.decisionTaken)
+	{
 		BreakProcLoop(cpOrderProc);
 		return;
 	}
@@ -129,4 +142,3 @@ static void LTFAi_CallDecide(struct Proc* cpOrderProc, AiDecitionMakerFunc decis
 
 	ProcStartBlocking(gProc_CpDecide, cpOrderProc);
 }
-
