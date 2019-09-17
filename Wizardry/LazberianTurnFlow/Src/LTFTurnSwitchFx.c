@@ -72,7 +72,7 @@ static void TurnSwitchFx_OnInit(struct TurnSwitchFxProc* proc)
 {
 	memset(proc->turnDigits, 0, sizeof(proc->turnDigits));
 
-	unsigned turn = 776; // gChapterData.turnNumber+1;
+	unsigned turn = gChapterData.turnNumber+1;
 	unsigned digicnt = 0;
 
 	do
