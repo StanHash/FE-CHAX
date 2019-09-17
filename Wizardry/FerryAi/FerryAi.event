@@ -15,6 +15,12 @@
  * ASMC_AddFerryDropTiles :: for use with ASMC: adds drop tiles given list of short pairs at address in s2 (list is terminated when x < 0)
  */
 
+#ifndef AIPERFORMEXT_INCLUDED
+
+  ERROR "FerryAi requires AiPerformExtension!"
+
+#else
+
 #ifndef FERRY_TAKE_PERFORM
   #define FERRY_TAKE_PERFORM 14
 #endif // FERRY_TAKE_PERFORM
@@ -31,41 +37,7 @@
   #define FERRY_AI1 10
 #endif // FERRY_AI1
 
-#ifndef HipsterAiScrDefinitions
-	#define HipsterAiScrDefinitions
-
-	// "Extensions/AI Assembly.txt" is broken in latest EA package
-
-	#define InjectAi1(aId, aScr) "PUSH; ORG 0x5A9184+(4*(aId)); POIN (aScr); POP"
-	#define InjectAi2(aId, aScr) "PUSH; ORG 0x5A9138+(4*(aId)); POIN (aScr); POP"
-
-	#define AiResultAddr 0x0203AA8A
-
-	#define AiGotoIfHI(aLabel, aLAddr, aRValue) "BYTE 0x00 0 0xFF (aLabel); WORD (aRValue) (aLAddr) 0"
-	#define AiGotoIfHS(aLabel, aLAddr, aRValue) "BYTE 0x00 1 0xFF (aLabel); WORD (aRValue) (aLAddr) 0"
-	#define AiGotoIfEQ(aLabel, aLAddr, aRValue) "BYTE 0x00 2 0xFF (aLabel); WORD (aRValue) (aLAddr) 0"
-	#define AiGotoIfLS(aLabel, aLAddr, aRValue) "BYTE 0x00 3 0xFF (aLabel); WORD (aRValue) (aLAddr) 0"
-	#define AiGotoIfLO(aLabel, aLAddr, aRValue) "BYTE 0x00 4 0xFF (aLabel); WORD (aRValue) (aLAddr) 0"
-	#define AiGotoIfNE(aLabel, aLAddr, aRValue) "BYTE 0x00 5 0xFF (aLabel); WORD (aRValue) (aLAddr) 0"
-	#define AiGotoIfHI(aLabel, aRValue)         "BYTE 0x00 0 0xFF (aLabel); WORD (aRValue) (AiResultAddr) 0"
-	#define AiGotoIfHS(aLabel, aRValue)         "BYTE 0x00 1 0xFF (aLabel); WORD (aRValue) (AiResultAddr) 0"
-	#define AiGotoIfEQ(aLabel, aRValue)         "BYTE 0x00 2 0xFF (aLabel); WORD (aRValue) (AiResultAddr) 0"
-	#define AiGotoIfLS(aLabel, aRValue)         "BYTE 0x00 3 0xFF (aLabel); WORD (aRValue) (AiResultAddr) 0"
-	#define AiGotoIfLO(aLabel, aRValue)         "BYTE 0x00 4 0xFF (aLabel); WORD (aRValue) (AiResultAddr) 0"
-	#define AiGotoIfNE(aLabel, aRValue)         "BYTE 0x00 5 0xFF (aLabel); WORD (aRValue) (AiResultAddr) 0"
-
-	#define AiFunc(aFuncAddr, aParamAddr)  "BYTE 0x01 0 0xFF 0; WORD 0; POIN (aFuncAddr) (aParamAddr)"
-	#define AiFunc(aFuncAddr)              "BYTE 0x01 0 0xFF 0; WORD 0; POIN (aFuncAddr); WORD 0"
-	#define AiChangeAi(aNewAi1, aNewAi2)   "BYTE 0x02 (aNewAi1) (aNewAi2) 0; WORD 0 0 0"
-	#define AiGoto(aLabel)                 "BYTE 0x03 0 0xFF (aLabel); WORD 0 0 0"
-	#define AiMoveTowardsPoint(aX, aY)     "BYTE 0x0C (aX) 0xFF (aY); WORD 0 0 0"
-	#define AiLabel(aId)                   "BYTE 0x1C 0 0xFF (aId); WORD 0 0 0"
-
-	#define AiRestart "AiGoto(0)"
-
-#endif // HipsterAiScrDefinitions
-
-#include "AiPerformExtension.event"
+#include "AiScrDefinitions.event"
 
 gFerryTakePerformId: BYTE FERRY_TAKE_PERFORM
 gFerryDropPerformId: BYTE FERRY_DROP_PERFORM
@@ -98,5 +70,7 @@ AiLabel(2)
 }
 
 InjectAi1(FERRY_AI1, FerryAiScr)
+
+#endif // AIPERFORMEXT_INCLUDED
 
 #endif // FERRYAI_INCLUDED
