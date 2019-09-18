@@ -13,7 +13,7 @@ FcukTanksHook:
 
 PUSH
 	ORG $03DF10
-		WORD $47184B00; POIN FcukTanksHook
+		WORD $47184B00; POIN FcukTanksHook|1
 POP
 
 /* SOURCE:
