@@ -1,0 +1,56 @@
+#ifndef FCUKTANKS_INCLUDED
+#define FCUKTANKS_INCLUDED
+
+// Simple hack that makes AI-controlled units not attack if they can't deal damage
+// hack by Stan
+
+// Note that this doesn't account for any cool special mechanic that affects damage
+// It just check for (attack - defense) to be more than 0
+
+ALIGN 4
+FcukTanksHook:
+	WORD $205A4B06 $4B065E18 $5E59215C $20001A41 $DC002900 $4B032001 $47182800 $203A4EC $203A56C $803DF19
+
+PUSH
+	ORG $03DF10
+		WORD $47184B00; POIN FcukTanksHook
+POP
+
+/* SOURCE:
+
+	.thumb
+
+FcukTanksHook:
+	@ Jump from FE8U:0803DF10
+
+	@ We are just after a battle simulation
+	@ So the battle actor and target are still fresh and up-to-date
+	@ Which allows us to load battle stats from them
+
+	ldr  r3, =gBattleActor
+	mov  r0, #0x5A
+	ldsh r0, [r3, r0] @ r0 = actor battle attack
+
+	ldr  r3, =gBattleTarget
+	mov  r1, #0x5C
+	ldsh r1, [r3, r1] @ r1 = target battle defense
+
+	sub r1, r0, r1 @ r1 = attack - defense = damage per hit
+
+	mov r0, #0 @ default to 0 (can battle)
+
+	cmp r1, #0
+	bgt end
+
+	mov r0, #1 @ if attack - defense <= 0, get 1 (cannot battle)
+
+end:
+	ldr r3, =0x0803DF18+1
+
+	cmp r0, #0 @ compare (replaced)
+
+	bx r3
+
+*/
+
+#endif // FCUKTANKS_INCLUDED
