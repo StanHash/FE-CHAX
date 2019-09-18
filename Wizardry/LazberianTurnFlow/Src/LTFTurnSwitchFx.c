@@ -3,7 +3,7 @@
 extern const u8  gLTFTurnSwitchSheetImg[];
 extern const u16 gLTFTurnSwitchSheetPal[];
 
-static void StartObject(int xOrigin, int yOrigin, int chr, const void* obj, struct Proc* parent);
+static void StartObject(int xOrigin, int yOrigin, int chrDisp, int isTurn, struct Proc* parent);
 static void SetObjectAllBlend(void);
 static void SetObjectAllFlat(void);
 static void EndAllObjects(void);
@@ -12,6 +12,9 @@ enum
 {
 	LTF_TURNSWITCH_GFX_OBJPAL = 2,
 	LTF_TURNSWITCH_GFX_OBJCHR = 0x180,
+
+	LTF_TURNSWITCH_GFX_BGPAL = 2,
+	LTF_TURNSWITCH_GFX_BGCHR = 0x200,
 };
 
 static const struct ObjData sSpr_Turn =
@@ -87,17 +90,22 @@ static void TurnSwitchFx_OnInit(struct TurnSwitchFxProc* proc)
 	}
 	while (turn);
 
-	proc->origin.x = 120 - (70 + digicnt*16)/2;
-	proc->origin.y = 80 - 16;
+	proc->origin.x = (120 - (72 + digicnt*16)/2) >> 3 << 3;
+	proc->origin.y = (80 - 16) >> 3 << 3;
+
+	// gLCDIOBuffer.bgControl[1].priority = gLCDIOBuffer.bgControl[3].priority - 1;
 
 	SetColorEffectsParameters(BLEND_EFFECT_ALPHA, 0, 0x10, 0);
-	SetColorEffectsFirstTarget(0, 0, 0, 0, 0);
-	SetColorEffectsSecondTarget(1, 1, 1, 1, 1);
+	SetColorEffectsFirstTarget(0, 1, 0, 0, 0);
+	SetColorEffectsSecondTarget(0, 0, 1, 1, 1);
+
+	Decompress(gLTFTurnSwitchSheetImg, VRAM + 0x20 * LTF_TURNSWITCH_GFX_BGCHR);
+	ApplyPalette(gLTFTurnSwitchSheetPal, LTF_TURNSWITCH_GFX_BGPAL);
 
 	Decompress(gLTFTurnSwitchSheetImg, VRAM_OBJ + 0x20 * LTF_TURNSWITCH_GFX_OBJCHR);
 	ApplyPalette(gLTFTurnSwitchSheetPal, 0x10 + LTF_TURNSWITCH_GFX_OBJPAL);
 
-	StartObject(proc->origin.x, proc->origin.y, LTF_TURNSWITCH_GFX_OBJCHR, &sSpr_Turn, (struct Proc*) proc);
+	StartObject(proc->origin.x, proc->origin.y, 0, TRUE, (struct Proc*) proc);
 
 	SetObjectAllFlat();
 	SetObjectAllBlend();
@@ -132,10 +140,10 @@ static void TurnSwitchFx_OnBlendInEnd(struct TurnSwitchFxProc* proc)
 		const unsigned turnDigit = proc->turnDigits[proc->turnDigitCnt];
 
 		StartObject(
-			proc->origin.x + 70 + 16*proc->turnDigitCnt,
+			proc->origin.x + 72 + 16*proc->turnDigitCnt,
 			proc->origin.y,
-			LTF_TURNSWITCH_GFX_OBJCHR + 8 + 2 * (turnDigit == 0 ? 9 : turnDigit-1),
-			&sSpr_Number, (struct Proc*) proc);
+			8 + 2 * (turnDigit == 0 ? 9 : turnDigit-1),
+			FALSE, (struct Proc*) proc);
 
 		proc->turnDigitCnt++;
 		proc->blendTimer = 0;
@@ -175,18 +183,19 @@ struct ObjectProc
 {
 	PROC_HEADER;
 
-	/* 2A */ u16 imgChr;
-	/* 2C */ struct Vec2 origin;
+	/* 2A */ u16 chrDisp;
+	/* 2C */ struct Vec2u origin;
 
 	/* 30 */ unsigned positionTimer;
-	/* 34 */ int      xDisplayOffset;
+	/* 34 */ int xDisplayOffset;
 
-	/* 38 */ const struct ObjData* obj;
+	/* 38 */ int isTurn;
 };
 
 static void TurnObject_OnInit(struct ObjectProc* proc);
-static void TurnObject_OnLoopBlend(struct ObjectProc* proc);
-static void TurnObject_OnLoopFlat(struct ObjectProc* proc);
+static void TurnObject_PutOnBg(struct ObjectProc* proc);
+static void TurnObject_OnDispBlend(struct ObjectProc* proc);
+static void TurnObject_OnDispFlat(struct ObjectProc* proc);
 
 static const struct ProcInstruction sProc_Object[] =
 {
@@ -196,22 +205,45 @@ static const struct ProcInstruction sProc_Object[] =
 	PROC_SLEEP(1),
 
 PROC_LABEL(0),
-	PROC_CALL_ROUTINE(TurnObject_OnLoopBlend),
-	PROC_LOOP_ROUTINE(TurnObject_OnLoopBlend),
+	PROC_CALL_ROUTINE(TurnObject_PutOnBg),
+	PROC_CALL_ROUTINE(TurnObject_OnDispBlend),
+	PROC_LOOP_ROUTINE(TurnObject_OnDispBlend),
 
 PROC_LABEL(1),
-	PROC_CALL_ROUTINE(TurnObject_OnLoopFlat),
-	PROC_LOOP_ROUTINE(TurnObject_OnLoopFlat),
+	PROC_LOOP_ROUTINE(TurnObject_OnDispFlat),
 
 	PROC_END
 };
 
-static void TurnObject_OnInit(struct ObjectProc* proc)
+static
+void TurnObject_PutOnBg(struct ObjectProc* proc)
+{
+	u16* const out = gBg1MapBuffer + TILEMAP_INDEX(proc->origin.x/8, proc->origin.y/8);
+
+	const unsigned width  = proc->isTurn ? 8 : 2;
+	const unsigned height = 4;
+
+	for (unsigned iy = 0; iy < height; ++iy)
+	{
+		for (unsigned ix = 0; ix < width; ++ix)
+		{
+			out[TILEMAP_INDEX(ix, iy)] = TILEREF(
+				LTF_TURNSWITCH_GFX_BGCHR + proc->chrDisp + 0x20 * iy + ix,
+				LTF_TURNSWITCH_GFX_BGPAL);
+		}
+	}
+
+	EnableBgSyncByMask(BG1_SYNC_BIT);
+}
+
+static
+void TurnObject_OnInit(struct ObjectProc* proc)
 {
 	proc->positionTimer = 0;
 }
 
-static void TurnObject_PositionUpdate(struct ObjectProc* proc)
+static
+void TurnObject_PositionUpdate(struct ObjectProc* proc)
 {
 	static const unsigned OFFSET_MAX = 0x20;
 
@@ -226,39 +258,38 @@ static void TurnObject_PositionUpdate(struct ObjectProc* proc)
 	}
 }
 
-static void TurnObject_OnLoopBlend(struct ObjectProc* proc)
+static
+void TurnObject_OnDispBlend(struct ObjectProc* proc)
 {
 	TurnObject_PositionUpdate(proc);
-
-	ObjInsert(0,
-		0x1FF & (proc->origin.x + proc->xDisplayOffset),
-		(0x0FF & (proc->origin.y)) | 0x0400,
-
-		proc->obj, TILEREF(proc->imgChr, LTF_TURNSWITCH_GFX_OBJPAL));
+	SetBgPosition(1, -proc->xDisplayOffset, 0);
 }
 
-static void TurnObject_OnLoopFlat(struct ObjectProc* proc)
+static
+void TurnObject_OnDispFlat(struct ObjectProc* proc)
 {
 	TurnObject_PositionUpdate(proc);
 
 	ObjInsert(0,
 		0x1FF & (proc->origin.x + proc->xDisplayOffset),
 		0x0FF & (proc->origin.y),
-
-		proc->obj, TILEREF(proc->imgChr, LTF_TURNSWITCH_GFX_OBJPAL));
+		proc->isTurn
+			? &sSpr_Turn
+			: &sSpr_Number,
+		TILEREF(
+			LTF_TURNSWITCH_GFX_OBJCHR + proc->chrDisp,
+			LTF_TURNSWITCH_GFX_OBJPAL));
 }
 
 static
-void StartObject(int xOrigin, int yOrigin, int chr, const void* obj, struct Proc* parent)
+void StartObject(int xOrigin, int yOrigin, int chrDisp, int isTurn, struct Proc* parent)
 {
 	struct ObjectProc* proc = START_PROC(sProc_Object, parent);
 
 	proc->origin.x = xOrigin;
 	proc->origin.y = yOrigin;
-
-	proc->imgChr = chr;
-
-	proc->obj = obj;
+	proc->chrDisp = chrDisp;
+	proc->isTurn = isTurn;
 }
 
 static
@@ -282,6 +313,9 @@ void SetObjectFlat(struct Proc* proc)
 static
 void SetObjectAllFlat(void)
 {
+	FillBgMap(gBg1MapBuffer, 0);
+	EnableBgSyncByMask(BG1_SYNC_BIT);
+
 	ForEachProc(sProc_Object, SetObjectFlat);
 }
 
