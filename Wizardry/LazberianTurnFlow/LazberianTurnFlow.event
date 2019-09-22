@@ -13,7 +13,7 @@ gLTFChapterEnableList:
 	BYTE 0xFF // end
 
 // Those are the graphics for the turn change effect
-// 
+// Feel free to edit those (you probably should)
 
 ALIGN 4
 gLTFTurnSwitchSheetImg:
