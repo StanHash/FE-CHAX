@@ -56,7 +56,7 @@ LTFT_StartBmMainHook:
 	ldr r3, =LTFT_UpdateLTFEnable
 	bl BXR3
 
-	ldr r3, =LTFT_IsEnabled
+	ldr r3, =LTFT_IsActiveNow
 	bl BXR3
 
 	lsl r0, #2
@@ -85,7 +85,7 @@ LTFT_StartBmMainHook:
 LTFT_FindBmMainHook:
 	push {lr}
 
-	ldr r3, =LTFT_IsEnabled
+	ldr r3, =LTFT_IsActiveNow
 	bl BXR3
 
 	lsl r0, #2
@@ -109,7 +109,7 @@ LTFT_TurnEventCheckHook:
 
 	push {r2-r3, lr} @ big hacks
 
-	ldr r3, =LTFT_IsEnabled
+	ldr r3, =LTFT_IsActiveNow
 	bl BXR3
 
 	cmp r0, #0
@@ -135,7 +135,7 @@ LTFT_UpdateTrapsHook:
 
 	push {r0, lr}
 
-	ldr r3, =LTFT_IsEnabled
+	ldr r3, =LTFT_IsActiveNow
 	bl BXR3
 
 	pop {r1} @ r1 = proc
@@ -161,7 +161,7 @@ LTFT_GetEnemyStartCursorPositionHook:
 	mov r6, r0
 	mov r5, r1
 
-	ldr r3, =LTFT_IsEnabled
+	ldr r3, =LTFT_IsActiveNow
 	bl BXR3
 
 	cmp r0, #0
@@ -181,7 +181,7 @@ LTFT_GetEnemyStartCursorPositionHook.return:
 LTFT_CpDecideMainHook1:
 	@ jumpToHack from 08039B04
 
-	ldr r3, =LTFT_IsEnabled
+	ldr r3, =LTFT_IsActiveNow
 	bl BXR3
 
 	ldr r4, =gAiData
@@ -203,7 +203,7 @@ LTFT_CpDecideMainHook2:
 
 	push {r2}
 
-	ldr r3, =LTFT_IsEnabled
+	ldr r3, =LTFT_IsActiveNow
 	bl BXR3
 
 	pop {r2}
@@ -229,7 +229,7 @@ LTFT_CpOrderMainHook:
 
 	push {r0, lr}
 
-	ldr r3, =LTFT_IsEnabled
+	ldr r3, =LTFT_IsActiveNow
 	bl BXR3
 
 	lsl r0, #2
@@ -263,7 +263,7 @@ lCpOrderFuncListAddrs:
 LTFT_StartBskPhaseHook:
 	@ jumpToHack from 0803975C
 
-	ldr r3, =LTFT_IsEnabled
+	ldr r3, =LTFT_IsActiveNow
 	bl BXR3
 
 	lsl r0, #2
@@ -292,7 +292,7 @@ LTFT_ListFactionTickHook:
 	mov r0, r10
 	push {r0}
 
-	ldr r3, =LTFT_IsEnabled
+	ldr r3, =LTFT_IsActiveNow
 	bl BXR3
 
 	cmp r0, #0
@@ -347,7 +347,7 @@ LTFT_ListTerrainHealHook:
 	add r0, r1
 	mov r8, r0 @ r8 = arg + 0x40
 
-	ldr r3, =LTFT_IsEnabled
+	ldr r3, =LTFT_IsActiveNow
 	bl BXR3
 
 	cmp r0, #0
@@ -385,7 +385,7 @@ LTFT_ListPoisonDamageHook:
 	add r0, r1
 	mov r8, r0 @ r8 = arg + 0x40
 
-	ldr r3, =LTFT_IsEnabled
+	ldr r3, =LTFT_IsActiveNow
 	bl BXR3
 
 	cmp r0, #0
@@ -422,7 +422,7 @@ LTFT_ListEggHatchesHook:
 	mov r1, #0x40
 	add r7, r0, r1 @ r7 = arg + 0x40
 
-	ldr r3, =LTFT_IsEnabled
+	ldr r3, =LTFT_IsActiveNow
 	bl BXR3
 
 	cmp r0, #0

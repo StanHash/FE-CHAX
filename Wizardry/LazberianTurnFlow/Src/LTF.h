@@ -18,6 +18,10 @@ enum
 	LTF_DISPLAY_XOFF_STEP = 2, // speed
 };
 
+// provided by user
+
+int IsLtfEnabled(void);
+
 // in LTFCore.c
 
 unsigned LTF_IsUnitReadyToMove(const struct Unit*);
@@ -33,6 +37,8 @@ unsigned LTF_PredictNextPhase(const unsigned ableCounts[4], const unsigned maxCo
 
 // in LTFPhaseSwitch.c
 
+void LTF_ResetUnitsStateForTurnSwitch(void);
+int LTF_GotoNextTurn(struct Proc* mapMainProc);
 int LTF_MapMainPhaseSwitch(struct Proc* mapMainProc);
 
 // in LTFDisplay.c
@@ -43,6 +49,9 @@ void LTF_UpdatePredictionDisplay(void);
 void LTF_EnablePredictionDisplay(void);
 void LTF_DisablePredictionDisplay(void);
 
-// void LTF_DisplayPhasePredictions(struct Proc* maptaskProc); // old
+// in LTFTurnSwitchFx.c
+
+extern
+const struct ProcInstruction gProc_TurnSwitchFx[];
 
 #endif // LTF_H

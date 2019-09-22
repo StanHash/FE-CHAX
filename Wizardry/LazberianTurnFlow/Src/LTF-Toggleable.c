@@ -10,30 +10,17 @@ extern const u8 gLTFChapterEnableList[];
 
 void LTFT_UpdateLTFEnable(void)
 {
-	const u8* it = gLTFChapterEnableList;
-
-	while (it[0] != 0xFF)
-	{
-		if (it[0] == gChapterData.chapterIndex)
-		{
-			gLTFEnableFlag = TRUE;
-			return;
-		}
-
-		it++;
-	}
-
-	gLTFEnableFlag = FALSE;
+	gLTFEnableFlag = IsLtfEnabled();
 }
 
-int LTFT_IsEnabled(void)
+int LTFT_IsActiveNow(void)
 {
 	return !!gLTFEnableFlag; //return !!CheckEventId(gLTFEnableFlag);
 }
 
 void LTFT_PlayerPhaseEndHook(struct Proc* proc)
 {
-	if (LTFT_IsEnabled())
+	if (LTFT_IsActiveNow())
 		Proc_JumpToPointer(proc, LTFPlayerPhaseProcHook);
 	else
 		ProcGoto(proc, 0);
@@ -41,6 +28,6 @@ void LTFT_PlayerPhaseEndHook(struct Proc* proc)
 
 void LTFT_CpDecideLoopCheck(struct Proc* proc)
 {
-	if (!LTFT_IsEnabled())
+	if (!LTFT_IsActiveNow())
 		ProcGoto(proc, 0);
 }
