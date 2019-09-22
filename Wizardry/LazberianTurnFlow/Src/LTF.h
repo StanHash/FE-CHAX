@@ -3,6 +3,9 @@
 
 #include "gbafe.h"
 
+// TODO: I can't believe I don't have that in CLib
+s8 CheckEventId(int id);
+
 // config
 
 enum

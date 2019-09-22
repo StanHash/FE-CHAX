@@ -8,6 +8,13 @@ static void SetObjectAllBlend(void);
 static void SetObjectAllFlat(void);
 static void EndAllObjects(void);
 
+#define PROC_UNLOCK_PARENT(aProc) do \
+{ \
+	struct Proc* __proc = (struct Proc*)(aProc); \
+	__proc->statebits &= ~2; \
+	__proc->parent->lockCount--; \
+} while (0)
+
 enum
 {
 	LTF_TURNSWITCH_GFX_OBJPAL = 2,
@@ -75,7 +82,7 @@ static void TurnSwitchFx_OnInit(struct TurnSwitchFxProc* proc)
 {
 	memset(proc->turnDigits, 0, sizeof(proc->turnDigits));
 
-	unsigned turn = gChapterData.turnNumber+1;
+	unsigned turn = gChapterData.turnNumber;
 	unsigned digicnt = 0;
 
 	do
@@ -164,6 +171,9 @@ static void TurnSwitchFx_OnBlendOutLoop(struct TurnSwitchFxProc* proc)
 {
 	const unsigned eva = proc->blendTimer < 0x20 ? 0x10 : 0x10 - (proc->blendTimer-0x20)/2;
 	const unsigned evb = proc->blendTimer < 0x20 ? proc->blendTimer/2 : 0x10;
+
+	if (proc->blendTimer == 0x20)
+		PROC_UNLOCK_PARENT(proc);
 
 	SetColorEffectsParameters(BLEND_EFFECT_ALPHA, eva, evb, 0);
 

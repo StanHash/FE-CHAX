@@ -50,8 +50,6 @@ static void LTFDisplay_OnInit(struct LTFPredictionDisplayProc* proc)
 	proc->xOff = LTF_DISPLAY_XOFF;
 }
 
-s8 CheckEventId(int id);
-
 static void LTFDisplay_OnLoop(struct LTFPredictionDisplayProc* proc)
 {
 	if (!proc->doDisplay || gChapterData.subtitleHelpOption || CheckEventId(0x84))
@@ -67,8 +65,7 @@ static void LTFDisplay_OnLoop(struct LTFPredictionDisplayProc* proc)
 	{
 		PushToHiOAM(
 			240 - ((LTF_DISPLAY_XOFF - proc->xOff) * LTF_DISPLAY_XOFF_STEP), 55 + (i * 10),
-			&gObj_8x8, 3 + (LTFDisplay_GetPhaseObjPalette(proc->prediction[i]) << 12)
-		);
+			&gObj_8x8, 3 + (LTFDisplay_GetPhaseObjPalette(proc->prediction[i]) << 12));
 	}
 }
 
@@ -127,6 +124,9 @@ void LTF_UpdatePredictionDisplay(void)
 		}
 
 		proc->predictionCount = i;
+
+		if (proc->predictionCount == 0)
+			proc->doDisplay = FALSE;
 	}
 }
 

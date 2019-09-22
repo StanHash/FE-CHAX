@@ -30,7 +30,7 @@ void LTF_InitCursorMemory(void)
 	}
 	else
 	{
-		gChapterData.xCursorSaved = gMapSize.x  / 2;
+		gChapterData.xCursorSaved = gMapSize.x / 2;
 		gChapterData.yCursorSaved = gMapSize.y / 2;
 	}
 }
