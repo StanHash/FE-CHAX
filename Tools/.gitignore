@@ -1,6 +1,8 @@
 ParseFile*
 PortraitFormatter*
 lyn*
+ea-dep*
+midi2agb*
 gbagfx*
 bin2ea*
 EventAssembler/*

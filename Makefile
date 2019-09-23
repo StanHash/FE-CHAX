@@ -1,181 +1,80 @@
+
 .SUFFIXES:
-.PHONY: hack hack_recursive all clean
+.PHONY:
+
+# EA Input File
+EVENT_MAIN := Main.event
+
+# ROMs
+ROM_SOURCE := FE8U.gba
+ROM_TARGET := HACK.gba
 
 include Tools.mak
 
-# Setting C/ASM include directories up
-INCLUDE_DIRS := Tools/CLib/include
-INCFLAGS     := $(foreach dir, $(INCLUDE_DIRS), -I "$(dir)")
-
-# setting up compilation flags
-ARCH    := -mcpu=arm7tdmi -mthumb -mthumb-interwork
-CFLAGS  := $(ARCH) $(INCFLAGS) -Wall -Werror -Os -mtune=arm7tdmi -fomit-frame-pointer -ffast-math -ffreestanding -mlong-calls
-ASFLAGS := $(ARCH) $(INCFLAGS)
-
-# setting up cache dir
-CACHE_DIR := .MkCache
+# Common cache directory
+# Used to generate dependency files in
+CACHE_DIR := .MuhCache
 $(shell mkdir -p $(CACHE_DIR) > /dev/null)
 
-# defining dependency directory
-DEPSDIR := $(CACHE_DIR)
+CLEAN_FILES :=
+CLEAN_DIRS  :=
 
-# lyn options
-LYNREF := Tools/CLib/reference/FE8U-20190316.o
+# ===============
+# = MAIN TARGET =
+# ===============
 
-# Finding all possible source files
-CFILES   := $(shell find -type f -name '*.c')
-SFILES   := $(shell find -type f -name '*.s')
-OFILES   := $(CFILES:.c=.o) $(SFILES:.s=.o)
-ASMFILES := $(CFILES:.c=.asm)
-LYNFILES := $(OFILES:.o=.lyn.event)
-DMPFILES := $(OFILES:.o=.dmp)
-DEPFILES := $(addprefix $(DEPSDIR)/, $(notdir $(CFILES:.c=.d) $(SFILES:.s=.d)))
+hack: $(ROM_TARGET)
 
-# EA Files
-EVENT_MAIN     := Main.event
-EVENT_MAIN_DEP := $(CACHE_DIR)/Main.d
+.PHONY: hack
 
-EVENT_SYMBOLS  := HACK.sym.event
+# =================
+# = THE BUILDFILE =
+# =================
 
-# ROMs
-ROM_SOURCE     := FE8U.gba
-ROM_TARGET     := HACK.gba
+# EA depends
+EVENT_DEPENDS := $(shell $(EADEP) $(EVENT_MAIN) -I $(realpath .)/Tools/EventAssembler --add-missings)
 
-# defining dependency flags
-CDEPFLAGS = -MMD -MT "$*.o" -MT "$*.asm" -MF "$(DEPSDIR)/$(notdir $*).d" -MP
-SDEPFLAGS = --MD "$(DEPSDIR)/$(notdir $*).d"
+# Additional EA commandline flags
+# EAFLAGS := -raws:Tools/EA-Raws --nocash-sym
+EAFLAGS :=
+
+$(ROM_TARGET): $(EVENT_MAIN) $(EVENT_DEPENDS) $(ROM_SOURCE)
+	$(NOTIFY_PROCESS)
+	@cp -f $(ROM_SOURCE) $(ROM_TARGET)
+	@$(EA) A FE8 -output:$(ROM_TARGET) -input:$(EVENT_MAIN) $(EAFLAGS) || (rm $(ROM_TARGET) && false)
+	@cat "$(ROM_SOURCE:.gba=.sym)" >> "$(ROM_TARGET:.gba=.sym)" || true
 
 ifeq ($(MAKECMDGOALS),clean)
-  # Clean-only stuff.
-
-  # NMMs and generated events
-  NMMS := $(shell find -type f -name '*.nmm')
-  TABLE_EVENTS := $(NMMS:.nmm=.event)
-
-  # TMXs and generated files
-  TMXS := $(shell find -type f -name '*.tmx')
-  MAP_GENFILES := $(TMXS:.tmx=.event) $(TMXS:.tmx=_data.dmp) 
+  CLEAN_FILES += $(ROM_TARGET) $(ROM_TARGET:.gba=.sym) $(EVENT_SYMBOLS)
 endif
 
-# All files
-ALL_FILES := $(EVENT_MAIN_DEP) $(ROM_TARGET) $(EVENT_SYMBOLS) $(OFILES) $(ASMFILES) $(LYNFILES) $(DMPFILES) $(TABLE_EVENTS) $(MAP_GENFILES)
+# ===================
+# = COMPONENT RULES =
+# ===================
 
-# Variable listing all text files in the writans directory
-# The text installer depends on them (in case there was any change)
-# (Too lazy to code a dependency thingy for that too)
-WRITANS_ALL_TEXT := $(wildcard Writans/*.txt)
+include Spritans.mak
+include Writans.mak
+include GameData.mak
+include Wizardry.mak
 
-# ------------------
-# PHONY TARGET RULES
-
-hack:
-	@rm -f $(EVENT_MAIN_DEP)
-	@$(MAKE) hack_recursive
-
-hack_recursive: $(ROM_TARGET);
-all: $(ALL_FILES);
+# ==============
+# = MAKE CLEAN =
+# ==============
 
 clean:
-	@rm -f $(ALL_FILES)
+	@rm -f  $(CLEAN_FILES)
+	@rm -rf $(CLEAN_DIRS)
+
 	@rm -rf $(CACHE_DIR)
-	@rm -rf Writans/.TextEntries Writans/Text.event Writans/TextDefinitions.event
+
 	@echo all clean!
 
-msg:
-	@$(MAKE) -C Wizardry/ModularGetters
+.PHONY: clean
 
-.PHONY: msg
-
-# -------------------
-# ACTUAL TARGET RULES
-
-$(ROM_TARGET): $(EVENT_MAIN) $(EVENT_MAIN_DEP) $(ROM_SOURCE)
-	@echo Building $(ROM_TARGET).
-	@cp -f $(ROM_SOURCE) $(ROM_TARGET)
-	@$(EA) A FE8 -output $(ROM_TARGET) -input $(EVENT_MAIN) -symOutput $(EVENT_SYMBOLS) || (rm $(ROM_TARGET) && false)
-
-$(EVENT_MAIN_DEP):
-	@echo Refreshing dependencies.
-	@$(EA) A FE8 -output $(ROM_TARGET) -input $(EVENT_MAIN) -MM -MG -MT $(EVENT_MAIN_DEP) -MF $(EVENT_MAIN_DEP)
-	@sed -i s/\\\\/\\//g $(EVENT_MAIN_DEP)
-
-# -------------------
-# SPECIAL FILES RULES
-
-Spritans/Portraits.event: Spritans/PortraitList
-	$(GENMUGS) $< $@
-
-Writans/Text.event Writans/TextDefinitions.event: $(WRITANS_ALL_TEXT)
-	$(TEXTPROCESS) Writans/TextMain.txt Writans/Text.event Writans/TextDefinitions.event
-
-# -------------
-# PATTERN RULES
-
-# C to ASM rule
-%.asm: %.c
-	$(PREPROCESS_MESSAGE)
-	@$(CC) $(CFLAGS) $(CDEPFLAGS) -S $< -o $@ -fverbose-asm $(ERROR_FILTER)
-
-%.asm: %.cpp
-	$(PREPROCESS_MESSAGE)
-	@$(CC) $(CFLAGS) $(CDEPFLAGS) -S $< -o $@ -fverbose-asm -fno-rtti $(ERROR_FILTER)
-
-# C to OBJ rule
-%.o: %.c
-	$(PREPROCESS_MESSAGE)
-	@$(CC) $(CFLAGS) $(CDEPFLAGS) -c $< -o $@ $(ERROR_FILTER)
-
-# ASM to OBJ rule
-%.o: %.s
-	@echo "$(notdir $<) => $(notdir $@)"
-	@$(AS) $(ARCH) $(SDEPFLAGS) -I $(dir $<) $< -o $@ $(ERROR_FILTER)
-
-# OBJ to DMP rule
-%.dmp: %.o
-	$(PREPROCESS_MESSAGE)
-	@$(OBJCOPY) -S $< -O binary $@
-
-# OBJ to EVENT rule
-%.lyn.event: %.o $(LYNREF)
-	$(PREPROCESS_MESSAGE)
-	@$(LYN) $< $(LYNREF) > $@
-
-# PNG to 4bpp rule
-%.4bpp: %.png
-	$(PREPROCESS_MESSAGE)
-	@$(GBAGFX) $< $@
-
-# PNG to gbapal rule
-%.gbapal: %.png
-	$(PREPROCESS_MESSAGE)
-	@$(GBAGFX) $< $@
-
-# Anything to lz rule
-%.lz: %
-	$(PREPROCESS_MESSAGE)
-	@$(GBAGFX) $< $@
-
-# Formatted text to insertable binary
-# Nulling output because it's annoying
-%.fetxt.bin: %.fetxt
-	$(PARSEFILE) $< -o $@ > /dev/null
-
-# PNG to insertable portrait rule
-%_mug.dmp %_palette.dmp %_frames.dmp %_minimug.dmp: %.png
-	$(PORTRAITFORMATTER) $<
-
-# CSV+NMM to event
-%.event: %.csv %.nmm
-	@echo | $(C2EA) -csv $*.csv -nmm $*.nmm -out $*.event $(ROM_SOURCE)
-
-# TMX to event + dmp
-%.event %_data.dmp: %.tmx
-	$(TMX2EA) $*.tmx $*.event
-
-# --------------------
-# INCLUDE DEPENDENCIES
+# ========================
+# = INCLUDE DEPENDENCIES =
+# ========================
 
 ifneq ($(MAKECMDGOALS),clean)
-  -include $(DEPFILES)
-  -include $(EVENT_MAIN_DEP)
+  -include $(wildcard $(CACHE_DIR)/*.d)
 endif
