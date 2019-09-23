@@ -8,6 +8,7 @@ struct VciHealEntry
 };
 
 extern const struct VciHealEntry gVciItemHealAmountList[];
+extern const u8 gVciLockAttrMap[];
 
 static int VciGetIndexVanilla(int item)
 {
@@ -247,7 +248,7 @@ static int VciGetLckBonusVanilla(int item)
 
 static int VciCloneVanilla(int item)
 {
-	int uses = GetItemMaxUses(item);
+	unsigned uses = GetItemMaxUses(item);
 
 	if (GetItemAttributes(item) & IA_UNBREAKABLE)
 		uses = 0;
@@ -260,52 +261,34 @@ static int VciCanUnitUseWeaponVanilla(int item, struct Unit* unit)
 	if (!item)
 		return FALSE;
 
-	unsigned attrs = GetItemAttributes(item);
+	const unsigned attrs = GetItemAttributes(item);
+	const unsigned cattrs = UNIT_CATTRIBUTES(unit);
 
 	if (!(attrs & IA_WEAPON))
 		return FALSE;
 
-	if (attrs & IA_LOCK_ANY)
-	{
-		// Check for item locks
-
-		if ((attrs & IA_LOCK_1) && !(UNIT_CATTRIBUTES(unit) & CA_LOCK_1))
-			return FALSE;
-
-		if ((attrs & IA_LOCK_4) && !(UNIT_CATTRIBUTES(unit) & CA_LOCK_4))
-			return FALSE;
-
-		if ((attrs & IA_LOCK_5) && !(UNIT_CATTRIBUTES(unit) & CA_LOCK_5))
-			return FALSE;
-
-		if ((attrs & IA_LOCK_6) && !(UNIT_CATTRIBUTES(unit) & CA_LOCK_6))
-			return FALSE;
-
-		if ((attrs & IA_LOCK_7) && !(UNIT_CATTRIBUTES(unit) & CA_LOCK_7))
-			return FALSE;
-
-		if ((attrs & IA_LOCK_2) && !(UNIT_CATTRIBUTES(unit) & CA_LOCK_2))
-			return FALSE;
-
-		// Monster lock is special
-		if (attrs & IA_LOCK_3)
-		{
-			if (!(UNIT_CATTRIBUTES(unit) & CA_LOCK_3))
-				return FALSE;
-
-			return TRUE;
-		}
-
-		if (attrs & IA_UNUSABLE)
-			if (!(IsItemUnsealedForUnit(unit, item)))
-				return FALSE;
-	}
-
 	if ((unit->statusIndex == UNIT_STATUS_SILENCED) && (attrs & IA_MAGIC))
 		return FALSE;
 
-	int wRank = GetItemRequiredExp(item);
-	int uRank = (unit->ranks[GetItemType(item)]);
+	// Monster lock is special
+	if (attrs & IA_LOCK_3)
+		return !!(cattrs & CA_LOCK_3);
+
+	for (const u8* it = gVciLockAttrMap; it[0] != 0xFF; it += 2)
+	{
+		const unsigned iattr = 1 << it[0];
+		const unsigned cattr = 1 << it[1];
+
+		if ((attrs & iattr) && !(cattrs & cattr))
+			return FALSE;
+	}
+
+	if (attrs & IA_UNUSABLE)
+		if (!(IsItemUnsealedForUnit(unit, item)))
+			return FALSE;
+
+	const unsigned wRank = GetItemRequiredExp(item);
+	const unsigned uRank = (unit->ranks[GetItemType(item)]);
 
 	return (uRank >= wRank);
 }
@@ -327,8 +310,8 @@ static int VciCanUnitUseStaffVanilla(int item, struct Unit* unit)
 	if (unit->statusIndex == UNIT_STATUS_SILENCED)
 		return FALSE;
 
-	int wRank = GetItemRequiredExp(item);
-	int uRank = unit->ranks[GetItemType(item)];
+	const unsigned wRank = GetItemRequiredExp(item);
+	const unsigned uRank = unit->ranks[GetItemType(item)];
 
 	return (uRank >= wRank);
 }
@@ -342,7 +325,7 @@ static void VciDrawMenuLineVanilla(int item, struct TextHandle* text, u16* mapOu
 
 	DrawUiNumberOrDoubleDashes(mapOut + 11, isUsable ? TEXT_COLOR_BLUE : TEXT_COLOR_GRAY, GetItemUses(item));
 
-	DrawIcon(mapOut, GetItemIconId(item), 0x4000);
+	DrawIcon(mapOut, GetItemIconId(item), TILEREF(0, 4));
 }
 
 static void VciDrawMenuLineLongVanilla(int item, struct TextHandle* text, u16* mapOut, int isUsable)
@@ -356,7 +339,7 @@ static void VciDrawMenuLineLongVanilla(int item, struct TextHandle* text, u16* m
 	DrawUiNumberOrDoubleDashes(mapOut + 13, isUsable ? TEXT_COLOR_BLUE : TEXT_COLOR_GRAY, GetItemMaxUses(item));
 	DrawSpecialUiChar(mapOut + 11, isUsable ? TEXT_COLOR_NORMAL : TEXT_COLOR_GRAY, 0x16); // draw special character?
 
-	DrawIcon(mapOut, GetItemIconId(item), 0x4000);
+	DrawIcon(mapOut, GetItemIconId(item), TILEREF(0, 4));
 }
 
 static void VciDrawMenuLineNoColorVanilla(int item, struct TextHandle* text, u16* mapOut)
@@ -368,7 +351,7 @@ static void VciDrawMenuLineNoColorVanilla(int item, struct TextHandle* text, u16
 
 	DrawUiNumberOrDoubleDashes(mapOut + 11, Text_GetColorId(text), GetItemUses(item));
 
-	DrawIcon(mapOut, GetItemIconId(item), 0x4000);
+	DrawIcon(mapOut, GetItemIconId(item), TILEREF(0, 4));
 }
 
 static void VciDrawStatScreenLineVanilla(int item, struct TextHandle* text, u16* mapOut, int nameColor)
@@ -391,7 +374,7 @@ static void VciDrawStatScreenLineVanilla(int item, struct TextHandle* text, u16*
 
 	Text_Display(text, mapOut + 2);
 
-	DrawIcon(mapOut, GetItemIconId(item), 0x4000);
+	DrawIcon(mapOut, GetItemIconId(item), TILEREF(0, 4));
 }
 
 static int VciGetAfterUseVanilla(int item)
@@ -419,28 +402,20 @@ static int VciIsEffectiveAgainstVanilla(int item, struct Unit* unit)
 
 		for (; *effList; ++effList)
 			if (*effList == classId)
-				// NOTE: maybe there's a better way to make this work (using an inline maybe?)
 				goto check_flying_effectiveness_negation;
 
 		return FALSE;
 
-		check_flying_effectiveness_negation: { 
-			u32 attributes;
-			int i;
-
-			if (GetItemEffectiveness(item) != (const void*)(0x088ADF2A))
-				if (GetItemEffectiveness(item) != (const void*)(0x088ADEF1))
-					return TRUE;
-
-			attributes = 0;
-
-			for (i = 0; i < UNIT_ITEM_COUNT; ++i)
-				attributes = attributes | GetItemAttributes(unit->items[i]);
-
-			if (!(attributes & IA_NEGATE_FLYING))
+		check_flying_effectiveness_negation:
+		{
+			if ((effList != (const u8*)(0x088ADF2A)) && (effList != (const u8*)(0x088ADEF1)))
 				return TRUE;
-			else
-				return FALSE;
+
+			for (unsigned i = 0; i < UNIT_ITEM_COUNT; ++i)
+				if (GetItemAttributes(unit->items[i]) & IA_NEGATE_FLYING)
+					return FALSE;
+
+			return TRUE;
 		}
 	}
 
@@ -449,7 +424,8 @@ static int VciIsEffectiveAgainstVanilla(int item, struct Unit* unit)
 
 static char* VciGetDisplayRangeStringVanilla(int item)
 {
-	static const short rangeTextIdLookup[10] = {
+	static const short rangeTextIdLookup[10] =
+	{
 		0x522, 0x523, 0x524, 0x525, 0x526, // 0-Mag/2, 1, 1-2, 1-3, 2
 		0x527, 0x528, 0x529, 0x52A, 0x52B, // 2-3, 3-10, 3-15, Total, --
 	};
@@ -488,7 +464,8 @@ static char* VciGetDisplayRangeStringVanilla(int item)
 
 static char* VciGetDisplayRankStringVanilla(int item)
 {
-	static const short rankTextIdLookup[] = {
+	static const short rankTextIdLookup[] =
+	{
 		0x52C, 0x52D, 0x52E, 0x52F, // --, E, D, C
 		0x530, 0x531, 0x532, 0x533, // B, A, S, Prf
 	};
@@ -543,7 +520,10 @@ static int VciGetHealAmountVanilla(int item, struct Unit* unit)
 	while (it->itemId)
 	{
 		if (idx == it->itemId)
+		{
 			result = it->healAmt;
+			break;
+		}
 
 		++it;
 	}
@@ -581,7 +561,8 @@ static int VciIsHammernableVanilla(int item)
 	return TRUE;
 }
 
-const struct VciInfo gVciDefaultInfo = {
+const struct VciInfo gVciDefaultInfo =
+{
 	.getIndex              = VciGetIndexVanilla,
 	.getName               = VciGetNameVanilla,
 	.getDescId             = VciGetDescIdVanilla,

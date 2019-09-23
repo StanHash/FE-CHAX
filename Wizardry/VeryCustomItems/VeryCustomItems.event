@@ -13,8 +13,23 @@ gVciNightmareId:
 gVciLockpickId:
 	BYTE Lockpick
 
+gVciLockAttrMap:
+	// Format: BYTE <Item Lock Attr Bit> <Char/Class Lock Attr Bit>
+	BYTE 0x0B 0x10 // Lock 1
+	BYTE 0x0C 0x11 // Lock 2
+	BYTE 0x12 0x1C // Lock 4
+	BYTE 0x13 0x1D // Lock 5
+	BYTE 0x14 0x1E // Lock 6
+	BYTE 0x15 0x1F // Lock 7
+
+	// Lock 3 (Monster Lock) is a special case (as items with monster locks are always usable to monsters reguardless of rank)
+	// BYTE 0x0A 0x12
+
+	BYTE 0xFF 0xFF // End
+
 ALIGN 2
 gVciItemHealAmountList:
+	// Format: SHORT <Item Id> <Heal Amount>
 	SHORT Heal       10
 	SHORT Physic     10
 	SHORT Fortify    10
@@ -23,7 +38,8 @@ gVciItemHealAmountList:
 	SHORT Mend       20
 	SHORT Recover    80
 	SHORT Elixir     80
-	SHORT 0 0
+
+	SHORT 0 0 // End
 
 #ifndef VciDefinitions
 	#define VciDefinitions
