@@ -1,0 +1,20 @@
+#ifndef DECIDEMONI_INCLUDED
+#define DECIDEMONI_INCLUDED
+
+// Stupid hack that displays how long it took the AI to (try to) make and apply a decision
+// hack by Stan
+
+#include "Extensions/ProcDefinitions.txt"
+
+#include "Src/DecideMonitor.lyn.event"
+
+PUSH
+
+	ORG $5A7FCC
+		// replaces one instruction (name) and moves label up
+		PROC_LABEL(0)
+		PROC_CALL_ROUTINE_2(StartDecideMonitor)
+
+POP
+
+#endif // DECIDEMONI_INCLUDED
