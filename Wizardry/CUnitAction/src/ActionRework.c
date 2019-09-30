@@ -1,30 +1,35 @@
 #include "gbafe.h"
 
-extern int ActionStaffDoorChestUseItem(Proc*) __attribute__((long_call));
+int ActionStaffDoorChestUseItem(Proc*);
 
-typedef int (*ActionFunc) (Proc*);
+typedef int (*ActionFunc) (struct Proc*);
 
 extern const ActionFunc UnitActionCallTable[];
 
-static int RequiresProcYield(ActionFunc func) {
+static int RequiresProcYield(ActionFunc func)
+{
 	const u32 raw = (u32)(func);
 	return (raw >> 28) ? 1 : 0;
 }
 
-static ActionFunc FilterFunc(ActionFunc func) {
+static ActionFunc FilterFunc(ActionFunc func)
+{
 	const u32 raw           = (u32)(func);
 	const ActionFunc result = (ActionFunc)(raw & 0xFFFFFFF);
 
 	return result;
 }
 
-int ApplyUnitAction(Proc* proc) {
+int ApplyUnitAction(struct Proc* proc)
+{
 	gActiveUnit = GetUnit(gActionData.subjectIndex);
 
 #ifndef NO_NIGHTMARE_HARDCODED_CHECK
 
-	if (gActionData.unitActionType == UNIT_ACTION_COMBAT) {
-		if (GetItemIndex(gActiveUnit->items[gActionData.itemSlotIndex]) == 0xA6) {
+	if (gActionData.unitActionType == UNIT_ACTION_COMBAT)
+	{
+		if (GetItemIndex(gActiveUnit->items[gActionData.itemSlotIndex]) == 0xA6)
+		{
 			ActionStaffDoorChestUseItem(proc);
 			return 0;
 		}
@@ -34,10 +39,13 @@ int ApplyUnitAction(Proc* proc) {
 
 	ActionFunc func = UnitActionCallTable[gActionData.unitActionType];
 
-	if (func) {
-		if (RequiresProcYield(func)) {
+	if (func)
+	{
+		if (RequiresProcYield(func))
+		{
 			func = FilterFunc(func);
 			func(proc);
+
 			return 0;
 		}
 
@@ -47,7 +55,8 @@ int ApplyUnitAction(Proc* proc) {
 	return 1;
 }
 
-int WaitAction(Proc* proc) {
+int WaitAction(struct Proc* proc)
+{
 	gActiveUnit->state |= US_HAS_MOVED;
 	return 1;
 }

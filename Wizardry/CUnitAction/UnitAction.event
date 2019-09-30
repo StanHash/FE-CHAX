@@ -55,7 +55,7 @@ UnitActionCallTable:
 	NoActionRoutine               // 0x1B ?
 	NoActionRoutine               // 0x1C ?
 	NoActionRoutine               // 0x1D Post Trade/Supply
-	NoActionRoutine               // 0x1E Wait 2 (needs more research)
+	ActionRoutine(WaitAction)     // 0x1E Bumping into fog
 	NoActionRoutine               // 0x1F Backing out (from a trap?)
 	NoActionRoutine               // 0x20 ?
 	NoActionRoutine               // 0x21 Ride Ballista
