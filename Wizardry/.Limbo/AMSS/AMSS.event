@@ -1,0 +1,68 @@
+#ifndef AMSS_INCLUDED
+#define AMSS_INCLUDED
+
+// Actually Modular Stat Screen
+// hack by Stan, inspired by circleseverywhere's MSS
+
+// This is like MSS, but it
+// 1. is in C
+// 2. is actually modular (with real modules, not just "you can edit the source" kind of modular) (also better help text)
+
+PUSH
+
+	ORG $08899C
+		POIN AmssMainProcScr
+
+	// ORG $088670 // Replace stat screen drawing routine
+	// 	WORD $46C04778 $E59FC000 $E12FFF1C; POIN NuDrawStatScreen
+
+	// ORG $0878CC
+	// 	WORD $46C04778 $E59FC000 $E12FFF1C; POIN NuDrawStatScreenPage
+
+	// ORG $0889A0
+	//	WORD $46C04778 $E59FC000 $E12FFF1C; POIN NuStartStatScreenHelp
+
+POP
+
+#define AmssModule(aXX, aYY, aWidth, aHeight, aAddr)        "BYTE (aXX) (aYY) (aWidth) (aHeight); WORD 0; POIN (aAddr)"
+#define AmssModule(aXX, aYY, aWidth, aHeight, aAddr, aUser) "BYTE (aXX) (aYY) (aWidth) (aHeight); WORD (aUser); POIN (aAddr)"
+#define AmssModuleEnd                                       "WORD 0 0 0"
+
+#include "Src/AmssDebug.lyn.event"
+#include "Src/AmssHelp.lyn.event"
+#include "Src/AmssUnitChange.lyn.event"
+#include "Src/AmssCore.lyn.event"
+
+#include "Modules/Portrait/AmssPortrait.event"
+#include "Modules/Pages/AmssPage.event"
+
+ALIGN 4
+AmssCoreModules:
+	AmssModule(1, 1, 10, 9, AmssMiniPortraitModule, 0x000B0410)
+	AmssModule(11, 2, 19, 18, AmssPageModule, 0x08000000 + AmssPages)
+//	AmssModule(11, 1, 0, 0, AmssPortraitModule)
+//	AmssModule(11, 11, 0, 0, AmssPortraitModule)
+	AmssModuleEnd
+
+ALIGN 4
+AmssPages:
+	POIN AmssPage1Modules
+	POIN AmssPage2Modules
+	POIN AmssPage3Modules
+	WORD 0
+
+ALIGN 4
+AmssPage1Modules:
+	AmssModule(1, 1, 10, 9, AmssPortraitModule)
+	AmssModuleEnd
+
+ALIGN 4
+AmssPage2Modules:
+	AmssModuleEnd
+
+ALIGN 4
+AmssPage3Modules:
+	AmssModule(4, 4, 10, 9, AmssPortraitModule)
+	AmssModuleEnd
+
+#endif // AMSS_INCLUDED

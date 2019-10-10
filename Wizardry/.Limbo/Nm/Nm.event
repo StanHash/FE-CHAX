@@ -1,0 +1,6 @@
+#ifndef NM_INCLUDED
+#define NM_INCLUDED
+
+#include "Src/NmMain.lyn.event"
+
+#endif // NM_INCLUDED

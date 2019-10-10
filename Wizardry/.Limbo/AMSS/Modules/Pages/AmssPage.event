@@ -1,0 +1,9 @@
+#ifndef AMSS_PAGE_INCLUDED
+#define AMSS_PAGE_INCLUDED
+
+// Page modules for AMSS
+// hack by Stan
+
+#include "Src/AmssPage.lyn.event"
+
+#endif // AMSS_PAGE_INCLUDED

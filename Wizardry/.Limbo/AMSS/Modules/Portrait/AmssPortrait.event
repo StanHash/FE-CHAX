@@ -1,0 +1,20 @@
+#ifndef AMSS_PORTRAIT_INCLUDED
+#define AMSS_PORTRAIT_INCLUDED
+
+// Portrait modules for AMSS
+// hack by Stan
+
+/* INCLUDED MODULES:
+ *
+ * AmssPortraitModule:
+ * * Size: Fixed [10, 9], please use that
+ * * User (optional): TILEREF* for graphics
+ * * Displays unit portrait as it would have been in the vanilla stat screen
+ *
+ * Note: a TILEREF here means a value encoding a tile id and pal id in the way it would be on a tilemap
+ * Which means: low 10 bits are tile id, next 2 bits unused and next 4 bits are pal id
+ */
+
+#include "Src/AmssPortrait.lyn.event"
+
+#endif // AMSS_PORTRAIT_INCLUDED
