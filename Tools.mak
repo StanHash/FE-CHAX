@@ -25,6 +25,7 @@ endif
 # additional tools
 export PARSEFILE         := $(realpath .)/Tools/EventAssembler/Tools/ParseFile$(EXE)
 export PORTRAITFORMATTER := $(realpath .)/Tools/EventAssembler/Tools/PortraitFormatter$(EXE)
+export PNG2DMP           := $(realpath .)/Tools/EventAssembler/Tools/Png2Dmp$(EXE)
 export GBAGFX            := $(realpath .)/Tools/gbagfx$(EXE)
 export PORTRAIT_PROCESS  := $(PYTHON3) $(realpath .)/Tools/PyTools/portrait-process.py
 export TEXT_PROCESS      := $(PYTHON3) $(realpath .)/Tools/PyTools/text-process-classic.py

@@ -1,0 +1,9 @@
+#ifndef SHOPLIKE_INCLUDED
+#define SHOPLIKE_INCLUDED
+
+// Set of utility functions for making screens that look like shops/arena
+// hack by Stan
+
+#include "Src/ShopLike.lyn.event"
+
+#endif // SHOPLIKE_INCLUDED

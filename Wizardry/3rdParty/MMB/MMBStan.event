@@ -56,7 +56,7 @@ After each set of module options are definitions that you can use to adjust the 
 // Unit name options
 
 	// Coordinates and widths are in 8x8 pixel tiles
-	#define MMBNameWidth 5
+	#define MMBNameWidth 7
 	#define MMBNameColor TextBlack
 	#define MMBNameX 5
 	#define MMBNameY 1
@@ -88,8 +88,8 @@ After each set of module options are definitions that you can use to adjust the 
 // Inventory options
 
 	// Coordinates are in pixels
-	#define MMBInventoryX "(10*8+2)"
-	#define MMBInventoryY "(1*8)"
+	#define MMBInventoryX 82
+	#define MMBInventoryY 8
 	#define MMBInventoryTileIndex 0x300
 
 	// Used for item text

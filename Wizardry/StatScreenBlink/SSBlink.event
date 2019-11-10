@@ -11,6 +11,9 @@
 
 PUSH
 
+	ORG $005C24 // portraits shouldn't be smol (because it breaks)
+		SHORT $2000 $4770
+
 	ORG $005E98 // Make portraits on backgrounds blink
 		// (t)bx pc; (a)ldr ip, =NuDisplayBgFace; (a)bx ip
 		WORD $46C04778 $E59FC000 $E12FFF1C; POIN NuDisplayBgFace
