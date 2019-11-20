@@ -32,7 +32,7 @@ MoveToChapter2Hook:
 .lop:
 	ldr  r3, =WMLocation_GetChapterId
 
-	mov  r0, r4 @ arg r0 = chapter id
+	mov  r0, r4 @ arg r0 = node id
 
 	bl   BXR3
 
