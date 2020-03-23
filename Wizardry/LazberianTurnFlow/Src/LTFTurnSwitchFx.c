@@ -40,7 +40,7 @@ struct TurnSwitchFxProc
 
 	/* 2C */ unsigned blendTimer;
 	/* 30 */ unsigned turnDigitCnt;
-	/* 34 */ u8 turnDigits[4];
+	/* 34 */ s8 turnDigits[4];
 	/* 38 */ struct Vec2u origin;
 };
 
@@ -80,9 +80,9 @@ PROC_LABEL(0),
 
 static void TurnSwitchFx_OnInit(struct TurnSwitchFxProc* proc)
 {
-	memset(proc->turnDigits, 0, sizeof(proc->turnDigits));
+	memset(proc->turnDigits, -1, sizeof(proc->turnDigits));
 
-	unsigned turn = gChapterData.turnNumber;
+	unsigned turn = gChapterData.turnNumber + 9;
 	unsigned digicnt = 0;
 
 	do
@@ -142,7 +142,7 @@ static void TurnSwitchFx_OnBlendInEnd(struct TurnSwitchFxProc* proc)
 {
 	SetObjectAllFlat();
 
-	if (proc->turnDigitCnt < 4 && (proc->turnDigits[proc->turnDigitCnt] || proc->turnDigitCnt == 0))
+	if (proc->turnDigitCnt < 4 && (proc->turnDigits[proc->turnDigitCnt] >= 0 || proc->turnDigitCnt == 0))
 	{
 		const unsigned turnDigit = proc->turnDigits[proc->turnDigitCnt];
 
