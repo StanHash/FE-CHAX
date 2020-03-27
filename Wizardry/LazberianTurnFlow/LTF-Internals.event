@@ -231,6 +231,8 @@ PROC_LABEL(chapter_start_end)
 	PROC_CALL_ROUTINE(LTF_GotoNextTurn)
 
 PROC_LABEL(turn_start)
+	PROC_SLEEP(0)
+
 	PROC_NEW_CHILD($59AE00) // gProc_ResetCursorPosition
 
 	PROC_NEW_CHILD_BLOCKING(gProc_TurnSwitchFx)
