@@ -9,11 +9,11 @@ EVENT_MAIN := Main.event
 ROM_SOURCE := FE8U.gba
 ROM_TARGET := HACK.gba
 
-include Tools.mak
+include tools.mk
 
 # Common cache directory
 # Used to generate dependency files in
-CACHE_DIR := .MuhCache
+CACHE_DIR := .cache_dir
 $(shell mkdir -p $(CACHE_DIR) > /dev/null)
 
 CLEAN_FILES :=
@@ -52,19 +52,18 @@ endif
 # = COMPONENT RULES =
 # ===================
 
-include Spritans.mak
-include Writans.mak
-include GameData.mak
-include Wizardry.mak
+include spritans.mk
+include writans.mk
+include game-data.mk
+include wizardry.mk
 
 # ==============
 # = MAKE CLEAN =
 # ==============
 
 clean:
-	@rm -f  $(CLEAN_FILES)
+	@rm -f $(CLEAN_FILES)
 	@rm -rf $(CLEAN_DIRS)
-
 	@rm -rf $(CACHE_DIR)
 
 	@echo all clean!

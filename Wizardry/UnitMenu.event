@@ -8,12 +8,12 @@
 
 {
 
-NormalText = 0x0
-GrayText   = 0x1
-BlueText   = 0x2
-OrangeText = 0x3
-GreenText  = 0x4
-BlackText  = 0x5
+#define NormalText 0x0
+#define GrayText   0x1
+#define BlueText   0x2
+#define OrangeText 0x3
+#define GreenText  0x4
+#define BlackText  0x5
 
 #define UM_Seize      "BYTE $9C $7E $0D $08 $7A $06 $CC $06 $00 $4E $00 $00 $DD $2F $02 $08 $00 $00 $00 $00 $21 $30 $02 $08 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00 $00"
 #define UM_Attack     "BYTE $94 $7E $0D $08 $7B $06 $C0 $06 $00 $4F $00 $00 $AD $49 $02 $08 $00 $00 $00 $00 $31 $2B $02 $08 $00 $00 $00 $00 $31 $2C $02 $08 $99 $2C $02 $08"

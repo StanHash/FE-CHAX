@@ -9,10 +9,10 @@ include $(DEVKITARM)/base_tools
 
 ifeq ($(OS),Windows_NT)
   EXE := .exe
-  EA  := $(realpath .)/Tools/EventAssembler/Core.exe
+  EA  := $(realpath .)/Tools/EventAssembler/ColorzCore.exe
 else
   EXE :=
-  EA  := mono $(realpath .)/Tools/EventAssembler/Core.exe
+  EA  := mono $(realpath .)/Tools/EventAssembler/ColorzCore.exe
 endif
 
 # Making sure we are using python 3
@@ -32,6 +32,6 @@ export TEXT_PROCESS      := $(PYTHON3) $(realpath .)/Tools/PyTools/text-process-
 export C2EA              := $(PYTHON3) $(realpath .)/Tools/PyTools/NMM2CSV/c2ea.py
 export TMX2EA            := $(PYTHON3) $(realpath .)/Tools/PyTools/TMX2EA/tmx2ea.py
 export EADEP             := $(realpath .)/Tools/ea-dep$(EXE)
-export LYN               := $(realpath .)/Tools/lyn$(EXE)
+export LYN               := $(realpath .)/Tools/EventAssembler/Tools/lyn$(EXE)
 
 NOTIFY_PROCESS = @echo "$(notdir $<) => $(notdir $@)"
