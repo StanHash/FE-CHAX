@@ -1,5 +1,8 @@
 #include "ModularSave.h"
 
+// TODO: update reference and add to CLib
+#define gUseBackupSuspend (*(u8*)(void*)(0x0203EDB8))
+
 void* MS_GetSaveAddressBySlot(unsigned slot) {
 	if (slot > SAVE_BLOCK_UNK6)
 		return NULL;
@@ -31,7 +34,7 @@ void MS_LoadChapterStateFromGameSave(unsigned slot, struct ChapterState* target)
 }
 
 void MS_LoadChapterStateFromSuspendSave(unsigned slot, struct ChapterState* target) {
-	void* const source = GetSaveSourceAddress(slot);
+	void* const source = GetSaveSourceAddress(slot + gUseBackupSuspend);
 	const struct SaveChunkDecl* const chunk = MS_FindSuspendSaveChunk(gMS_ChapterStateChunkId);
 
 	ReadSramFast(source + chunk->offset, target, chunk->size);
@@ -132,6 +135,8 @@ void MS_SaveSuspend(unsigned slot) {
 	if (!IsSramWorking())
 		return;
 
+	slot += GetNextSuspendSaveId();
+
 	void* const base = GetSaveTargetAddress(slot);
 
 	// Actual save!
@@ -148,11 +153,12 @@ void MS_SaveSuspend(unsigned slot) {
 
 	SaveMetadata_Save(&sbm, slot);
 
-	gGameState.boolHasJustResumed = FALSE; // TODO: figure out. This is set on resume. May be "no suspend since resume" flag
+	gGameState.boolHasJustResumed = FALSE;
+	UpdateNextSuspendSaveId();
 }
 
 void MS_LoadSuspend(unsigned slot) {
-	void* const base = GetSaveSourceAddress(slot);
+	void* const base = GetSaveSourceAddress(slot + gUseBackupSuspend);
 
 	for (const struct SaveChunkDecl* chunk = gSuspendSaveChunks; chunk->offset != 0xFFFF; ++chunk)
 		if (chunk->load)

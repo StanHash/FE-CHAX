@@ -55,4 +55,7 @@ void UnpackUnitStructFromSuspend(void* source, struct Unit* unit) __attribute__(
 
 void SetBonusContentClaimFlags(u32 value) __attribute__((long_call));
 
+int GetNextSuspendSaveId(void);
+void UpdateNextSuspendSaveId(void);
+
 #endif // MODULAR_SAVE_H
