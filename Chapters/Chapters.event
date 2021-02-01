@@ -11,8 +11,8 @@
 }
 
 {
-// #include "FE6Ch1/FE6Chapter1.event"
-// #include "FE6Ch1/FE6Chapter1Map.event"
+#include "FE6Ch1/FE6Chapter1.event"
+#include "FE6Ch1/FE6Chapter1Map.event"
 }
 
 {
@@ -21,8 +21,8 @@
 }
 
 {
-#include "CommBlitz/CommBlitzCh10.event"
-#include "CommBlitz/CommBlitzCh10Map.event"
+// #include "CommBlitz/CommBlitzCh10.event"
+// #include "CommBlitz/CommBlitzCh10Map.event"
 }
 
 {

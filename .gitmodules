@@ -7,3 +7,6 @@
 [submodule "Tools/PyTools"]
 	path = Tools/PyTools
 	url = https://github.com/StanHash/FE-PyTools.git
+[submodule "Tools/EventAssembler"]
+	path = Tools/EventAssembler
+	url = https://github.com/StanHash/EventAssembler.git

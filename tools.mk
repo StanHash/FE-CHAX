@@ -9,10 +9,8 @@ include $(DEVKITARM)/base_tools
 
 ifeq ($(OS),Windows_NT)
   EXE := .exe
-  EA  := $(realpath .)/Tools/EventAssembler/ColorzCore.exe
 else
   EXE :=
-  EA  := mono $(realpath .)/Tools/EventAssembler/ColorzCore.exe
 endif
 
 # Making sure we are using python 3
@@ -22,16 +20,19 @@ else
   export PYTHON3 := python3
 endif
 
+EA := $(realpath .)/Tools/EventAssembler/ColorzCore$(EXE)
+
 # additional tools
 export PARSEFILE         := $(realpath .)/Tools/EventAssembler/Tools/ParseFile$(EXE)
 export PORTRAITFORMATTER := $(realpath .)/Tools/EventAssembler/Tools/PortraitFormatter$(EXE)
 export PNG2DMP           := $(realpath .)/Tools/EventAssembler/Tools/Png2Dmp$(EXE)
-export GBAGFX            := $(realpath .)/Tools/gbagfx$(EXE)
+export COMPRESS          := $(realpath .)/Tools/EventAssembler/Tools/compress$(EXE)
+export LYN               := $(realpath .)/Tools/EventAssembler/Tools/lyn$(EXE)
+export EADEP             := $(realpath .)/Tools/EventAssembler/ea-dep$(EXE)
+
 export PORTRAIT_PROCESS  := $(PYTHON3) $(realpath .)/Tools/PyTools/portrait-process.py
 export TEXT_PROCESS      := $(PYTHON3) $(realpath .)/Tools/PyTools/text-process-classic.py
 export C2EA              := $(PYTHON3) $(realpath .)/Tools/PyTools/NMM2CSV/c2ea.py
 export TMX2EA            := $(PYTHON3) $(realpath .)/Tools/PyTools/TMX2EA/tmx2ea.py
-export EADEP             := $(realpath .)/Tools/ea-dep$(EXE)
-export LYN               := $(realpath .)/Tools/EventAssembler/Tools/lyn$(EXE)
 
 NOTIFY_PROCESS = @echo "$(notdir $<) => $(notdir $@)"

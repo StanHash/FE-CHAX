@@ -23,19 +23,17 @@ $(PORTRAIT_INSTALLER): $(PORTRAIT_LIST) $(shell $(PORTRAIT_PROCESS) $(PORTRAIT_L
 # PNG to 4bpp rule
 %.4bpp: %.png
 	$(NOTIFY_PROCESS)
-#	@$(PNG2DMP) $< -o $@
-	@$(GBAGFX) $< $@
+	@$(PNG2DMP) $< -o $@
 
 # PNG to gbapal rule
 %.gbapal: %.png
 	$(NOTIFY_PROCESS)
-#	@$(PNG2DMP) $< -po $@ --palette-only
-	@$(GBAGFX) $< $@
+	@$(PNG2DMP) $< -po $@ --palette-only
 
 # Anything to lz rule
 %.lz: %
 	$(NOTIFY_PROCESS)
-	@$(GBAGFX) $< $@
+	@$(COMPRESS) $< $@
 
 ifeq ($(MAKECMDGOALS),clean)
 

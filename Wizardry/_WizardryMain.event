@@ -19,7 +19,7 @@
 
 #include "3rdParty/HpBars/HpBars.event"
 // #include "3rdParty/KirbDebug/KirbDebug.event"
-#include "3rdParty/CSAEngine/CSAEngine.event"
+// #include "3rdParty/CSAEngine/CSAEngine.event"
 
 #include "CustomGameSpeed/CustomGameSpeed.event"
 #include "PerChapterBattleQuotes/PerChapterBattleQuotes.event"
