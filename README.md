@@ -11,7 +11,7 @@ This repository makes use of the git submodule facilities. If you didn't clone t
 
 - have [devkitARM](https://devkitpro.org/wiki/Getting_Started) installed, and the `DEVKITARM` env variable set.
 - have [python 3](https://www.python.org/) installed and in your path. (the makefile *should* be able to find the correct python executable name. See [`tooks.mk`](./tooks.mk)).
-- have built Tools/EventAssembler by running `Tools/EventAssembler/build.sh`. [See the attached README for details.](./Tools/EventAssembler/README.md).
+- have built Tools/EventAssembler by running `Tools/EventAssembler/build.sh`. [See the attached README for details](https://github.com/StanHash/EventAssembler/blob/main/README.md).
 
 Once all of that is done, you can navigate to this folder in your shell and do the following:
 
