@@ -1,0 +1,17 @@
+
+// makes venin weapons put opponent to sleep instead of poisoning them
+// proof of concept hack by stan
+
+#include "Src/VswHook.lyn.event"
+
+PUSH
+
+    ORG $02B044
+        WORD $47184B00; POIN VswHook_0802B044
+
+    ORG $02B644
+        SHORT $2002 // movs r0, #2 @ sleep status
+        SHORT $216F // movs r1, #0x6F
+        SHORT $5460 // strb r0, [r4, r1]
+
+POP

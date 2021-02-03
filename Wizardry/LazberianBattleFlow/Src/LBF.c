@@ -5,66 +5,73 @@ void ClearBattleHits(void);
 void BattleGetBattleUnitOrder(struct BattleUnit** outAttacker, struct BattleUnit** outDefender);
 s8 BattleGenerateRoundHits(struct BattleUnit* attacker, struct BattleUnit* defender);
 
-static int CheckNonMiss(const struct BattleHit* begin, const struct BattleHit* end);
-static int GetPlus(const struct BattleUnit* attacker, const struct BattleUnit* defender);
+static int CheckNonMiss(struct BattleHit const* begin, struct BattleHit const* end);
+static int GetPlus(struct BattleUnit const* attacker, struct BattleUnit const* defender);
+static struct BattleHit const* IncBattleHitIt(struct BattleHit const* it);
 
-extern const unsigned gPlusItemAttribute;
+extern u32 const gPlusItemAttribute;
+extern u8 const gLbfBattleHitLen;
 
 //! Should replace function at FE8U:0802AED0
 void BattleUnwind(void)
 {
-	ClearBattleHits();
+    ClearBattleHits();
 
-	struct BattleUnit* attacker;
-	struct BattleUnit* defender;
+    struct BattleUnit* attacker;
+    struct BattleUnit* defender;
 
-	BattleGetBattleUnitOrder(&attacker, &defender);
+    BattleGetBattleUnitOrder(&attacker, &defender);
 
-	gBattleHitIterator->info |= BATTLE_HIT_INFO_BEGIN;
+    gBattleHitIterator->info |= BATTLE_HIT_INFO_BEGIN;
 
-	int attackerPlus = GetPlus(attacker, defender);
-	int defenderPlus = GetPlus(defender, attacker);
+    int attackerPlus = GetPlus(attacker, defender);
+    int defenderPlus = GetPlus(defender, attacker);
 
-	while (attackerPlus > 0)
-	{
-		struct BattleHit* it = gBattleHitIterator;
+    while (attackerPlus > 0)
+    {
+        struct BattleHit* it = gBattleHitIterator;
 
-		if (BattleGenerateRoundHits(attacker, defender))
-			break;
+        if (BattleGenerateRoundHits(attacker, defender))
+            break;
 
-		if (defenderPlus > 0)
-		{
-			if (!CheckNonMiss(it, gBattleHitIterator))
-			{
-				gBattleHitIterator->attributes |= BATTLE_HIT_ATTR_RETALIATE;
+        if (defenderPlus > 0)
+        {
+            if (!CheckNonMiss(it, gBattleHitIterator))
+            {
+                gBattleHitIterator->attributes |= BATTLE_HIT_ATTR_RETALIATE;
 
-				if (BattleGenerateRoundHits(defender, attacker))
-					break;
-			}
+                if (BattleGenerateRoundHits(defender, attacker))
+                    break;
+            }
 
-			defenderPlus--;
-		}
+            defenderPlus--;
+        }
 
-		attackerPlus--;
-	}
+        attackerPlus--;
+    }
 
-	gBattleHitIterator->info |= BATTLE_HIT_INFO_END;
+    gBattleHitIterator->info |= BATTLE_HIT_INFO_END;
 }
 
-static int CheckNonMiss(const struct BattleHit* begin, const struct BattleHit* end)
+static int CheckNonMiss(struct BattleHit const* begin, struct BattleHit const* end)
 {
-	for (const struct BattleHit* it = begin; it != end; ++it)
-	{
-		if (it->attributes & BATTLE_HIT_ATTR_MISS)
-			continue;
+    for (struct BattleHit const* it = begin; it != end; it = IncBattleHitIt(it))
+    {
+        if (it->attributes & BATTLE_HIT_ATTR_MISS)
+            continue;
 
-		return TRUE;
-	}
+        return TRUE;
+    }
 
-	return FALSE;
+    return FALSE;
 }
 
-static int GetPlus(const struct BattleUnit* attacker, const struct BattleUnit* defender)
+static int GetPlus(struct BattleUnit const* attacker, struct BattleUnit const* defender)
 {
-	return (attacker->weaponAttributes & gPlusItemAttribute) && (attacker->battleSpeed > defender->battleSpeed) ? 2 : 1;
+    return (attacker->weaponAttributes & gPlusItemAttribute) && (attacker->battleSpeed > defender->battleSpeed) ? 2 : 1;
+}
+
+static struct BattleHit const* IncBattleHitIt(struct BattleHit const* it)
+{
+    return it + (gLbfBattleHitLen/4);
 }
