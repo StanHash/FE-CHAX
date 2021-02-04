@@ -1,0 +1,5 @@
+
+// Require double opponent's speed to follow up attack
+// hack by stan
+
+#include "Src/DoubleDouble.lyn.event"
