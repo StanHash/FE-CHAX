@@ -1,0 +1,14 @@
+
+// Makes units with level set to 31 instead load with the average level of the player party
+// hack by stan
+
+#include "Src/Ale.lyn.event"
+#include "Src/AleHooks.lyn.event"
+
+PUSH
+
+    ORG $017D7C
+        // ldr r3, target ; bx r3 ; target: .word target
+        WORD $47184B00; POIN AleHook
+
+POP
