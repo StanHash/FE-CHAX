@@ -50,11 +50,11 @@ static const uint16_t css_bg_config[] = {
 
 void css_disable_game_gfx(struct CSSCoreProc* proc) {
 	// disabling every layer
-	gLCDIOBuffer.dispControl.bg0_on = 0;
-	gLCDIOBuffer.dispControl.bg1_on = 0;
-	gLCDIOBuffer.dispControl.bg2_on = 0;
-	gLCDIOBuffer.dispControl.bg3_on = 0;
-	gLCDIOBuffer.dispControl.obj_on = 0;
+	gLCDIOBuffer.dispControl.enableBg0 = 0;
+	gLCDIOBuffer.dispControl.enableBg1 = 0;
+	gLCDIOBuffer.dispControl.enableBg2 = 0;
+	gLCDIOBuffer.dispControl.enableBg3 = 0;
+	gLCDIOBuffer.dispControl.enableObj = 0;
 
 	// resetting color effects?
 	SetColorEffectsParameters(3, 0, 0, 0x10);
@@ -78,11 +78,11 @@ void css_load_gfx(struct CSSCoreProc* proc) {
 	proc->pLPanel = css_lpanel_start(zeroVec, (Proc*)(proc));
 
 	// enable every layer
-	gLCDIOBuffer.dispControl.bg0_on = 1;
-	gLCDIOBuffer.dispControl.bg1_on = 1;
-	gLCDIOBuffer.dispControl.bg2_on = 1;
-	gLCDIOBuffer.dispControl.bg3_on = 1;
-	gLCDIOBuffer.dispControl.obj_on = 1;
+	gLCDIOBuffer.dispControl.enableBg0 = 1;
+	gLCDIOBuffer.dispControl.enableBg1 = 1;
+	gLCDIOBuffer.dispControl.enableBg2 = 1;
+	gLCDIOBuffer.dispControl.enableBg3 = 1;
+	gLCDIOBuffer.dispControl.enableObj = 1;
 }
 
 void css_disable_gfx(struct CSSCoreProc* proc) {

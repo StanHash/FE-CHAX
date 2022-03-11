@@ -82,7 +82,7 @@ static void css_lpanel_init(struct CSSLeftPanelProc* proc) {
 
 	SetBgPosition(0, 4, 4);
 
-	// css_mugframe_small_start(gBg0MapBuffer, 0xF0);
+	//*
 
 	u16* const bgOut = gBg0MapBuffer;
 
@@ -110,7 +110,11 @@ static void css_lpanel_init(struct CSSLeftPanelProc* proc) {
 
 	css_lpanel_show_face(proc);
 
+	// */
+
 	/*
+
+	css_mugframe_small_start(gBg0MapBuffer, 0xF0);
 
 	struct Vec2 stOrigin = {
 		proc->origin.x + 4,

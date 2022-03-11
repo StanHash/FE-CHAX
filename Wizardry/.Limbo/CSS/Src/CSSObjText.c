@@ -71,7 +71,7 @@ static void css_stats_draw_glyph(struct TextHandle* text, const struct FontGlyph
 
 	uint32_t* const target = gpCurrentFont->getDrawTarget(text);
 
-	const uint16_t* const colorLookup = Get2bppTo4bppLookup(text->colotId);
+	const uint16_t* const colorLookup = Get2bppTo4bppLookup(text->colorId);
 	const uint16_t* const maskLookup  = Get2bppTo4bppLookup(9);
 
 	const unsigned x2bppOffset = (text->xCursor % 8) * 2;
@@ -105,12 +105,13 @@ static void css_stats_draw_glyph(struct TextHandle* text, const struct FontGlyph
 	text->xCursor += glyph->pxLength;
 }
 
+// the heck
 #undef THM_LLSL
 
 static void css_stats_text_init(struct TextHandle* text, int xCursor, int colorIndex) {
 	text->tileIndexOffset = 0;
 	text->xCursor = xCursor;
-	text->colotId = colorIndex;
+	text->colorId = colorIndex;
 	text->tileWidth = sStatTextTileWidth;
 	text->useDoubleBuffer = FALSE;
 	text->currentBufferId = 0;
@@ -174,7 +175,7 @@ static void css_stats_draw_text_2D(void* target, const char* statName, unsigned 
 }
 
 static void css_stats_draw(int targetObjTile, const char* statName, int statValue, int statMax) {
-	void* const target = (OBJ_VRAM0 + (targetObjTile * 0x20));
+	void* const target = (VRAM_OBJ + (targetObjTile * 0x20));
 
 	// Clear gfx
 	CpuFastFill16(0, target,         0x20 * sStatTextTileWidth);
