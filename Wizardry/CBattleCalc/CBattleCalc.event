@@ -8,16 +8,16 @@
 #include "Extensions/Hack Installation.txt"
 #include "EAstdlib.event"
 
-BCalcDefRes  = $2AA44+1
-BCalcPower   = $2AABC+1
-BCalcASpd    = $2AB74+1
-BCalcHit     = $2ABAC+1
-BCalcAvo     = $2ABE4+1
-BCalcCrit    = $2AC18+1
-BCalcDodge   = $2AC54+1
-BCalcSupport = $2A9D0+1
-BCalcWRank   = $2AD54+1
-BCalcStatus  = $2AD90+1
+#define BCalcDefRes  "($2AA44+1)"
+#define BCalcPower   "($2AABC+1)"
+#define BCalcASpd    "($2AB74+1)"
+#define BCalcHit     "($2ABAC+1)"
+#define BCalcAvo     "($2ABE4+1)"
+#define BCalcCrit    "($2AC18+1)"
+#define BCalcDodge   "($2AC54+1)"
+#define BCalcSupport "($2A9D0+1)"
+#define BCalcWRank   "($2AD54+1)"
+#define BCalcStatus  "($2AD90+1)"
 
 {
 

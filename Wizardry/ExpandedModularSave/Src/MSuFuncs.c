@@ -51,7 +51,7 @@ void MSu_LoadOtherUnits(void* source, unsigned size) {
 }
 
 void MSu_SaveMenuRelated(void* target, unsigned size) {
-	static const void(*PackMenuRelatedSaveStruct)(void*) = (void(*)(void*))(0x804F714+1);
+	static void (* const PackMenuRelatedSaveStruct)(void*) = (void(*)(void*))(0x804F714+1);
 
 	u8 buf[0x10];
 
@@ -60,7 +60,7 @@ void MSu_SaveMenuRelated(void* target, unsigned size) {
 }
 
 void MSu_LoadMenuRelated(void* source, unsigned size) {
-	static const void(*UnpackMenuRelatedSaveStruct)(void*) = (void(*)(void*))(0x804F754+1);
+	static void(* const UnpackMenuRelatedSaveStruct)(void*) = (void(*)(void*))(0x804F754+1);
 
 	u8 buf[0x10];
 
@@ -69,7 +69,7 @@ void MSu_LoadMenuRelated(void* source, unsigned size) {
 }
 
 void MSu_SaveDungeonState(void* target, unsigned size) {
-	static const void(*PackIdk)(void*) = (void(*)(void*))(0x8037E08+1);
+	static void(*const PackIdk)(void*) = (void(*)(void*))(0x8037E08+1);
 
 	u8 buf[0xC];
 
@@ -78,7 +78,7 @@ void MSu_SaveDungeonState(void* target, unsigned size) {
 }
 
 void MSu_LoadDungeonState(void* source, unsigned size) {
-	static const void(*UnpackIdk)(void*) = (void(*)(void*))(0x8037E30+1);
+	static void(*const UnpackIdk)(void*) = (void(*)(void*))(0x8037E30+1);
 
 	u8 buf[0xC];
 

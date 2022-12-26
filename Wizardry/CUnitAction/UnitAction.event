@@ -24,6 +24,7 @@
 
 #define InjectUnitAction(aActionId, adActionRoutine) "PUSH; ORG (UnitActionCallTable + 4*aActionId); adActionRoutine; POP"
 
+ALIGN 4
 UnitActionCallTable:
 	NoActionRoutine               // 0x00 ?
 	ActionRoutine(WaitAction)     // 0x01 Wait

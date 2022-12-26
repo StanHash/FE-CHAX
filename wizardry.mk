@@ -25,7 +25,7 @@ INCFLAGS     := $(foreach dir, $(INCLUDE_DIRS), -I "$(dir)")
 
 # setting up compilation flags
 ARCH    := -mcpu=arm7tdmi -mthumb -mthumb-interwork
-CFLAGS  := $(ARCH) $(INCFLAGS) -Wall -Os -mtune=arm7tdmi -ffreestanding -mlong-calls
+CFLAGS  := $(ARCH) $(INCFLAGS) -Wall -Wextra -Wno-unused -O2 -mtune=arm7tdmi -ffreestanding -mlong-calls
 ASFLAGS := $(ARCH) $(INCFLAGS)
 
 # defining dependency flags

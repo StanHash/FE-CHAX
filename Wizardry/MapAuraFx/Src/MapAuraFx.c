@@ -145,7 +145,7 @@ static void MapAuraFx_Unit_OnInit(struct MapAuraFxUnitProc* proc)
 static void MapAuraFx_Unit_OnLoop(struct MapAuraFxUnitProc* proc)
 {
 	// TODO: add to libgbafe
-	static const void(*SMS_DisplayWindowBlended)(int, int, int, int, struct Unit*)
+	static void(*const SMS_DisplayWindowBlended)(int, int, int, int, struct Unit*)
 		= (void(*)(int node, int x, int y, int info, struct Unit* unit))(0x08028014+1);
 
 	// Display semi-transparent map sprite + obj window map sprite

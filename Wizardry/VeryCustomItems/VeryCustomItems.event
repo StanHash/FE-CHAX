@@ -30,14 +30,14 @@ gVciLockAttrMap:
 ALIGN 2
 gVciItemHealAmountList:
 	// Format: SHORT <Item Id> <Heal Amount>
-	SHORT Heal       10
-	SHORT Physic     10
-	SHORT Fortify    10
-	SHORT Vulnerary  10
-	SHORT Vulnerary2 10
-	SHORT Mend       20
-	SHORT Recover    80
-	SHORT Elixir     80
+	SHORT Heal        10
+	SHORT Physic      10
+	SHORT Fortify     10
+	SHORT Vulnerary   10
+	SHORT Vulnerary_2 10
+	SHORT Mend        20
+	SHORT Recover     80
+	SHORT Elixir      80
 
 	SHORT 0 0 // End
 

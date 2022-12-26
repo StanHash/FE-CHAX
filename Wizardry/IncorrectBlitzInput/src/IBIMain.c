@@ -7,8 +7,8 @@ extern const u16 gPal_FF6Window[];
 
 // FIXME (update fe8u.s)
 static struct AnimationInterpreter** const gBattleAnimMainAIs = (struct AnimationInterpreter**)(0x02000000);
-static const int(*GetAISLayerId)(const struct AnimationInterpreter*) = (int(*)(const struct AnimationInterpreter*))(0x805A154+1);
-static const int(*HasEkrNamewinAppearEnded)(void) = (int(*)(void))(0x08056E60+1);
+static int(*const GetAISLayerId)(const struct AnimationInterpreter*) = (int(*)(const struct AnimationInterpreter*))(0x805A154+1);
+static int(*const HasEkrNamewinAppearEnded)(void) = (int(*)(void))(0x08056E60+1);
 
 struct IBIProc {
 	PROC_HEADER;
@@ -65,7 +65,7 @@ static void IBIHBlankPalEffect(void) {
 		unsigned green = line * 1  + (32 - line) * 15;
 		unsigned blue  = line * 11 + (32 - line) * 26;
 
-		((vu16*)(PLTT + 0x20))[14] = RGB(
+		((vu16*)(PLTT + 0x20))[14] = COLOR_RGB(
 			red   / 32,
 			green / 32,
 			blue  / 32
@@ -79,7 +79,7 @@ static void IBIHBlankPalEffect(void) {
 		unsigned green = line * 0  + (32 - line) * 14;
 		unsigned blue  = line * 10 + (32 - line) * 25;
 
-		((vu16*)(PLTT + 0x20))[15] = RGB(
+		((vu16*)(PLTT + 0x20))[15] = COLOR_RGB(
 			red   / 32,
 			green / 32,
 			blue  / 32

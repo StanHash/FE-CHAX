@@ -99,14 +99,14 @@ unsigned LTF_PredictNextPhase(const unsigned ableCounts[4], const unsigned maxCo
 {
 	unsigned ratios[4];
 
-	for (unsigned i = 0; i < 4; ++i)
+	for (int i = 0; i < 4; ++i)
 		ratios[i] = maxCounts[i] ? Div(ableCounts[i] << 8, maxCounts[i] + sTurnOrderPriorityPenaltyLookup[i]) : 0;
 
-	for (unsigned i = 3; i >= 0; --i)
+	for (int i = 3; i >= 0; --i)
 	{
-		unsigned all = TRUE;
+		int all = TRUE;
 
-		for (unsigned j = 0; j < i; ++j)
+		for (int j = 0; j < i; ++j)
 			all = all && (ratios[j] < ratios[i]);
 
 		if (all)

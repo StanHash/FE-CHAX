@@ -1,39 +1,164 @@
 #ifndef WIZARDRY
 #define WIZARDRY
 
+// I didn't really make most of this one
 #include "_FE8EssentialFixes.event"
 
+// ===================
+// = WIZARDRY CONFIG =
+// ===================
+
+// AiPerformExtension: how many EXTRA perform slots to ADD (perform ids past 14).
+// Default if not defined: 10.
+#define PERFORM_EXTENSION_COUNT 10
+
+// CBattleCalc: tell it that we define our own list.
+// In this demo install, it is defined at the end of the this file.
+#define BattleStatCalcListDeclared
+
+// CIconDisplay: how many icon sheets (sets of 256 icons) to reserve.
+// Default if not defined: 1 (only the one vanilla sheet).
+// In this demo install we need at most 2, as LazberianWeaponry uses one.
+#define ICON_SHEET_COUNT 2
+
+// CPopupRework: how many custom component slots to reverse (vanilla requires 13).
+// Default if not defined: 16.
+#define POPR_COMPONENT_COUNT 16
+
+// CUnitAction: how many custom action slots to reserve (min 0x30, but 0x23 are free I think).
+// Default if not defined: 0x30.
+#define ACTION_TABLE_SIZE 0x30
+
+// TradeCheck: tell it that we define our own list.
+// In this demo install, it is defined at the end of the this file.
+#define TradeCheckListDeclared
+
+// FerryAi: internal IDs config.
+// Each constant can be defined individually or not at all (in which case it takes default values which are the same as here).
+#define FERRY_TAKE_PERFORM 14 // which AiPerformExtension perform id to take over for the Take action (remember: only free past 14).
+#define FERRY_DROP_PERFORM 15 // which AiPerformExtension perform id to take over for the Drop action (remember: only free past 14).
+#define FERRY_TRAP_ID 0xEF // which trap id to use for the ferry drop point curstom trap.
+#define FERRY_AI1 10 // which Ai1 to override with ferry Ai. You can also use this constant in your UNIT ai definitions.
+
+// CRewarp: which CUnitAction action id to take over for the rewarp action.
+// Default if not defined: 0x27.
+#define ACTION_REWARP 0x27
+
+// LazberianBattleFlow: which item attribute mask to use for the "plus" property.
+// Required definition if installing LazberianBattleFlow.
+#define WA_LBF_PLUS 0x80000000
+
+// LazberianWeaponry: which CIconDisplay icon sheet to use (0 is reserved for vanilla sheet).
+// Required definition if installing LazberianWeaponry.
+#define LW_ICON_SHEET 1
+
+// LazberianMercenaries: Unit flag mask to use to remember if a unit has been hired (needs to be a saved flag).
+// Default if not defined: 0x40000000.
+#define US_LM_HIRED 0x40000000
+
+// LazberianMercenaries: Unit (Character Info/Class Info) attribute mask to use to identify mercenaries.
+// Default if not defined: 0x40000000.
+#define CA_LM_MERCENARY 0x40000000
+
+// Mimic: the character (pid) to use for mimic units.
+// Default if not defined: 0xC0.
+#define CHARACTER_MIMIC 0xC0
+
+// Mimic: which CUnitAction action id to take over for the mimic action.
+// Default if not defined: 0x28.
+#define ACTION_MIMIC 0x28
+
+// CustomGameSpeed: the entire config.
+// Sets defaults (same as demo here) if CustomGameSpeedConfig isn't defined.
+#define CustomGameSpeedConfig
+#define GameSpeedNormalValue       5
+#define GameSpeedNormalCheckSlow   True
+#define GameSpeedNormalCheckAPress False
+#define GameSpeedFastValue         6
+#define GameSpeedFastCheckSlow     False
+#define GameSpeedFastCheckAPress   True
+
+// FixDifficulty: Which difficulty to fix to (0: easy, 1: normal: 2; difficult).
+// Default if not defined: 1 (normal).
+#define DIFFICULTY 1
+
+// TextScrollSpeed: the new text vertical scroll speed.
+// Default: 1.
 #define TextScrollSpeed 2
+
+// =========================
+// = WIZARDRY INSTALLATION =
+// =========================
+
+// Fixes
+#include "DecompressFix/DecompressFix.event"
+#include "MiscFixes/CounterFix.event"
+#include "MiscFixes/LeadAiFix.event"
+#include "MiscFixes/MNC2FixTest.event"
+
+// Modularized systems
+#include "AiPerformExtension/AiPerformExt.event"
+#include "CBattleCalc/CBattleCalc.event"
+#include "CIconDisplay/IconDisplay.event"
+#include "CPopupRework/PopupRework.event"
+#include "CUnitAction/UnitAction.event"
+#include "BriefBwl/BriefBwl.event"
+#include "ExpandedModularSave/ExModularSave.event"
+#include "PerChapterBattleQuotes/PerChapterBattleQuotes.event"
+#include "TradeCheck/TradeCheck.event"
+#include "VeryCustomItems/VeryCustomItems.event"
+
+// Utility frameworks
+#include "CFreeSelect/FreeSelect.event"
+#include "FerryAi/FerryAi.event"
+#include "M7/M7.event"
+#include "MapAuraFx/MapAuraFx.event"
+#include "Misc/SetMoveBonus.event"
+#include "TalkAi/TalkAi.event"
+#include "TileChangeTrap/TileChangeTrap.event"
+#include "Utility/CanUnitBeOnPosition.event"
+#include "Utility/ShopLike.event"
+
+// Feature hacks (the fancy ones)
+#include "Autolevels/FixedAutolevels.event"
+#include "Autolevels/NoBonusLevels.event"
+#include "AverageLevelEnemies/Ale.event"
+#include "CLolStats/LolStats.event"
+// #include "CRewarp/Rewarp.event" // This is broekn (both balance-wise and functionnality-wise)
+#include "DanceAi/DanceAi.event"
+#include "DeathDropFix/DeathDropFix.event"
+#include "DoubleDouble/DoubleDouble.event"
+#include "EvilRN/EvilRN.event"
+#include "IncorrectBlitzInput/IncorrectBlitzInput.event"
+#include "LazberianBattleFlow/LazberianBattleFlow.event"
+#include "LazberianMercenaries/LazberianMercenaries.event"
+#include "LazberianTurnFlow/LazberianTurnFlow.event"
+// #include "LazberianWeaponry/LazberianWeaponry.event" // NOTE: conflicts with VeryCustomItems
+#include "Mimic/Mimic.event"
+#include "Misc/FcukTanks.event"
+#include "FixDifficulty/FixDifficulty.event"
+#include "StatScreenBlink/SSBlink.event"
+#include "VeninSleepWeapons/Vsw.event"
+
+// Other small things
+#include "CustomGameSpeed/CustomGameSpeed.event"
+#include "Dumb/RemoveSupports.event"
+#include "Dumb/NoBattleAnimations.event"
 #include "TextScrollSpeed.event"
 
-#include "CUnitAction/UnitAction.event"
-#include "CIconDisplay/IconDisplay.event"
+// Bad debugging hacks
+// #include "DecideMonitor/DecideMonitor.event"
 
-// #include "CFreeSelect/FreeSelect.event"
-// #include "CRewarp/Rewarp.event"
-
-#include "DanceAi/DanceAi.event"
-
-#include "CLolStats/LolStats.event"
-#include "LazberianTurnFlow/LazberianTurnFlow.event"
-
+// 3rd party hacks (means I didn't make those)
 #include "3rdParty/HpBars/HpBars.event"
 // #include "3rdParty/KirbDebug/KirbDebug.event"
 // #include "3rdParty/CSAEngine/CSAEngine.event"
 
-#include "CustomGameSpeed/CustomGameSpeed.event"
-#include "PerChapterBattleQuotes/PerChapterBattleQuotes.event"
-#include "ExpandedModularSave/ExModularSave.event"
+// ================
+// = MODULE LISTS =
+// ================
 
-#include "Mimic/Mimic.event"
-
-#include "UnitMenu.event"
-
-/*
-
-// Custom BattleCalc/TradeCheck and what not lists here
-// Example:
-
+// CBattleCalc func list
 ALIGN 4
 BattleStatCalcList:
 	POIN BCalcDefRes
@@ -47,14 +172,32 @@ BattleStatCalcList:
 	POIN BCalcWRank
 	POIN BCalcStatus
 
-	// Extra things
+	// This is just vanilla, I don't do battle calcs apparently
 
 	WORD 0 // end
 
-#define BattleStatCalcListDeclared
+// PopupRework battle popups (vanilla)
+ALIGN 4
+gBattlePopupTable:
+	PopRBattlePopup(PopR_InitWeaponBroke, 0x592420, 90) // duration was 96 in vanilla but I like roundness
+	PopRBattlePopup(PopR_InitWRankUp,     0x592468, 90) // same
+	PopRBattlePopupEnd
 
-// */
+// PopupRework promote popups (vanilla)
+ALIGN 4
+gPromotionPopupTable:
+	PopRBattlePopup(PopR_InitSwordRankNew, gPopup_PopR_NewWType, 90) // duration was 96 in vanilla but I like roundness
+	PopRBattlePopup(PopR_InitLanceRankNew, gPopup_PopR_NewWType, 90) // same
+	PopRBattlePopup(PopR_InitAxeRankNew,   gPopup_PopR_NewWType, 90) // same
+	PopRBattlePopup(PopR_InitBowRankNew,   gPopup_PopR_NewWType, 90) // same
+	PopRBattlePopup(PopR_InitStaffRankNew, gPopup_PopR_NewWType, 90) // same
+	PopRBattlePopup(PopR_InitAnimaRankNew, gPopup_PopR_NewWType, 90) // same
+	PopRBattlePopup(PopR_InitLightRankNew, gPopup_PopR_NewWType, 90) // same
+	PopRBattlePopup(PopR_InitElderRankNew, gPopup_PopR_NewWType, 90) // same
+	PopRBattlePopupEnd
 
+// TradeCheck func list
+ALIGN 4
 TradeCheckList:
 	POIN AreUnitsSameAllegiance
 	POIN AreNeitherUnitPhantomClass
@@ -65,10 +208,7 @@ TradeCheckList:
 
 	WORD 0 // end
 
-#define TradeCheckListDeclared
-
-// #include "CBattleCalc/CBattleCalc.event"
-
-#include "TradeCheck/TradeCheck.event"
+// See this file for mimic and rewrap commands
+#include "UnitMenu.event"
 
 #endif // WIZARDRY

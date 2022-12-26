@@ -1,17 +1,20 @@
-
-# making sure devkitARM exists and is set up
-ifeq ($(strip $(DEVKITARM)),)
-  $(error "Please set DEVKITARM in your environment. export DEVKITARM=<path to>devkitARM")
-endif
-
-# including devkitARM tool definitions
-include $(DEVKITARM)/base_tools
-
 ifeq ($(OS),Windows_NT)
   EXE := .exe
 else
   EXE :=
 endif
+
+TOOLCHAIN ?= $(DEVKITARM)
+
+ifneq (,$(TOOLCHAIN))
+  export PATH := $(TOOLCHAIN)/bin:$(PATH)
+endif
+
+PREFIX := arm-none-eabi-
+
+CC := $(PREFIX)gcc
+AS := $(PREFIX)as
+OBJCOPY := $(PREFIX)objcopy
 
 # Making sure we are using python 3
 ifeq ($(shell python -c 'import sys; print(int(sys.version_info[0] > 2))'),1)

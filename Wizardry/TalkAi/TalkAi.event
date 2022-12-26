@@ -23,7 +23,7 @@ The AiTryTalkToCharacter(aCharacter) macro is equivalent to:
 	AiMoveUntilAdjacentTo(aCharacter)
 	AiGotoIfNE(0, 2)
 
-	/* moved adjacent */
+	// moved adjacent
 	AiFunc(AiTransformMoveIntoTalk, TalkAiCharacterParam)
 
 	AiRestart

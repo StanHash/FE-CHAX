@@ -113,7 +113,7 @@ void RCARing(struct RCAProc* proc) {
 }
 
 void RCAFlashBegin(struct RCAProc* proc) {
-	static const void(*StartUnitWarpFlash)(MoveUnitProc*, int) = (void(*)(MoveUnitProc*, int))(0x8079804+1);
+	static void(* const StartUnitWarpFlash)(MoveUnitProc*, int) = (void(*)(MoveUnitProc*, int))(0x8079804+1);
 
 	StartUnitWarpFlash(proc->pMoveUnit, 0);
 }
