@@ -106,7 +106,7 @@
 #include "ExpandedModularSave/ExModularSave.event"
 #include "PerChapterBattleQuotes/PerChapterBattleQuotes.event"
 #include "TradeCheck/TradeCheck.event"
-#include "VeryCustomItems/VeryCustomItems.event"
+// #include "VeryCustomItems/VeryCustomItems.event"
 
 // Utility frameworks
 #include "CFreeSelect/FreeSelect.event"
@@ -133,8 +133,8 @@
 #include "LazberianBattleFlow/LazberianBattleFlow.event"
 #include "LazberianMercenaries/LazberianMercenaries.event"
 #include "LazberianTurnFlow/LazberianTurnFlow.event"
-// #include "LazberianWeaponry/LazberianWeaponry.event" // NOTE: conflicts with VeryCustomItems
-#include "Mimic/Mimic.event"
+#include "LazberianWeaponry/LazberianWeaponry.event" // NOTE: conflicts with VeryCustomItems
+// #include "Mimic/Mimic.event"
 #include "Misc/FcukTanks.event"
 #include "FixDifficulty/FixDifficulty.event"
 #include "StatScreenBlink/SSBlink.event"
@@ -143,7 +143,7 @@
 // Other small things
 #include "CustomGameSpeed/CustomGameSpeed.event"
 #include "Dumb/RemoveSupports.event"
-#include "Dumb/NoBattleAnimations.event"
+// #include "Dumb/NoBattleAnimations.event"
 #include "TextScrollSpeed.event"
 
 // Bad debugging hacks
