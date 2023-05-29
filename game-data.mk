@@ -15,7 +15,7 @@
 # TMX to event + dmp
 %.event %_data.dmp: %.tmx
 	$(NOTIFY_PROCESS)
-	@echo | $(TMX2EA) $< > /dev/null
+	@$(TMX1EA) $< --output-event $*.event --output-data $*_data.dmp
 
 # ==============
 # = MAKE CLEAN =

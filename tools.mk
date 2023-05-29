@@ -36,6 +36,6 @@ export EADEP             := $(realpath .)/Tools/EventAssembler/ea-dep$(EXE)
 export PORTRAIT_PROCESS  := $(PYTHON3) $(realpath .)/Tools/PyTools/portrait-process.py
 export TEXT_PROCESS      := $(PYTHON3) $(realpath .)/Tools/PyTools/text-process-classic.py
 export C2EA              := $(PYTHON3) $(realpath .)/Tools/PyTools/NMM2CSV/c2ea.py
-export TMX2EA            := $(PYTHON3) $(realpath .)/Tools/PyTools/TMX2EA/tmx2ea.py
+export TMX1EA            := $(PYTHON3) $(realpath .)/Tools/PyTools/tmx1ea.py
 
 NOTIFY_PROCESS = @echo "$(notdir $<) => $(notdir $@)"
