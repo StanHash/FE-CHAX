@@ -63,6 +63,10 @@ PUSH
 	ORG $0A524C
 		LynJump(MS_GetClaimFlagsFromGameSave)
 
+	// Replace LoadSavedWMStuff
+	ORG $0A5274
+		LynJump(MS_LoadWMDataFromGameSave)
+
 	// Replace LoadSavedEid8A
 	ORG $0A5290
 		LynJump(MS_CheckEid8AFromGameSave)
